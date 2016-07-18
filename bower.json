@@ -1,0 +1,23 @@
+{
+  "name": "CrawFord",
+  "description": "CrawFord Public Resource With Bower",
+  "main": "",
+  "authors": [
+    "nvnghia <nvnghia0202@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "datatables.net": "^1.10.12",
+    "datatables.net-bs": "^1.10.12"
+  }
+}
