@@ -14,8 +14,12 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Link</a></li>
-				<li><a href="#">Link</a></li>
+				<li><a href="javascript:;">Claim</a></li>
+				<li><a href="javascript:;">Docket</a></li>
+				<li><a href="javascript:;">Trial Fee</a></li>
+				<li><a href="javascript:;">Invoice</a></li>
+                <li><a href="javascript:;">Employee</a></li>
+                <li><a href="javascript:;">Report</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
@@ -26,7 +30,7 @@
 						@else
 							<li><a href="{{ asset('user/profile') }}">Profile</a></li>
 						@endif
-						<li><a href="{{ asset('auth/login') }}">Logout</a></li>
+						<li><a href="{{ asset('auth/logout') }}">Logout</a></li>
 					</ul>
 				</li>
 			</ul>

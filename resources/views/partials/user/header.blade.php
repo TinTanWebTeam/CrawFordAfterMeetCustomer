@@ -26,7 +26,7 @@
 						@else
 							<li><a href="{{ asset('user/profile') }}">Profile</a></li>
 						@endif
-						<li><a href="{{ asset('auth/login') }}">Logout</a></li>
+						<li><a href="{{ asset('auth/logout') }}">Logout</a></li>
 					</ul>
 				</li>
 			</ul>

@@ -6,8 +6,8 @@
 Route::get('/',function(){
    if(Auth::check()){
        if(Auth::user()->roleId == 1)
-           return redirect('admin');
-       return redirect('user');
+           return redirect('admin/dashboard');
+       return redirect('user/dashboard');
    }
    return redirect('auth/login');
 });
@@ -21,12 +21,13 @@ Route::group(['middleware' => ['guest']],function (){
  * Admin Route
  * */
 Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
-    Route::get('/','AdminController@dashboard');
+    Route::get('dashboard','AdminController@dashboard');
+    Route::get('claim','AdminController@getViewClaim');
 });
 
 /*
  * User Route
  * */
 Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
-    Route::get('/','UserController@dashboard');
+    Route::get('dashboard','UserController@dashboard');
 });

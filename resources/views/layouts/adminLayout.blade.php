@@ -22,7 +22,11 @@
 		<div class="container" id="page_container">
 			@yield('content')
 		</div>
-		@include('partials.admin.footer')	
+		@include('partials.admin.footer')
+        <script>
+            var url = "{{ asset('admin') }}/";
+            var _token = "{{ csrf_token() }}";
+        </script>
 		<!-- jQuery -->
 		<script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
 		<!-- Bootstrap JavaScript -->
@@ -31,9 +35,7 @@
 		<script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 		<!-- DataTables Bootstrap JavaScript -->
 		<script src="{{ asset('libs/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-		<script>
-			var url = "{{ asset('') }}";
-			var _token = "{{ csrf_token() }}";
-		</script>
+        <!-- Global JavaScript -->
+        <script src="{{ asset('admin/js/global.js') }}"></script>
 	</body>
 </html>
