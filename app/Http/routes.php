@@ -23,6 +23,7 @@ Route::group(['middleware' => ['guest']],function (){
 Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('dashboard','AdminController@dashboard');
     Route::get('claim','AdminController@getViewClaim');
+    Route::get('employee','AdminController@getViewEmployee');
 });
 
 /*

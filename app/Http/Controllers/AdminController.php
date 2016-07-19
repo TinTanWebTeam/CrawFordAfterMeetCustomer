@@ -17,4 +17,9 @@ class AdminController extends Controller
     {
         return view('admin.claim');
     }
+
+    public function getViewEmployee()
+    {
+        return view('admin.employee');
+    }
 }

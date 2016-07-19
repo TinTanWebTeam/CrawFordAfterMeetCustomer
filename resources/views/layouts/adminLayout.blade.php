@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="{{ asset('libs/bootstrap/dist/css/bootstrap.min.css') }}">
 		<!-- DataTables CSS -->
 		<link rel="stylesheet" href="{{ asset('libs/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+        <!-- Style CSS -->
+        <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
