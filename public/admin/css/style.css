@@ -12,3 +12,16 @@ input{
 select{
     background-color: #f8f8f8;
 }
+.form-claim{
+
+}
+.form-claim h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+form.form-claim table tr td {
+    padding: 0px 10px 0px 10px;
+}
+select{
+    height: 26px;
+}
