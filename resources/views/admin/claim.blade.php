@@ -401,21 +401,16 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4" rowspan="6">
+                <td colspan="4" rowspan="6"  style="border: 1px solid #c5c0c0;border-radius: 10px;padding: 10px;width: 878px;">
                     <h5>Co-insurers Detail</h5>
-                    <table>
-                        <tr>
-                            <th>
-                                Bill To
-                            </th>
-                            <th>
-                                Lead
-                            </th>
-                        </tr>
-                        <tr>
-
-                        </tr>
-                    </table>
+                    <div class="table-responsive" style="width: 878px;">
+                        <table class="table table-bordered" style="width: 878px;">
+                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                        </table>
+                    </div>
                 </td>
                 <td rowspan="6" style="border: 1px solid #c5c0c0;border-radius: 10px;padding: 10px">
                     <div>
