@@ -311,10 +311,57 @@
                                 <input type="text" name="">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5 style="text-align: right">Windows Users ID :</h5>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="text" name="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 style="text-align: right">Locked :</h5>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="checkbox" name="">
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" name="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 style="text-align: right">Inactive :</h5>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="checkbox" name="">
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" name="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 style="text-align: right">Default Profile :</h5>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="checkbox" name="">
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
+            <div class="row" style="margin-left: 225px">
+                <button type="button" class="btn btn-default">
+                    Save
+                </button>
+                <button type="button" class=" btn btn-default">
+                    Cancel
+                </button>
+            </div>
         </div>
+
     </form>
 
 </div>

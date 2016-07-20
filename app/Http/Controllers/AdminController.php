@@ -22,4 +22,15 @@ class AdminController extends Controller
     {
         return view('admin.employee');
     }
+
+    public function getViewTrialFee()
+    {
+        //$list = array("A");
+        return view('admin.trialFee');
+    }
+
+    public function getViewInvoice()
+    {
+        return view('admin.invoice');
+    }
 }

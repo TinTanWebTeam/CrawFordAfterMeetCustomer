@@ -22,4 +22,21 @@ $(function () {
             });
         }
     });
+    Catogories.find("li").eq(2).click(function () {
+        if($(this).find("a").text() === "Trial Fee"){
+            setActiveMenu($(this));
+            $.get(url + "trialFee",function (viewEmployee) {
+                $("div#page_container").empty().append(viewEmployee);
+            });
+        }
+    });
+    Catogories.find("li").eq(3).click(function () {
+        if($(this).find("a").text() === "Invoice"){
+            setActiveMenu($(this));
+            $.get(url + "invoice",function (viewInvoice) {
+                $("div#page_container").empty().append(viewInvoice);
+            });
+        }
+    });
+
 });
