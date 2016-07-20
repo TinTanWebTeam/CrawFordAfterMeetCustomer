@@ -23,6 +23,10 @@ select{
     font-size: 12px;
     margin-top: 7px;
 }
+.form-invoice h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
 .form-employee legend{
     font-size: 14px;
 }
