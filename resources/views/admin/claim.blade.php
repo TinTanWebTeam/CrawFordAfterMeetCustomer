@@ -469,6 +469,15 @@
                 </td>
             </tr>
         </table>
+        <br>
+        <div class="text-right">
+            <div style="width: 7%;display: inline-block">
+                <input type="submit" class="btn btn-default" value="Save">
+            </div>
+            <div style="width: 7%;display: inline-block">
+                <input type="submit" class="btn btn-default" value="Cancel">
+            </div>
+        </div>
     </form>
     <br>
     <br>
