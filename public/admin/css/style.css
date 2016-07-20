@@ -19,6 +19,13 @@ select{
     font-size: 12px;
     margin-top: 7px;
 }
+.form-employee h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+.form-employee legend{
+    font-size: 14px;
+}
 form.form-claim table tr td {
     padding: 0px 10px 0px 10px;
 }
