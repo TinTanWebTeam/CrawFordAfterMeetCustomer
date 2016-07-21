@@ -37,6 +37,8 @@
 		<script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 		<!-- DataTables Bootstrap JavaScript -->
 		<script src="{{ asset('libs/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+		<!-- jquery validator -->
+		<script src="{{ asset('libs/jquery/jquery.validate.min.js') }}"></script>
         <!-- Global JavaScript -->
         <script src="{{ asset('admin/js/global.js') }}"></script>
 	</body>

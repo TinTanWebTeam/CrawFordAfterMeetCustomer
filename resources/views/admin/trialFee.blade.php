@@ -186,14 +186,21 @@
                 </table>
             </div>
             <div class="col-sm-8" style="padding: 10px 10px;margin-top: 10px">
-                <table style="width: 100%">
-                    <tr style="border: 1px solid black">
-                        <th style="text-align: center;background-color: blue;color: white">Branch/Adjuster Subtotals:</th>
-                    </tr>
+                <div class="table-responsive"  style="width: 400px;">
+                    <table class="table table-bordered" style="width: 400px;">
+                        {{--<tr style="border: 1px solid black">--}}
+                            {{--<th style="text-align: center;background-color: blue;color: white">Branch/Adjuster Subtotals:</th>--}}
+                        {{--</tr>--}}
+                        <thead>
+                            <tr>
+                                <th style="width:600px">A</th>
+                                <th style="width:600px">A</th>
+                            </tr>
+                        </thead>
+                        {{--<thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th><th>Username</th> </tr> </thead>--}}
+                    </table>
+                </div>
 
-
-
-                </table>
             </div>
         </div>
     </div>
@@ -213,3 +220,7 @@
         </div>
     </div>
 </div>
+
+</div>
+<br>
+<br>
