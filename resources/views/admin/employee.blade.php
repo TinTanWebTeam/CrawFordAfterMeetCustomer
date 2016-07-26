@@ -1,3 +1,52 @@
+{{--Model show confirm--}}
+<div class="modal fade" id="modalConfirm" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalContent" style="text-align: center">Save New Success</div>
+        </div>
+    </div>
+</div>
+{{--End Model  show confirm--}}
+
+{{--Model List Employee--}}
+<div class="modal fade" id="modalListEmployee" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalContent" style="text-align: center">List Users</div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Sex</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if($listUser !=null)
+                        @foreach($listUser as $item)
+                            <tr id="{{$item->id}}" onclick="employeeView.viewEmployeeDetailWhenChooseRowOfEventDoubleClick(this)" style="cursor: pointer">
+                                <td>{{$item->name}}</td>
+                                <td>{{$item->firstName}}</td>
+                                <td>{{$item->lastName}}</td>
+                                <td>{{$item->sex}}</td>
+                                <td>{{$item->email}}</td>
+                                <td>{{$item->phone}}</td>
+                                <td>{{$item->address}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{{--End Model Model List Employee--}}
 <div class="row">
     <form class="form-employee" id="formEmployee" role="form" onsubmit="return false">
         <div class="col-sm-8">
@@ -10,10 +59,10 @@
                         <div class="col-sm-8">
                             <input type="text" name="ajaxActionType" style="width: 100%;display: none"
                                    id="ajaxActionType" value="1">
-                            <input type="text" name="ajaxAddNewAndSaveUpdateId" style="width: 100%;display: none"
-                                   id="ajaxAddNewAndSaveUpdateCodeId">
+                            <input type="text" name="Id" style="width: 100%;display: none"
+                                   id="Id">
                             <input type="text" name="Name" style="width: 100%"
-                                    id="Name">
+                                    id="Name" ondblclick="employeeView.viewListEmployeeWhenDoubleClickOnInputName()" onkeypress="employeeView.viewEmployeeDetailWhenEnterKey(event)">
                         </div>
                     </div>
                 </div>
@@ -297,7 +346,7 @@
                                 <h5 style="text-align: right">UserID :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="ajaxAddNewAndSaveUpdateDateUserIDCreated" id="ajaxAddNewAndSaveUpdateDateUserIDCreated" readonly="readonly" style="background-color: #BF9B9B">
+                                <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #BF9B9B">
                             </div>
                         </div>
                         <div class="row">
@@ -320,7 +369,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="updated_at" id="updated_at" readonly style="background-color: #BF9B9B">
+                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #BF9B9B">
                             </div>
                         </div>
                         <div class="row">
@@ -328,7 +377,7 @@
                                 <h5 style="text-align: right">UserID :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="ajaxAddNewAndSaveUpdateDateUserIDLastChanged" id="ajaxAddNewAndSaveUpdateDateUserIDLastChanged" readonly="readonly" style="background-color: #BF9B9B">
+                                <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #BF9B9B">
                             </div>
                         </div>
                         <div class="row">
@@ -352,10 +401,10 @@
                                 <h5 style="text-align: right">Locked :</h5>
                             </div>
                             <div class="col-sm-2">
-                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Locked">
+                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Locked" disabled>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="LockedDetail" id="LockedDetail">
+                                <input type="text" name="LockedDetail" id="LockedDetail" readonly style="background-color: #BF9B9B">
                             </div>
                         </div>
                         <div class="row">
@@ -363,10 +412,10 @@
                                 <h5 style="text-align: right">Inactive :</h5>
                             </div>
                             <div class="col-sm-2">
-                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Inactive">
+                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Inactive" disabled>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="InactiveDetail" id="InactiveDetail">
+                                <input type="text" name="InactiveDetail" id="InactiveDetail" readonly style="background-color: #BF9B9B">
                             </div>
                         </div>
                         <div class="row">
@@ -374,15 +423,15 @@
                                 <h5 style="text-align: right">Default Profile :</h5>
                             </div>
                             <div class="col-sm-2">
-                                <input type="checkbox" class="checkbox" name="DefaultProfile" value="defaultProfile">
+                                <input type="checkbox" class="checkbox" name="DefaultProfile" id="DefaultProfile" value="defaultProfile">
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class="row" style="margin-left: 225px">
+            <div class="row" style="margin-left: 180px">
                 <button type="button" class="btn btn-default" name="btnAction" onclick="employeeView.ActionAddNewOrUpdate()">
-                    Save
+                    Save New
                 </button>
                 <button type="button" class=" btn btn-default">
                     Cancel
@@ -424,7 +473,7 @@
                     InactiveDetail:null,
                     DefaultProfile:null,
                     Created_at:null,
-                    Updated_at:null,
+                    Changed_at:null,
                     Flat:null,
                     Hourly:null,
                     Blended:null
@@ -438,7 +487,10 @@
                 },
                 ActionAddNewOrUpdate:function()
                 {
-                    if ($("input[name=ajaxActionType]").val() === "1") {
+                    var type = $("input[name=ajaxActionType]").val();
+                    console.log(type);
+                    if (type === "1") {
+                        alert("truong hop validator co password");
                         $("form[id=formEmployee]").validate({
                             rules: {
                                 Name: "required",
@@ -457,26 +509,28 @@
                                 LastName: "Last Name is required",
                                 PasswordConfirm: {
                                     required: "Password Confirm is required",
-                                    equalTo: "Password Confirm is not them same password"
+                                    equalTo: "Password Confirm is not the same password"
                                 }
                             }
                         });
                     }
                     else
                     {
+                        alert("0");
                         $("form[id=formEmployee]").validate({
                             rules: {
-                                ajaxAddNewAndSaveUpdateName: "required",
-                                ajaxAddNewAndSaveUpdateFirstName: "required",
-                                ajaxAddNewAndSaveUpdateLastName: "required"
+                                Name: "required",
+                                FirstName: "required",
+                                LastName: "required"
                             },
                             messages: {
-                                ajaxAddNewAndSaveUpdateName: "Code is required",
-                                ajaxAddNewAndSaveUpdateFirstName: "First Name is required",
-                                ajaxAddNewAndSaveUpdateLastName: "Last Name is required"
+                                Name: "Code is required",
+                                FirstName: "First Name is required",
+                                LastName: "Last Name is required"
                             }
                         });
                     }
+
                     if ($("form[id=formEmployee]").valid()) {
                         employeeView.resetEmployeeObject();
                         for(var i = 0;i<Object.keys(employeeView.EmployeeObject).length;i++)
@@ -494,17 +548,44 @@
                             {
                                 employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("select#Sex option:selected").val();
                             }
+                            else if(Object.keys(employeeView.EmployeeObject)[i]==="DefaultProfile")
+                            {
+                                var checked = null;
+                                if($("input[name=DefaultProfile]").is(":checked"))
+                                {
+                                    checked = "True";
+                                }
+                                else
+                                {
+                                    checked = "False";
+                                }
+                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked;
+                            }
                             else if(Object.keys(employeeView.EmployeeObject)[i]==="Locked")
                             {
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("input[name=checkboxLockAndActive]:checked").val();
+                                var checked1 = null;
+                                if($("input[name=checkboxLockAndActive]:eq(0)").is(":checked"))
+                                {
+                                    checked1 = "True";
+                                }
+                                else
+                                {
+                                    checked1 = "False";
+                                }
+                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked1;
                             }
                             else if(Object.keys(employeeView.EmployeeObject)[i]==="Inactive")
                             {
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("input[name=checkboxLockAndActive]:checked").val();
-                            }
-                            else if(Object.keys(employeeView.EmployeeObject)[i]==="DefaultProfile")
-                            {
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("input[name=DefaultProfile]:checked").val();
+                                var checked2 = null;
+                                if($("input[name=checkboxLockAndActive]:eq(1)").is(":checked"))
+                                {
+                                    checked2 = "True";
+                                }
+                                else
+                                {
+                                    checked2 = "False";
+                                }
+                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked2;
                             }
                             else
                             {
@@ -512,9 +593,172 @@
                             }
                         }
                         console.log(employeeView.EmployeeObject);
-                        $.post(url+"admin/addNewAndUpdateEmployee",{_token:_token});
+                        $.post(url+"addNewAndUpdateEmployee",{_token:_token,idAction:$("input[name=ajaxActionType]").val(),dataEmployee:employeeView.EmployeeObject},function(data){
+                            console.log(data);
+                            if(data["Action"]==="AddNew")
+                            {
+                                if(data["Result"]===1)
+                                {
+                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Add New Success");
+                                    $("input[name=ajaxActionType]").val("1");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    employeeView.ResetForm();
+                                }
+                                else
+                                {
+                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Add New No Success");
+                                    $("div[id=modalConfirm]").modal("show");
+                                }
+                            }
+                            else
+                            {
+                                if(data["Result"]===1)
+                                {
+                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Update Success");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    $("input[name=ajaxActionType]").empty().val("1");
+                                    employeeView.ResetForm();
+                                }
+                                else
+                                {
+                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Update No Success");
+                                    $("div[id=modalConfirm]").modal("show");
+                                }
+                            }
+                        });
                     }
 
+                },
+                convertStringToDate:function(date)
+                {
+                    var currentDate = new Date(date);
+                    var datetime = currentDate.getFullYear() +"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)  +"-"
+                            + ("0" + currentDate.getDate()).slice(-2);
+                    return datetime;
+                },
+                firstToUpperCase:function(str){
+                    return str.substr(0, 1).toUpperCase() + str.substr(1);
+                },
+                viewListEmployeeWhenDoubleClickOnInputName:function()
+                {
+                    $("div[id=modalListEmployee]").modal("show");
+                },
+                viewEmployeeDetailWhenChooseRowOfEventDoubleClick:function(element)
+                {
+                    $("input[name=ajaxActionType]").empty().val("0");
+                    $("button[name=btnAction]").text("Save Update");
+                    $("div[id=modalListEmployee]").modal("hide");
+                    $.post(url+"viewEmployeeDetailWhenChooseRowOfEventDoubleClick",{_token:_token,idEmployee:$(element).attr("id")},function(data){
+                        $("select#Position").val(data["Object"]["positionId"]);
+                        $("select#Sex").val(data["Object"]["sex"]);
+                        $("input[name=checkboxLockAndActive]").removeAttr("disabled");
+                        $("input[name=LockedDetail]").removeAttr("readonly").css("background-color","");
+                        $("input[name=InactiveDetail]").removeAttr("readonly").css("background-color","");
+                        for(var propertyName in data["Object"])
+                        {
+                            if(employeeView.convertStringToDate(data["Object"][propertyName])==="NaN-aN-aN")
+                            {
+                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Object"][propertyName]);
+                            }
+                            else if(employeeView.convertStringToDate(data["Object"][propertyName])==="1970-01-01")
+                            {
+                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Object"][propertyName]);
+                            }
+                            else
+                            {
+                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(employeeView.convertStringToDate(data["Object"][propertyName]));
+                            }
+                        }
+                        var address = data["Object"]["address"].split(";");
+                        $("input[name=Address]").val(address[0]);
+                        $("input[name=Address1]").val(address[1]);
+                        $("input[name=Address2]").val(address[2]);
+
+                        $("input[name=UserID_Created]").val(data["nameCreated"]);
+                        $("input[name=UserID_Changed]").val(data["nameUpdated"]);
+                        $("input[name=Hourly]").val(data["rate"]);
+                        if(data["Object"]["locked"]===1)
+                        {
+                            $("input[name=checkboxLockAndActive]:eq(0)").prop("checked",true);
+                        }
+                        else
+                        {
+                            $("input[name=checkboxLockAndActive]:eq(0)").prop("checked",false);
+                        }
+
+                        if(data["Object"]["inactive"]===1)
+                        {
+                            $("input[name=checkboxLockAndActive]:eq(1)").prop("checked",true);
+                        }
+                        else
+                        {
+                            $("input[name=checkboxLockAndActive]:eq(1)").prop("checked",false);
+                        }
+
+                        //reset object
+                        employeeView.resetEmployeeObject();
+                        for(var i = 0;i<Object.keys(employeeView.EmployeeObject).length;i++)
+                        {
+                            employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("#"+Object.keys(employeeView.EmployeeObject)[i]).val();
+                        }
+                    });
+
+                },
+                viewEmployeeDetailWhenEnterKey:function(e)
+                {
+                    if (e.keyCode == 13) {
+                        $.post(url+"viewDetailEmployeeWhenUseEvenEnter",{_token:_token,key:$("input[name=Name]").val()},function(data){
+                            console.log(data);
+                            if(data["Result"]===1){
+                                //Reset form
+                                $("input[name=ajaxActionType]").empty().val("0");
+                                $("button[name=btnAction]").text("Save Update");
+                                $("div[id=modalConfirm]").modal("hide");
+                                //Binding data
+                                $("select#Position").val(data["Data"]["positionId"]);
+                                $("select#Sex").val(data["Data"]["sex"]);
+                                $("input[name=checkboxLockAndActive]").removeAttr("disabled");
+                                $("input[name=LockedDetail]").removeAttr("readonly").css("background-color","");
+                                $("input[name=InactiveDetail]").removeAttr("readonly").css("background-color","");
+                                for(var propertyName in data["Data"])
+                                {
+                                    if(employeeView.convertStringToDate(data["Data"][propertyName])==="NaN-aN-aN")
+                                    {
+                                        $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Data"][propertyName]);
+                                    }
+                                    else if(employeeView.convertStringToDate(data["Data"][propertyName])==="1970-01-01")
+                                    {
+                                        $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Data"][propertyName]);
+                                    }
+                                    else
+                                    {
+                                        $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(employeeView.convertStringToDate(data["Data"][propertyName]));
+                                    }
+                                }
+                                $("input[name=UserID_Created]").val(data["nameCreated"]);
+                                var address = data["Data"]["address"].split(";");
+                                $("input[name=Address]").val(address[0]);
+                                $("input[name=Address1]").val(address[1]);
+                                $("input[name=Address2]").val(address[2]);
+                            }
+                            else
+                            {
+                                alert("Can't find this user !!!");
+                            }
+                        });
+                    }
+                },
+                ResetForm:function()
+                {
+                    if($("input[name=ajaxActionType]").val()==="1")
+                    {
+                        var allInput = $("input");
+                        $("form[id=formEmployee]").find(allInput).val("");
+                        $("button[name=btnAction]").text("Save New");
+                        $("input[name=ajaxActionType]").val("1");
+                        $("input[name=checkboxLockAndActive]").prop("checked",false);
+                    }
                 }
             };
         }

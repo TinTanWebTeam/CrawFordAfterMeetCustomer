@@ -26,6 +26,8 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->integer('userId')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('updatedBy')->default(0); //if not equal 0 will be reference to id in user
+
+
             $table->timestamps();
         });
     }

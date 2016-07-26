@@ -20,7 +20,20 @@ class CreateBillsTable extends Migration
             $table->string('policyNumber',50)->nullable();
             $table->string('CompClaimNumber',200)->nullable();
             $table->string('claimId')->nullable(); //if not null will be reference to id in claim
-            $table->string('active')->defaul(1);
+            $table->string('active')->default(1);
+
+            $table->integer('billId')->default(0);
+            $table->integer('rateBill')->nullable();//if not null will be reference to id in rate detail
+            $table->integer('rateTypeBill')->nullable();//if not null will be reference to id in rate type
+            $table->decimal('professionalServices')->default(0);
+            $table->decimal('generalExp')->default(0);
+            $table->decimal('comm&&PhotoExp')->default(0);
+            $table->decimal('consultFees&&Exp')->default(0);
+            $table->decimal('travelRelatedExp')->default(0);
+            $table->decimal('gSTFreeDisb')->default(0);
+            $table->decimal('disbursements')->default(0);
+            $table->decimal('total')->default(0);
+
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('updatedBy')->default(0); //if not equal 0 will be reference to id in user
             $table->timestamps();

@@ -33,9 +33,9 @@ class CreateUsersTable extends Migration
             $table->string('networkID_created',500)->nullable();
             $table->integer('userID_changed')->default(0);//if nor equal 0 will be reference to id in user
             $table->string('networkID_changed',500)->nullable();
-            $table->boolean('locked')->default(1);
+            $table->boolean('locked')->default(0);
             $table->string('lockedDetail',500)->nullable();
-            $table->boolean('inactive')->default(1);
+            $table->boolean('inactive')->default(0);
             $table->string('inactiveDetail',500)->nullable();
             $table->boolean('defaultProfile')->default(1);
             $table->boolean('active')->default(1);
