@@ -36,3 +36,61 @@ form.form-claim table tr td {
 select{
     height: 26px;
 }
+.report-logo{
+    border-bottom: 3px solid black;
+}
+.report-logo-img{
+    width: 150px;
+    height: 50px;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.h6-printed-time{
+    font-style: italic;
+}
+.claim-report-our-file{
+    border-bottom: 1px solid black;
+}
+.percent-15{
+    width: 15%;
+}
+.table-claim-report-info{
+    font-size: 12px;
+}
+.text-bold{
+    font-weight: 600;
+}
+.co-insurer{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.table-claim-report-co-insurer{
+    font-size: 12px;
+}
+.table-claim-report-reserves{
+    font-size: 12px;
+}
+.reserves{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.padding-15{
+    padding-left: 15%;
+}
+.table-claim-report-assist{
+    font-size: 12px;
+}
+.assist{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
