@@ -7,11 +7,11 @@
                     <h5 class="text-right">ID:</h5>
                 </td>
                 <td style="width: 15%;">
-                    <input type="text" name="code" ondblclick="cliamView.searchClaimByCode(this)">
+                    <input type="text" id="code" name="code" ondblclick="cliamView.searchClaimByCode(this)">
                 </td>
                 <td style="width: 20%;">
                     <div style="display: inline-block;width: 20%">
-                        <input type="checkbox" name="privileged">
+                        <input type="checkbox" id="privileged" name="privileged">
                     </div>
                     <div style="display: inline-block;width: 78%">
                         <h5>Privileged</h5>
@@ -22,7 +22,7 @@
                         <h5 class="text-right">Account:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="accountCode">
+                        <input type="text" id="accountCode" name="accountCode">
                     </div>
                 </td>
                 <td style="width: 25%;">
@@ -30,7 +30,7 @@
                         <h5>Policy:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" name="accountPolicyId">
+                        <input type="text" id="accountPolicyId" name="accountPolicyId">
                     </div>
                 </td>
             </tr>
@@ -46,7 +46,7 @@
                         <h5 class="text-right">Partnership:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="partnershipId">
+                        <input type="text" id="partnershipId" name="partnershipId">
                     </div>
                 </td>
                 <td>
@@ -54,7 +54,7 @@
                         <h5>Currency:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <select name="currency" id="" style="width: 100%">
+                        <select name="currency" id="currency" style="width: 100%">
                             <option value="usd">USD</option>
                             <option value="vnd">VND</option>
                         </select>
@@ -66,14 +66,14 @@
                     <h5 class="text-right">Organization:</h5>
                 </td>
                 <td colspan="2">
-                    <input type="text" name="organization">
+                    <input type="text" id="organization" name="organization">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 30%">
                         <h5 class="text-right">Incident:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="incident">
+                        <input type="text" id="incident" name="incident">
                     </div>
                 </td>
                 <td>
@@ -81,7 +81,7 @@
                         <h5>Branch Seq #:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" name="branchSeqNo">
+                        <input type="text" id="branchSeqNo" name="branchSeqNo">
                     </div>
                 </td>
             </tr>
@@ -111,18 +111,18 @@
                         <button style="width: 100%">Address...</button>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="insuredFirstName">
+                        <input type="text" id="insuredFirstName" name="insuredFirstName">
                     </div>
                 </td>
                 <td>
-                    <input type="text" name="insuredLastName">
+                    <input type="text" id="insuredLastName" name="insuredLastName">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 40%">
                         <h5 class="text-right">Received:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="receiveDate">
+                        <input type="text" id="receiveDate" name="receiveDate">
                     </div>
                 </td>
             </tr>
@@ -131,14 +131,14 @@
                     <h5 class="text-right">Insured Claim #:</h5>
                 </td>
                 <td colspan="3">
-                    <input type="text" name="insuredClaim">
+                    <input type="text" id="insuredClaim" name="insuredClaim">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 40%">
                         <h5 class="text-right">Opened:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="openDate">
+                        <input type="text" id="openDate" name="openDate">
                     </div>
                 </td>
             </tr>
@@ -147,14 +147,14 @@
                     <h5 class="text-right">Operated As:</h5>
                 </td>
                 <td colspan="3">
-                    <input type="text" name="operatedAs">
+                    <input type="text" id="operatedAs" name="operatedAs">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 40%">
                         <h5 class="text-right">Closed:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Dates" name="closeDate">
+                        <input type="text" id="closeDate" name="closeDate">
                     </div>
                 </td>
             </tr>
@@ -170,7 +170,7 @@
                         <h5 class="text-right">Reopened:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="reOpen">
+                        <input type="text" inputmode="Reopened" name="reOpen">
                     </div>
                 </td>
             </tr>
@@ -179,14 +179,14 @@
                     <h5 class="text-right">Claim Type:</h5>
                 </td>
                 <td>
-                    <input type="text" name="claimTypeCode">
+                    <input type="text" id="claimTypeCode" name="claimTypeCode">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
                         <h5>Insurer:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" name="insurerCode">
+                        <input type="text" id="insurerCode" name="insurerCode">
                     </div>
                 </td>
                 <td>
@@ -194,7 +194,7 @@
                         <h5 class="text-right">Branch:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="branchCode">
+                        <input type="text" id="branchCode" name="branchCode">
                     </div>
                 </td>
                 <td>
@@ -202,7 +202,7 @@
                         <h5 class="text-right">Destroy:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="destroyedDate">
+                        <input type="text" id="destroyedDate" name="destroyedDate">
                     </div>
                 </td>
             </tr>
@@ -211,14 +211,14 @@
                     <h5 class="text-right">Loss Desc:</h5>
                 </td>
                 <td>
-                    <input type="text" name="lossDescCode">
+                    <input type="text" id="lossLocation" name="lossDescCode">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
                         <h5>Broker:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" name="brokerCode">
+                        <input type="text" id="brokerCode" name="brokerCode">
                     </div>
                 </td>
                 <td>
@@ -226,7 +226,7 @@
                         <h5 class="text-right">Adjuster:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="adjusterCode">
+                        <input type="text" id="adjusterCode" name="adjusterCode">
                     </div>
                 </td>
                 <td>
@@ -234,7 +234,7 @@
                         <h5 class="text-right">EBox Destroy:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="eBoxDestroyed">
+                        <input type="text" id="eBoxDestroyed" name="eBoxDestroyed">
                     </div>
                 </td>
             </tr>
@@ -253,7 +253,7 @@
                         <h5 class="text-right">Rate:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" name="rate">
+                        <input type="text" id="rate" name="rate">
                     </div>
                 </td>
                 <td>
@@ -261,7 +261,7 @@
                         <h5 class="text-right">First Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="firstContact">
+                        <input type="text" id="firstContact" name="firstContact">
                     </div>
                 </td>
             </tr>
@@ -270,14 +270,14 @@
                     <h5 class="text-right">Catastrophic Loss:</h5>
                 </td>
                 <td>
-                    <input type="text" name="catastrophicLoss">
+                    <input type="text" id="catastrophicLoss" name="catastrophicLoss">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
                         <h5>Source:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" name="sourceCode">
+                        <input type="text" id="sourceCode" name="sourceCode">
                     </div>
                 </td>
                 <td>
@@ -285,7 +285,7 @@
                         <h5 class="text-right">Period:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <select name="rateType" id="" style="width: 100%">
+                        <select name="rateType" id="rateType" style="width: 100%">
                             <option value="hourly">Hourly</option>
                             <option value="flat">Flat</option>
                             <option value="blend">Blend</option>
@@ -297,7 +297,7 @@
                         <h5 class="text-right">Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" name="contact" value="Nguyen">
+                        <input type="text" id="contact" name="contact">
                     </div>
                 </td>
             </tr>
@@ -306,14 +306,14 @@
                     <button>Loss Location</button>
                 </td>
                 <td colspan="3">
-                    <input type="text" name="lossLocation">
+                    <input type="text" id="lossLocation" name="lossLocation">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 40%">
                         <h5 class="text-right">Loss Date:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="lossDate">
+                        <input type="text" id="lossDate" name="lossDate">
                     </div>
                 </td>
             </tr>
@@ -322,14 +322,14 @@
                     <h5 class="text-right">Line Of Business Code:</h5>
                 </td>
                 <td>
-                    <input type="text" name="lineOfBusinessCode">
+                    <input type="text" id="lineOfBusinessCode" name="lineOfBusinessCode">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 50%">
                         <h5 class="text-right">Large Loss Claim:</h5>
                     </div>
                     <div style="display: inline-block;width: 48%">
-                        <select name="largeLossClaim" id="">
+                        <select name="largeLossClaim" id="largeLossClaim">
                             <option value="undetermined">Undetermined</option>
                             <option value="determined">Determined</option>
                         </select>
@@ -340,7 +340,7 @@
                         <h5 class="text-right">Taxable:</h5>
                     </div>
                     <div style="display: inline-block;width: 30%">
-                        <input type="checkbox" name="taxable">
+                        <input type="checkbox" id="taxable" name="taxable">
                     </div>
                 </td>
                 <td>
@@ -348,7 +348,7 @@
                         <h5 class="text-right">Proscription:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="proscription">
+                        <input type="text" id="proscription" name="proscription">
                     </div>
                 </td>
             </tr>
@@ -357,14 +357,14 @@
                     <h5 class="text-right">Estimated Claim Value:</h5>
                 </td>
                 <td>
-                    <input type="text" name="estimatedClaimValue">
+                    <input type="text" id="estimatedClaimValue" name="estimatedClaimValue">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 50%">
                         <h5 class="text-right">SIR Breached:</h5>
                     </div>
                     <div style="display: inline-block;width: 48%">
-                        <input type="checkbox" name="sirBreached">
+                        <input type="checkbox" id="sirBreached" name="sirBreached">
                     </div>
                 </td>
                 <td>
@@ -372,7 +372,7 @@
                         <h5 class="text-right">Claim Assignment:</h5>
                     </div>
                     <div style="display: inline-block;width: 30%">
-                        <input type="checkbox" name="claimAssignment">
+                        <input type="checkbox" id="claimAssignment" name="claimAssignment">
                     </div>
                 </td>
                 <td>
@@ -380,7 +380,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="policyInceptionDate">
+                        <input type="Date" id="policyInceptionDate" name="policyInceptionDate">
                     </div>
                 </td>
             </tr>
@@ -391,7 +391,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" name="policyExpiryDate">
+                        <input type="Date" id="policyExpiryDate" name="policyExpiryDate">
                     </div>
                 </td>
             </tr>
@@ -418,7 +418,7 @@
                             <h5 class="text-right">Created Date:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="Date" name="created_at">
+                            <input type="text" id="created_at" name="created_at">
                         </div>
                     </div>
                     <div>
@@ -426,7 +426,7 @@
                             <h5 class="text-right">Created By:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="text" name="createdBy">
+                            <input type="text" id="createdBy" name="createdBy">
                         </div>
                     </div>
                     <div>
@@ -434,7 +434,7 @@
                             <h5 class="text-right">Last Changed:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="Date" name="updated_at">
+                            <input type="text" id="updated_at" name="updated_at">
                         </div>
                     </div>
                     <div>
@@ -442,7 +442,7 @@
                             <h5 class="text-right">Last Changed By:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="text" name="updatedBy">
+                            <input type="text" id="updatedBy" name="updatedBy">
                         </div>
                     </div>
                     <div>
@@ -450,7 +450,7 @@
                             <h5 class="text-right">Import Date:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="Date" name="importDate">
+                            <input type="text" id="importDate" name="importDate">
                         </div>
                     </div>
                     <div>
@@ -458,7 +458,7 @@
                             <h5 class="text-right">Import Close Date:</h5>
                         </div>
                         <div style="display: inline-block;width: 58%">
-                            <input type="Date" name="importCloseDate">
+                            <input type="text" id="importCloseDate" name="importCloseDate">
                         </div>
                     </div>
                 </td>
@@ -516,9 +516,9 @@
         if(typeof claimView === 'undefined'){
             cliamView = {
                 claimViewObject : {
-                    id : null,
                     code : null,
                     branchSeqNo : null,
+                    privileged: null,
                     incident : null,
                     assignmentTypeCode : null,
                     accountCode : null,
@@ -580,7 +580,13 @@
                     }
                 },
                 save : function () {
-                    alert('save');
+                    for(var i = 0; i < Object.keys(cliamView.claimViewObject).length;i++){
+                        if($("#"+Object.keys(cliamView.claimViewObject)[i])){
+                            console.log(Object.keys(cliamView.claimViewObject)[i]);
+                            console.log(typeof $("#"+Object.keys(cliamView.claimViewObject)[i]));
+                            console.log($("#"+Object.keys(cliamView.claimViewObject)[i]).val());
+                        }
+                    }
                 },
                 cancel : function () {
                     alert('cancel');
