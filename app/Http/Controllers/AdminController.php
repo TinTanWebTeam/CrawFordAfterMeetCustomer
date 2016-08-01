@@ -435,4 +435,9 @@ class AdminController extends Controller
             'data'   => null
         ];
     }
+
+    public function getViewDocket()
+    {
+        return view('admin.docket');
+    }
 }

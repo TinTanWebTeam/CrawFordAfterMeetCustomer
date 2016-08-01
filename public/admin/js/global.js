@@ -15,6 +15,14 @@ $(function() {
             });
         }
     });
+    Catogories.find("li").eq(1).click(function() {
+        if ($(this).find("a").text() === "Docket") {
+            setActiveMenu($(this));
+            $.get(url + "docket", function(viewDocket) {
+                $("div#page_container").empty().append(viewDocket);
+            });
+        }
+    });
     Catogories.find("li").eq(4).click(function() {
         if ($(this).find("a").text() === "Employee") {
             setActiveMenu($(this));

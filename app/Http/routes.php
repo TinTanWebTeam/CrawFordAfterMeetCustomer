@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('trialFee','AdminController@getViewTrialFee');
     Route::get('invoice','AdminController@getViewInvoice');
     Route::get('report','AdminController@getViewReport');
+    Route::get('docket','AdminController@getViewDocket');
     Route::get('getClaimByCode/{code}','AdminController@getClaimByCode');
     Route::get('getAllClaim','AdminController@getAllClaim');
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
