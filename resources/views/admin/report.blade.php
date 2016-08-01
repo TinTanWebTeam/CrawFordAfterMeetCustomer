@@ -1,4 +1,4 @@
-<div class="row" style="background-color: #fff;"">
+<div class="row" style="background-color: #fff;">
     <form accept-charset="utf-8" action="report_submit">
     </form>
     <table style="background-color: #fff;width: 100%" class="table-claim-report-info">
