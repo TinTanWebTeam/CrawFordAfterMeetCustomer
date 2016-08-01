@@ -1,5 +1,5 @@
 <form action="" class="form-invoice">
-    <div class="row">
+    <div class="row" style="background-color: white">
         <div class="col-sm-7">
             <div class="row" style="padding: 10px;border: 1px solid #AFAFAF">
                 <fieldset>
@@ -389,4 +389,6 @@
 
         </div>
     </div>
+    <br>
+    <br>
 </form>

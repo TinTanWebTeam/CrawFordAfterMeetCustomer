@@ -54,7 +54,7 @@ class ClaimTableSeeder extends Seeder
                 'feeType' => $faker->countryCode,
                 'organization' => $faker->countryCode,
                 'operatedAs' => $faker->countryCode,
-                'miscInfo' => $faker->countryCode,
+                'miscInfo' => $faker->sentence,
                 'largeLossClaim' => $faker->countryCode,
                 'policy' => $faker->countryCode,
                 'reOpen' => $faker->date(),

@@ -47,7 +47,7 @@
     </div>
 </div>
 {{--End Model Model List Employee--}}
-<div class="row">
+<div class="row" style="background-color: white;padding-top: 20px;padding-bottom: 20px">
     <form class="form-employee" id="formEmployee" role="form" onsubmit="return false">
         <div class="col-sm-8">
             <div class="row">
@@ -429,18 +429,21 @@
                     </fieldset>
                 </div>
             </div>
-            <div class="row" style="margin-left: 180px">
-                <button type="button" class="btn btn-default" name="btnAction" onclick="employeeView.ActionAddNewOrUpdate()">
-                    Save New
-                </button>
-                <button type="button" class=" btn btn-default">
+            <br>
+            <div class="row">
+                <button type="button" class="btn btn-danger pull-right" style="margin-right: 20px;margin-left: 20px">
                     Cancel
+                </button>
+                <button type="button" class="btn btn-success pull-right" name="btnAction" onclick="employeeView.ActionAddNewOrUpdate()">
+                    Save
                 </button>
             </div>
         </div>
 
     </form>
 </div>
+<br>
+<br>
 
 <script>
     $(function(){

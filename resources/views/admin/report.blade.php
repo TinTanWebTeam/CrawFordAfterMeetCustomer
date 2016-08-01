@@ -367,5 +367,88 @@
             </tr>
         </tbody>
     </table>
+    <table style="background-color: #fff;width: 100%" class="table-claim-report-docket">
+        <thead>
+        <tr class="docket">
+            <th colspan="10"><h4 class="text-center">Docket</h4></th>
+        </tr>
+        <tr style="border-bottom: 1px solid black;">
+            <th class="text-bold text-center">Date</th>
+            <th class="text-bold text-center">Adjuster Code</th>
+            <th class="text-bold text-center">Professional Code</th>
+            <th class="text-bold text-center">Professional Unit</th>
+            <th class="text-bold text-center">Professional Note</th>
+            <th class="text-bold text-center">Expense Code</th>
+            <th class="text-bold text-center">Expense Unit</th>
+            <th class="text-bold text-center">Expense Note</th>
+            <th class="text-bold text-center">Invoice MajorNo</th>
+            <th class="text-bold text-center">Invoice Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">03-Sep-2015</td>
+            <td class="text-center">SONV1</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">2703</td>
+            <td class="text-center">09-Dec-2015</td>
+        </tr>
+        <tr>
+            <td class="text-center">03-Sep-2015</td>
+            <td class="text-center">SONV1</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">2703</td>
+            <td class="text-center">09-Dec-2015</td>
+        </tr>
+        <tr>
+            <td class="text-center">03-Sep-2015</td>
+            <td class="text-center">SONV1</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">2703</td>
+            <td class="text-center">09-Dec-2015</td>
+        </tr>
+        <tr>
+            <td class="text-center">03-Sep-2015</td>
+            <td class="text-center">SONV1</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">2703</td>
+            <td class="text-center">09-Dec-2015</td>
+        </tr>
+        <tr>
+            <td class="text-center">03-Sep-2015</td>
+            <td class="text-center">SONV1</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">SV</td>
+            <td class="text-center">3.5</td>
+            <td>Site Visit: ...</td>
+            <td class="text-center">2703</td>
+            <td class="text-center">09-Dec-2015</td>
+        </tr>
+        </tbody>
+    </table>
     <br>
 </div>
+<br>
+<br>

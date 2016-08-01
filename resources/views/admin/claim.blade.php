@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="background-color: white;padding-top: 20px;padding-bottom: 20px">
     <form class="form-claim" id="form_claim">
         <input name="id" style="display: none" type="text" value="0">
         <table style="width: 100%">
@@ -167,14 +167,14 @@
                     <h5 class="text-right">Misc Info:</h5>
                 </td>
                 <td colspan="3">
-                    <input type="text" name="miscInfo">
+                    <input type="text" name="miscInfo" id="miscInfo">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 40%">
                         <h5 class="text-right">Reopened:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" inputmode="Reopened" name="reOpen">
+                        <input type="text" id="reOpen" name="reOpen"/>
                     </div>
                 </td>
             </tr>
@@ -471,22 +471,22 @@
         <br>
         <div class="text-right">
             <div style="width: 7%;display: inline-block">
-                <input type="submit" class="btn btn-default" value="Save">
+                <input type="submit" class="btn btn-success" value="Save">
             </div>
-            <div style="width: 7%;display: inline-block">
-                <input type="submit" class="btn btn-default" value="Cancel">
+            <div style="width: 7%;display: inline-block;margin-right: 15px;margin-left: 20px">
+                <input type="submit" class="btn btn-danger" value="Cancel">
             </div>
         </div>
     </form>
-    <br>
-    <br>
 </div>
+<br>
+<br>
 <div class="modal fade" id="modal-claim">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
-                    �
+                    x
                 </button>
                 <h4 class="modal-title">
                     Claim List
@@ -629,6 +629,13 @@
                         }
                         $("input[name=id]").val(data.data.id);
                         $("input[name=code]").val(data.data.code);
+                        if(data.data.largeLossClaim === "Undetermined"){
+                            $("option[value=determined]").removeAttr("selected");
+                            $("option[value=undetermined]").attr("selected","selected");
+                        }else{
+                            $("option[value=determined]").attr("selected","selected");
+                            $("option[value=undetermined]").removeAttr("selected");
+                        }
                     });
                     $("#modal-claim").modal("hide");
                 },

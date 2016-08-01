@@ -94,3 +94,17 @@ select{
     border-right: 1px solid black;
     border-left: 1px solid black;
 }
+.table-claim-report-docket{
+    font-size: 12px;
+}
+.docket{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+form#trialFee h5{
+    font-size: 12px;
+}
