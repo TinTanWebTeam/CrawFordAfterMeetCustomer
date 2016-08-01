@@ -26,11 +26,16 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('employee','AdminController@getViewEmployee');
     Route::get('trialFee','AdminController@getViewTrialFee');
     Route::get('invoice','AdminController@getViewInvoice');
+    Route::get('report','AdminController@getViewReport');
+    Route::get('getClaimByCode/{code}','AdminController@getClaimByCode');
+    Route::get('getAllClaim','AdminController@getAllClaim');
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');
     Route::post('viewDetailEmployeeWhenUseEvenEnter','AdminController@viewDetailEmployeeWhenUseEvenEnter');
     Route::post('chooseClaimWhenUseEventEnter','AdminController@chooseClaimWhenUseEventEnter');
     Route::post('showInformationOfCustomer','AdminController@showInformationOfCustomer');
+    Route::post('actionBillOfClaimViewTrialFee','AdminController@actionBillOfClaimViewTrialFee');
+
 });
 
 /*

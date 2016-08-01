@@ -52,6 +52,9 @@ class Claim extends Model
         'reOpen',
         'eBoxDestroyed',
         'firstContact',
-        'proscription'
+        'proscription',
+        'initialReserve',
+        'currentRes',
+        'adjustReserve'
     ];
 }

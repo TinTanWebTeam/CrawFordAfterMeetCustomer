@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Bill;
 use App\Claim;
 use App\ClaimTaskDetail;
+use App\commAndPhotoExp;
+use App\consultFeesAndExp;
 use App\Customer;
+use App\generalExp;
+use App\gStFreeDisb;
 use App\Position;
+use App\professionalServices;
 use App\RateDetail;
+use App\travelRelatedExp;
 use App\User;
 use Auth;
 use Config;
@@ -38,14 +45,18 @@ class AdminController extends Controller
     public function getViewTrialFee()
     {
         $listCustomer = Customer::where('active',1)->get();
-        return view('admin.trialFee')->with('listCustomer',$listCustomer);
+        $claimIB = Claim::where('statusId',4)->get();
+        return view('admin.trialFee')->with('listCustomer',$listCustomer)->with('claimIB',$claimIB);
     }
 
     public function getViewInvoice()
     {
         return view('admin.invoice');
     }
-
+    public function getViewReport()
+    {
+        return view('admin.report');
+    }
     public function addNewAndUpdateEmployee(Request $request)
     {
         $result =null;
@@ -219,11 +230,28 @@ class AdminController extends Controller
 
     public function chooseClaimWhenUseEventEnter(Request $request)
     {
+        //dd($request->all());
         $result = null;
+        $claim = null;
+        $bill = null;
         try{
             if($request->get('key')!= null)
             {
-               $claim = Claim::where('code',$request->get('key'))->where('statusId',1)->first();
+                $claim = Claim::where('code',$request->get('key'))->where('statusId',1)->first();
+            }
+            else
+            {
+                if($request->get('id')!=null)
+                {
+                    $claim = Claim::where('id',$request->get('id'))->where('statusId',4)->first();
+                    if($claim)
+                    {
+                        $bill = Bill::where('claimId',$claim->id)->where('active',1)->first();
+                    }
+                }
+            }
+            if($claim)
+            {
                 $listClaimTaskDetail = DB::table('claim_task_details')
                     ->leftJoin('users','claim_task_details.userId','=','users.id')
                     ->leftJoin('rate_details','claim_task_details.userId','=','rate_details.userId')
@@ -233,27 +261,37 @@ class AdminController extends Controller
                     ->groupBy('users.name')
                     ->select(
                         'users.name as userName',
-                        'claim_task_details.professionalServices as cv9',
-                        DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTime'),
+                        'claim_task_details.professionalServices as cvChinh',
+                        'claim_task_details.expense as cvPhu',
+                        DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTimeCvChinh'),
+                        DB::raw('SUM(claim_task_details.expenseTime) as sumTimeCvPhu'),
                         'rate_details.value as rate',
                         'rate_types.name as rateType'
                     )
                     ->get();
-                    $collect = collect($listClaimTaskDetail);
-                    $array_all = [];
-                    foreach($collect as $item)
-                    {
-                        $array = [
-                            'Name'=>$item->userName,
-                            'Rate'=>$item->rate,
-                            'RateType'=>$item->rateType,
-                            'Sum'=>$item->sumTime,
-                            'ProfessionalServices'=>$item->sumTime*$item->rate
-                        ];
-                        array_push($array_all,$array);
-                    }
-                $result = array('Claim'=>$claim,'listClaimTaskDetail'=>$array_all);
+                $collect = collect($listClaimTaskDetail);
+                $array_all = [];
+                foreach($collect as $item)
+                {
+                    $array = [
+                        'Name'=>$item->userName,
+                        'Rate'=>$item->rate,
+                        'RateType'=>$item->rateType,
+                        'SumTimeCVChinh'=>$item->sumTimeCvChinh,
+                        'SumTimeCVPhu'=>$item->sumTimeCvPhu,
+                        'ProfessionalServices'=>$item->sumTimeCvChinh*$item->rate,
+                        'Expense'=>$item->sumTimeCvPhu*$item->rate,
+                    ];
+                    array_push($array_all,$array);
+                }
+                $result = array('Claim'=>$claim,'customer'=>$bill->billToId,'total'=>$bill->total,'listClaimTaskDetail'=>$array_all);
             }
+            else
+            {
+                $result = array('Claim'=>"",'customer'=>"",'total'=>"",'listClaimTaskDetail'=>"");
+            }
+
+
         }
         catch(Exception $ex)
         {
@@ -268,7 +306,7 @@ class AdminController extends Controller
         try{
             if($request->get('idCustomer')!= null)
             {
-                $result = Customer::where('id',$request->get('idCustomer'))->where('active',1)->first();
+                $result = Customer::where('code',$request->get('idCustomer'))->where('active',1)->first();
             }
         }
         catch(Exception $ex)
@@ -276,5 +314,125 @@ class AdminController extends Controller
             return $ex;
         }
         return $result;
+    }
+
+    public function actionBillOfClaimViewTrialFee(Request $request)
+    {
+        //dd($request->all());
+        $result = null;
+        try{
+            if($request->get("action")==="1")
+            {
+                //Update Status Claim
+                $claim = Claim::where('id',$request->get("data")["idClaim"])->first();
+                {
+                    $claim->statusId = 4;
+                    $claim->save();
+                }
+                //Insert data to table Claim_task_detail(Docket)
+                $claimTaskDetail = new ClaimTaskDetail();
+                $claimTaskDetail->professionalServices = 4;
+                $claimTaskDetail->professionalServicesTime = 0;
+                $claimTaskDetail->professionalServicesNote = "Interim Billing";
+                $claimTaskDetail->active =0;
+                $claimTaskDetail->statusId = 4;
+                $claimTaskDetail->claimId = $request->get("data")["idClaim"];
+                $claimTaskDetail->userId = Auth::user()->id;
+                $claimTaskDetail->createdBy = Auth::user()->id;
+                $claimTaskDetail->save();
+                //Insert data to table Bill
+                $bill = new Bill();
+                $bill->billToId = $request->get("data")["billToCustomer"];
+                $bill->claimId = $request->get("data")["idClaim"];
+                $bill->billId = $claimTaskDetail->id;
+                $bill->total = $request->get("data")["Total"];
+                $bill->save();
+                //Insert data detail table
+                foreach($request->get("data")["ArrayData"] as $item)
+                {
+                    $user = User::where('name',$item[0])->where('active',1)->first();
+                    if($user)
+                    {
+                        //table professional_services
+                        $professionalServices = new professionalServices();
+                        $professionalServices->billId = $bill->id;
+                        $professionalServices->userId = $user->id;
+                        $professionalServices->value = $item[4];
+                        $professionalServices->save();
+                        //table general exp
+                        $generalExp = new generalExp();
+                        $generalExp->billId = $bill->id;
+                        $generalExp->userId = $user->id;
+                        $generalExp->value = $item[5];
+                        $generalExp->save();
+                        //table commAndPhotoExp
+                        $commAndPhotoExp = new commAndPhotoExp();
+                        $commAndPhotoExp->billId = $bill->id;
+                        $commAndPhotoExp->userId = $user->id;
+                        $commAndPhotoExp->value = $item[6];
+                        $commAndPhotoExp->save();
+                        //table consultFeeAndExp
+                        $consultFeeAndExp = new consultFeesAndExp();
+                        $consultFeeAndExp->billId = $bill->id;
+                        $consultFeeAndExp->userId = $user->id;
+                        $consultFeeAndExp->value = $item[7];
+                        $consultFeeAndExp->save();
+                        //table travelRelatedExp
+                        $travelRelatedExp = new travelRelatedExp();
+                        $travelRelatedExp->billId = $bill->id;
+                        $travelRelatedExp->userId = $user->id;
+                        $travelRelatedExp->value = $item[8];
+                        $travelRelatedExp->save();
+                        //table gstFreeDisb
+                        $gstFreeDisb = new gStFreeDisb();
+                        $gstFreeDisb->billId = $bill->id;
+                        $gstFreeDisb->userId = $user->id;
+                        $gstFreeDisb->value = $item[9];
+                        $gstFreeDisb->save();
+                        //table disbursement
+                        $disbursement = new gStFreeDisb();
+                        $disbursement->billId = $bill->id;
+                        $disbursement->userId = $user->id;
+                        $disbursement->value = $item[10];
+                        $disbursement->save();
+                    }
+                }
+                $result = array("Action"=>"BillClaim","Result"=>1);
+            }
+            else
+            {
+                $bill = Bill::where('claimId',$request->get("data")["idClaim"])->first();
+                if($bill)
+                {
+                    $bill->total =  $request->get("data")["TotalUpdateInvoice"];
+                    $bill->save();
+                    $result = array("Action"=>"UpdateClaim","Result"=>1);
+                }
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $result;
+    }
+
+    public function getAllClaim()
+    {
+        return Claim::all();
+    }
+    public function getClaimByCode($code)
+    {
+        $claim = Claim::where('code', $code)->first();
+        if ($claim) {
+            return [
+                'status' => 201,
+                'data'   => $claim
+            ];
+        }
+        return [
+            'status' => 301,
+            'data'   => null
+        ];
     }
 }

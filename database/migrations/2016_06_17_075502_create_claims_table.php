@@ -67,6 +67,9 @@ class CreateClaimsTable extends Migration
             $table->dateTime('eBoxDestroyed')->nullable();
             $table->dateTime('firstContact')->nullable();
             $table->dateTime('proscription')->nullable();
+            $table->decimal('initialReserve')->nullable();
+            $table->decimal('currentRes')->nullable();
+            $table->decimal('adjustReserve')->nullable();
 
             $table->timestamps();
         });

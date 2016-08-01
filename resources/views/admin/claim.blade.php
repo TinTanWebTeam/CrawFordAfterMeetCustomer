@@ -403,12 +403,88 @@
             <tr>
                 <td colspan="4" rowspan="6"  style="border: 1px solid #c5c0c0;border-radius: 10px;padding: 10px;width: 878px;">
                     <h5>Co-insurers Detail</h5>
-                    <div class="table-responsive" style="width: 878px;">
-                        <table class="table table-bordered" style="width: 878px;">
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                    <div class="table-responsive" style="width: 600px;">
+                        <table class="table table-bordered" style="width: 800px;">
+                            <thead>
+                            <tr>
+                                <th style="background-color: blue;color: white;text-align: center">GL</th>
+                                <th colspan="4" style="text-align: center;background-color: blue;color: white">Branch/Adjuster Subtotals:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: center">Account</th>
+                                <th style="text-align: center">HC1A</th>
+                                <th style="text-align: center">SONV1</th>
+                                <th style="text-align: center">abc123</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="width: 170px">Hours</td>
+                                    <td>6.80</td>
+                                    <td>6.80</td>
+                                    <td>6.80</td>
+                                </tr>
+                                <tr>
+                                    <td>Rate</td>
+                                    <td>USD180.00</td>
+                                    <td>USD180.00</td>
+                                    <td>USD180.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Period</td>
+                                    <td>Hourly</td>
+                                    <td>Hourly</td>
+                                    <td>Hourly</td>
+                                </tr>
+                                <tr>
+                                    <td>Professional services</td>
+                                    <td>USD1.224.00</td>
+                                    <td>USD1.224.00</td>
+                                    <td>USD1.224.00</td>
+                                </tr>
+                                <tr>
+                                    <td>General Exp</td>
+                                    <td>USD0.00</td>
+                                    <td>USD0.00</td>
+                                    <td>USD0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Comm && Photo Exp</td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Consult Fees && Exp</td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Travel Related Exp</td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td>GST-free Disb</td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Disbursements</td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                    <td><input type="text" value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>USD0.00</td>
+                                    <td>USD0.00</td>
+                                    <td>USD0.00</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </td>
