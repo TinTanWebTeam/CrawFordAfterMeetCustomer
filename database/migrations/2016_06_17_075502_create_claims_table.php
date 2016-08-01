@@ -62,15 +62,15 @@ class CreateClaimsTable extends Migration
             $table->string('miscInfo',500)->nullable();
             $table->string('largeLossClaim',500)->nullable();
             $table->boolean('sirBreached')->default(1);
-            $table->boolean('claimAssignment')->defaulr(1);
+            $table->boolean('claimAssignment')->default(1);
             $table->string('policy',500)->nullable();
             $table->dateTime('reOpen')->nullable();
             $table->dateTime('eBoxDestroyed')->nullable();
             $table->dateTime('firstContact')->nullable();
             $table->dateTime('proscription')->nullable();
-            $table->decimal('initialReserve')->nullable();
-            $table->decimal('currentRes')->nullable();
-            $table->decimal('adjustReserve')->nullable();
+            $table->decimal('initialReserve')->dafault(0);
+            $table->decimal('currentRes')->dafault(0);
+            $table->decimal('adjustReserve')->dafault(0);
 
             $table->timestamps();
         });

@@ -384,7 +384,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" id="policyInceptionDate" name="policyInceptionDate">
+                        <input type="text" id="policyInceptionDate" name="policyInceptionDate">
                     </div>
                 </td>
             </tr>
@@ -395,7 +395,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="Date" id="policyExpiryDate" name="policyExpiryDate">
+                        <input type="text" id="policyExpiryDate" name="policyExpiryDate">
                     </div>
                 </td>
             </tr>
@@ -486,7 +486,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
-                    ×
+                    ï¿½
                 </button>
                 <h4 class="modal-title">
                     Claim List
@@ -546,7 +546,6 @@
                     id: null,
                     code : null,
                     branchSeqNo : null,
-                    privileged: null,
                     incident : null,
                     assignmentTypeCode : null,
                     accountCode : null,

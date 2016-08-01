@@ -266,8 +266,8 @@
         <br>
         <div class="row">
             <div class="col-sm-12" style="padding-right: 40px">
-                <button class="btn btn-sm btn-default pull-right">Cancel</button>
-                <button class="btn btn-sm btn-default pull-right">Save</button>
+                <button class="btn btn-sm btn-danger pull-right" style="margin-left: 20px">Cancel</button>
+                <button class="btn btn-sm btn-success pull-right">Save</button>
             </div>
         </div>
         <br>
@@ -353,8 +353,6 @@
         </tr>
         </tbody>
     </table>
-    <br>
-    <br>
     <br>
     <br>
 </div>
