@@ -13,6 +13,16 @@ class TaskCategoryTableSeeder extends Seeder
      */
     public function run()
     {
+        TaskCategory::create([
+            'code' => 'IB',
+            'name' => 'IB',
+            'description' => 'Interim Bill',
+        ]);
+        TaskCategory::create([
+            'code' => 'FB',
+            'name' => 'FB',
+            'description' => 'Final Bill',
+        ]);
         $faker = Factory::create();
         $codes = [
             'SV',

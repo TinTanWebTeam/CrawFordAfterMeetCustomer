@@ -45,6 +45,11 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('updatedBy')->default(0); //if not equal 0 will be reference to id in user
 
+            //Date bill
+            $table->dateTime('billDate')->nullable();
+            $table->string('invoiceMajorNo')->nullable();
+            $table->dateTime('invoiceDate')->nullable();
+
             $table->timestamps();
         });
     }
