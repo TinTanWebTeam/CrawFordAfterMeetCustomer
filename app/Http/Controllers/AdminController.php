@@ -59,6 +59,7 @@ class AdminController extends Controller
     }
     public function addNewAndUpdateEmployee(Request $request)
     {
+        //dd($request->all());
         $result =null;
         if($request->get('idAction')==1)
         {
@@ -233,7 +234,8 @@ class AdminController extends Controller
         //dd($request->all());
         $result = null;
         $claim = null;
-        $bill = null;
+        $billToId = null;
+        $billTotal = null;
         try{
             if($request->get('key')!= null)
             {
@@ -247,6 +249,8 @@ class AdminController extends Controller
                     if($claim)
                     {
                         $bill = Bill::where('claimId',$claim->id)->where('active',1)->first();
+                        $billToId = $bill->billToId;
+                        $billTotal = $bill->total;
                     }
                 }
             }
@@ -256,7 +260,7 @@ class AdminController extends Controller
                     ->leftJoin('users','claim_task_details.userId','=','users.id')
                     ->leftJoin('rate_details','claim_task_details.userId','=','rate_details.userId')
                     ->leftJoin('rate_types','rate_details.rateTypeId','=','rate_types.id')
-                    ->where('claim_task_details.active','=',1)
+                    ->where('claim_task_details.active',1)
                     ->where('claim_task_details.claimId','=',$claim->id)
                     ->groupBy('users.name')
                     ->select(
@@ -264,7 +268,7 @@ class AdminController extends Controller
                         'claim_task_details.professionalServices as cvChinh',
                         'claim_task_details.expense as cvPhu',
                         DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTimeCvChinh'),
-                        DB::raw('SUM(claim_task_details.expenseTime) as sumTimeCvPhu'),
+                        DB::raw('SUM(claim_task_details.expenseAmount) as expense'),
                         'rate_details.value as rate',
                         'rate_types.name as rateType'
                     )
@@ -278,13 +282,13 @@ class AdminController extends Controller
                         'Rate'=>$item->rate,
                         'RateType'=>$item->rateType,
                         'SumTimeCVChinh'=>$item->sumTimeCvChinh,
-                        'SumTimeCVPhu'=>$item->sumTimeCvPhu,
+                        'Expense'=>$item->expense,
                         'ProfessionalServices'=>$item->sumTimeCvChinh*$item->rate,
-                        'Expense'=>$item->sumTimeCvPhu*$item->rate,
+                        //'Expense'=>$item->sumTimeCvPhu*$item->rate,
                     ];
                     array_push($array_all,$array);
                 }
-                $result = array('Claim'=>$claim,'customer'=>$bill->billToId,'total'=>$bill->total,'listClaimTaskDetail'=>$array_all);
+                $result = array('Claim'=>$claim,'customer'=>$billToId,'total'=>$billTotal,'listClaimTaskDetail'=>$array_all);
             }
             else
             {
@@ -324,18 +328,18 @@ class AdminController extends Controller
             if($request->get("action")==="1")
             {
                 //Update Status Claim
-                $claim = Claim::where('id',$request->get("data")["idClaim"])->first();
-                {
-                    $claim->statusId = 4;
-                    $claim->save();
-                }
+//                $claim = Claim::where('id',$request->get("data")["idClaim"])->first();
+//                {
+//                    $claim->statusId = 4;
+//                    $claim->save();
+//                }
                 //Insert data to table Claim_task_detail(Docket)
                 $claimTaskDetail = new ClaimTaskDetail();
                 $claimTaskDetail->professionalServices = 4;
                 $claimTaskDetail->professionalServicesTime = 0;
                 $claimTaskDetail->professionalServicesNote = "Interim Billing";
-                $claimTaskDetail->active =0;
-                $claimTaskDetail->statusId = 4;
+                $claimTaskDetail->active =1;
+                $claimTaskDetail->statusId = 1;
                 $claimTaskDetail->claimId = $request->get("data")["idClaim"];
                 $claimTaskDetail->userId = Auth::user()->id;
                 $claimTaskDetail->createdBy = Auth::user()->id;

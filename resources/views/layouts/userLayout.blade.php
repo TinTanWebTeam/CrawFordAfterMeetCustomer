@@ -16,6 +16,8 @@
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
+		<!-- Style CSS -->
+		<link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
 	</head>
 	<body>
 		@include('partials.user.header')
@@ -32,6 +34,10 @@
 		<script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 		<!-- DataTables Bootstrap JavaScript -->
 		<script src="{{ asset('libs/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+		<!-- jquery validator -->
+		<script src="{{ asset('libs/jquery/jquery.validate.min.js') }}"></script>
+		<!-- Global JavaScript -->
+		<script src="{{ asset('user/js/global.js') }}"></script>
 		<script>
 			var url = "{{ asset('') }}";
 			var _token = "{{ csrf_token() }}";

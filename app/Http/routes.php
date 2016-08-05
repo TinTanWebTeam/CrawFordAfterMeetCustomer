@@ -44,4 +44,11 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
  * */
 Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::get('dashboard','UserController@dashboard');
+    Route::get('task','UserController@task');
+    Route::get('profile','UserController@profile');
+    Route::post('loadClaimByEventEnterKey','UserController@loadClaimByEventEnterKey');
+    Route::post('assignmentTask','UserController@assignmentTask');
+    Route::post('viewDetailTask','UserController@viewDetailTask');
+    Route::post('loadViewDocketDetail','UserController@loadViewDocketDetail');
+    Route::post('updateInformationOrChangePassword','UserController@updateInformationOrChangePassword');
 });

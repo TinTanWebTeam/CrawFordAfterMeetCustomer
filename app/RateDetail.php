@@ -16,5 +16,7 @@ class RateDetail extends Model
         'claimId',
         'createdBy',
         'updatedBy'
-    ]; 
+    ];
+
+
 }

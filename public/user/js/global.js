@@ -8,20 +8,21 @@ $(function() {
         element.addClass("active");
     }
     Catogories.find("li").eq(0).click(function() {
-        if ($(this).find("a").text() === "Claim") {
+        if ($(this).find("a").text() === "Profile") {
             setActiveMenu($(this));
-            $.get(url + "claim", function(viewClaim) {
-                $("div#page_container").empty().append(viewClaim);
+            $.get(url + "user/profile", function(viewProfileUser) {
+                $("div#page_container").empty().append(viewProfileUser);
             });
         }
     });
-    Catogories.find("li").eq(4).click(function() {
-        if ($(this).find("a").text() === "Employee") {
+    Catogories.find("li").eq(1).click(function() {
+        if ($(this).find("a").text() === "Task") {
             setActiveMenu($(this));
-            $.get(url + "employee", function(viewEmployee) {
-                $("div#page_container").empty().append(viewEmployee);
+            $.get(url + "user/task", function(viewTaskUser) {
+                $("div#page_container").empty().append(viewTaskUser);
             });
         }
+
     });
 
 });

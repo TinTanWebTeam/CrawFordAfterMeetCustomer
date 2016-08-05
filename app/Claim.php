@@ -57,4 +57,5 @@ class Claim extends Model
         'currentRes',
         'adjustReserve'
     ];
+
 }

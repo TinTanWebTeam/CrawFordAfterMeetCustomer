@@ -1,0 +1,114 @@
+.form-task h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+legend{
+    font-size: 16px;
+    border-bottom: 1px solid #969292;
+}
+body{
+    background-color: #ffffff;
+}
+input{
+    background-color: #f8f8f8;
+    width: 100%;
+}
+select{
+    background-color: #f8f8f8;
+}
+.form-claim{
+
+}
+.form-claim h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+.form-employee h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+.form-invoice h5{
+    font-size: 12px;
+    margin-top: 7px;
+}
+.form-employee legend{
+    font-size: 14px;
+}
+form.form-claim table tr td {
+    padding: 0px 10px 0px 10px;
+}
+select{
+    height: 26px;
+}
+.report-logo{
+    border-bottom: 3px solid black;
+}
+.report-logo-img{
+    width: 150px;
+    height: 50px;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.h6-printed-time{
+    font-style: italic;
+}
+.claim-report-our-file{
+    border-bottom: 1px solid black;
+}
+.percent-15{
+    width: 15%;
+}
+.table-claim-report-info{
+    font-size: 12px;
+}
+.text-bold{
+    font-weight: 600;
+}
+.co-insurer{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.table-claim-report-co-insurer{
+    font-size: 12px;
+}
+.table-claim-report-reserves{
+    font-size: 12px;
+}
+.reserves{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.padding-15{
+    padding-left: 15%;
+}
+.table-claim-report-assist{
+    font-size: 12px;
+}
+.assist{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.table-claim-report-docket{
+    font-size: 12px;
+}
+.docket{
+    margin-top: 30px;
+    border-top: 1px solid black;
+    border-bottom: 4px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+form#trialFee h5{
+    font-size: 12px;
+}

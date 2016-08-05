@@ -255,41 +255,32 @@
                 <thead>
                 <tr>
                     <th style="background-color: blue;color: white;text-align: center">GL</th>
-
                 </tr>
                 <tr>
                     <th style="text-align: center">Account</th>
-
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td style="width: 170px">Hours</td>
-
                 </tr>
                 <tr>
                     <td>Rate</td>
-
                 </tr>
                 <tr>
                     <td>Period</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Professional services</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">General Exp</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Comm && Photo Exp</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Consult Fees && Exp</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Travel Related Exp</td>
@@ -297,15 +288,12 @@
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">GST-free Disb</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Disbursements</td>
-
                 </tr>
                 <tr>
                     <td style="width: 266px;height:43px">Total</td>
-
                 </tr>
                 </tbody>
             </table>
@@ -435,7 +423,7 @@
                             }
                             else {
                                 $("input[name=idClaim]").val(data["Claim"]["id"]);
-                                $("input[name=insured]").val(data["Claim"]["insuredName"]);
+                                $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
                                 $("input[name=branch]").val(data["Claim"]["branchCode"]);
                                 $("input[name=lossDate]").val(trialFeeView.convertStringToDate(data["Claim"]["lossDate"]));
@@ -450,7 +438,7 @@
                                     //Insert data to thead of table
                                     theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Name"] + "</th>");
                                     //Insert data to tbody of table
-                                    tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + (parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVChinh"]) + parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVPhu"])) + "</td>");
+                                    tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + (parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVChinh"])) + "</td>");
                                     tbodyList.find("tr:eq(1)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">USD" + data["listClaimTaskDetail"][i]["Rate"] + "</td>");
                                     tbodyList.find("tr:eq(2)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + data["listClaimTaskDetail"][i]["RateType"] + "</td>");
                                     // CV ch�nh v� CV ph?
