@@ -22,6 +22,7 @@ class CreateClaimsTable extends Migration
             $table->string('accountPolicyId')->nullable();
             $table->string('insuredFirstName',200)->nullable();
             $table->string('insuredLastName',200)->nullable();
+            $table->string('insuredAddress')->nullable();
             $table->string('insuredClaim',100)->nullable();
             $table->string('tradingAs',100)->nullable();
             $table->string('claimTypeCode',20); //reference to code in insurance detail

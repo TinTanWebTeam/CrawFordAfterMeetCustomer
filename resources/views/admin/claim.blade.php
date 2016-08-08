@@ -112,7 +112,7 @@
                 </td>
                 <td colspan="2">
                     <div style="display: inline-block;width: 30%">
-                        <button style="width: 100%">Address...</button>
+                        <button style="width: 100%" id="insured_address">Address...</button>
                     </div>
                     <div style="display: inline-block;width: 68%">
                         <input type="text" id="insuredFirstName" name="insuredFirstName">
@@ -215,7 +215,7 @@
                     <h5 class="text-right">Loss Desc:</h5>
                 </td>
                 <td>
-                    <input type="text" id="lossLocation" name="lossDescCode">
+                    <input type="text" id="lossDescCode" name="lossDescCode">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
@@ -498,22 +498,22 @@
                         <thead>
                         <tr>
                             <th>
-                                code
+                                Code
                             </th>
                             <th>
-                                insuredName
+                                Insured Name
                             </th>
                             <th>
-                                lossLocation
+                                Loss Location
                             </th>
                             <th>
-                                receiveDate
+                                Receive Date
                             </th>
                             <th>
-                                openDate
+                                Open Date
                             </th>
                             <th>
-                                adjuster
+                                Adjuster
                             </th>
                             <th>
                             </th>
@@ -535,9 +535,38 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal-insured-address">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Insured Address
+                </h4>
+            </div>
+            <div class="modal-body">
+                <textarea name="insuredAddress" id="insuredAddress" rows="10" style="width: 100%;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).on('keypress',':input:not(textarea):not([type=submit])', function (e) {
         if (e.which == 13) e.preventDefault();
+    });
+    $("button#insured_address").click(function (e) {
+        e.preventDefault();
+        $("#modal-insured-address").modal("show");
     });
     $(function () {
         if(typeof claimView === 'undefined'){
@@ -622,6 +651,7 @@
                 },
                 fillClaimToForm : function (claimId) {
                     $.get(url+"getClaimByCode/"+claimId,function (data) {
+                        console.log(data);
                         if(data.status === 201){
                             for(var i = 0; i < Object.keys(data.data).length;i++){
                                 $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);

@@ -10,7 +10,6 @@
 		<link rel="stylesheet" href="{{ asset('libs/bootstrap/dist/css/bootstrap.min.css') }}">
 		<!-- DataTables CSS -->
 		<link rel="stylesheet" href="{{ asset('libs/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('admin/js/printThis.js') }}">
         <!-- Style CSS -->
         <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -40,6 +39,8 @@
 		<script src="{{ asset('libs/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 		<!-- jquery validator -->
 		<script src="{{ asset('libs/jquery/jquery.validate.min.js') }}"></script>
+        <!-- print plugin -->
+        <script src="{{ asset('admin/js/printThis.js') }}"></script>
         <!-- Global JavaScript -->
         <script src="{{ asset('admin/js/global.js') }}"></script>
 	</body>
