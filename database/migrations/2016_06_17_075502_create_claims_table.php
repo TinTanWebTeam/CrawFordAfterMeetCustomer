@@ -15,18 +15,19 @@ class CreateClaimsTable extends Migration
         Schema::create('claims', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code',20)->nullable();
-            $table->string('branchSeqNo',20)->nullalbe();
+            $table->string('branchSeqNo',20)->nullable();
             $table->string('incident',20)->nullable();
             $table->string('assignmentTypeCode',20)->nullable();
-            $table->string('accountCode',20)->nullalbe();
+            $table->string('accountCode',20)->nullable();
             $table->string('accountPolicyId')->nullable();
             $table->string('insuredFirstName',200)->nullable();
             $table->string('insuredLastName',200)->nullable();
+            $table->string('insuredAddress')->nullable();
             $table->string('insuredClaim',100)->nullable();
             $table->string('tradingAs',100)->nullable();
             $table->string('claimTypeCode',20); //reference to code in insurance detail
             $table->string('lossDescCode',20); //reference to code in type of damage
-            $table->string('catastrophicLoss')->nullalbe(); //reference to code in extend of damage
+            $table->string('catastrophicLoss')->nullable(); //reference to code in extend of damage
             $table->string('sourceCode',20); //reference to code in source customer
             $table->string('insurerCode',20); //reference to code in customer
             $table->string('brokerCode',20)->nullable(); //if not null will be reference to code in broker

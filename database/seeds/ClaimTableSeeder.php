@@ -25,6 +25,7 @@ class ClaimTableSeeder extends Seeder
                 'branchCode' => $faker->countryCode,
                 'branchTypeCode' => $faker->countryCode,
                 'accountPolicyId'=>$faker->streetName,
+                'insuredAddress' =>$faker->address,
                 'insuredFirstName'=>$faker->firstName,
                 'insuredLastName'=>$faker->lastName,
                 'insuredClaim'=>$faker->streetName,
@@ -60,7 +61,8 @@ class ClaimTableSeeder extends Seeder
                 'reOpen' => $faker->date(),
                 'eBoxDestroyed' => $faker->date(),
                 'firstContact' => $faker->date(),
-                'proscription' => $faker->date()
+                'proscription' => $faker->date(),
+                'estimatedClaimValue' => 2000
             ]);
         }
     }

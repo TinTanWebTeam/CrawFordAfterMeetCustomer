@@ -112,7 +112,7 @@
                 </td>
                 <td colspan="2">
                     <div style="display: inline-block;width: 30%">
-                        <button style="width: 100%">Address...</button>
+                        <button style="width: 100%" id="insured_address">Address...</button>
                     </div>
                     <div style="display: inline-block;width: 68%">
                         <input type="text" id="insuredFirstName" name="insuredFirstName">
@@ -215,7 +215,7 @@
                     <h5 class="text-right">Loss Desc:</h5>
                 </td>
                 <td>
-                    <input type="text" id="lossLocation" name="lossDescCode">
+                    <input type="text" id="lossDescCode" name="lossDescCode">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
@@ -471,16 +471,17 @@
         <br>
         <div class="text-right">
             <div style="width: 7%;display: inline-block">
-                <input type="submit" class="btn btn-success" value="Save">
+                <input type="button" class="btn btn-success" value="Save">
             </div>
             <div style="width: 7%;display: inline-block;margin-right: 15px;margin-left: 20px">
-                <input type="submit" class="btn btn-danger" value="Cancel">
+                <input type="button" class="btn btn-danger" value="Cancel">
             </div>
         </div>
     </form>
 </div>
 <br>
 <br>
+{{--claim--}}
 <div class="modal fade" id="modal-claim">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -498,22 +499,22 @@
                         <thead>
                         <tr>
                             <th>
-                                code
+                                Code
                             </th>
                             <th>
-                                insuredName
+                                Insured Name
                             </th>
                             <th>
-                                lossLocation
+                                Loss Location
                             </th>
                             <th>
-                                receiveDate
+                                Receive Date
                             </th>
                             <th>
-                                openDate
+                                Open Date
                             </th>
                             <th>
-                                adjuster
+                                Adjuster
                             </th>
                             <th>
                             </th>
@@ -535,13 +536,206 @@
         </div>
     </div>
 </div>
+{{--source code--}}
+<div class="modal fade" id="modal-source-code">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Source Code
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th data-name="id" style="display: none">
+                                Id
+                            </th>
+                            <th data-name="code">
+                                Code
+                            </th>
+                            <th data-name="name">
+                                Name
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="modal-source-code-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button" id="addNewUpdate">
+                    Add New
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-source-code-modify">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Source Code Modify
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="text" name="source_code_modify_id" id="source_code_modify_id" value="0" style="display: none">
+                        <div class="col-sm-3">
+                            <h5>Code</h5>
+                            <input type="text" class="form-control" id="source_code_modify_code" name="source_code_modify_code">
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>Name</h5>
+                            <input type="text" class="form-control" name="source_code_modify_name" id="source_code_modify_name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--claim type--}}
+<div class="modal fade" id="modal-claim-type">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Claim Type
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th data-name="id" style="display: none">
+                                Id
+                            </th>
+                            <th data-name="code">
+                                Code
+                            </th>
+                            <th data-name="name">
+                                Name
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="modal-claim-type-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button" id="addNewUpdate">
+                    Add New
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-claim-type-modify">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Claim Type Modify
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="text" name="source_code_modify_id" id="source_code_modify_id" value="0" style="display: none">
+                        <div class="col-sm-3">
+                            <h5>Code</h5>
+                            <input type="text" class="form-control" id="source_code_modify_code" name="source_code_modify_code">
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>Name</h5>
+                            <input type="text" class="form-control" name="source_code_modify_name" id="source_code_modify_name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--insured address--}}
+<div class="modal fade" id="modal-insured-address">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Insured Address
+                </h4>
+            </div>
+            <div class="modal-body">
+                <textarea name="insuredAddress" id="insuredAddress" rows="10" style="width: 100%;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">
+                    Close
+                </button>
+                <button class="btn btn-primary" type="button">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).on('keypress',':input:not(textarea):not([type=submit])', function (e) {
         if (e.which == 13) e.preventDefault();
     });
+
     $(function () {
         if(typeof claimView === 'undefined'){
-            cliamView = {
+            claimView = {
                 claimViewObject : {
                     id: null,
                     code : null,
@@ -613,7 +807,9 @@
                         }
                     }
                     cliamView.claimViewObject.id = $("input[name=id]").val();
-                    console.log(cliamView.claimViewObject);
+                    $.post(url+'saveClaim/'+ cliamView.claimViewObject.id,{_token:_token,claim : cliamView.claimViewObject},function (data) {
+                        console.log(data);
+                    });
                 },
                 cancel : function () {
                     for(var i = 0; i < Object.keys(cliamView.claimViewObject).length;i++){
@@ -622,6 +818,7 @@
                 },
                 fillClaimToForm : function (claimId) {
                     $.get(url+"getClaimByCode/"+claimId,function (data) {
+                        console.log(data);
                         if(data.status === 201){
                             for(var i = 0; i < Object.keys(data.data).length;i++){
                                 $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
@@ -670,8 +867,67 @@
                             $("input[name=id]").val(result.data.id);
                         });
                     }
+                },
+                fillSourceCustomerFromModalToInput: function(element){
+                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("#modal-source-code").modal("hide");
+                },
+                fillClaimTypeFromModalToInput : function(element){
+                    $("input[name=claimTypeCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("#modal-source-code").modal("hide");
                 }
             };
         }
+        /* insured address */
+        $("button#insured_address").click(function (e) {
+            e.preventDefault();
+            $("#modal-insured-address").modal("show");
+        });
+        /* source code */
+        $("input#sourceCode").dblclick(function () {
+            $("#modal-source-code").modal("show");
+            $.get(url + 'getAllSourceCode',function (data) {
+                var tr = "";
+                for(var i = 0;i<data.length;i++){
+                    tr+= "<tr>";
+                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
+                    tr+="<td>"+data[i].code+"</td>";
+                    tr+="<td>"+data[i].name+"</td>";
+                    tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info'><span class='glyphicon glyphicon-edit'></span></button></td>";
+                    tr+="</tr>";
+                }
+                $("#modal-source-code-table-body").empty().append(tr);
+            });
+        });
+        $("#modal-source-code").find("button#addNewUpdate").click(function () {
+            $("#modal-source-code").modal("hide");
+            $("#modal-source-code-modify").modal("show");
+        });
+        /* claim type */
+        $("input#claimTypeCode").dblclick(function () {
+            $("#modal-claim-type").modal("show");
+            $.get(url + 'getAllClaimType',function (data) {
+                var tr = "";
+                for(var i = 0;i<data.length;i++){
+                    tr+= "<tr>";
+                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
+                    tr+="<td>"+data[i].code+"</td>";
+                    tr+="<td>"+data[i].name+"</td>";
+                    tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info'><span class='glyphicon glyphicon-edit'></span></button></td>";
+                    tr+="</tr>";
+                }
+                $("#modal-claim-type-table-body").empty().append(tr);
+            });
+        });
+        $("#modal-claim-type").find("button#addNewUpdate").click(function () {
+            $("#modal-claim-type").modal("hide");
+            $("#modal-claim-type-modify").modal("show");
+        });
+
+
+        $("input[value=Save]").click(function (e) {
+            e.preventDefault();
+            cliamView.save();
+        });
     });
 </script>
