@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class professionalServices extends Model
+class CommPhotoExp extends Model
 {
-    protected $table= 'professional_services';
+    protected $table= 'comm_photo_exps';
     protected $fillable = [
         'id',
         'billId',

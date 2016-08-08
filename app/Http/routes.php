@@ -30,6 +30,9 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('docket','AdminController@getViewDocket');
     Route::get('getClaimByCode/{code}','AdminController@getClaimByCode');
     Route::get('getAllClaim','AdminController@getAllClaim');
+    Route::get('getAllSourceCode','AdminController@getAllSourceCode');
+    Route::get('getAllClaimType','AdminController@getAllClaimType');
+
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');
     Route::post('viewDetailEmployeeWhenUseEvenEnter','AdminController@viewDetailEmployeeWhenUseEvenEnter');
@@ -38,6 +41,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('actionBillOfClaimViewTrialFee','AdminController@actionBillOfClaimViewTrialFee');
     Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
     Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
+    Route::post('saveClaim/{claimId}','AdminController@saveClaim');
+
 });
 
 /*
@@ -52,4 +57,5 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::post('viewDetailTask','UserController@viewDetailTask');
     Route::post('loadViewDocketDetail','UserController@loadViewDocketDetail');
     Route::post('updateInformationOrChangePassword','UserController@updateInformationOrChangePassword');
+
 });

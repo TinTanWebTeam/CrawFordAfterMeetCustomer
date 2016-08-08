@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class total extends Model
+class Total extends Model
 {
     protected $table= 'totals';
     protected $fillable = [

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommAndPhotoExpsTable extends Migration
+class CreateCommPhotoExpsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,13 @@ class CreateCommAndPhotoExpsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comm_and_photo_exps', function (Blueprint $table) {
+        Schema::create('comm_photo_exps', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('billId');//if not null to reference to id in bill
             $table->integer('userId');//if not null to reference to id in user
             $table->decimal('value')->default(0);
 
             $table->timestamps();
-
         });
     }
 
@@ -30,6 +29,6 @@ class CreateCommAndPhotoExpsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('comm_and_photo_exps');
+        Schema::drop('comm_photo_exps');
     }
 }

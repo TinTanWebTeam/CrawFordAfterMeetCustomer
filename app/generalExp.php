@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class generalExp extends Model
+class GeneralExp extends Model
 {
     protected $table= 'general_exps';
     protected $fillable = [
@@ -13,6 +13,6 @@ class generalExp extends Model
         'userId',
         'value',
         'createdBy',
-        'updatedBy'
-    ];
+        'updatedBy',
+        ];
 }

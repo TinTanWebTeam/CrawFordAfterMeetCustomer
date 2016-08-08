@@ -39,6 +39,7 @@
                         <th>Id</th>
                         <th>Customer</th>
                         <th>Status</th>
+                        <th style="display: none">Total</th>
                     </tr>
                     </thead>
                     <tbody id="tbodyTableBillOfClaim">
@@ -222,7 +223,7 @@
         </div>
         <div class="col-sm-7">
             <div class="row"
-                 style="border: 1px solid #A9A6A6;padding: 10px 10px;margin-left: 1px;height: 314px">
+                 style="border: 1px solid #A9A6A6;padding: 10px 10px;margin-left: 1px;height: 360px">
                 <table style="width: 100%">
                     <tr>
                         <td style="width: 10%">
@@ -267,7 +268,13 @@
                         </td>
                     </tr>
                 </table>
-                <div class="row" style="margin-top: 60px">
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-sm-12 text-right">
+                        <h4 style="display: inline-block;">Interim Bill</h4>&nbsp;&nbsp;<input type="radio" name="bill-type" id="interim_bill" checked style="display: inline-block;width: 20px;height: 20px;padding-top: 5px">
+                        <h4 style="display: inline-block;">Final Bill</h4>&nbsp;&nbsp;<input type="radio" name="bill-type" id="final_bill" style="display: inline-block;width: 20px;height: 20px;padding-top: 5px">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px">
                     <button type="button" class="btn btn-danger pull-right" onclick="trialFeeView.cancel()"
                             name="cancel"
                             style="margin-right: 15px;margin-left: 15px">
@@ -278,6 +285,17 @@
                         Bill Claim
                     </button>
                 </div>
+                {{--<div class="row" style="margin-top: 120px">--}}
+                    {{--<button type="button" class="btn btn-danger pull-right" onclick="trialFeeView.cancel()"--}}
+                            {{--name="cancel"--}}
+                            {{--style="margin-right: 15px;margin-left: 15px">--}}
+                        {{--Cancel--}}
+                    {{--</button>--}}
+                    {{--<button type="button" class="btn btn-success pull-right" onclick="trialFeeView.actionBillOfClaim()"--}}
+                            {{--name="btnBill">--}}
+                        {{--Bill Claim--}}
+                    {{--</button>--}}
+                {{--</div>--}}
             </div>
         </div>
     </form>
@@ -488,12 +506,12 @@
                                     tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + (parseFloat(data["listClaimTaskDetail"][i]["ProfessionalServices"]) + parseFloat(data["listClaimTaskDetail"][i]["Expense"])) + "'></td>");
                                 }
                                 //insert total into table total
-                                trialFeeView.loadDataToTableTotal();
+                                trialFeeView.loadDataToTableTotal(data);
                             }
                         });
                     }
                 },
-                loadDataToTableTotal: function () {
+                loadDataToTableTotal: function (data) {
                     var arrSum = [];
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                     var tbodyListTotal = $("tbody[id=tbodyListTotal]");
@@ -519,7 +537,7 @@
                         if (z > 2 && z <= 10) {
                             if ($("input[name=action]").val() === "0") {
                                 if (z === 10) {
-                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' value=" + arrSum[h] + "></td>");
+                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' value=" + data + "></td>");
                                     h++;
                                 }
                                 else {
@@ -554,7 +572,7 @@
                         }
                     }
                     $("tbody[id=tbodyTableListTaskDetail]").find("tr:eq(10)").find("td[id=" + $(element).parent().attr("id") + "]").children().val(sum);
-                    trialFeeView.loadDataToTableTotal();
+                    trialFeeView.loadDataToTableTotal(element);
                 },
                 actionBillOfClaim: function () {
                     $("div[id=modalConfirm]").modal("show");
@@ -591,6 +609,7 @@
                         Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
                         TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
                         toDate:$("input[name=ToDate]").val(),
+                        billType: $("input[name=bill-type]:checked").attr("id"),
                         ArrayData: objectUserAll
                     };
                     $.post(url + "actionBillOfClaimViewTrialFee", {
@@ -633,6 +652,7 @@
                             tr += "<td>" + data[i]["idBill"] + "</td>";
                             tr += "<td>" + data[i]["customer"] + "</td>";
                             tr += "<td>" + data[i]["status"] + "</td>";
+                            tr += "<td style='display: none'>" + data[i]["total"] + "</td>";
                             row += tr;
                         }
                         $("tbody[id=tbodyTableBillOfClaim]").empty().append(row);
@@ -640,7 +660,17 @@
                     $("div[id=modalListClaimIB]").modal("show");
                 },
                 viewDetailIBClaim: function (element) {
-                    $("button[name=btnBill]").text("Update Bill ");
+                    var total = $(element).find("td:eq(3)").text();
+                    console.log($(element).find("td:eq(2)").text());
+                    if($(element).find("td:eq(2)").text()==="Complete")
+                    {
+                        $("button[name=btnBill]").text("Update Bill ").prop('disabled', true);
+                    }
+                    else
+                    {
+                        $("button[name=btnBill]").text("Update Bill ");
+                    }
+
                     $("input[name=action]").val("0");
                     $("select#chooseCustomer").val($(element).find("td:eq(1)").text());
                     trialFeeView.showInformationOfCustomer();
@@ -667,7 +697,7 @@
                         }
                         while(k<data.length);
                         //insert total into table total
-                        trialFeeView.loadDataToTableTotal();
+                        trialFeeView.loadDataToTableTotal(total);
                     });
                 },
                 cancel:function()
@@ -677,7 +707,6 @@
                         trialFeeView.chooseClaimWhenUseEventEnterKey();
                     }
                 }
-
             };
         }
         else {
