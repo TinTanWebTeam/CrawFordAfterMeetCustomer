@@ -307,7 +307,7 @@
             </tr>
             <tr>
                 <td class="text-right">
-                    <button>Loss Location</button>
+                    <h5 class="text-right">Loss Location</h5>
                 </td>
                 <td colspan="3">
                     <input type="text" id="lossLocation" name="lossLocation">
