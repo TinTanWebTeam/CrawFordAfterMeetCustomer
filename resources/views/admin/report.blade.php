@@ -1,454 +1,494 @@
 <div class="row" style="background-color: #fff;">
-    <form accept-charset="utf-8" action="report_submit">
-    </form>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-info">
-        <thead>
-            <tr style="width: 100%">
-                <th class="report-logo" colspan="20">
-                    <img alt="CrawFord Logo" class="report-logo-img" src="{{ asset('img/crawford1.png') }}"/>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="claim-report-our-file">
-                <td colspan="10">
-                    <div>
-                        <h4>Claim Report</h4>
-                        <h6 class="h6-printed-time">Printed : 13/06/2016 10:03:49 AM</h6>
-                    </div>
-                </td>
-                <td colspan="10">
-                    <div style="text-align: right">
-                        <h4>Our File #: 1001682 &nbsp;</h4>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold text-bold" style="width:16%" colspan="5">Branch Seq No:</td>
-                <td style="width: 40%"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Loss Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Incident #:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Receive Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Assognment Type Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Open Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Account Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Close Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Account PolicyID:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Insured Contacted Date:</td>
-                <td>September 01, 2015</td>            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Insured Name:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Policy Inception Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Insured Claim #:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Policy Expiry Date:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Trading As:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Disability Code:</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Claim Type Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Outcome Code:</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Loss Desc Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Last Changed:</td>
-                <td>September 01, 2015</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Catastrophic Loss:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Partnership ID:</td>
-                <td>1X</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Source Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Ajuster Code:</td>
-                <td>SONV1</td>
-                <td>Vun Thanh Son</td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Insurer Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Rate:</td>
-                <td>$150.00</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Broker Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Fee type:</td>
-                <td>Hourly</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Branch Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Taxable:</td>
-                <td>Yes</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Branch Type Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right text-bold">Estimated Claim Value:</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Destroyed Date:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Loss Location:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-right text-bold" colspan="5">Line Of Business Code:</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-co-insurer">
-        <thead>
-            <tr class="co-insurer">
-                <th colspan="5"><h4 class="text-center">Co - Insurers</h4></th>
-            </tr>
-            <tr style="border-bottom: 1px solid black;">
-                <th class="text-center">Percentage</th>
-                <th class="text-center">Bill To ID</th>
-                <th class="text-center">Claim Officer</th>
-                <th class="text-center">policy Number</th>
-                <th class="text-center">Comp. Claim Number</th>    
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="text-center">100.00 %</td>
-                <td class="text-center">FUBHCM1</td>
-                <td class="text-center">Mr. Nguyen Hung Linh</td>
-                <td class="text-center">P0014CFE40005814</td>
-                <td class="text-center">To be advise</td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-reserves">
-        <thead>
-            <tr class="reserves">
-                <th colspan="8"><h4 class="text-center">Reserves</h4></th>
-            </tr>
-            <tr style="border-bottom: 1px solid black;">
-                <th class="text-center text-bold">Date</th>
-                <th class="text-center text-bold">Third Party</th>
-                <th class="text-center text-bold">Reserve</th>
-                <th class="text-center text-bold">ADJ</th>
-                <th class="text-center text-bold">PMT</th>
-                <th class="text-center text-bold">EXP</th>
-                <th class="text-center text-bold">REC</th>
-                <th class="text-center text-bold">Total Inc.</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    12-May-2016
-                </td>
-                <td></td>
-                <td class="text-center">ADJUST</td>
-                <td></td>
-                <td></td>
-                <td class="text-left padding-15">27,388.06</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-assist">
-        <thead>
-            <tr class="assist">
-                <th colspan="9"><h4 class="text-center">Assists</h4></th>
-            </tr>
-            <tr style="border-bottom: 1px solid black;">
-                <th class="text-bold">Branch</th>
-                <th class="text-bold">Adjuster First Name</th>
-                <th class="text-bold">Adjuster Last Name</th>
-                <th class="text-bold">Rate</th>
-                <th class="text-bold">Fee Type</th>
-                <th class="text-bold">Diarize</th>
-                <th class="text-bold">Dairy Date</th>
-                <th class="text-bold">Assist Completed</th>
-                <th class="text-bold">Date Added</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-            <tr>
-                <td>HC1A</td>
-                <td>Thi Minh Hanh</td>
-                <td>Luu</td>
-                <td>90.00</td>
-                <td>Hourly</td>
-                <td>No</td>
-                <td></td>
-                <td>Yes</td>
-                <td>09-Dec-2015</td>
-            </tr>
-        </tbody>
-    </table>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-docket">
-        <thead>
-        <tr class="docket">
-            <th colspan="10"><h4 class="text-center">Docket</h4></th>
-        </tr>
-        <tr style="border-bottom: 1px solid black;">
-            <th class="text-bold text-center">Date</th>
-            <th class="text-bold text-center">Adjuster Code</th>
-            <th class="text-bold text-center">Professional Code</th>
-            <th class="text-bold text-center">Professional Unit</th>
-            <th class="text-bold text-center">Professional Note</th>
-            <th class="text-bold text-center">Expense Code</th>
-            <th class="text-bold text-center">Expense Unit</th>
-            <th class="text-bold text-center">Expense Note</th>
-            <th class="text-bold text-center">Invoice MajorNo</th>
-            <th class="text-bold text-center">Invoice Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="text-center">03-Sep-2015</td>
-            <td class="text-center">SONV1</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">2703</td>
-            <td class="text-center">09-Dec-2015</td>
-        </tr>
-        <tr>
-            <td class="text-center">03-Sep-2015</td>
-            <td class="text-center">SONV1</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">2703</td>
-            <td class="text-center">09-Dec-2015</td>
-        </tr>
-        <tr>
-            <td class="text-center">03-Sep-2015</td>
-            <td class="text-center">SONV1</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">2703</td>
-            <td class="text-center">09-Dec-2015</td>
-        </tr>
-        <tr>
-            <td class="text-center">03-Sep-2015</td>
-            <td class="text-center">SONV1</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">2703</td>
-            <td class="text-center">09-Dec-2015</td>
-        </tr>
-        <tr>
-            <td class="text-center">03-Sep-2015</td>
-            <td class="text-center">SONV1</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">SV</td>
-            <td class="text-center">3.5</td>
-            <td>Site Visit: ...</td>
-            <td class="text-center">2703</td>
-            <td class="text-center">09-Dec-2015</td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
+    <div class="col-sm-6">
+        <h5>Claim Id: </h5>
+        <input type="text" id="claim_id" style="display: inline-block;width: 70%">&nbsp;&nbsp;<button id="show_bill" style="display: inline-block">Show All Bill</button>
+    </div>
+    <div class="col-sm-6">
+        <h5 class="text-right" style="width: 100%;">-------------------------------------------------------------------</h5>
+        <button class="pull-right">Print Report</button>
+    </div>
+    &nbsp;
+
 </div>
+<div class="row" style="overflow: scroll">
+    <div style="width: 1280px;">
+        <div class="table-responsive">
+            <table class="table">
+                <div class="report">
+                    <div class="page" id="page_1">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                                <div class="claim-info">
+                                    <div class="claim-info-col-1">
+                                        <span>Branch Seq No:</span>
+                                        <span>Incident #:</span>
+                                        <span>Asssignment Type Code:</span>
+                                        <span>Account Code:</span>
+                                        <span>Insured Name:</span>
+                                        <span>Insured Claim #:</span>
+                                        <span>Trading As:</span>
+                                        <span>Claim Type Code:</span>
+                                        <span>Loss Desc Code:</span>
+                                        <span>Catastrophic Loss:</span>
+                                        <span>Source Code:</span>
+                                        <span>Insurer Code:</span>
+                                        <span>Broker Code:</span>
+                                        <span>Branch Code:</span>
+                                        <span>Branch Type Code:</span>
+                                        <span>Destroyed Date:</span>
+                                        <span>Loss Location:</span>
+                                        <span>Line Of Business Code:</span>
+                                    </div>
+                                    <div class="claim-info-col-2">
+                                        asfkaskjfnaksf
+                                    </div>
+                                    <div class="claim-info-col-3">
+                                        <div class="claim-info-col-3-row-1">
+                                            <div class="claim-info-col-3-row-1-col-1">
+                                                <span>Loss Date:</span>
+                                                <span>Receive Date:</span>
+                                                <span>Open Date:</span>
+                                                <span>Close Date:</span>
+                                                <span>Insured Contacted Date:</span>
+                                                <span>Limitation Date:</span>
+                                                <span>Policy Inception Date:</span>
+                                                <span>Policy Expiry Date:</span>
+                                                <span>Disability Code:</span>
+                                                <span>Outcome Code:</span>
+                                                <span>Last Changed:</span>
+                                                <span>Partnership Id:</span>
+                                            </div>
+                                            <div class="claim-info-col-3-row-1-col-2">
+                                            </div>
+                                        </div>
+                                        <div class="claim-info-col-3-row-2">
+                                            <div class="claim-info-col-3-row-2-col-1">
+                                                <span>Adjuster Code:</span>
+                                                <span>Rate:</span>
+                                                <span>Fee Type:</span>
+                                                <span>Taxable:</span>
+                                                <span>Estimated Claim Vaule:</span>
+                                                <span>&nbsp;</span>
+                                            </div>
+                                            <div class="claim-info-col-3-row-2-col-2">
+                                            </div>
+                                            <div class="claim-info-col-3-row-2-col-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="co-insurers">
+                                    <div class="co-insurers-header">
+                                        <span>Co - Insurers</span>
+                                    </div>
+                                    <div class="co-insurers-content">
+                                        <div class="co-insurers-content-header">
+                                            <div class="co-insurers-content-header-percentage">
+                                                <span>Percentage</span>
+                                            </div>
+                                            <div class="co-insurers-content-header-bill-to-id">
+                                                <span>Bill To Id</span>
+                                            </div>
+                                            <div class="co-insurers-content-header-claims-officer">
+                                                <span>Claims Officer</span>
+                                            </div>
+                                            <div class="co-insurers-content-header-policy-number">
+                                                <span>Policy Number</span>
+                                            </div>
+                                            <div class="co-insurers-content-header-comp-claim-number">
+                                                <span>Comp. Claim Number</span>
+                                            </div>
+                                        </div>
+                                        <div class="co-insurers-content-body">
+                                            <div class="co-insurers-content-body-col">
+                                                <span>100.00 %</span>
+                                            </div>
+                                            <div class="co-insurers-content-body-col">
+                                                <span>FUBHCM1</span>
+                                            </div>
+                                            <div class="co-insurers-content-body-col">
+                                                <span>Mr. Nguyen Hung Linh</span>
+                                            </div>
+                                            <div class="co-insurers-content-body-col">
+                                                <span>P0014CFE400</span>
+                                            </div>
+                                            <div class="co-insurers-content-body-col-last">
+                                                <span>To be advise</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="reserves">
+                                    <div class="reserves-header">
+                                        <span>Reserves</span>
+                                    </div>
+                                    <div class="reserves-content">
+                                        <div class="reserves-content-header">
+                                            <div class="reserves-content-header-date">
+                                                <span>Date</span>
+                                            </div>
+                                            <div class="reserves-content-header-third-party">
+                                                <span>Third Party</span>
+                                            </div>
+                                            <div class="reserves-content-header-reserve">
+                                                <span>Reserve</span>
+                                            </div>
+                                            <div class="reserves-content-header-adj">
+                                                <span>ADJ</span>
+                                            </div>
+                                            <div class="reserves-content-header-pmt">
+                                                <span>PMT</span>
+                                            </div>
+                                            <div class="reserves-content-header-exp">
+                                                <span>EXP</span>
+                                            </div>
+                                            <div class="reserves-content-header-rec">
+                                                <span>REC</span>
+                                            </div>
+                                            <div class="reserves-content-header-total-inc">
+                                                <span>Total Inc.</span>
+                                            </div>
+                                        </div>
+                                        <div class="reserves-content-body">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="assists">
+                                    <div class="assists-header">
+                                        <span>Assists</span>
+                                    </div>
+                                    <div class="assists-content">
+                                        <div class="assists-content-header">
+                                            <div class="assists-content-header-branch">
+                                                <span>Branch</span>
+                                            </div>
+                                            <div class="assists-content-header-adjuster-first-name">
+                                                <span>Adjuster First Name</span>
+                                            </div>
+                                            <div class="assists-content-header-adjuster-last-name">
+                                                <span>Adjuster Last Name</span>
+                                            </div>
+                                            <div class="assists-content-header-rate">
+                                                <span>Rate</span>
+                                            </div>
+                                            <div class="assists-content-header-fee-type">
+                                                <span>Fee Type</span>
+                                            </div>
+                                            <div class="assists-content-header-date-added">
+                                                <span>Date Added</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page" id="page_2">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>2</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page" id="page_3">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page" id="page_4">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>4</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page" id="page_5">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page" id="page_6">
+                        <div class="header">
+                            <div class="content-body">
+                                <div class="marginTop">
+                                </div>
+                                <div class="logo">
+                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                </div>
+                                <div class="ourFile">
+                                    <div class="claim-report">
+                                        <div>
+                                            <span class="claim-report-text bold">Claim Report</span>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <span class="claim-report-print-date">Printed: 13/06/2016 10:03:49 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="claim-report-outfile">
+                                        <div>
+                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content-body">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="content-body">
+                                <div class="paginate">
+                                    <div class="footer-text">
+                                        <div class="footer-text-info">
+                                            <span>CMS Claims Management System</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                        </div>
+                                    </div>
+                                    <div class="footer-number">
+                                        <div class="footer-text-number">
+                                            <span>6</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="marginBottom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </div>
+    </div>
+</div>
+
 <br>
 <br>

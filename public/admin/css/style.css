@@ -108,3 +108,461 @@ select{
 form#trialFee h5{
     font-size: 12px;
 }
+
+/* Main */
+.report{
+    width: 1654px;
+    margin: 0 auto;
+    background-color: gray;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+/* ---------------------------------------------- */
+/* Page */
+.bold{
+    font-weight: 600;
+}
+.page{
+    box-sizing: border-box;
+    margin-top: 10px;
+    background-color: white;
+    width: 1654px;
+    height: 2339px;
+}
+.content{
+    box-sizing: border-box;
+    width: 100%;
+    height: 1763px;
+}
+.content-body{
+    box-sizing: border-box;
+    width: 1600px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+
+.claim-info{
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+.claim-info-col-1{
+    box-sizing: border-box;
+    width: 18%;
+    text-align: right;
+    display: inline-block;
+}
+.claim-info-col-1 span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.claim-info-col-2{
+    display: inline-block;
+    box-sizing: border-box;
+    width: 40%;
+}
+.claim-info-col-3{
+    display: inline-block;
+    box-sizing: border-box;
+    width: 41%;
+}
+.claim-info-col-3-row-1{
+    box-sizing: border-box;
+    width: 100%;
+}
+.claim-info-col-3-row-1-col-1{
+    text-align: right;
+    box-sizing: border-box;
+    width: 60%;
+}
+.claim-info-col-3-row-1-col-1 span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.claim-info-col-3-row-1-col-2{
+    box-sizing: border-box;
+    width: 40%;
+}
+.claim-info-col-3-row-2{
+    margin-top: 6px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.claim-info-col-3-row-2-col-1{
+    text-align: right;
+    box-sizing: border-box;
+    width: 30%;
+}
+.claim-info-col-3-row-2-col-1 span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.claim-info-col-3-row-2-col-2{
+    box-sizing: border-box;
+    width: 30%;
+}
+.claim-info-col-3-row-2-col-3{
+    box-sizing: border-box;
+    width: 40%;
+}
+
+
+.co-insurers{
+    padding-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.co-insurers-header{
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 6px solid black;
+}
+.co-insurers-header span{
+    font-size: 28px;
+    font-weight: 600;
+}
+.co-insurers-content{
+    width: 100%;
+    box-sizing: border-box;
+}
+.co-insurers-content-header{
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    padding-bottom: 2px;
+}
+.co-insurers-content-header span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.co-insurers-content-header-percentage{
+    text-align: center;
+    width: 20%;
+    float: left;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.co-insurers-content-header-bill-to-id{
+    text-align: center;
+    width: 20%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.co-insurers-content-header-claims-officer{
+    text-align: center;
+    width: 20%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.co-insurers-content-header-policy-number{
+    text-align: center;
+    width: 20%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.co-insurers-content-header-comp-claim-number{
+    text-align: center;
+    width: 19%;
+    float: right;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.co-insurers-content-body{
+    padding-top: 7px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.co-insurers-content-body-col{
+    width: 20%;
+    display: inline-block;
+}
+.co-insurers-content-body-col-last{
+    width: 19%;
+    display: inline-block;
+    float: right;
+}
+
+
+.reserves{
+    padding-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.reserves-header{
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 6px solid black;
+}
+.reserves-header span{
+    font-size: 28px;
+    font-weight: 600;
+}
+.reserves-content{
+    width: 100%;
+    box-sizing: border-box;
+}
+.reserves-content-header{
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    padding-bottom: 2px;
+}
+.reserves-content-header span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.reserves-content-header-date{
+    text-align: center;
+    width: 9%;
+    float: left;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-third-party{
+    text-align: center;
+    width: 24%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-reserve{
+    text-align: center;
+    width: 14%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-adj{
+    text-align: center;
+    width: 11%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-pmt{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-exp{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-rec{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.reserves-content-header-total-inc{
+    float: right;
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+
+.assists{
+    padding-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.assists-header{
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 6px solid black;
+}
+.assists-header span{
+    font-size: 28px;
+    font-weight: 600;
+}
+.assists-content-header{
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    padding-bottom: 2px;
+}
+.assists-content-header span{
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+.assists-content-header-branch{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.assists-content-header-adjuster-first-name{
+    text-align: center;
+    width: 25%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.assists-content-header-adjuster-last-name{
+    text-align: center;
+    width: 20%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.assists-content-header-rate{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.assists-content-header-fee-type{
+    text-align: center;
+    width: 10%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.assists-content-header-date-added{
+    float: right;
+    text-align: center;
+    width: 23%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+
+.dockets{
+    padding-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.dockets-header{
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 6px solid black;
+}
+.dockets-header span{
+    font-size: 28px;
+    font-weight: 600;
+}
+.dockets-content-header-date{
+
+}
+.dockets-content-header-branch{
+
+}
+.dockets-content-header-adjuster{
+
+}
+.dockets-content-header-time{
+
+}
+/* ------------------------------------------------ */
+/* Header */
+.header{
+    box-sizing: border-box;
+    width: 100%;
+    height: 472px;
+}
+.marginTop{
+    box-sizing: border-box;
+    height: 197px;
+    width: 100%;
+}
+.logo{
+    box-sizing: border-box;
+    height: 197px;
+    width: 100%;
+    border-bottom: 6px solid black;
+}
+
+.logo-img{
+    padding-top: 30px;
+    width: 350px;
+}
+.claim-report{
+    box-sizing: border-box;
+    display: inline-block;
+    padding-top: 10px;
+    float: left;
+}
+.claim-report-text{
+    margin-top: 10px;
+    font-size: 32px;
+}
+.claim-report-print-date{
+    font-size: 16px;
+    font-style: italic;
+}
+.claim-report-outfile{
+    padding-top: 10px;
+    box-sizing: border-box;
+    display: inline-block;
+    float: right;
+}
+.ourFile{
+    box-sizing: border-box;
+    width: 100%;
+    height: 78px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+}
+/* -------------------------------------------------- */
+/* Footer */
+.footer{
+    box-sizing: border-box;
+    width: 100%;
+    height: 124px;
+}
+.marginBottom{
+    box-sizing: border-box;
+    height: 70px;
+    width: 100%;
+}
+
+.paginate{
+    box-sizing: border-box;
+    border-top: 4px solid black;
+    width: 100%;
+    height: 34px;
+}
+
+.footer-text{
+    box-sizing: border-box;
+    display: inline-block;
+    font-style: italic;
+    float: left;
+}
+.footer-number{
+    box-sizing: border-box;
+    display: inline-block;
+    font-style: italic;
+    float: right;
+}
+.footer-text-info{
+
+}
+.footer-text-number{
+
+}
+.TM{
+    display: inline-block;
+}
+/* ----------------------------------- */
+.claim-info{
+
+}
