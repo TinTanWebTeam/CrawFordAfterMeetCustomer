@@ -66,16 +66,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <h5 style="text-align: right">Employee # :</h5>
-                        </div>
-                        <div class="col-sm-8">
-                            <input name="Employee" id="Employee" style="width: 100%">
-                        </div>
-                    </div>
-                </div>
+                {{--<div class="col-sm-6">--}}
+                    {{--<div class="row">--}}
+                        {{--<div class="col-sm-4">--}}
+                            {{--<h5 style="text-align: right">Employee # :</h5>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-sm-8">--}}
+                            {{--<input name="Employee" id="Employee" style="width: 100%">--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
             <div class="row">
                 <div class="col-sm-6">
@@ -493,7 +493,6 @@
                     var type = $("input[name=ajaxActionType]").val();
                     console.log(type);
                     if (type === "1") {
-                        alert("truong hop validator co password");
                         $("form[id=formEmployee]").validate({
                             rules: {
                                 Name: "required",
@@ -519,7 +518,6 @@
                     }
                     else
                     {
-                        alert("0");
                         $("form[id=formEmployee]").validate({
                             rules: {
                                 Name: "required",

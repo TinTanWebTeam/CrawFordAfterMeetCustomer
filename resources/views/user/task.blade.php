@@ -556,7 +556,7 @@
                 },
                 cancel:function()
                 {
-                    $("button[name=actionAttackTask]").text("Add New");
+                    $("button[name=actionAttackTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
                     $("form[id=formTask]").find("input").val("");
                     $("form[id=formTask]").find("textarea").val("");

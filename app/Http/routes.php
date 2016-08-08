@@ -36,7 +36,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('chooseClaimWhenUseEventEnter','AdminController@chooseClaimWhenUseEventEnter');
     Route::post('showInformationOfCustomer','AdminController@showInformationOfCustomer');
     Route::post('actionBillOfClaimViewTrialFee','AdminController@actionBillOfClaimViewTrialFee');
-
+    Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
+    Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
 });
 
 /*

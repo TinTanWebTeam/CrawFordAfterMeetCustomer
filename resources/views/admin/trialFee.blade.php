@@ -36,30 +36,13 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Insured Name</th>
-                        <th>Branch</th>
-                        <th>Loss Date</th>
-                        <th>Received</th>
-                        <th>Opened</th>
-                        <th>Estimated</th>
+                        <th>Id</th>
+                        <th>Customer</th>
+                        <th>Status</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @if($claimIB !=null)
-                        @foreach($claimIB as $item)
-                            <tr id="{{$item->id}}" onclick="trialFeeView.viewDetailIBClaim(this)"
-                                style="cursor: pointer">
-                                <td>{{$item->code}}</td>
-                                <td>{{$item->insuredName}}</td>
-                                <td>{{$item->branchCode}}</td>
-                                <td>{{$item->lossDate}}</td>
-                                <td>{{$item->receiveDate}}</td>
-                                <td>{{$item->openDate}}</td>
-                                <td>{{$item->extimatedClaimValue}}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    <tbody id="tbodyTableBillOfClaim">
+
                     </tbody>
                 </table>
             </div>
@@ -71,41 +54,92 @@
     <form id="trialFee">
         <div class="col-sm-5" style="padding-top: 15px">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h5 style="text-align: right">Claim#:</h5>
+                                    <input name="action" id="action" style="display: none" value="1">
+                                    <input name="idClaim" id="idClaim" style="display: none">
+                                </div>
+                                <div class="col-sm-7">
+                                    <input name="Claim" id="Claim"
+                                           onkeypress="trialFeeView.chooseClaimWhenUseEventEnterKey(event)" style="margin-left: 4px;display: inline-block">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-default" onclick="trialFeeView.loadIBClaim()"
+                                    style="height: 28px;width: 50px;">
+                                    ...
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {{--<div class="col-sm-6">--}}
+                            {{--<div class="row">--}}
+                                {{--<div class="col-sm-10">--}}
+                                    {{--<div class="row">--}}
+                                        {{--<div class="col-sm-2 text-right">--}}
+                                            {{--<input type="checkbox" style="width: 20px;height: 20px">--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-9">--}}
+                                            {{--<h5 style="text-align: left">Show Pending</h5>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{----}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--<div class="col-sm-2">--}}
+                            {{--<button type="button" class="btn btn-default" onclick="trialFeeView.loadIBClaim()"--}}
+                                    {{--style="height: 28px">--}}
+                                {{--...--}}
+                            {{--</button>--}}
+                        {{--</div>--}}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
                     <div class="row">
                         <div class="col-sm-3">
-                            <h5 style="text-align: right">Claim#:</h5>
-                            <input name="action" id="action" style="display: none" value="1">
-                            <input name="idClaim" id="idClaim" style="display: none">
+                            <h5 style="text-align: right">From Date:</h5>
                         </div>
                         <div class="col-sm-7">
-                            <input name="Claim" id="Claim"
-                                   onkeypress="trialFeeView.chooseClaimWhenUseEventEnterKey(event)">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-default" onclick="trialFeeView.loadIBClaim()"
-                                    style="height: 28px">
-                                ...
-                            </button>
+                            <input type="date" name="FromDate" id="FromDate" readonly style="margin-left: 4px">
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="row">
-                        <div class="col-sm-2 text-right">
-                            <input type="checkbox" style="width: 20px;height: 20px">
+                        <div class="col-sm-3">
+                            <h5 style="text-align: right">To Date:</h5>
                         </div>
-                        <div class="col-sm-9">
-                            <h5 style="text-align: left">Show Pending</h5>
+                        <div class="col-sm-7">
+                            <input type="date" name="ToDate" id="ToDate" value="{{date('Y-m-d')}}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-2 text-right">
-                            <input type="checkbox" style="width: 20px;height: 20px">
-                        </div>
-                        <div class="col-sm-9">
-                            <h5 style="text-align: left">Show All</h5>
-                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-sm-2 text-right">
+                        <input type="radio" name="btnStatus" value="0" style="width: 20px;height: 20px" checked>
+                        {{--<div class="radio">--}}
+                            {{--<label><input type="radio" name="optradio">Option 1</label>--}}
+                        {{--</div>--}}
+                    </div>
+                    <div class="col-sm-9">
+                        <h5 style="text-align: left;padding-left: 15px">Show Pending</h5>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-2 text-right">
+                        <input type="radio" name="btnStatus" value="1" style="width: 20px;height: 20px">
+                    </div>
+                    <div class="col-sm-9">
+                        <h5 style="text-align: left;margin-left: 10px">Show All</h5>
                     </div>
                 </div>
             </div>
@@ -422,6 +456,7 @@
                                 alert("This claim has already bill! Can't find it!!!");
                             }
                             else {
+                                $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data["check"]));
                                 $("input[name=idClaim]").val(data["Claim"]["id"]);
                                 $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
@@ -453,12 +488,12 @@
                                     tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + (parseFloat(data["listClaimTaskDetail"][i]["ProfessionalServices"]) + parseFloat(data["listClaimTaskDetail"][i]["Expense"])) + "'></td>");
                                 }
                                 //insert total into table total
-                                trialFeeView.loadDataToTableTotal(data);
+                                trialFeeView.loadDataToTableTotal();
                             }
                         });
                     }
                 },
-                loadDataToTableTotal: function (data) {
+                loadDataToTableTotal: function () {
                     var arrSum = [];
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                     var tbodyListTotal = $("tbody[id=tbodyListTotal]");
@@ -484,7 +519,7 @@
                         if (z > 2 && z <= 10) {
                             if ($("input[name=action]").val() === "0") {
                                 if (z === 10) {
-                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' value=" + data["total"] + "></td>");
+                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' value=" + arrSum[h] + "></td>");
                                     h++;
                                 }
                                 else {
@@ -555,6 +590,7 @@
                         billToCustomer: $("select#chooseCustomer option:selected").val(),
                         Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
                         TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
+                        toDate:$("input[name=ToDate]").val(),
                         ArrayData: objectUserAll
                     };
                     $.post(url + "actionBillOfClaimViewTrialFee", {
@@ -587,66 +623,61 @@
                     })
                 },
                 loadIBClaim: function () {
+                    $.post(url+"viewBillOfClaimByStatus",{_token:_token,idClaim:$("input[name=idClaim]").val(),status:$("input[name=btnStatus]:checked").val()},function(data){
+                        console.log(data);
+                        var row ="";
+                        for(var i = 0;i<data.length;i++)
+                        {
+                            var tr = "";
+                            tr += "<tr id='" + data[i]["idBill"] + "' onclick='trialFeeView.viewDetailIBClaim(this)' style='cursor:pointer'>";
+                            tr += "<td>" + data[i]["idBill"] + "</td>";
+                            tr += "<td>" + data[i]["customer"] + "</td>";
+                            tr += "<td>" + data[i]["status"] + "</td>";
+                            row += tr;
+                        }
+                        $("tbody[id=tbodyTableBillOfClaim]").empty().append(row);
+                    });
                     $("div[id=modalListClaimIB]").modal("show");
                 },
                 viewDetailIBClaim: function (element) {
-                    //Custom form when view IB claim
-                    $("form[id=trialFee]").find("input").prop("readonly", true).css("background-color", "#AFA3A3");
-                    $("select[id=chooseCustomer]").prop("disabled", true);
+                    $("button[name=btnBill]").text("Update Bill ");
                     $("input[name=action]").val("0");
-                    $("textarea[name=addressCustomer]").prop("disabled", true).css("background-color", "#AFA3A3");
-                    $("button[name=btnBill]").empty().text("Update");
-                    //Call Ajax come back server
-                    $.post(url + "chooseClaimWhenUseEventEnter", {
-                        _token: _token,
-                        key: "",
-                        id: $(element).attr("id")
-                    }, function (data) {
+                    $("select#chooseCustomer").val($(element).find("td:eq(1)").text());
+                    trialFeeView.showInformationOfCustomer();
+                    $("div[id=modalListClaimIB]").modal("hide");
+                    $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
+                    {
                         console.log(data);
-                        if (data["Claim"] !== "") {
-                            $("input[name=Claim]").val(data["Claim"]["code"]);
-                            $("input[name=idClaim]").val(data["Claim"]["id"]);
-                            $("input[name=insured]").val(data["Claim"]["insuredName"]);
-                            $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
-                            $("input[name=branch]").val(data["Claim"]["branchCode"]);
-                            $("input[name=lossDate]").val(trialFeeView.convertStringToDate(data["Claim"]["lossDate"]));
-                            $("input[name=receiveDate]").val(trialFeeView.convertStringToDate(data["Claim"]["receiveDate"]));
-                            $("input[name=openDate]").val(trialFeeView.convertStringToDate(data["Claim"]["openDate"]));
-                            $("input[name=estimated]").val(data["Claim"]["estimatedClaimValue"]);
-                            $("select#chooseCustomer").val(data["customer"]);
-                            trialFeeView.showInformationOfCustomer();
-
-                            var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
-                            var theadList = $("thead[id=theadTableListTaskDetail]");
-                            for (var i = 0; i < data["listClaimTaskDetail"].length; i++) {
-                                //Insert data to thead of table
-                                theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Name"] + "</th>");
-                                //Insert data to tbody of table
-                                tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + (parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVChinh"]) + parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVPhu"])) + "</td>");
-                                tbodyList.find("tr:eq(1)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">USD" + data["listClaimTaskDetail"][i]["Rate"] + "</td>");
-                                tbodyList.find("tr:eq(2)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + data["listClaimTaskDetail"][i]["RateType"] + "</td>");
-                                // CV ch�nh v� CV ph?
-                                tbodyList.find("tr:eq(3)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data["listClaimTaskDetail"][i]["ProfessionalServices"] + "'</td>");
-                                tbodyList.find("tr:eq(4)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data["listClaimTaskDetail"][i]["Expense"] + "'</td>");
-                                // CV th�m
-                                tbodyList.find("tr:eq(5)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyList.find("tr:eq(6)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyList.find("tr:eq(7)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyList.find("tr:eq(8)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyList.find("tr:eq(9)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + (parseFloat(data["listClaimTaskDetail"][i]["ProfessionalServices"]) + parseFloat(data["listClaimTaskDetail"][i]["Expense"])) + "'></td>");
+                        //load data to table
+                        var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
+                        var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
+                        var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;
+                        var k =0;
+                        do{
+                            for(var i = 0;i<count;i++)
+                            {
+                                //console.log(data[k][i]["name"]);
+                                console.log(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text());
+                                if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[k][i]["name"])
+                                {
+                                    tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[k][i]["value"]);
+                                }
                             }
-                            //insert total into table total
-                            trialFeeView.loadDataToTableTotal(data);
-                            //tbodyListTotal.find("tr:eq(10)").empty().append("<td>" + trialFeeView.sumAllTd($(tbodyList).find("tr:eq(10)"), "TH2") + "</td>").append("<td><input type='text' id='' name='' value=" + data["total"] + "></td>");
-                            $("div[id=modalListClaimIB]").modal("hide");
-
+                            k++;
                         }
-                        else {
-                            alert("Can't find it!!!");
-                        }
-                    })
+                        while(k<data.length);
+                        //insert total into table total
+                        trialFeeView.loadDataToTableTotal();
+                    });
+                },
+                cancel:function()
+                {
+                    if($("button[name=action]").val()==="0")
+                    {
+                        trialFeeView.chooseClaimWhenUseEventEnterKey();
+                    }
                 }
+
             };
         }
         else {

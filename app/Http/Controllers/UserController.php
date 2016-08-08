@@ -26,7 +26,7 @@ class UserController extends Controller
 
     public function task()
     {
-        $listTask = TaskCategory::where('active',1)->where('code','!=','IB')->get();
+        $listTask = TaskCategory::where('active',1)->where('code','!=','IB')->where('code','!=','FB')->get();
         return view('user.task')->with('listTask',$listTask);
     }
 
@@ -111,7 +111,8 @@ class UserController extends Controller
                 ->leftJoin('task_categories as cate1','claim_task_details.professionalServices','=','cate1.id')
                 ->leftJoin('task_categories as cate2','claim_task_details.expense','=','cate2.id')
                 ->where('claim_task_details.claimId',$request->get('idClaim'))
-                ->where('claim_task_details.professionalServices','!=',4)
+                ->where('claim_task_details.professionalServices','!=',1)
+                ->where('claim_task_details.professionalServices','!=',2)
                 ->orderBy('claim_task_details.created_at','desc')
                 ->select(
                     'claim_task_details.id as idTask',
