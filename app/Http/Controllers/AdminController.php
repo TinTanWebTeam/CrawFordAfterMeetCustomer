@@ -335,7 +335,7 @@ class AdminController extends Controller
                         $user = User::where('name', $item[0])->where('active', 1)->first();
                         if ($user) {
                             //table professional_services
-                            $professionalServices = new professionalServices();
+                            $professionalServices = new ProfessionalService();
                             $professionalServices->billId = $bill->id;
                             $professionalServices->userId = $user->id;
                             $professionalServices->value = $item[4];
@@ -347,37 +347,37 @@ class AdminController extends Controller
                             $generalExp->value = $item[5];
                             $generalExp->save();
                             //table commAndPhotoExp
-                            $commAndPhotoExp = new commAndPhotoExp();
+                            $commAndPhotoExp = new CommPhotoExp();
                             $commAndPhotoExp->billId = $bill->id;
                             $commAndPhotoExp->userId = $user->id;
                             $commAndPhotoExp->value = $item[6];
                             $commAndPhotoExp->save();
                             //table consultFeeAndExp
-                            $consultFeeAndExp = new consultFeesAndExp();
+                            $consultFeeAndExp = new ConsultFeesExp();
                             $consultFeeAndExp->billId = $bill->id;
                             $consultFeeAndExp->userId = $user->id;
                             $consultFeeAndExp->value = $item[7];
                             $consultFeeAndExp->save();
                             //table travelRelatedExp
-                            $travelRelatedExp = new travelRelatedExp();
+                            $travelRelatedExp = new TravelRelatedExp();
                             $travelRelatedExp->billId = $bill->id;
                             $travelRelatedExp->userId = $user->id;
                             $travelRelatedExp->value = $item[8];
                             $travelRelatedExp->save();
                             //table gstFreeDisb
-                            $gstFreeDisb = new gStFreeDisb();
+                            $gstFreeDisb = new GstFreeDisb();
                             $gstFreeDisb->billId = $bill->id;
                             $gstFreeDisb->userId = $user->id;
                             $gstFreeDisb->value = $item[9];
                             $gstFreeDisb->save();
                             //table disbursement
-                            $disbursement = new disbursements();
+                            $disbursement = new Disbursement();
                             $disbursement->billId = $bill->id;
                             $disbursement->userId = $user->id;
                             $disbursement->value = $item[10];
                             $disbursement->save();
                             //table total
-                            $total = new total();
+                            $total = new Total();
                             $total->billId = $bill->id;
                             $total->userId = $user->id;
                             $total->value = $item[11];
