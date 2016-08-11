@@ -42,7 +42,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
     Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
     Route::post('saveClaim/{claimId}','AdminController@saveClaim');
-
+    Route::post('loadTaskDetailByDate','AdminController@loadTaskDetailByDate');
+    Route::post('loadInvoiceByEventEnterKey','AdminController@loadInvoiceByEventEnterKey');
 });
 
 /*

@@ -12,6 +12,12 @@
             <div class="modal-body" id="modalContent">
                 Are you sure this bill claim ?
             </div>
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <h4 style="display: inline-block;">Pending</h4>&nbsp;&nbsp;<input type="radio" name="bill-status" id="pending" checked style="display: inline-block;width: 20px;height: 20px;padding-top: 5px">
+                    <h4 style="display: inline-block;">Complete</h4>&nbsp;&nbsp;<input type="radio" name="bill-status" id="complete" style="display: inline-block;width: 20px;height: 20px;padding-top: 5px">
+                </div>
+            </div>
             <div class="modal-footer">
                 <button class="btn dark btn-outline" data-dismiss="modal" name="modalClose" type="button">
                     Close
@@ -118,7 +124,7 @@
                             <h5 style="text-align: right">To Date:</h5>
                         </div>
                         <div class="col-sm-7">
-                            <input type="date" name="ToDate" id="ToDate" value="{{date('Y-m-d')}}">
+                            <input type="date" name="ToDate" id="ToDate" value="{{date('Y-m-d')}}" onchange="trialFeeView.loadTaskDetailByDate()">
                         </div>
                     </div>
                 </div>
@@ -487,6 +493,7 @@
                                 //Insert data to table list task detail
                                 var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                                 var theadList = $("thead[id=theadTableListTaskDetail]");
+                                trialFeeView.clearTable();
                                 for (var i = 0; i < data["listClaimTaskDetail"].length; i++) {
                                     //Insert data to thead of table
                                     theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Name"] + "</th>");
@@ -575,6 +582,14 @@
                     trialFeeView.loadDataToTableTotal(element);
                 },
                 actionBillOfClaim: function () {
+                    if($("input[id=final_bill]").is(":checked"))
+                    {
+                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").hide();
+                    }
+                    else
+                    {
+                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").show();
+                    }
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
@@ -610,6 +625,7 @@
                         TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
                         toDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
+                        billStatus:$("input[name=bill-status]:checked").attr("id"),
                         ArrayData: objectUserAll
                     };
                     $.post(url + "actionBillOfClaimViewTrialFee", {
@@ -670,7 +686,6 @@
                     {
                         $("button[name=btnBill]").text("Update Bill ");
                     }
-
                     $("input[name=action]").val("0");
                     $("select#chooseCustomer").val($(element).find("td:eq(1)").text());
                     trialFeeView.showInformationOfCustomer();
@@ -678,26 +693,79 @@
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
                         console.log(data);
-                        //load data to table
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
-                        var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;
-                        var k =0;
-                        do{
-                            for(var i = 0;i<count;i++)
-                            {
-                                //console.log(data[k][i]["name"]);
-                                console.log(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text());
-                                if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[k][i]["name"])
+                        if(data[0]==="Pending")
+                        {
+                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data[1]["FromDate"])).prop("readOnly",true);
+                            $("input[name=ToDate]").val(trialFeeView.convertStringToDate(data[1]["ToDate"])).prop("readOnly",true);
+                            //load data to table
+                            var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;
+                            var k =0;
+                            do{
+                                for(var i = 0;i<count;i++)
                                 {
-                                    tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[k][i]["value"]);
+                                    //console.log(data[k][i]["name"]);
+                                    console.log(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text());
+                                    if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[2][k][i]["name"])
+                                    {
+                                        tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[2][k][i]["value"]);
+                                    }
                                 }
+                                k++;
                             }
-                            k++;
+                            while(k<data[2].length);
+                            //insert total into table total
+                            trialFeeView.loadDataToTableTotal(total);
                         }
-                        while(k<data.length);
-                        //insert total into table total
-                        trialFeeView.loadDataToTableTotal(total);
+                        else
+                        {
+                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data[1]["FromDate"])).prop("readOnly",true);
+                            $("input[name=ToDate]").val(trialFeeView.convertStringToDate(data[1]["ToDate"])).prop("readOnly",true);
+                            //insert data default
+                            trialFeeView.clearTable();
+                            for (var i = 0; i < data[2].length; i++) {
+                                //Insert data to thead of table
+                                theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[2][i]["Name"] + "</th>");
+                                //Insert data to tbody of table
+                                tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][i]["Name"] + ">" + (parseFloat(data[2][i]["SumTimeCVChinh"])) + "</td>");
+                                tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[2][i]["Name"] + ">USD" + data[2][i]["Rate"] + "</td>");
+                                tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[2][i]["Name"] + ">" + data[2][i]["RateType"] + "</td>");
+                                // CV ch�nh v� CV ph?
+                                tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data[2][i]["ProfessionalServices"] + "'</td>");
+                                tbodyListTaskDetail.find("tr:eq(4)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data[2][i]["Expense"] + "'</td>");
+                                // CV th�m
+                                tbodyListTaskDetail.find("tr:eq(5)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(6)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(7)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(8)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(9)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(10)").append("<td id=" + data[2][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + (parseFloat(data[2][i]["ProfessionalServices"]) + parseFloat(data[2][i]["Expense"])) + "'></td>");
+                            }
+                            //insert total into table total
+                            trialFeeView.loadDataToTableTotal(data);
+                            //insert data exp
+                            var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;
+                            var k =0;
+                            do{
+                                for(var i = 0;i<count;i++)
+                                {
+                                    //console.log(data[k][i]["name"]);
+                                    console.log(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text());
+                                    if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[3][k][i]["name"])
+                                    {
+                                        tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[3][k][i]["value"]);
+                                    }
+                                }
+                                k++;
+                            }
+                            while(k<data[3].length);
+                            //insert total into table total
+                            trialFeeView.loadDataToTableTotal(total);
+                            $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().prop("readOnly",true).css("background-color","#AFA3A3");
+                        }
+
+
                     });
                 },
                 cancel:function()
@@ -705,6 +773,48 @@
                     if($("button[name=action]").val()==="0")
                     {
                         trialFeeView.chooseClaimWhenUseEventEnterKey();
+                    }
+                },
+                loadTaskDetailByDate:function()
+                {
+                    $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),date:$("input[name=ToDate]").val()},function(data)
+                    {
+                        trialFeeView.clearTable();
+                        console.log(data["listClaimTaskDetail"]);
+                        //Insert data to table list task detail
+                        var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
+                        var theadList = $("thead[id=theadTableListTaskDetail]");
+                        for (var i = 0; i < data["listClaimTaskDetail"].length; i++) {
+                            //Insert data to thead of table
+                            theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Name"] + "</th>");
+                            //Insert data to tbody of table
+                            tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + (parseFloat(data["listClaimTaskDetail"][i]["SumTimeCVChinh"])) + "</td>");
+                            tbodyList.find("tr:eq(1)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">USD" + data["listClaimTaskDetail"][i]["Rate"] + "</td>");
+                            tbodyList.find("tr:eq(2)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + ">" + data["listClaimTaskDetail"][i]["RateType"] + "</td>");
+                            // CV ch�nh v� CV ph?
+                            tbodyList.find("tr:eq(3)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data["listClaimTaskDetail"][i]["ProfessionalServices"] + "'</td>");
+                            tbodyList.find("tr:eq(4)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + data["listClaimTaskDetail"][i]["Expense"] + "'</td>");
+                            // CV th�m
+                            tbodyList.find("tr:eq(5)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                            tbodyList.find("tr:eq(6)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                            tbodyList.find("tr:eq(7)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                            tbodyList.find("tr:eq(8)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                            tbodyList.find("tr:eq(9)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' value='0.00' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                            tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Name"] + "><input type='text' id='' name='' readonly style='background-color: #AFA3A3' value='" + (parseFloat(data["listClaimTaskDetail"][i]["ProfessionalServices"]) + parseFloat(data["listClaimTaskDetail"][i]["Expense"])) + "'></td>");
+                        }
+                        //insert total into table total
+                        trialFeeView.loadDataToTableTotal(data);
+                    });
+                },
+                clearTable:function()
+                {
+                    var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
+                    var theadList = $("thead[id=theadTableListTaskDetail]");
+                    var trClick = tbodyList.find("tr");
+                    theadList.find("tr:eq(1)").empty();
+                    for(var i = 0;i<trClick.length;i++)
+                    {
+                        $(trClick[i]).empty();
                     }
                 }
             };

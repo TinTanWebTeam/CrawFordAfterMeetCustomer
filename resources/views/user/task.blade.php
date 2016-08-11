@@ -97,6 +97,14 @@
                             <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #AFA3A3" readonly>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h5 style="display: inline-block" class="text-right">Choose Date:</h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="date"  name="ChooseDate" id="ChooseDate" value="" style="display: inline-block">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="row">
@@ -210,9 +218,11 @@
                                                 <div class="col-sm-4">
                                                     <h5 style="text-align:right">Rate/Unit</h5>
                                                 </div>
-                                                <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesRate" id="ProfessionalServicesRate" value="0" style="width:80px" onkeyup="taskView.automaticInitialValueTimeOfInputRate()">
-                                                </div>
+                                                @if($rateDefault!=null)
+                                                    <div class="col-sm-8">
+                                                        <input type="text" name="ProfessionalServicesRate" id="ProfessionalServicesRate" value="{{$rateDefault}}USD" style="width:80px" onkeyup="taskView.automaticInitialValueTimeOfInputRate()">
+                                                    </div>
+                                                @endif
                                             </div>
                                         </fieldset>
                                     </div>
@@ -516,7 +526,7 @@
                                 taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
                             }
                             console.log(taskView.taskObject);
-                            $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject},function(data){
+                            $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,Date:$("input[name=ChooseDate]").val()},function(data){
                                 console.log(data);
                                 if(data["Action"]==="AddNew")
                                 {

@@ -27,7 +27,11 @@ class UserController extends Controller
     public function task()
     {
         $listTask = TaskCategory::where('active',1)->where('code','!=','IB')->where('code','!=','FB')->get();
-        return view('user.task')->with('listTask',$listTask);
+        $rate = RateDetail::where('userId',Auth::user()->id)
+            ->where('active',1)
+            ->where('rateTypeId',2)
+            ->first();
+        return view('user.task')->with('listTask',$listTask)->with('rateDefault',$rate->value);
     }
 
     public function profile()
@@ -167,6 +171,7 @@ class UserController extends Controller
                     $task->userId = $request->get('taskObject')['UserId'];
                     $task->createdBy = $request->get('taskObject')['UserId'];
                     $task->updatedBy = $request->get('taskObject')['UserId'];
+                    $task->billDate = $request->get('Date');
                     $task->save();
                     $result = array('Action'=>'AddNew','Result'=>1);
                 }
