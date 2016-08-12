@@ -7,7 +7,7 @@
                     <h5 class="text-right">ID:</h5>
                 </td>
                 <td style="width: 15%;">
-                    <input id="code" name="code" ondblclick="cliamView.searchClaimByCode()" onkeyup="cliamView.fillClaim(this,event)" type="text"/>
+                    <input id="code" name="code" ondblclick="claimView.searchClaimByCode()" onkeyup="claimView.fillClaim(this,event)" type="text"/>
                 </td>
                 <td style="width: 20%;">
                     <div style="display: inline-block;width: 20%">
@@ -525,14 +525,6 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
-                    Close
-                </button>
-                <button class="btn btn-primary" type="button">
-                    Save changes
-                </button>
-            </div>
         </div>
     </div>
 </div>
@@ -572,9 +564,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
-                    Close
-                </button>
                 <button class="btn btn-primary" type="button" id="addNewUpdate">
                     Add New
                 </button>
@@ -609,9 +598,6 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
-                    Close
-                </button>
                 <button class="btn btn-primary" type="button">
                     Save changes
                 </button>
@@ -655,9 +641,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
-                    Close
-                </button>
                 <button class="btn btn-primary" type="button" id="addNewUpdate">
                     Add New
                 </button>
@@ -692,9 +675,6 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
-                    Close
-                </button>
                 <button class="btn btn-primary" type="button">
                     Save changes
                 </button>
@@ -796,24 +776,25 @@
                     importCloseDate : null
                 },
                 resetClaimViewObject : function(){
-                    for(var i = 0; i < Object.keys(cliamView.claimViewObject).length;i++){
-                        cliamView.claimViewObject[Object.keys(cliamView.claimViewObject)[i]] = null;
+                    for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
+                        claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
                     }
                 },
                 save : function () {
-                    for(var i = 0; i < Object.keys(cliamView.claimViewObject).length;i++){
-                        if($("#"+Object.keys(cliamView.claimViewObject)[i])){
-                            cliamView.claimViewObject[Object.keys(cliamView.claimViewObject)[i]] = $("#"+Object.keys(cliamView.claimViewObject)[i]).val();
+                    for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
+                        if($("#"+Object.keys(claimView.claimViewObject)[i])){
+                            claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
                         }
                     }
-                    cliamView.claimViewObject.id = $("input[name=id]").val();
-                    $.post(url+'saveClaim/'+ cliamView.claimViewObject.id,{_token:_token,claim : cliamView.claimViewObject},function (data) {
+                    claimView.claimViewObject.id = $("input[name=id]").val();
+                    console.log(claimView.claimViewObject);
+                    $.post(url+'saveClaim/'+ claimView.claimViewObject.id,{_token:_token,claim : claimView.claimViewObject},function (data) {
                         console.log(data);
                     });
                 },
                 cancel : function () {
-                    for(var i = 0; i < Object.keys(cliamView.claimViewObject).length;i++){
-                        cliamView.claimViewObject[Object.keys(cliamView.claimViewObject)[i]] = null;
+                    for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
+                        claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
                     }
                 },
                 fillClaimToForm : function (claimId) {
@@ -847,7 +828,7 @@
                             tr += "<td>"+ listClaim[i]["receiveDate"] + "</td>";
                             tr += "<td>"+ listClaim[i]["openDate"] + "</td>";
                             tr += "<td>"+ listClaim[i]["adjusterCode"] + "</td>";
-                            tr += "<td><button class='btn btn-xs btn-success' onclick='cliamView.fillClaimToForm(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
+                            tr += "<td><button class='btn btn-xs btn-success' onclick='claimView.fillClaimToForm(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
                             tr += "</tr>";
                             row += tr;
                         }
@@ -927,7 +908,7 @@
 
         $("input[value=Save]").click(function (e) {
             e.preventDefault();
-            cliamView.save();
+            claimView.save();
         });
     });
 </script>
