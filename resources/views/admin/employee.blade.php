@@ -10,11 +10,11 @@
 
 {{--Model List Employee--}}
 <div class="modal fade" id="modalListEmployee" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent" style="text-align: center">List Users</div>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table hover">
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -490,11 +490,8 @@
                 },
                 ActionAddNewOrUpdate:function()
                 {
-                    var type = $("input[name=ajaxActionType]").val();
-                    console.log(type);
-                    if (type === "1") {
-                        $("form[id=formEmployee]").validate({
-                            rules: {
+                     $("form[id=formEmployee]").validate({
+                           rules: {
                                 Name: "required",
                                 Password: "required",
                                 FirstName: "required",
@@ -515,23 +512,6 @@
                                 }
                             }
                         });
-                    }
-                    else
-                    {
-                        $("form[id=formEmployee]").validate({
-                            rules: {
-                                Name: "required",
-                                FirstName: "required",
-                                LastName: "required"
-                            },
-                            messages: {
-                                Name: "Code is required",
-                                FirstName: "First Name is required",
-                                LastName: "Last Name is required"
-                            }
-                        });
-                    }
-
                     if ($("form[id=formEmployee]").valid()) {
                         employeeView.resetEmployeeObject();
                         for(var i = 0;i<Object.keys(employeeView.EmployeeObject).length;i++)
@@ -647,12 +627,19 @@
                 },
                 viewEmployeeDetailWhenChooseRowOfEventDoubleClick:function(element)
                 {
+                    //Reset class error
+                    $("form[id=formEmployee]").find("label[class=error]").hide();
+
                     $("input[name=ajaxActionType]").empty().val("0");
                     $("button[name=btnAction]").text("Save Update");
                     $("div[id=modalListEmployee]").modal("hide");
                     $.post(url+"viewEmployeeDetailWhenChooseRowOfEventDoubleClick",{_token:_token,idEmployee:$(element).attr("id")},function(data){
                         $("select#Position").val(data["Object"]["positionId"]);
                         $("select#Sex").val(data["Object"]["sex"]);
+                        //set value password
+                        $("input[name=Password]").val("SamePassword").prop("readOnly",true).css("background-color","#EADFDF");
+                        $("input[name=PasswordConfirm]").val("SamePassword").prop("readOnly",true).css("background-color","#EADFDF");
+
                         $("input[name=checkboxLockAndActive]").removeAttr("disabled");
                         $("input[name=LockedDetail]").removeAttr("readonly").css("background-color","");
                         $("input[name=InactiveDetail]").removeAttr("readonly").css("background-color","");
@@ -759,6 +746,9 @@
                         $("button[name=btnAction]").text("Save New");
                         $("input[name=ajaxActionType]").val("1");
                         $("input[name=checkboxLockAndActive]").prop("checked",false);
+                        $("input[name=Password]").css("background-color","").prop("readOnly",false);
+                        $("input[name=PasswordConfirm]").css("background-color","").prop("readOnly",false);
+
                     }
                 }
             };

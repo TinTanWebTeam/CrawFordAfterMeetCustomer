@@ -559,3 +559,6 @@ form#trialFee h5{
 .claim-info{
 
 }
+label.error{
+    color: #B52929;
+}

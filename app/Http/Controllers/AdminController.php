@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Bill;
+use App\Branch;
+use App\BranchType;
 use App\Claim;
 use App\ClaimTaskDetail;
 use App\CommPhotoExp;
@@ -17,8 +19,10 @@ use App\Position;
 use App\ProfessionalService;
 use App\RateDetail;
 use App\SourceCustomer;
+use App\TaskCategory;
 use App\Total;
 use App\TravelRelatedExp;
+use App\TypeOfDamage;
 use App\User;
 use Auth;
 use Config;
@@ -28,6 +32,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Mockery\Exception;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -38,7 +43,10 @@ class AdminController extends Controller
 
     public function getViewClaim()
     {
-        return view('admin.claim');
+        $branchType = BranchType::where('active',1)->get();
+        $sourceCustomer = SourceCustomer::where('active',1)->get();
+        $code = Claim::orderBy('created_at','desc')->first()->code;
+        return view('admin.claim')->with('branchType',$branchType)->with('sourceCustomer',$sourceCustomer)->with('codeClaim',$code);
     }
 
     public function getViewEmployee()
@@ -98,6 +106,7 @@ class AdminController extends Controller
                 $employee->address = $request->get('dataEmployee')['Address'];
                 $employee->bonusDate = $request->get('dataEmployee')['BonusDate'];
                 $employee->userID_created = Auth::user()->id;
+                $employee->userID_changed = Auth::user()->id;
                 $employee->networkID_created = $request->get('dataEmployee')['NetworkID_created'];
                 $employee->positionId = $request->get('dataEmployee')['Position'];
                 $employee->roleId = 2;
@@ -224,26 +233,28 @@ class AdminController extends Controller
         $claim = null;
         $billToId = null;
         $billTotal = null;
-        $check = null;
+        $date = null;
         try {
             if ($request->get('key') != null)
             {
                 $claim = Claim::where('code', $request->get('key'))->where('statusId', 1)->first();
                 if ($claim)
                 {
-                    $checkIB = ClaimTaskDetail::where('professionalServices', 1)
+                    //Check from date to date
+                    $checkIBAndFB = ClaimTaskDetail::where('professionalServices', 1)
+                        ->orWhere('professionalServices',2)
                         ->where('claimId', $claim->id)
 //                        ->where('billDate', '<', date('Y-m-d 23:59:59'))
                         ->where('statusId', 2)
                         ->orderBy('billDate', 'desc')
                         ->first();
-                    if ($checkIB) {
-                        $check = $checkIB->billDate;
+                    if ($checkIBAndFB) {
+                        $date = $checkIBAndFB->billDate;
                     } else {
-                        $check = $claim->openDate;
+                        $date = $claim->openDate;
                     }
                     //load data
-                    if($check)
+                    if($date)
                     {
                         $listClaimTaskDetail = DB::table('claim_task_details')
                             ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
@@ -252,7 +263,7 @@ class AdminController extends Controller
                             ->where('claim_task_details.professionalServices', '!=', 1)
                             ->where('claim_task_details.professionalServices', '!=', 2)
                             ->where('claim_task_details.claimId', '=', $claim->id)
-                            ->where('claim_task_details.billDate','>',$check)
+                            ->where('claim_task_details.billDate','>',$date)
                             ->groupBy('users.name')
                             ->select(
                                 'users.name as userName',
@@ -274,37 +285,17 @@ class AdminController extends Controller
                                 'SumTimeCVChinh' => $item->sumTimeCvChinh,
                                 'Expense' => $item->expense,
                                 'ProfessionalServices' => $item->sumTimeCvChinh * $item->rate,
-                                //'Expense'=>$item->sumTimeCvPhu*$item->rate,
                             ];
                             array_push($array_all, $array);
                         }
-//                        dd($array_all);
-
-                        $result = array('Claim' => $claim, 'check' => $check, 'customer' => $billToId, 'total' => $billTotal, 'listClaimTaskDetail' => $array_all);
-                    }
-
-                }
-            }
-            else
-            {
-                if ($request->get('id') != null) {
-                    $claim = Claim::where('id', $request->get('id'))->where('statusId', 4)->first();
-                    if ($claim) {
-                        $bill = Bill::where('claimId', $claim->id)->where('active', 1)->first();
-                        $billToId = $bill->billToId;
-                        $billTotal = $bill->total;
+                        $result = array('Claim' => $claim, 'check' => $date, 'customer' => $billToId, 'total' => $billTotal, 'listClaimTaskDetail' => $array_all);
                     }
                 }
+                else
+                {
+                    $result = "Error";
+                }
             }
-//            if ($claim) {
-//
-//            }
-//            else
-//            {
-//                $result = array('Claim' => '', 'check' => $check, 'customer' => '', 'total' => '', 'listClaimTaskDetail' => '');
-//            }
-
-
         } catch (Exception $ex) {
             return $ex;
         }
@@ -515,6 +506,24 @@ class AdminController extends Controller
                 }
                 else
                 {
+                    //Delete IB have status 1
+                    $IBPending = ClaimTaskDetail::where('professionalServices',1)->where('statusId',1)->first();
+                    if($IBPending)
+                    {
+                        $billIB = Bill::where('billId',$IBPending->id)->first();
+                        if($billIB)
+                        {
+                            ProfessionalService::where('billId',$billIB->id)->delete();
+                            GeneralExp::where('billId',$billIB->id)->delete();
+                            CommPhotoExp::where('billId',$billIB->id)->delete();
+                            ConsultFeesExp::where('billId',$billIB->id)->delete();
+                            TravelRelatedExp::where('billId',$billIB->id)->delete();
+                            GstFreeDisb::where('billId',$billIB->id)->delete();
+                            Disbursement::where('billId',$billIB->id)->delete();
+                            $billIB->delete();
+                        }
+                        $IBPending->delete();
+                    }
                     //Insert data to table Claim_task_detail(Docket)
                     $claimTaskDetail = new ClaimTaskDetail();
                     $claimTaskDetail->professionalServices = 2;
@@ -595,7 +604,8 @@ class AdminController extends Controller
                     $invoice->save();
                     $result = array('Action' => 'BillClaim', 'Result' => 1);
                 }
-            } else {
+            }
+            else {
                 $bill = Bill::where('claimId', $request->get('data')['idClaim'])->first();
                 if($bill)
                 {
@@ -636,9 +646,13 @@ class AdminController extends Controller
     {
         $claim = Claim::where('code', $code)->first();
         if ($claim) {
+            $userCreatedBy = User::where('roleId',1)->where('id',$claim->createdBy)->first()->name;
+            $userUpdatedBy = User::where('roleId',1)->where('id',$claim->updatedBy)->first()->name;
             return [
                 'status' => 201,
-                'data' => $claim
+                'data' => $claim,
+                'userCreatedBy'=>$userCreatedBy,
+                'userUpdatedBy'=>$userUpdatedBy
             ];
         }
         return [
@@ -937,131 +951,143 @@ class AdminController extends Controller
 
     public function saveClaim(Request $request,$claimId)
     {
-        if($claimId == '0'){
-            //save new claim
-            $claim = new Claim();
-            $claim->code = $request->get('code');
-            $claim->branchSeqNo = $request->get('branchSeqNo');
-            $claim->incident = $request->get('incident');
-            $claim->assignmentTypeCode = $request->get('assignmentTypeCode');
-            $claim->accountCode = $request->get('accountCode');
-            $claim->accountPolicyId = $request->get('accountPolicyId');
-            $claim->insuredFirstName = $request->get('insuredFirstName');
-            $claim->insuredLastName = $request->get('insuredLastName');
-            $claim->insuredAddress = $request->get('insuredAddress');
-            $claim->insuredClaim = $request->get('insuredClaim');
-            $claim->tradingAs = $request->get('tradingAs');
-            $claim->claimTypeCode = $request->get('claimTypeCode');
-            $claim->lossDescCode = $request->get('lossDescCode');
-            $claim->catastrophicLoss = $request->get('catastrophicLoss');
-            $claim->sourceCode = $request->get('sourceCode');
-            $claim->insurerCode = $request->get('insurerCode');
-            $claim->brokerCode = $request->get('brokerCode');
-            $claim->branchCode = $request->get('branchCode');
-            $claim->branchTypeCode = $request->get('branchTypeCode');
-            $claim->destroyedDate = $request->get('destroyedDate');
-            $claim->lossLocation = $request->get('lossLocation');
-            $claim->lineOfBusinessCode = $request->get('lineOfBusinessCode');
-            $claim->lossDate = $request->get('lossDate');
-            $claim->receiveDate = $request->get('receiveDate');
-            $claim->openDate = $request->get('openDate');
-            $claim->closeDate = $request->get('closeDate');
-            $claim->insuredContactedDate = $request->get('insuredContactedDate');
-            $claim->limitationDate = $request->get('limitationDate');
-            $claim->policyInceptionDate = $request->get('policyInceptionDate');
-            $claim->policyExpiryDate = $request->get('policyExpiryDate');
-            $claim->disabilityCode = $request->get('disabilityCode');
-            $claim->outComeCode = $request->get('outComeCode');
-            $claim->lastChanged = $request->get('lastChanged');
-            $claim->partnershipId = $request->get('partnershipId');
-            $claim->adjusterCode = $request->get('adjusterCode');
-            $claim->rate = $request->get('rate');
-            $claim->feeType = $request->get('feeType');
-            $claim->taxable = $request->get('taxable');
-            $claim->estimatedClaimValue = $request->get('estimatedClaimValue');
-            $claim->createdBy = $request->get('createdBy');
-            $claim->updatedBy = $request->get('updatedBy');
-            $claim->statusId = $request->get('statusId');
-            $claim->privileged = $request->get('privileged');
-            $claim->organization = $request->get('organization');
-            $claim->operatedAs = $request->get('operatedAs');
-            $claim->miscInfo = $request->get('miscInfo');
-            $claim->largeLossClaim = $request->get('largeLossClaim');
-            $claim->sirBreached = $request->get('sirBreached');
-            $claim->claimAssignment = $request->get('claimAssignment');
-            $claim->policy = $request->get('policy');
-            $claim->reOpen = $request->get('reOpen');
-            $claim->eBoxDestroyed = $request->get('eBoxDestroyed');
-            $claim->firstContact = $request->get('firstContact');
-            $claim->proscription = $request->get('proscription');
-            $claim->initialReserve = $request->get('initialReserve');
-            $claim->currentRes = $request->get('currentRes');
-            $claim->adjustReserve = $request->get('adjustReserve');
-            $claim->save();
-            return $claim;
-        }else{
-            //update claim
-            $claim = Claim::where('id',$claimId)->first();
-            $claim->code = $request->get('code');
-            $claim->branchSeqNo = $request->get('branchSeqNo');
-            $claim->incident = $request->get('incident');
-            $claim->assignmentTypeCode = $request->get('assignmentTypeCode');
-            $claim->accountCode = $request->get('accountCode');
-            $claim->accountPolicyId = $request->get('accountPolicyId');
-            $claim->insuredFirstName = $request->get('insuredFirstName');
-            $claim->insuredLastName = $request->get('insuredLastName');
-            $claim->insuredAddress = $request->get('insuredAddress');
-            $claim->insuredClaim = $request->get('insuredClaim');
-            $claim->tradingAs = $request->get('tradingAs');
-            $claim->claimTypeCode = $request->get('claimTypeCode');
-            $claim->lossDescCode = $request->get('lossDescCode');
-            $claim->catastrophicLoss = $request->get('catastrophicLoss');
-            $claim->sourceCode = $request->get('sourceCode');
-            $claim->insurerCode = $request->get('insurerCode');
-            $claim->brokerCode = $request->get('brokerCode');
-            $claim->branchCode = $request->get('branchCode');
-            $claim->branchTypeCode = $request->get('branchTypeCode');
-            $claim->destroyedDate = $request->get('destroyedDate');
-            $claim->lossLocation = $request->get('lossLocation');
-            $claim->lineOfBusinessCode = $request->get('lineOfBusinessCode');
-            $claim->lossDate = $request->get('lossDate');
-            $claim->receiveDate = $request->get('receiveDate');
-            $claim->openDate = $request->get('openDate');
-            $claim->closeDate = $request->get('closeDate');
-            $claim->insuredContactedDate = $request->get('insuredContactedDate');
-            $claim->limitationDate = $request->get('limitationDate');
-            $claim->policyInceptionDate = $request->get('policyInceptionDate');
-            $claim->policyExpiryDate = $request->get('policyExpiryDate');
-            $claim->disabilityCode = $request->get('disabilityCode');
-            $claim->outComeCode = $request->get('outComeCode');
-            $claim->lastChanged = $request->get('lastChanged');
-            $claim->partnershipId = $request->get('partnershipId');
-            $claim->adjusterCode = $request->get('adjusterCode');
-            $claim->rate = $request->get('rate');
-            $claim->feeType = $request->get('feeType');
-            $claim->taxable = $request->get('taxable');
-            $claim->estimatedClaimValue = $request->get('estimatedClaimValue');
-            $claim->createdBy = $request->get('createdBy');
-            $claim->updatedBy = $request->get('updatedBy');
-            $claim->statusId = $request->get('statusId');
-            $claim->privileged = $request->get('privileged');
-            $claim->organization = $request->get('organization');
-            $claim->operatedAs = $request->get('operatedAs');
-            $claim->miscInfo = $request->get('miscInfo');
-            $claim->largeLossClaim = $request->get('largeLossClaim');
-            $claim->sirBreached = $request->get('sirBreached');
-            $claim->claimAssignment = $request->get('claimAssignment');
-            $claim->policy = $request->get('policy');
-            $claim->reOpen = $request->get('reOpen');
-            $claim->eBoxDestroyed = $request->get('eBoxDestroyed');
-            $claim->firstContact = $request->get('firstContact');
-            $claim->proscription = $request->get('proscription');
-            $claim->initialReserve = $request->get('initialReserve');
-            $claim->currentRes = $request->get('currentRes');
-            $claim->adjustReserve = $request->get('adjustReserve');
-            $claim->save();
-            return $claim;
+        $result = null;
+        //check validator
+        if ($this->validatorAdmin($request->get('claim'), "createClaim")->fails()) {
+            return "Error Validator";
         }
+        else
+        {
+            if($claimId == '0'){
+                //save new claim
+                $claim = new Claim();
+                $claim->code = $request->get("claim")['code'];
+                $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
+                $claim->incident = $request->get("claim")['incident'];
+//            $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
+                $claim->accountCode = $request->get("claim")['accountCode'];
+                $claim->accountPolicyId = $request->get("claim")['policy'];
+                $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
+                $claim->insuredLastName = $request->get("claim")['insuredLastName'];
+                $claim->insuredAddress = $request->get("claim")['insuredAddress'];
+                $claim->insuredClaim = $request->get("claim")['insuredClaim'];
+                //$claim->tradingAs = $request->get("claim")['tradingAs'];
+                $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
+                $claim->lossDescCode = $request->get("claim")['lossDescCode'];
+                $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
+                $claim->sourceCode = $request->get("claim")['sourceCode'];
+                $claim->insurerCode = $request->get("claim")['insurerCode'];
+                $claim->brokerCode = $request->get("claim")['brokerCode'];
+                $claim->branchCode = $request->get("claim")['branchCode'];
+//            $claim->branchTypeCode = $request->get("claim")['branchTypeCode'];
+                $claim->destroyedDate = $request->get("claim")['destroyedDate'];
+                $claim->lossLocation = $request->get("claim")['lossLocation'];
+                $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
+                $claim->lossDate = $request->get("claim")['lossDate'];
+                $claim->receiveDate = $request->get("claim")['receiveDate'];
+                $claim->openDate = $request->get("claim")['openDate'];
+                $claim->closeDate = $request->get("claim")['closeDate'];
+                //$claim->insuredContactedDate = $request->get("claim")['insuredContactedDate'];
+                //$claim->limitationDate = $request->get("claim")['limitationDate'];
+                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'];
+                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'];
+                //$claim->disabilityCode = $request->get("claim")['disabilityCode'];
+                // $claim->outComeCode = $request->get("claim")['outComeCode'];
+                //$claim->lastChanged = $request->get("claim")['lastChanged'];
+                $claim->partnershipId = $request->get("claim")['partnershipId'];
+                $claim->adjusterCode = $request->get("claim")['adjusterCode'];
+                $claim->rate = $request->get("claim")['rate'];
+                //$claim->feeType = $request->get("claim")['feeType'];
+                $claim->taxable = $request->get("claim")['taxable'];
+                $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
+                $claim->createdBy = Auth::user()->id;
+                $claim->updatedBy = Auth::user()->id;
+                $claim->statusId = 0;
+                $claim->privileged = $request->get("claim")['privileged'];
+                $claim->organization = $request->get("claim")['organization'];
+                $claim->operatedAs = $request->get("claim")['operatedAs'];
+                $claim->miscInfo = $request->get("claim")['miscInfo'];
+                $claim->largeLossClaim = $request->get("claim")['largeLossClaim'];
+                $claim->sirBreached = $request->get("claim")['sirBreached'];
+                $claim->claimAssignment = $request->get("claim")['claimAssignment'];
+                $claim->policy = $request->get("claim")['policy'];
+                $claim->reOpen = $request->get("claim")['reOpen'];
+                $claim->eBoxDestroyed = $request->get("claim")['eBoxDestroyed'];
+                $claim->firstContact = $request->get("claim")['firstContact'];
+                $claim->proscription = $request->get("claim")['proscription'];
+                //$claim->initialReserve = $request->get("claim")['initialReserve'];
+                //claim->currentRes = $request->get("claim")['currentRes'];
+                //$claim->adjustReserve = $request->get("claim")['adjustReserve'];
+                $claim->save();
+                //take code of final claim
+                $code = Claim::orderBy('created_at','desc')->first()->code;
+                $result = array('Action'=>'AddNew','Claim'=>$claim,'Result'=>1,'codeClaim'=>$code);
+            }else{
+                //update claim
+                $claim = Claim::where('id',$claimId)->first();
+                $claim->code = $request->get("claim")['code'];
+                $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
+                $claim->incident = $request->get("claim")['incident'];
+//            $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
+                $claim->accountCode = $request->get("claim")['accountCode'];
+                $claim->accountPolicyId = $request->get("claim")['policy'];
+                $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
+                $claim->insuredLastName = $request->get("claim")['insuredLastName'];
+                $claim->insuredAddress = $request->get("claim")['insuredAddress'];
+                $claim->insuredClaim = $request->get("claim")['insuredClaim'];
+                //$claim->tradingAs = $request->get("claim")['tradingAs'];
+                $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
+                $claim->lossDescCode = $request->get("claim")['lossDescCode'];
+                $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
+                $claim->sourceCode = $request->get("claim")['sourceCode'];
+                $claim->insurerCode = $request->get("claim")['insurerCode'];
+                $claim->brokerCode = $request->get("claim")['brokerCode'];
+                $claim->branchCode = $request->get("claim")['branchCode'];
+//            $claim->branchTypeCode = $request->get("claim")['branchTypeCode'];
+                $claim->destroyedDate = $request->get("claim")['destroyedDate'];
+                $claim->lossLocation = $request->get("claim")['lossLocation'];
+                $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
+                $claim->lossDate = $request->get("claim")['lossDate'];
+                $claim->receiveDate = $request->get("claim")['receiveDate'];
+                $claim->openDate = $request->get("claim")['openDate'];
+                $claim->closeDate = $request->get("claim")['closeDate'];
+                //$claim->insuredContactedDate = $request->get("claim")['insuredContactedDate'];
+                //$claim->limitationDate = $request->get("claim")['limitationDate'];
+                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'];
+                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'];
+                //$claim->disabilityCode = $request->get("claim")['disabilityCode'];
+                //$claim->outComeCode = $request->get("claim")['outComeCode'];
+                //$claim->lastChanged = $request->get("claim")['lastChanged'];
+                $claim->partnershipId = $request->get("claim")['partnershipId'];
+                $claim->adjusterCode = $request->get("claim")['adjusterCode'];
+                $claim->rate = $request->get("claim")['rate'];
+                //$claim->feeType = $request->get("claim")['feeType'];
+                $claim->taxable = $request->get("claim")['taxable'];
+                $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
+                $claim->updatedBy = $request->get("claim")['updatedBy'];
+                $claim->statusId = 0;
+                $claim->privileged = $request->get("claim")['privileged'];
+                $claim->organization = $request->get("claim")['organization'];
+                $claim->operatedAs = $request->get("claim")['operatedAs'];
+                $claim->miscInfo = $request->get("claim")['miscInfo'];
+                $claim->largeLossClaim = $request->get("claim")['largeLossClaim'];
+                $claim->sirBreached = $request->get("claim")['sirBreached'];
+                $claim->claimAssignment = $request->get("claim")['claimAssignment'];
+                $claim->policy = $request->get("claim")['policy'];
+                $claim->reOpen = $request->get("claim")['reOpen'];
+                $claim->eBoxDestroyed = $request->get("claim")['eBoxDestroyed'];
+                $claim->firstContact = $request->get("claim")['firstContact'];
+                $claim->proscription = $request->get("claim")['proscription'];
+                //$claim->initialReserve = $request->get("claim")['initialReserve'];
+                //$claim->currentRes = $request->get("claim")['currentRes'];
+                //$claim->adjustReserve = $request->get("claim")['adjustReserve'];
+                $claim->save();
+                //take code of final claim
+                $code = Claim::orderBy('created_at','desc')->first()->code;
+                $result = array('Action'=>'Update','Claim'=>$claim,'Result'=>1,'codeClaim'=>$code);
+            }
+        }
+        return $result;
     }
 
     public function getAllSourceCode()
@@ -1089,6 +1115,7 @@ class AdminController extends Controller
                 if ($claim)
                 {
                     $checkIBStatusComplete = ClaimTaskDetail::where('professionalServices', 1)
+                        ->orWhere('professionalServices',2)
                         ->where('claimId', $claim->id)
 //                        ->where('billDate', '<', date('Y-m-d'))
                         ->where('statusId', 2)
@@ -1122,7 +1149,7 @@ class AdminController extends Controller
                     }
                     else
                     {
-                        $query->where('claim_task_details.billDate','<',$request->get('date'))->where('claim_task_details.billDate','>',$check);
+                        $query->where('claim_task_details.billDate','<=',$request->get('date'))->where('claim_task_details.billDate','>',$check);
                     }
                     $listClaimTaskDetail = $query->get();
                     $collect = collect($listClaimTaskDetail);
@@ -1243,6 +1270,550 @@ class AdminController extends Controller
         }
         return $resultArray;
 
+    }
+
+    public function loadClaimByEventEnterKey(Request $request)
+    {
+        $result = null;
+        try{
+            if($request->get('key'))
+            {
+                $claim = Claim::where('code',$request->get('key'))->where('statusId',0)->first();
+                $result = array('Claim'=>$claim);
+            }
+        }
+        catch(Exception $ex)
+        {
+            return null;
+        }
+        return $result;
+    }
+
+    public function loadViewDocketDetail(Request $request)
+    {
+        if($request->get('idClaim'))
+        {
+            $claim_task_detail = DB::table('claim_task_details')
+                ->leftJoin('users','claim_task_details.userId','=','users.id')
+                ->leftJoin('task_categories as cate1','claim_task_details.professionalServices','=','cate1.id')
+                ->leftJoin('task_categories as cate2','claim_task_details.expense','=','cate2.id')
+                ->where('claim_task_details.claimId',$request->get('idClaim'))
+                ->where('claim_task_details.professionalServices','!=',1)
+                ->where('claim_task_details.professionalServices','!=',2)
+                ->orderBy('claim_task_details.created_at','desc')
+                ->select(
+                    'claim_task_details.id as idTask',
+                    'claim_task_details.userId as idUser',
+                    'users.name as adjuster',
+                    'cate1.code as professionalServices',
+                    'cate2.code as expense',
+                    'claim_task_details.professionalServicesTime as professionalUnit',
+                    'claim_task_details.professionalServicesNote as professionalNote',
+                    'claim_task_details.expenseNote as expenseNote',
+                    'claim_task_details.created_at as date'
+                )
+                ->get();
+            return view('admin.viewDocketDetail')->with('claim_task_detail',$claim_task_detail);
+        }
+    }
+
+    public function loadListProfessionalServiceOrExpense()
+    {
+        $result = null;
+        try{
+            $result = TaskCategory::where('code','!=','IB')
+                                    ->where('code','!=','FB')->get();
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return view('admin.viewTaskCategory')->with('result',$result);
+    }
+
+    public function submitAddNewAndUpdateCategory(Request $request)
+    {
+        //dd($request->all());
+        $result = null;
+        if($request->get('id')==0)
+        {
+            //add new
+            try
+            {
+                $taskCategory = new TaskCategory();
+                $taskCategory->code = $request->get('code');
+                $taskCategory->name = $request->get('name');
+                $taskCategory->description = $request->get('description');
+                $taskCategory->active = 1;
+                $taskCategory->createdBy = Auth::user()->id;
+                $taskCategory->save();
+                $result = array('Action'=>'AddNew','Result'=>1);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            //update
+            try{
+                $taskCategory = TaskCategory::where('id',$request->get('id'))->where('active',1)->first();
+                if($taskCategory)
+                {
+                    $taskCategory->code = $request->get('code');
+                    $taskCategory->name = $request->get('name');
+                    $taskCategory->description = $request->get('description');
+                    $taskCategory->active = 1;
+                    $taskCategory->updatedBy = Auth::user()->id;
+                    $taskCategory->save();
+                    $result = array('Action'=>'Update','Result'=>1);
+                }
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
+    }
+
+    public function validatorAdmin(array $data, $variable)
+    {
+        $rules = null;
+        switch ($variable) {
+            case "assignmentTask": {
+                $rules = [
+                    'ProfessionalServices' => 'required',
+                ];
+                break;
+            }
+            case "createClaim": {
+                $rules = [
+                    'claimTypeCode' => 'required',
+                    'lossDescCode' => 'required',
+                    'insurerCode' => 'required',
+                    'sourceCode' => 'required'
+                ];
+                break;
+            }
+        }
+        return Validator::make($data, $rules);
+    }
+
+    public function assignmentTask(Request $request)
+    {
+        //dd($request->all());
+        $result = null;
+        if($request->get('action')==1)
+        {
+            if ($this->validatorAdmin($request->get('taskObject'), "assignmentTask")->fails()) {
+                $result = array('Action' => 'AddNew', 'Result' => 2);
+            }
+            else
+            {
+                try{
+                    $userTask = User::where('name',$request->get('taskObject')['UserId'])
+                                    ->where('roleId','!=',1)->first();
+                    if($userTask)
+                    {
+                        $task = new ClaimTaskDetail();
+                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                        $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+
+                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+
+                        $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
+                        $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
+                        $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
+
+                        $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
+                        $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
+                        $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
+
+                        $task->expense = $request->get('taskObject')['Expense'];
+                        $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                        $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
+                        $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
+
+                        $task->claimId = $request->get('taskObject')['ClaimId'];
+                        $task->userId = $userTask->id;
+                        $task->createdBy = Auth::user()->id;
+                        $task->billDate = $request->get('Date');
+                        $task->save();
+                        $result = array('Action'=>'AddNew','Result'=>1);
+                    }
+                    else
+                    {
+                        $result = array('Action' => 'AddNew', 'Result' => 3);
+                    }
+                }
+                catch(Exception $ex)
+                {
+                    return $ex;
+                }
+            }
+        }
+        else
+        {
+             try{
+                    if($request->get('idTask'))
+                    {
+                        $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
+                        if($task)
+                        {
+                            $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                            $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+
+                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                            $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+
+                            $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
+                            $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
+                            $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
+
+                            $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
+                            $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
+                            $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
+
+                            $task->expense = $request->get('taskObject')['Expense'];
+                            $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                            $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
+                            $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
+
+                            $task->updatedBy = Auth::user()->id;
+                            $task->save();
+                            $result = array('Action'=>'Update','Result'=>1);
+                        }
+                    }
+                }
+                catch(Exception $ex)
+                {
+                    return $ex;
+                }
+
+        }
+        return $result;
+
+    }
+
+    public function viewDetailTask(Request $request)
+    {
+        $data = null;
+        $expenseCode = null;
+        try{
+            if($request->get('idDocket'))
+            {
+                $task = ClaimTaskDetail::where('id',$request->get('idDocket'))->where('active',1)->first();
+                $professionalCode = TaskCategory::where('id',$task->professionalServices)->where('active',1)->first()->code;
+                if($task->expense)
+                {
+                    $expenseCode = TaskCategory::where('id',$task->expense)->where('active',1)->first()->code;
+                }
+                $data = array('Task'=>$task,'professionalCode'=>$professionalCode,'expenseCode'=>$expenseCode);
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $data;
+    }
+
+    public function getAllLossDesc()
+    {
+        return TypeOfDamage::all();
+    }
+
+    public function saveAddNewUpdateClaimType(Request $request)
+    {
+        $result = null;
+        if($request->get('idClaimType')==='0')
+        {
+            try
+            {
+                $claimType = new InsuranceDetail();
+                $claimType->code = $request->get('codeClaimType');
+                $claimType->name = $request->get('nameClaimType');
+                $claimType->description = 'Description Claim Type';
+                $claimType->active = 1;
+                $claimType->createdBy = Auth::user()->id;
+                $claimType->typeOfInsuranceId = 1;
+                $claimType->save();
+                $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$claimType);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            try
+            {
+                $claimType = InsuranceDetail::where('id',$request->get('idClaimType'))->where('active',1)->first();
+                if($claimType)
+                {
+                    $claimType->code = $request->get('codeClaimType');
+                    $claimType->name = $request->get('nameClaimType');
+                    $claimType->updatedBy = Auth::user()->id;
+                    $claimType->save();
+                    $result = array('Action'=>'Update','Result'=>1,'Data'=>$claimType);
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
+    }
+
+    public function saveAddNewUpdateLossDesc(Request $request)
+    {
+            $result = null;
+            if($request->get('idLossDesc')==='0')
+            {
+                try
+                {
+                    $lossDesc = new TypeOfDamage();
+                    $lossDesc->code = $request->get('codeLossDesc');
+                    $lossDesc->name = $request->get('nameLossDesc');
+                    $lossDesc->description = 'Description Loss Desc';
+                    $lossDesc->active = 1;
+                    $lossDesc->createdBy = Auth::user()->id;
+                    $lossDesc->save();
+                    $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$lossDesc);
+                }
+                catch(Exception $ex)
+                {
+                    return $ex;
+                }
+            }
+            else
+            {
+                try
+                {
+                    $lossDesc = TypeOfDamage::where('id',$request->get('idLossDesc'))->where('active',1)->first();
+                    if($lossDesc)
+                    {
+                        $lossDesc->code = $request->get('codeLossDesc');
+                        $lossDesc->name = $request->get('nameLossDesc');
+                        $lossDesc->updatedBy = Auth::user()->id;
+                        $lossDesc->save();
+                        $result = array('Action'=>'Update','Result'=>1,'Data'=>$lossDesc);
+                    }
+                }
+
+                catch(Exception $ex)
+                {
+                    return $ex;
+                }
+            }
+            return $result;
+    }
+
+    public function saveAddNewUpdateSourceCode(Request $request)
+    {
+        $result = null;
+        if($request->get('idSourceCode')==='0')
+        {
+            try
+            {
+                $sourceCode = new SourceCustomer();
+                $sourceCode->code = $request->get('codeSourceCode');
+                $sourceCode->name = $request->get('nameSourceCode');
+                $sourceCode->description = 'Description Source Code';
+                $sourceCode->active = 1;
+                $sourceCode->createdBy = Auth::user()->id;
+                $sourceCode->save();
+                $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$sourceCode);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            try
+            {
+                $sourceCode = SourceCustomer::where('id',$request->get('idSourceCode'))->where('active',1)->first();
+                if($sourceCode)
+                {
+                    $sourceCode->code = $request->get('codeSourceCode');
+                    $sourceCode->name = $request->get('nameSourceCode');
+                    $sourceCode->updatedBy = Auth::user()->id;
+                    $sourceCode->save();
+                    $result = array('Action'=>'Update','Result'=>1,'Data'=>$sourceCode);
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
+    }
+
+    public function getAllAdjuster()
+    {
+        return User::where('roleId','!=',1)->get();
+    }
+
+    public function getAllBranch()
+    {
+        return Branch::all();
+    }
+
+    public function saveAddNewUpdateBranch(Request $request)
+    {
+        $result = null;
+        if($request->get('idBranch')==='0')
+        {
+            try
+            {
+                $branchCode = new Branch();
+                $branchCode->code = $request->get('codeBranch');
+                $branchCode->name = $request->get('nameBranch');
+                $branchCode->description = 'Description Branch';
+                $branchCode->branchTypeCode = $request->get('branchTypeBranch');
+                $branchCode->active = 1;
+                $branchCode->createdBy = Auth::user()->id;
+                $branchCode->save();
+                $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$branchCode);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            try
+            {
+                $branchCode = SourceCustomer::where('id',$request->get('idBranch'))->where('active',1)->first();
+                if($branchCode)
+                {
+                    $branchCode->code = $request->get('codeBranch');
+                    $branchCode->name = $request->get('nameBranch');
+                    $branchCode->updatedBy = Auth::user()->id;
+                    $branchCode->save();
+                    $result = array('Action'=>'Update','Result'=>1,'Data'=>$branchCode);
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
+    }
+
+    public function saveAddNewUpdateBranchType(Request $request)
+    {
+        $result = null;
+        if($request->get('idBranchType')==='0')
+        {
+            try
+            {
+                $branchType = new BranchType();
+                $branchType->code = $request->get('codeBranchType');
+                $branchType->name = $request->get('nameBranchType');
+                $branchType->description = 'Description Branch Type';
+                $branchType->active = 1;
+                $branchType->createdBy = Auth::user()->id;
+                $branchType->save();
+                $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$branchType);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            try
+            {
+                $branchType = BranchType::where('id',$request->get('idBranchType'))->where('active',1)->first();
+                if($branchType)
+                {
+                    $branchType->code = $request->get('codeBranchType');
+                    $branchType->name = $request->get('nameBranchType');
+                    $branchType->updatedBy = Auth::user()->id;
+                    $branchType->save();
+                    $result = array('Action'=>'Update','Result'=>1,'Data'=>$branchType);
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
+    }
+
+    public function getAllInsurerCode()
+    {
+        return Customer::all();
+    }
+
+    public function saveAddNewUpdateInsurer(Request $request)
+    {
+        //dd($request->all());
+        $result = null;
+        if($request->get('idInsurer')==='0')
+        {
+            try
+            {
+                $insurer = new Customer();
+                $insurer->code = $request->get('codeInsurer');
+                $insurer->fullName = $request->get('nameInsurer');
+                $insurer->address = $request->get('addressInsurer');
+                $insurer->contactPersonFirstName = $request->get('contactPersonInsurer');
+                $insurer->sourceCustomerId = $request->get('sourceCustomer');
+                $insurer->active = 1;
+                $insurer->createdBy = Auth::user()->id;
+                $insurer->save();
+                $result = array('Action'=>'AddNew','Result'=>1,'Data'=>$insurer);
+            }
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        else
+        {
+            try
+            {
+                $insurer = Customer::where('id',$request->get('idInsurer'))->where('active',1)->first();
+                if($insurer)
+                {
+                    $insurer->code = $request->get('codeInsurer');
+                    $insurer->fullName = $request->get('nameInsurer');
+                    $insurer->address = $request->get('addressInsurer');
+                    $insurer->contactPersonFirstName = $request->get('contactPersonInsurer');
+                    $insurer->updatedBy = Auth::user()->id;
+                    $insurer->save();
+                    $result = array('Action'=>'Update','Result'=>1,'Data'=>$insurer);
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                return $ex;
+            }
+        }
+        return $result;
     }
 
 }

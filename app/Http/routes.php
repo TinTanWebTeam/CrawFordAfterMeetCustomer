@@ -32,6 +32,10 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getAllClaim','AdminController@getAllClaim');
     Route::get('getAllSourceCode','AdminController@getAllSourceCode');
     Route::get('getAllClaimType','AdminController@getAllClaimType');
+    Route::get('getAllLossDesc','AdminController@getAllLossDesc');
+    Route::get('getAllAdjuster','AdminController@getAllAdjuster');
+    Route::get('getAllBranch','AdminController@getAllBranch');
+    Route::get('getAllInsurerCode','AdminController@getAllInsurerCode');
 
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');
@@ -44,6 +48,19 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('saveClaim/{claimId}','AdminController@saveClaim');
     Route::post('loadTaskDetailByDate','AdminController@loadTaskDetailByDate');
     Route::post('loadInvoiceByEventEnterKey','AdminController@loadInvoiceByEventEnterKey');
+    Route::post('saveAddNewUpdateClaimType','AdminController@saveAddNewUpdateClaimType');
+    Route::post('saveAddNewUpdateLossDesc','AdminController@saveAddNewUpdateLossDesc');
+    Route::post('saveAddNewUpdateSourceCode','AdminController@saveAddNewUpdateSourceCode');
+    Route::post('saveAddNewUpdateBranch','AdminController@saveAddNewUpdateBranch');
+    Route::post('saveAddNewUpdateBranchType','AdminController@saveAddNewUpdateBranchType');
+    Route::post('saveAddNewUpdateInsurer','AdminController@saveAddNewUpdateInsurer');
+
+    Route::post('loadClaimByEventEnterKey','AdminController@loadClaimByEventEnterKey');
+    Route::post('loadViewDocketDetail','AdminController@loadViewDocketDetail');
+    Route::post('loadListProfessionalServiceOrExpense','AdminController@loadListProfessionalServiceOrExpense');
+    Route::post('submitAddNewAndUpdateCategory','AdminController@submitAddNewAndUpdateCategory');
+    Route::post('assignmentTask','AdminController@assignmentTask');
+    Route::post('viewDetailTask','AdminController@viewDetailTask');
 });
 
 /*
