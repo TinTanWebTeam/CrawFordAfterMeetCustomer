@@ -28,9 +28,9 @@ use Validator;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function dashboard()
     {
-        return view('admin.index');
+        return view('admin.dashboard');
     }
 
     public function getViewClaimType()

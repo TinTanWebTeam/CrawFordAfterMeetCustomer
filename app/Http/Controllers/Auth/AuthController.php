@@ -94,9 +94,9 @@ class AuthController extends Controller
                 if ($password == $request->get('password')) {
                     Auth::login($user);
                     if($user->role_id != 1){
-                        return redirect('user/index');        
+                        return redirect('user/dashboard');        
                     }else{
-                        return redirect('admin/index');
+                        return redirect('admin/dashboard');
                     }   
                 }
             }
