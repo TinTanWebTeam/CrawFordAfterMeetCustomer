@@ -1,11 +1,24 @@
 {{--Model show confirm--}}
-<div class="modal fade" id="modalConfirm" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+<div class="modal fade" id="modal-confirm">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-body" id="modalContent" style="text-align: center">Save New Success</div>
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Information
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h4>
+
+                </h4>
+            </div>
         </div>
     </div>
 </div>
+
 {{--End Model  show confirm--}}
 
 <div class="row" style="background-color: white;padding-top: 20px;padding-bottom: 20px">
@@ -21,7 +34,7 @@
                             <input type="text" name="Id" style="width: 100%;display: none"
                                    id="Id" value="{{$user->id}}">
                             <input type="text" name="ajaxActionType" style="width: 100%;display: none" value="1">
-                            <input type="text" name="Name" style="width: 100%;background-color:#BF9B9B"
+                            <input type="text" name="Name" style="width: 100%;background-color:#E2D8D8"
                                    id="Name" value="{{$user->name}}" readonly>
                         </div>
                     </div>
@@ -239,7 +252,7 @@
                             <h5 style="text-align: right">Password New:</h5>
                         </div>
                         <div class="col-sm-8">
-                            <input type="password" name="Password" id="Password" style="width: 100%;background-color: #BF9B9B" readonly>
+                            <input type="password" name="Password" id="Password" value="SamePassword" style="width: 100%;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                 </div>
@@ -261,7 +274,7 @@
                             <h5 style="text-align: right">PasswordConfirm:</h5>
                         </div>
                         <div class="col-sm-8">
-                            <input type="password" name="PasswordConfirm" id="PasswordConfirm" style="width: 100%;background-color: #BF9B9B" readonly>
+                            <input type="password" name="PasswordConfirm" value="SamePassword" id="PasswordConfirm" style="width: 100%;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                 </div>
@@ -329,7 +342,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #BF9B9B" value="{{date_format(date_create($user->created_at),'Y-m-d')}}">
+                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #E2D8D8" value="{{date_format(date_create($user->created_at),'Y-m-d')}}">
                             </div>
                         </div>
                         <div class="row">
@@ -338,9 +351,9 @@
                             </div>
                             <div class="col-sm-8">
                                 @if($userCreated!=null)
-                                    <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #BF9B9B" value="{{$userCreated}}">
+                                    <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #E2D8D8" value="{{$userCreated}}">
                                 @else
-                                    <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #BF9B9B">
+                                    <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #E2D8D8">
                                 @endif
                             </div>
                         </div>
@@ -349,7 +362,7 @@
                                 <h5 style="text-align: right">Network ID :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="NetworkID_created" id="NetworkID_created" value="{{$user->networkID_created}}" readonly style="background-color:#BF9B9B">
+                                <input type="text" name="NetworkID_created" id="NetworkID_created" value="{{$user->networkID_created}}" readonly style="background-color:#E2D8D8">
                             </div>
                         </div>
                     </fieldset>
@@ -364,7 +377,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #BF9B9B" value="{{date_format(date_create($user->updated_at),'Y-m-d')}}">
+                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #E2D8D8" value="{{date_format(date_create($user->updated_at),'Y-m-d')}}">
                             </div>
                         </div>
                         <div class="row">
@@ -373,9 +386,9 @@
                             </div>
                             <div class="col-sm-8">
                                 @if($userChanged!=null)
-                                    <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #BF9B9B" value="{{$userChanged}}">
+                                    <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #E2D8D8" value="{{$userChanged}}">
                                 @else
-                                    <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #BF9B9B">
+                                    <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #E2D8D8">
                                 @endif
                             </div>
                         </div>
@@ -510,6 +523,7 @@
                     }
                     else
                     {
+                        //alert(type);
                         $("form[id=formEmployee]").validate({
                             rules: {
                                 Name: "required",
@@ -540,30 +554,44 @@
                             {
                                 if(data["Result"]===1)
                                 {
-                                    alert("Update success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
                                 }
                                 else if(data["Result"]===0)
                                 {
-                                    alert("Update No success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update No success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
                                 }
                                 else
                                 {
-                                    alert("Update No success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update No success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
                                 }
                             }
                             else
                             {
                                 if(data["Result"]===1)
                                 {
-                                    alert("Change Password success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Change Password success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
+
                                 }
                                 else if(data["Result"]===0)
                                 {
-                                    alert("Change Password No success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Change Password No success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
+
                                 }
                                 else
                                 {
-                                    alert("Change Password No success");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Change Password No success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    profileView.actionCancel();
                                 }
                             }
 
@@ -597,15 +625,18 @@
                     $("input[name=ajaxActionType]").val("0");
                     $("select[id=Position]").prop("disabled",true);
                     $("select[id=Sex]").prop("disabled",true);
-                    $("form[id=formEmployee]").find("input").prop("readOnly",true).css("background-color","#BF9B9B");
-                    $("input[name=Password]").prop("readOnly",false).css("background-color","");
-                    $("input[name=PasswordConfirm]").prop("readOnly",false).css("background-color","");
+                    $("form[id=formEmployee]").find("input").prop("readOnly",true).css("background-color","#E2D8D8");
+                    $("input[name=Password]").prop("readOnly",false).css("background-color","").val("");
+                    $("input[name=PasswordConfirm]").prop("readOnly",false).css("background-color","").val("");
 
                 },
                 actionCancel:function()
                 {
                     if($("input[name=ajaxActionType]").val()==="0")
                     {
+                        $("input[name=Password]").val("SamePassword").prop("readOnly",true);
+                        $("input[name=PasswordConfirm]").val("SamePassword").prop("readOnly",true);
+
                         $("select[id=Position]").prop("disabled",false);
                         $("select[id=Sex]").prop("disabled",false);
                         console.log($("form[id=formEmployee]").find("input").length);
@@ -614,31 +645,31 @@
                             var name =$("form[id=formEmployee]").find($("input")[i]).attr("name");
                             if(name==="UserID_Created")
                             {
-                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","BF9B9B");
+                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","#E2D8D8");
                             }
                             else if(name==="Created_at")
                             {
-                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","BF9B9B");
+                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","#E2D8D8");
                             }
                             else if(name==="NetworkID_created")
                             {
-                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","BF9B9B");
+                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","#E2D8D8");
                             }
                             else if(name==="Updated_at")
                             {
-                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","BF9B9B");
+                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","#E2D8D8");
                             }
                             else if(name==="UserID_Changed")
                             {
-                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","BF9B9B");
+                                $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",true).css("background-color","#E2D8D8");
                             }
                             else
                             {
                                 $("form[id=formEmployee]").find($("input")[i]).prop("readOnly",false).css("background-color","");
                             }
                         }
-                        $("input[name=Password]").prop("readOnly",true).css("background-color","#BF9B9B");
-                        $("input[name=PasswordConfirm]").prop("readOnly",true).css("background-color","#BF9B9B");
+                        $("input[name=Password]").prop("readOnly",true).css("background-color","#E2D8D8");
+                        $("input[name=PasswordConfirm]").prop("readOnly",true).css("background-color","#E2D8D8");
 
                         $("form[id=formEmployee]").find($("label[class=error]")).css("display","none");
 

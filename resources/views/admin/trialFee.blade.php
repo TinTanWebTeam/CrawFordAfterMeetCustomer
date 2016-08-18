@@ -1,10 +1,18 @@
 {{--Modal Notification--}}
-<div div aria-hidden="true" class="modal fade" id="modalNotification" role="basic" style="display: none;" tabindex="-1">
-    <div class="modal-dialog ">
-        <div class="modal-content" style="height: 90px">
-            <h4 style="text-align: center;margin-top: 30px">
-
-            </h4>
+<div class="modal fade" id="modalNotification">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Information
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h4></h4>
+            </div>
         </div>
     </div>
 </div>
@@ -18,7 +26,7 @@
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
                 </button>
                 <h4 class="modal-title">
-                    Modal Title
+                    Confirm Bill Claim
                 </h4>
             </div>
             <div class="modal-body" id="modalContent">
@@ -191,7 +199,7 @@
                             <h5>Loss Date:</h5>
                         </td>
                         <td>
-                            <input type="datetime" name="lossDate" id="lossDate" readonly style="background-color: #F3EDED">
+                            <input type="date" name="lossDate" id="lossDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Initial Reserve:</h5>
@@ -205,7 +213,7 @@
                             <h5>Received:</h5>
                         </td>
                         <td>
-                            <input type="datetime" name="receiveDate" id="receiveDate" readonly style="background-color: #F3EDED">
+                            <input type="date" name="receiveDate" id="receiveDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Current Res:</h5>
@@ -219,7 +227,7 @@
                             <h5>Opened:</h5>
                         </td>
                         <td>
-                            <input type="datetime" name="openDate" id="openDate" readonly style="background-color: #F3EDED">
+                            <input type="date" name="openDate" id="openDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Adjust Res:</h5>
@@ -248,7 +256,7 @@
                             <h5>Bill To:</h5>
                         </td>
                         <td>
-                            <select name="" id="chooseCustomer" style="width:auto"
+                            <select id="chooseCustomer" style="width:auto"
                                     onchange="trialFeeView.showInformationOfCustomer()">
                                 @if($listCustomer!=null)
                                     @foreach($listCustomer as $item)
@@ -374,7 +382,7 @@
             <table class="table table-bordered" style="width: 700px;">
                 <thead id="theadTableListTaskDetail">
                 <tr>
-                    <th colspan="4" style="text-align: center;background-color: blue;color: white">Branch/Adjuster
+                    <th colspan="50" style="text-align: center;background-color: blue;color: white">Branch/Adjuster
                         Subtotals:
                     </th>
                 </tr>
@@ -452,10 +460,16 @@
                     disbursements: null,
                     total: null
                 },
+
                 convertStringToDate: function (date) {
+//                    var currentDate = new Date(date);
+//                    var datetime =("0" + currentDate.getDate()).slice(-2)+"-"
+//                            + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
+//                            + currentDate.getFullYear();
+//                    return datetime;
                     var currentDate = new Date(date);
-                    var datetime = currentDate.getFullYear() + "-"
-                            + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
+                    var datetime = currentDate.getFullYear() +"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)  +"-"
                             + ("0" + currentDate.getDate()).slice(-2);
                     return datetime;
                 },
@@ -483,7 +497,8 @@
                         }, function (data) {
                             console.log(data);
                             if (data === "Error") {
-                                alert("Claim is not exist!");
+                                $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Claim is not exist!");
+                                $("div[id=modalNotification]").modal("show");
                             }
                             else {
                                 $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data["check"]));
@@ -528,7 +543,7 @@
                                 }
                                 else
                                 {
-                                    $("div[id=modalNotification]").find("div[class=modal-content]").find("h4").empty().append("Cant't find data of Adjuster Subtotals from"+" "+data["check"]);
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Cant't find data of Adjuster Subtotals from"+" "+data["check"]);
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
@@ -583,7 +598,6 @@
                         _token: _token,
                         idCustomer: $("select#chooseCustomer option:selected").val()
                     }, function (data) {
-                        console.log(data);
                         $("textarea[name=addressCustomer]").val(data["address"]);
                         $("input[name=insurerCustomer]").val(data["fullName"]);
 
@@ -615,8 +629,10 @@
                     if($("input[name=FromDate]").val() > $("input[name=ToDate]").val())
                     {
                         $("div[id=modalConfirm]").modal("hide");
-                        $("div[id=modalNotification]").find("h4").empty().append("Bill date can't smaller than start date !!! ");
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill date can't smaller than start date !!! ");
                         $("div[id=modalNotification]").modal("show");
+
+
                     }
                     else
                     {
@@ -746,6 +762,7 @@
                         }
                         else
                         {
+                            console.log(trialFeeView.convertStringToDate(data[1]["FromDate"]));
                             $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data[1]["FromDate"])).prop("readOnly",true);
                             $("input[name=ToDate]").val(trialFeeView.convertStringToDate(data[1]["ToDate"])).prop("readOnly",true);
                             //insert data default
@@ -795,10 +812,11 @@
                 },
                 cancel:function()
                 {
-                    if($("button[name=action]").val()==="0")
-                    {
-                        trialFeeView.chooseClaimWhenUseEventEnterKey();
-                    }
+                    $("form#trialFee").find("input").val("");
+                    $("input[name=ToDate]").prop("readOnly",false);
+                    $("textarea[name=addressCustomer]").val("");
+                    $("select[id=chooseCustomer]").val($("select[id=chooseCustomer] option:eq(0)").val());
+                    trialFeeView.clearTable();
                 },
                 loadTaskDetailByDate:function()
                 {
@@ -845,6 +863,7 @@
                     var theadList = $("thead[id=theadTableListTaskDetail]");
                     var tbodyTableGL = $("tbody[id=tbodyGL]");
                     var tbodyTableTotal = $("tbody[id=tbodyListTotal]");
+                    $("button[name=btnBill]").prop("disabled",false);
                     var trClick = tbodyList.find("tr");
                     theadList.find("tr:eq(1)").empty();
                     for(var i = 0;i<trClick.length;i++)
@@ -860,6 +879,7 @@
                         $(tbodyTableTotal.find("tr")[k]).empty();
                     }
                 }
+
             };
         }
         else {

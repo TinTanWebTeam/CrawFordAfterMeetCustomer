@@ -1,8 +1,26 @@
 {{--Model show confirm--}}
-<div class="modal fade" id="modalConfirm" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+{{--<div class="modal fade" id="modalConfirm" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">--}}
+    {{--<div class="modal-dialog">--}}
+        {{--<div class="modal-content">--}}
+            {{--<div class="modal-body" id="modalContent" style="text-align: center">Save New Success</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
+
+<div class="modal fade" id="modalNotification">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-body" id="modalContent" style="text-align: center">Save New Success</div>
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Information
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h4></h4>
+            </div>
         </div>
     </div>
 </div>
@@ -338,7 +356,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #BF9B9B">
+                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -346,7 +364,7 @@
                                 <h5 style="text-align: right">UserID :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #BF9B9B">
+                                <input type="text" name="UserID_Created" id="UserID_Created" readonly="readonly" style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -369,7 +387,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #BF9B9B">
+                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -377,7 +395,7 @@
                                 <h5 style="text-align: right">UserID :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #BF9B9B">
+                                <input type="text" name="UserID_Changed" id="UserID_Changed" readonly="readonly" style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -404,7 +422,7 @@
                                 <input type="radio" class="radio" name="checkboxLockAndActive" value="Locked" disabled>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="LockedDetail" id="LockedDetail" readonly style="background-color: #BF9B9B">
+                                <input type="text" name="LockedDetail" id="LockedDetail" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -415,7 +433,7 @@
                                 <input type="radio" class="radio" name="checkboxLockAndActive" value="Inactive" disabled>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="InactiveDetail" id="InactiveDetail" readonly style="background-color: #BF9B9B">
+                                <input type="text" name="InactiveDetail" id="InactiveDetail" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -431,7 +449,7 @@
             </div>
             <br>
             <div class="row">
-                <button type="button" class="btn btn-danger pull-right" style="margin-right: 20px;margin-left: 20px">
+                <button type="button" class="btn btn-danger pull-right" style="margin-right: 20px;margin-left: 20px" onclick="employeeView.ResetForm()">
                     Cancel
                 </button>
                 <button type="button" class="btn btn-success pull-right" name="btnAction" onclick="employeeView.ActionAddNewOrUpdate()">
@@ -499,7 +517,11 @@
                                 PasswordConfirm: {
                                     required: true,
                                     equalTo: "#Password"
-                                }
+                                },
+                               Email: {
+                                   required: true,
+                                   email: true
+                               },
                             },
                             messages: {
                                 Name: "ID is required",
@@ -509,7 +531,11 @@
                                 PasswordConfirm: {
                                     required: "Password Confirm is required",
                                     equalTo: "Password Confirm is not the same password"
-                                }
+                                },
+                                Email: {
+                                    required: "Email is required",
+                                    email: "Email is not correct"
+                                },
                             }
                         });
                     if ($("form[id=formEmployee]").valid()) {
@@ -580,30 +606,30 @@
                             {
                                 if(data["Result"]===1)
                                 {
-                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Add New Success");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Add New Success");
+                                    $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").val("1");
-                                    $("div[id=modalConfirm]").modal("show");
                                     employeeView.ResetForm();
                                 }
                                 else
                                 {
-                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Add New No Success");
-                                    $("div[id=modalConfirm]").modal("show");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Add New No Success");
+                                    $("div[id=modalNotification]").modal("show");
                                 }
                             }
                             else
                             {
                                 if(data["Result"]===1)
                                 {
-                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Update Success");
-                                    $("div[id=modalConfirm]").modal("show");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update Success");
+                                    $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").empty().val("1");
                                     employeeView.ResetForm();
                                 }
                                 else
                                 {
-                                    $("div[id=modalConfirm]").children().children().find(".modal-body").empty().html("Update No Success");
-                                    $("div[id=modalConfirm]").modal("show");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update No Success");
+                                    $("div[id=modalNotification]").modal("show");
                                 }
                             }
                         });
@@ -732,24 +758,29 @@
                             }
                             else
                             {
-                                alert("Can't find this user !!!");
+                                $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Can't find this user !!!");
+                                $("div[id=modalNotification]").modal("show");
                             }
                         });
                     }
                 },
                 ResetForm:function()
                 {
-                    if($("input[name=ajaxActionType]").val()==="1")
-                    {
+//                    if($("input[name=ajaxActionType]").val()==="1")
+//                    {
                         var allInput = $("input");
                         $("form[id=formEmployee]").find(allInput).val("");
+                        $("form[id=formEmployee]").find("label[class=error]").hide();
                         $("button[name=btnAction]").text("Save New");
                         $("input[name=ajaxActionType]").val("1");
-                        $("input[name=checkboxLockAndActive]").prop("checked",false);
+                        $("input[name=checkboxLockAndActive]").prop("checked",false).prop("disabled",true);
+                        $("input[name=InactiveDetail]").prop("readOnly",true).css("background-color","#F3EDED");
+                        $("input[name=LockedDetail]").prop("readOnly",true).css("background-color","#F3EDED");
                         $("input[name=Password]").css("background-color","").prop("readOnly",false);
                         $("input[name=PasswordConfirm]").css("background-color","").prop("readOnly",false);
 
-                    }
+
+                    //}
                 }
             };
         }
@@ -757,5 +788,46 @@
         {
 
         }
+        var typingTimer; //timer identifier
+        var doneTypingInterval = 2000;  //time in ms, 3 second for example
+        var $inputName = $("input[name=Name]");
+        var $inputEmail = $("input[name=Email]");
+
+        //on keyup, start the countdown
+        $inputName.on('keyup', function () {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(checkTheSameName, doneTypingInterval);
+        });
+        $inputEmail.on('keyup',function(){
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(checkTheSameEmail, doneTypingInterval);
+        });
+        //on keydown, clear the countdown
+        $inputName.on('keydown', function () {
+            clearTimeout(typingTimer);
+        });
+        $inputEmail.on('keydown',function(){
+            clearTimeout(typingTimer);
+        });
+        //user is "finished typing," do something
+        function checkTheSameName () {
+            $.ajax({
+                method: "post",
+                url: url + "checkTheSameNameWhenCreateEmployee",
+                data:{
+                    _token:_token,
+                    key:$inputName.val()
+                },
+                success: function(result) {
+                    if(result === "False"){
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This name has already exists!!!Let's choose other name");
+                        $("div[id=modalNotification]").modal("show");
+                        $inputName.val("");
+                    }
+                }
+            });
+        }
+
+
     })
 </script>

@@ -94,7 +94,7 @@
                         <div class="col-sm-8">
                             <input type="text" id="UserId" name="UserId" value="{{Auth::user()->id}}" style="display: none">
                             <input type="text" id="UserOther" name="UserOther"  style="display: none">
-                            <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #AFA3A3" readonly>
+                            <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -112,7 +112,7 @@
                             <h5 style="display: inline-block" class="text-right">Insured Name: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="insuredName" name="insuredName" value="" style="display: inline-block;width: 300px;background-color: #AFA3A3" readonly>
+                            <input type="text" id="insuredName" name="insuredName" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -120,7 +120,7 @@
                             <h5 style="display: inline-block" class="text-right">Loss Date: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="lossDate" name="lossDate" value="" style="display: inline-block;width: 300px;background-color: #AFA3A3" readonly>
+                            <input type="text" id="lossDate" name="lossDate" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -128,7 +128,7 @@
                             <h5 style="display: inline-block" class="text-right">Loss Location: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="lossLocation" name="lossLocation" value="" style="display: inline-block;width: 300px;background-color: #AFA3A3" readonly>
+                            <input type="text" id="lossLocation" name="lossLocation" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmount" id="ProfessionalServicesAmount" value="0" style="width:80px;background-color:#AFA3A3 " readonly>
+                                                    <input type="text" name="ProfessionalServicesAmount" id="ProfessionalServicesAmount" value="0" style="width:80px;background-color:#E2D8D8 " readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -234,7 +234,7 @@
                                                     <h5 style="text-align:right">Units</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesTimeBillValue" id="ProfessionalServicesTimeBillValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesTimeBillValue" id="ProfessionalServicesTimeBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -242,7 +242,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmountBillValue" id="ProfessionalServicesAmountBillValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesAmountBillValue" id="ProfessionalServicesAmountBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -250,7 +250,7 @@
                                                     <h5 style="text-align:right">Rate/Unit</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesRateBillValue" id="ProfessionalServicesRateBillValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesRateBillValue" id="ProfessionalServicesRateBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -263,7 +263,7 @@
                                                     <h5 style="text-align:right">Units</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesTimeOverrideValue" id="ProfessionalServicesTimeOverrideValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesTimeOverrideValue" id="ProfessionalServicesTimeOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideTimeOfInputTime()">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -271,7 +271,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmountOverrideValue" id="ProfessionalServicesAmountOverrideValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesAmountOverrideValue" id="ProfessionalServicesAmountOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -279,7 +279,7 @@
                                                     <h5 style="text-align:right">Rate/Unit</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesRateOverrideValue" id="ProfessionalServicesRateOverrideValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ProfessionalServicesRateOverrideValue" id="ProfessionalServicesRateOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideRateOfInputRate()">
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -314,7 +314,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmountBillValue" id="ExpenseAmountBillValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ExpenseAmountBillValue" id="ExpenseAmountBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -327,7 +327,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmountOverrideValue" id="ExpenseAmountOverrideValue" value="0" style="width:80px;background-color: #AFA3A3" readonly>
+                                                    <input type="text" name="ExpenseAmountOverrideValue" id="ExpenseAmountOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -361,8 +361,6 @@
                 <th class="text-bold text-center">Description</th>
                 <th class="text-bold text-center">Expense Code</th>
                 <th class="text-bold text-center">Expense Note</th>
-                <th class="text-bold text-center">Invoice MajorNo</th>
-                <th class="text-bold text-center">Invoice Date</th>
             </tr>
             </thead>
             <tbody id="tbodyDocket">
@@ -407,8 +405,9 @@
 
                     ExpenseAmount:null,
                     ExpenseAmountBillValue:null,
-                    ExpenseAmountOverrideValue:null
+                    ExpenseAmountOverrideValue:null,
 
+                    RateDefault:$("input[name=ProfessionalServicesRate]").val()
                 },
                 idUserOther:null,
                 resetTaskObject: function () {
@@ -448,6 +447,8 @@
                     taskView.idUserOther = $(element).find("td:eq(0)").text();
                     $("button[name=actionAttackTask]").text("Update");
                     $("input[name=Action]").val("0");
+
+
                     $.post(url+"user/viewDetailTask",{_token:_token,idDocket:$(element).attr("id")},function(data){
                         console.log(data);
                         for(var propertyName in data["Task"])
@@ -472,15 +473,17 @@
                         //change User overide when billValue have value
                         if(parseFloat($("input[name=ProfessionalServicesAmountBillValue]").val()) !== 0)
                         {
-                            $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#AFA3A3");
-                            $("input[name=ProfessionalServicesRate]").prop("readOnly",true).css("background-color","#AFA3A3");
+                            $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
+                            $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
+                            $("input[name=ProfessionalServicesRate]").prop("readOnly",true).css("background-color","#E2D8D8");
+
                             $("input[name=ProfessionalServicesTimeOverrideValue]").prop("readOnly",false).css("background-color","");
-                            $("input[name=ProfessionalServicesAmountOverrideValue]").prop("readOnly",false).css("background-color","");
+                            $("input[name=ProfessionalServicesAmountOverrideValue]").prop("readOnly",true).css("background-color","#E2D8D8");
                             $("input[name=ProfessionalServicesRateOverrideValue]").prop("readOnly",false).css("background-color","");
                         }
                         if(parseFloat($("input[name=ExpenseAmountBillValue]").val()) !== 0)
                         {
-                            $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#AFA3A3");
+                            $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
                             $("input[name=ExpenseAmountOverrideValue]").prop("readOnly",false).css("background-color","");
                         }
                     });
@@ -503,6 +506,26 @@
                     }
                     else{
                         $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()) * parseFloat($("input[name=ProfessionalServicesTime]").val()));
+                    }
+                },
+                automaticUserOverideTimeOfInputTime:function()
+                {
+                    if($("input[name=ProfessionalServicesTimeOverrideValue]").val()==="")
+                    {
+                        $("input[name=ProfessionalServicesAmountOverrideValue]").empty().val(parseFloat($("input[name=ProfessionalServicesRateOverrideValue]").val()));
+                    }
+                    else{
+                        $("input[name=ProfessionalServicesAmountOverrideValue]").empty().val(parseFloat($("input[name=ProfessionalServicesRateOverrideValue]").val()) * parseFloat($("input[name=ProfessionalServicesTimeOverrideValue]").val()));
+                    }
+                },
+                automaticUserOverideRateOfInputRate:function()
+                {
+                    if($("input[name=ProfessionalServicesTimeOverrideValue]").val()==="")
+                    {
+                        $("input[name=ProfessionalServicesAmountOverrideValue]").empty().val(parseFloat($("input[name=ProfessionalServicesRateOverrideValue]").val()));
+                    }
+                    else{
+                        $("input[name=ProfessionalServicesAmountOverrideValue]").empty().val(parseFloat($("input[name=ProfessionalServicesRateOverrideValue]").val()) * parseFloat($("input[name=ProfessionalServicesTimeOverrideValue]").val()));
                     }
                 },
                 assignmentTask:function()
@@ -537,6 +560,7 @@
                                         $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
                                             $("tbody[id=tbodyDocket]").empty().append(view);
                                         });
+                                        taskView.cancel();
                                     }
                                     else if(data["Result"]===0)
                                     {
@@ -553,6 +577,7 @@
                                     {
                                         $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
                                         $("div[id=modalConfirm]").modal("show");
+                                        taskView.cancel();
                                     }
                                     else
                                     {
@@ -566,10 +591,36 @@
                 },
                 cancel:function()
                 {
+                    $("#IdTask").val("");
+                    //Time
+                    $("input[id=ProfessionalServicesCode]").val("");
+                    $("textarea[id=ProfessionalServicesNote]").val("");
+                    //Expense
+                    $("input[id=ExpenseCode]").val("");
+                    $("textarea[id=ExpenseNote]").val("");
+                    //Button
                     $("button[name=actionAttackTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
-                    $("form[id=formTask]").find("input").val("");
-                    $("form[id=formTask]").find("textarea").val("");
+
+                    //Value ProfessionalServices
+                    $("input[name=ProfessionalServicesTime]").prop("readOnly",false).val("0").css("background-color","");
+                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",false).val("0").css("background-color","");
+                    $("input[name=ProfessionalServicesRate]").prop("readOnly",false).val(taskView.taskObject.RateDefault).css("background-color","");
+
+                    $("input[name=ProfessionalServicesTimeBillValue]").val("0");
+                    $("input[name=ProfessionalServicesAmountBillValue]").val("0");
+                    $("input[name=ProfessionalServicesRateBillValue]").val("0");
+
+                    $("input[name=ProfessionalServicesTimeOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+                    $("input[name=ProfessionalServicesAmountOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+                    $("input[name=ProfessionalServicesRateOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+
+                    //Expense
+                    $("input[name=ExpenseAmount]").prop("readOnly",false).val("0").css("background-color","");
+                    $("input[name=ExpenseAmountBillValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+                    $("input[name=ExpenseAmountOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+
+
                 },
                 showModelListTaskTime:function()
                 {

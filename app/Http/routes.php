@@ -4,12 +4,12 @@
  * Public Route
  * */
 Route::get('/',function(){
-   if(Auth::check()){
-       if(Auth::user()->roleId == 1)
-           return redirect('admin/dashboard');
-       return redirect('user/dashboard');
-   }
-   return redirect('auth/login');
+    if(Auth::check()){
+        if(Auth::user()->roleId == 1)
+            return redirect('admin/dashboard');
+        return redirect('user/dashboard');
+    }
+    return redirect('auth/login');
 });
 Route::get('auth/logout','Auth\AuthController@getLogout');
 Route::group(['middleware' => ['guest']],function (){
@@ -61,6 +61,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('submitAddNewAndUpdateCategory','AdminController@submitAddNewAndUpdateCategory');
     Route::post('assignmentTask','AdminController@assignmentTask');
     Route::post('viewDetailTask','AdminController@viewDetailTask');
+
+    Route::post('checkTheSameNameWhenCreateEmployee','AdminController@checkTheSameNameWhenCreateEmployee');
 });
 
 /*
