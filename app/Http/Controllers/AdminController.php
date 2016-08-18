@@ -43,10 +43,16 @@ class AdminController extends Controller
 
     public function getViewClaim()
     {
+        $codeID = null;
         $branchType = BranchType::where('active',1)->get();
         $sourceCustomer = SourceCustomer::where('active',1)->get();
-        $code = Claim::orderBy('created_at','desc')->first()->code;
-        return view('admin.claim')->with('branchType',$branchType)->with('sourceCustomer',$sourceCustomer)->with('codeClaim',$code);
+        $code = Claim::orderBy('created_at','desc')->first();
+        if($code!=null)
+        {
+            $codeID = $code->code;
+        }
+
+        return view('admin.claim')->with('branchType',$branchType)->with('sourceCustomer',$sourceCustomer)->with('codeClaim',$codeID);
     }
 
     public function getViewEmployee()
