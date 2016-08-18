@@ -89,44 +89,53 @@ class AdminController extends Controller
         $result = null;
         if ($request->get('idAction') == 1) {
             try {
-                $employee = new User();
-                $employee->name = $request->get('dataEmployee')['Name'];
-                $employee->email = $request->get('dataEmployee')['Email'];
-                $employee->password = crypt(Config::get('app.key'), $request->get('dataEmployee')['Password']);
-                $employee->firstName = $request->get('dataEmployee')['FirstName'];
-                $employee->lastName = $request->get('dataEmployee')['LastName'];
-                $employee->salutation = $request->get('dataEmployee')['Salutation'];
-                $employee->middleInitial = $request->get('dataEmployee')['MiddleInitial'];
-                $employee->designations = $request->get('dataEmployee')['Designations'];
-                $employee->sex = $request->get('dataEmployee')['Sex'];
-                $employee->birthDate = $request->get('dataEmployee')['BirthDate'];
-                $employee->company = $request->get('dataEmployee')['Company'];
-                $employee->title = $request->get('dataEmployee')['Title'];
-                $employee->phone = $request->get('dataEmployee')['Phone'];
-                $employee->address = $request->get('dataEmployee')['Address'];
-                $employee->bonusDate = $request->get('dataEmployee')['BonusDate'];
-                $employee->userID_created = Auth::user()->id;
-                $employee->userID_changed = Auth::user()->id;
-                $employee->networkID_created = $request->get('dataEmployee')['NetworkID_created'];
-                $employee->positionId = $request->get('dataEmployee')['Position'];
-                $employee->roleId = 2;
-                if ($request->get('dataEmployee')['DefaultProfile'] == 'True') {
-                    $employee->defaultProfile = 1;
-                } else {
-                    $employee->defaultProfile = 0;
+                //Check exists
+                $userCheck = User::where('name', $request->get('dataEmployee')['Name'])->where('roleId',2)->first();
+                if($userCheck == null)
+                {
+                    $employee = new User();
+                    $employee->name = $request->get('dataEmployee')['Name'];
+                    $employee->email = $request->get('dataEmployee')['Email'];
+                    $employee->password = crypt(Config::get('app.key'), $request->get('dataEmployee')['Password']);
+                    $employee->firstName = $request->get('dataEmployee')['FirstName'];
+                    $employee->lastName = $request->get('dataEmployee')['LastName'];
+                    $employee->salutation = $request->get('dataEmployee')['Salutation'];
+                    $employee->middleInitial = $request->get('dataEmployee')['MiddleInitial'];
+                    $employee->designations = $request->get('dataEmployee')['Designations'];
+                    $employee->sex = $request->get('dataEmployee')['Sex'];
+                    $employee->birthDate = $request->get('dataEmployee')['BirthDate'];
+                    $employee->company = $request->get('dataEmployee')['Company'];
+                    $employee->title = $request->get('dataEmployee')['Title'];
+                    $employee->phone = $request->get('dataEmployee')['Phone'];
+                    $employee->address = $request->get('dataEmployee')['Address'];
+                    $employee->bonusDate = $request->get('dataEmployee')['BonusDate'];
+                    $employee->userID_created = Auth::user()->id;
+                    $employee->userID_changed = Auth::user()->id;
+                    $employee->networkID_created = $request->get('dataEmployee')['NetworkID_created'];
+                    $employee->positionId = $request->get('dataEmployee')['Position'];
+                    $employee->roleId = 2;
+                    if ($request->get('dataEmployee')['DefaultProfile'] == 'True') {
+                        $employee->defaultProfile = 1;
+                    } else {
+                        $employee->defaultProfile = 0;
+                    }
+                    $employee->save();
+                    //Insert table rate details
+                    $rate_Detail = new RateDetail();
+                    $rate_Detail->value = $request->get('dataEmployee')['Hourly'];
+                    $rate_Detail->description = $request->get('dataEmployee')['Hourly'];
+                    $rate_Detail->active = 1;
+                    $rate_Detail->rateTypeId = 2;
+                    $rate_Detail->userId = $employee->id;
+                    $rate_Detail->claimId = 0;
+                    $rate_Detail->createdBy = Auth::user()->id;
+                    $rate_Detail->save();
+                    $result = array('Action' => 'AddNew', 'Result' => 1);
                 }
-                $employee->save();
-                //Insert table rate details
-                $rate_Detail = new RateDetail();
-                $rate_Detail->value = $request->get('dataEmployee')['Hourly'];
-                $rate_Detail->description = $request->get('dataEmployee')['Hourly'];
-                $rate_Detail->active = 1;
-                $rate_Detail->rateTypeId = 2;
-                $rate_Detail->userId = $employee->id;
-                $rate_Detail->claimId = 0;
-                $rate_Detail->createdBy = Auth::user()->id;
-                $rate_Detail->save();
-                $result = array('Action' => 'AddNew', 'Result' => 1);
+                else{
+                    $result = array('Action' => 'AddNew', 'Result' => 0);
+                }
+
             } catch (Exception $ex) {
                 return $ex;
             }
@@ -965,7 +974,7 @@ class AdminController extends Controller
                 $claim->code = $request->get("claim")['code'];
                 $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
                 $claim->incident = $request->get("claim")['incident'];
-//            $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
+//              $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
                 $claim->accountCode = $request->get("claim")['accountCode'];
                 $claim->accountPolicyId = $request->get("claim")['policy'];
                 $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
