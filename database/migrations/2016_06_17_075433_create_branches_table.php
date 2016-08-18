@@ -14,11 +14,11 @@ class CreateBranchesTable extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique();
+            $table->string('code',50)->unique();
             $table->string('name',100);
-            $table->string('description')->nullable();
-            $table->string('branchTypeCode',20)->nullable(); //if not null will be reference to code in branch type
-            $table->string('customerCode',20)->nullable(); // if not null will be reference to code in table customer
+            $table->string('description',1000)->nullable();
+            $table->string('branchTypeCode',50)->nullable(); //if not null will be reference to code in branch type
+            $table->string('customerCode',50)->nullable(); // if not null will be reference to code in table customer
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('updatedBy')->default(0); //if not equal 0 will be reference to id in user
             $table->boolean('active')->default(1);

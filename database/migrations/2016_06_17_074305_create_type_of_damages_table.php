@@ -14,7 +14,7 @@ class CreateTypeOfDamagesTable extends Migration
     {
         Schema::create('type_of_damages', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique();
+            $table->string('code',50)->unique();
             $table->string('name',100);
             $table->string('description')->nullable();
             $table->boolean('active')->default(1);

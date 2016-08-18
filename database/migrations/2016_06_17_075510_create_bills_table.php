@@ -15,7 +15,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
             $table->decimal('percentage',18,2)->nullable();
-            $table->string('billToId',20)->nullable(); //if not null will be reference to code in customer
+            $table->string('billToId',50)->nullable(); //if not null will be reference to code in customer
             $table->string('claimOfficer',100)->nullable(); //name customer charge of the project
             $table->string('policyNumber',50)->nullable();
             $table->string('CompClaimNumber',200)->nullable();

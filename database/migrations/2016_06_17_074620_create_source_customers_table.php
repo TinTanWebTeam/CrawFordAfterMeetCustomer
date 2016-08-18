@@ -14,7 +14,7 @@ class CreateSourceCustomersTable extends Migration
     {
         Schema::create('source_customers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique(); //Origins customers : A => ... ; S => insurance company
+            $table->string('code',50)->unique(); //Origins customers : A => ... ; S => insurance company
             $table->string('name',100);
             $table->string('description')->nullable();
             $table->boolean('active')->default(1);

@@ -14,7 +14,7 @@ class CreateExchangeRatesTable extends Migration
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique();
+            $table->string('code',50)->unique();
             $table->string('name',500);
             $table->decimal('value');
             $table->string('description')->nullable();

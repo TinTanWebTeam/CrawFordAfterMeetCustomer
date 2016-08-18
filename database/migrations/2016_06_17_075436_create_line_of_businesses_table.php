@@ -14,9 +14,9 @@ class CreateLineOfBusinessesTable extends Migration
     {
         Schema::create('line_of_businesses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique();
+            $table->string('code',50)->unique();
             $table->string('name',100);
-            $table->string('description')->nullable();
+            $table->string('description',1000)->nullable();
             $table->integer('createdBy')->default(0);
             $table->integer('updatedBy')->default(0);
             $table->boolean('active')->default(1);

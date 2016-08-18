@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
-            'password' => crypt(Config::get('app.key'),'tintansoft'),
+            'password' => encrypt('tintansoft',Config::get('app.key')),
             'roleId' => 1,
             'firstName'=>'admin',
             'lastName'=>'admin',
@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'user',
             'email' => 'user@gmail.com',
-            'password' => crypt(Config::get('app.key'),'tintansoft'),
+            'password' => encrypt('tintansoft',Config::get('app.key')),
             'roleId' => 2,
             'firstName'=>'user1',
             'lastName'=>'user2',

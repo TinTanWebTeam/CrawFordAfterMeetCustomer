@@ -14,14 +14,14 @@ class CreateBrokersTable extends Migration
     {
         Schema::create('brokers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20)->unique();
+            $table->string('code',50)->unique();
             $table->string('firstName',50);
             $table->string('lastName',50);
-            $table->string('phone',20)->nullable();
-            $table->string('email',50)->nullable();
+            $table->string('phone',50)->nullable();
+            $table->string('email',100)->nullable();
             $table->string('address',300)->nullable();
-            $table->string('bankAccountNumber',30)->nullable();
-            $table->string('bankCardNumber',30)->nullable();
+            $table->string('bankAccountNumber',50)->nullable();
+            $table->string('bankCardNumber',50)->nullable();
             $table->string('bankAccountName',100)->nullable();
             $table->string('bankName',100)->nullable();
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user

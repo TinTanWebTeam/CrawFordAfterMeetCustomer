@@ -14,7 +14,7 @@ class CreateTaskCategoriesTable extends Migration
     {
         Schema::create('task_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code',20);
+            $table->string('code',50);
             $table->string('name',50);
             $table->integer('claimId')->default(0);
             $table->string('description')->nullable();

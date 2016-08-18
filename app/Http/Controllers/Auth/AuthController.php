@@ -88,12 +88,17 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         try{
-            $user = User::where('name',$request->get('username'))
-                ->where('password',crypt(Config::get('app.key'),$request->get('password')))
-                ->first();
+            $user = User::where('name', $request->get('username'))->first();
             if($user){
-                Auth::login($user);
-                return redirect('/');
+                $password = decrypt($user->password,Config::get('app.key'));
+                if ($password == $request->get('password')) {
+                    Auth::login($user);
+                    if($user->role_id != 1){
+                        return redirect('user/dashboard');        
+                    }else{
+                        return redirect('admin/dashboard');
+                    }   
+                }
             }
             else{
                 flash()->overlay('Account Not Found, Try Again!', 'Notification');
