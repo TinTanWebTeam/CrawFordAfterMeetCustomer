@@ -98,6 +98,9 @@ class AuthController extends Controller
                     }else{
                         return redirect('admin/dashboard');
                     }   
+                }else{
+                    flash()->overlay('Password Miss Match, Try Again!', 'Notification');
+                    return redirect('auth/login');
                 }
             }
             else{
