@@ -241,11 +241,10 @@ class AdminController extends Controller
                 if ($claim)
                 {
                     //Check from date to date
-                    $checkIBAndFB = ClaimTaskDetail::where('professionalServices', 1)
-                        ->orWhere('professionalServices',2)
+                    $checkIBAndFB = ClaimTaskDetail::where('statusId', 2)
+                        //->orWhere('professionalServices',2)
                         ->where('claimId', $claim->id)
 //                        ->where('billDate', '<', date('Y-m-d 23:59:59'))
-                        ->where('statusId', 2)
                         ->orderBy('billDate', 'desc')
                         ->first();
                     if ($checkIBAndFB) {
@@ -271,6 +270,7 @@ class AdminController extends Controller
                                 'claim_task_details.expense as cvPhu',
                                 DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTimeCvChinh'),
                                 DB::raw('SUM(claim_task_details.expenseAmount) as expense'),
+                                DB::raw('SUM(claim_task_details.professionalServicesAmount) as ProfessionalServices'),
                                 'rate_details.value as rate',
                                 'rate_types.name as rateType'
                             )
@@ -284,7 +284,7 @@ class AdminController extends Controller
                                 'RateType' => $item->rateType,
                                 'SumTimeCVChinh' => $item->sumTimeCvChinh,
                                 'Expense' => $item->expense,
-                                'ProfessionalServices' => $item->sumTimeCvChinh * $item->rate,
+                                'ProfessionalServices' => $item->ProfessionalServices
                             ];
                             array_push($array_all, $array);
                         }
@@ -855,6 +855,7 @@ class AdminController extends Controller
                                     'claim_task_details.expense as cvPhu',
                                     DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTimeCvChinh'),
                                     DB::raw('SUM(claim_task_details.expenseAmount) as expense'),
+                                    DB::raw('SUM(claim_task_details.professionalServicesAmount) as ProfessionalServices'),
                                     'rate_details.value as rate',
                                     'rate_types.name as rateType'
                                 )
@@ -868,7 +869,7 @@ class AdminController extends Controller
                                     'RateType' => $item->rateType,
                                     'SumTimeCVChinh' => $item->sumTimeCvChinh,
                                     'Expense' => $item->expense,
-                                    'ProfessionalServices' => $item->sumTimeCvChinh * $item->rate,
+                                    'ProfessionalServices' => $item->ProfessionalServices,
                                 ];
                                 array_push($array_all, $array);
                             }
@@ -1114,11 +1115,10 @@ class AdminController extends Controller
                 $claim = Claim::where('code', $request->get('key'))->where('statusId', 1)->first();
                 if ($claim)
                 {
-                    $checkIBStatusComplete = ClaimTaskDetail::where('professionalServices', 1)
-                        ->orWhere('professionalServices',2)
+                    $checkIBStatusComplete = ClaimTaskDetail::where('statusId', 2)
+                        //->orWhere('professionalServices',2)
                         ->where('claimId', $claim->id)
 //                        ->where('billDate', '<', date('Y-m-d'))
-                        ->where('statusId', 2)
                         ->orderBy('billDate', 'desc')
                         ->first();
                     if ($checkIBStatusComplete) {
@@ -1140,6 +1140,7 @@ class AdminController extends Controller
                             'claim_task_details.expense as cvPhu',
                             DB::raw('SUM(claim_task_details.professionalServicesTime) as sumTimeCvChinh'),
                             DB::raw('SUM(claim_task_details.expenseAmount) as expense'),
+                            DB::raw('SUM(claim_task_details.professionalServicesAmount) as ProfessionalServices'),
                             'rate_details.value as rate',
                             'rate_types.name as rateType'
                         );
@@ -1161,7 +1162,7 @@ class AdminController extends Controller
                             'RateType' => $item->rateType,
                             'SumTimeCVChinh' => $item->sumTimeCvChinh,
                             'Expense' => $item->expense,
-                            'ProfessionalServices' => $item->sumTimeCvChinh * $item->rate
+                            'ProfessionalServices' => $item->ProfessionalServices
                         ];
                         array_push($array_all, $array);
                     }
