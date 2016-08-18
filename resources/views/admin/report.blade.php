@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-6">
         <h5 class="text-right" style="width: 100%;">-------------------------------------------------------------------</h5>
-        <button class="pull-right">Print Report</button>
+        <button class="pull-right" id="print_report">Print Report</button>
     </div>
     &nbsp;
 
@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +64,24 @@
                                         <span>Line Of Business Code:</span>
                                     </div>
                                     <div class="claim-info-col-2">
-                                        asfkaskjfnaksf
+                                        <span>&nbsp;aa</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
+                                        <span>&nbsp;</span>
                                     </div>
                                     <div class="claim-info-col-3">
                                         <div class="claim-info-col-3-row-1">
@@ -83,6 +100,7 @@
                                                 <span>Partnership Id:</span>
                                             </div>
                                             <div class="claim-info-col-3-row-1-col-2">
+
                                             </div>
                                         </div>
                                         <div class="claim-info-col-3-row-2">
@@ -258,7 +276,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +284,19 @@
                         </div>
                         <div class="content">
                             <div class="content-body">
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -307,7 +338,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -315,6 +346,19 @@
                         </div>
                         <div class="content">
                             <div class="content-body">
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -356,7 +400,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -364,6 +408,19 @@
                         </div>
                         <div class="content">
                             <div class="content-body">
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -405,7 +462,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -413,6 +470,19 @@
                         </div>
                         <div class="content">
                             <div class="content-body">
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -454,7 +524,7 @@
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: 1001682</span>
+                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -462,6 +532,19 @@
                         </div>
                         <div class="content">
                             <div class="content-body">
+                                <div class="dockets">
+                                    <div class="dockets-header">
+                                        <span>Dockets</span>
+                                    </div>
+                                    <div class="dockets-content">
+                                        <div class="dockets-content-header">
+                                            <div class="dockets-content-header-row-1">
+                                            </div>
+                                            <div class="dockets-content-header-row-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -492,3 +575,17 @@
 
 <br>
 <br>
+<script>
+    $("#print_report").click(function (e) {
+        $(".report").printThis({
+            debug: false,              
+            importCSS: true,            
+            importStyle: false,           
+            loadCSS: "admin/css/style.css", 
+            removeInline: false,   
+            printDelay: 333,    
+            header: null,    
+            formValues: true           
+        });
+    });
+</script>
