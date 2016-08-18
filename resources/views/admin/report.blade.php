@@ -21,7 +21,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -225,7 +225,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
@@ -274,7 +274,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
@@ -323,7 +323,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
@@ -372,7 +372,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
@@ -421,7 +421,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
@@ -470,7 +470,7 @@
                                     <div class="footer-text">
                                         <div class="footer-text-info">
                                             <span>CMS Claims Management System</span>
-                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 Crawford Adjusters Canada Inc.</span>
+                                            <div class="TM"><span>TM</span></div><span> - &copy; 2000-2016 VietNam International Adjusters.</span>
                                         </div>
                                     </div>
                                     <div class="footer-number">
