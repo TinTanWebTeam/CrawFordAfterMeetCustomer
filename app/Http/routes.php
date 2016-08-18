@@ -6,8 +6,8 @@
 Route::get('/',function(){
     if(Auth::check()){
         if(Auth::user()->roleId == 1)
-            return redirect('admin/dashboard');
-        return redirect('user/dashboard');
+            return redirect('admin/index');
+        return redirect('user/index');
     }
     return redirect('auth/login');
 });
