@@ -26,8 +26,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
-    //'default' => 'sqlite',
+    // 'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => 'sqlsrv',
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -76,6 +76,18 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
+        ],
+        'sqlsrv' => [
+            'driver' => 'sqlsrv',
+            'host' => '127.0.0.1',
+            'port' => 1433,
+            'database' => 'crawford',
+            'username' => 'sa',
+            'password' => 'nguyennghia',
+            'charset' => 'utf8', 
+            'collation' => 'utf8_unicode_ci', 
+            'prefix' => '',
+            'strict' => false,
         ],
 
     ],
