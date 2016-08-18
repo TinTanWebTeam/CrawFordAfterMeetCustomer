@@ -245,7 +245,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -294,7 +294,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -343,7 +343,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -392,7 +392,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -441,7 +441,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="crawford1.png" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
