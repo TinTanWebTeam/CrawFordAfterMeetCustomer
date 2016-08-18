@@ -79,11 +79,11 @@ return [
         ],
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => '127.0.0.1',
+            'host' => '192.168.0.3',
             'port' => 1433,
             'database' => 'crawford',
             'username' => 'sa',
-            'password' => 'nguyennghia',
+            'password' => 'Tintansoft@',
             'charset' => 'utf8', 
             'collation' => 'utf8_unicode_ci', 
             'prefix' => '',
