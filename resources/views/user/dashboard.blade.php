@@ -1,12 +1,11 @@
 @extends('layouts.userLayout')
 @section('content')
-	<div class="jumbotron">
-		<div class="container">
-			<h1>Hello, world!</h1>
-			<p>Contents ...</p>
-			<p>
-				<a class="btn btn-primary btn-lg">Learn more</a>
-			</p>
-		</div>
-	</div>
+	<div class="jumbotron" style="background-color: white">
+        <div class="container text-center">
+            <img src="{{ asset('img/logo.jpg') }}" alt="logo" style="width: 50%">        
+         </div>
+        <div class="container text-center">
+            <h3 class="text-center">VietNam International Adjuster CMS</h3>
+        </div>
+    </div>
 @endsection
