@@ -18,7 +18,7 @@ class InsuranceDetailTableSeeder extends Seeder
             InsuranceDetail::create([
                 'code' => 'CODE' . str_random(3) . (string) date_timestamp_get(date_create()),
                 'name' => $faker->name,
-                'description' => $faker->paragraph(3),
+                'description' => $faker->paragraph(1),
                 'typeOfInsuranceId'=>1
             ]);
         }
