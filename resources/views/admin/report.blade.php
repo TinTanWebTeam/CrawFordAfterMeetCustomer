@@ -173,18 +173,18 @@
                                                 <span>Partnership Id:</span>
                                             </div>
                                             <div class="claim-info-col-3-row-1-col-2">
-                                                <span>&nbsp;<div id="lossDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="receiveDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="openDate" style="display: inline-block"></div>:</span>
-                                                <span>&nbsp;<div id="closeDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="insuredContactedDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="limitationDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="policyInceptionDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="policyExpireDate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="disabilityCode" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="outComeCode" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="lastChanged" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="partnershipId" style="display: inline-block"></div></span>    
+                                                <span>&nbsp;&nbsp;<div id="lossDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="receiveDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="openDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="closeDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="insuredContactedDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="limitationDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="policyInceptionDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="policyExpireDate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="disabilityCode" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="outComeCode" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="lastChanged" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="partnershipId" style="display: inline-block"></div></span>    
                                             </div>
                                         </div>
                                         <div class="claim-info-col-3-row-2">
@@ -194,20 +194,23 @@
                                                 <span>Fee Type:</span>
                                                 <span>Taxable:</span>
                                                 <span>Estimated Claim Value:</span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
                                             </div>
                                             <div class="claim-info-col-3-row-2-col-2">
-                                                <span>&nbsp;<div id="adjusterCode" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="rate" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="feeType" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="taxable" style="display: inline-block"></div></span>
-                                                <span>&nbsp;<div id="estimatedClaimValue" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="adjusterCode" style="display: inline-block">SONV1</div></span>
+                                                <span>&nbsp;&nbsp;<div id="rate" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="feeType" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="taxable" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;<div id="estimatedClaimValue" style="display: inline-block"></div></span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
                                             </div>
                                             <div class="claim-info-col-3-row-2-col-3">
-                                                <span>&nbsp;<div id="adjusterName" style="display: inline-block"></div></span>
-                                                <span>&nbsp;</span>
-                                                <span>&nbsp;</span>
-                                                <span>&nbsp;</span>
-                                                <span>&nbsp;</span>
+                                                <span>&nbsp;&nbsp;&nbsp;<div id="adjusterName" style="display: inline-block">Vu Thanh Son</div></span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
                                             </div>
                                         </div>
                                     </div>
@@ -425,9 +428,35 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span></span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                
                                             </div>
                                         </div>
                                     </div>

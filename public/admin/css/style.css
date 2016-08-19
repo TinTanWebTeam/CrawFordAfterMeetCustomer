@@ -104,6 +104,7 @@ form#trialFee h5{
 
 /* Main */
 .report{
+    font-size: 16px;
     width: 1654px;
     margin: 0 auto;
     background-color: gray;
@@ -145,6 +146,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .claim-info-col-1 span{
+    height: 21px;
     margin-top: 6px;
     display: block;
     font-size: 18px;
@@ -157,9 +159,10 @@ form#trialFee h5{
     width: 40%;
 }
 .claim-info-col-2 span{
+    height: 21px;
     margin-top: 6px;
     display: block;
-    font-size: 18px;
+    font-size: 16px;
 }
 .claim-info-col-3{
     display: inline-block;
@@ -177,6 +180,7 @@ form#trialFee h5{
     width: 60%;
 }
 .claim-info-col-3-row-1-col-1 span{
+    height: 21px;
     margin-top: 6px;
     display: block;
     font-size: 18px;
@@ -187,31 +191,52 @@ form#trialFee h5{
     box-sizing: border-box;
     width: 38%;
 }
-.claim-info-col-3-row-2{
+.claim-info-col-3-row-1-col-2 span{
+    height: 21px;
     margin-top: 6px;
+    display: block;
+    font-size: 16px;
+}
+
+.claim-info-col-3-row-2{
     box-sizing: border-box;
     width: 100%;
 }
 .claim-info-col-3-row-2-col-1{
+    display: inline-block;
     text-align: right;
     box-sizing: border-box;
-    width: 30%;
+    width: 33%;
 }
 .claim-info-col-3-row-2-col-1 span{
+    height: 21px;
     margin-top: 6px;
     display: block;
     font-size: 18px;
     font-weight: 600;
 }
 .claim-info-col-3-row-2-col-2{
+    display: inline-block;
     box-sizing: border-box;
-    width: 30%;
+    width: 27%;
+}
+.claim-info-col-3-row-2-col-2 span{
+    height: 21px;
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
 }
 .claim-info-col-3-row-2-col-3{
+    display: inline-block;
     box-sizing: border-box;
-    width: 40%;
+    width: 38%;
 }
-
+.claim-info-col-3-row-2-col-3 span{
+    height: 21px;
+    margin-top: 6px;
+    display: block;
+    font-size: 16px;
+}
 
 .co-insurers{
     padding-top: 20px;
@@ -471,18 +496,45 @@ form#trialFee h5{
     font-size: 32px;
     font-weight: 600;
 }
+.dockets-content-header{
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid black;
+}
 .dockets-content-header-date{
-
+    width: 10%;
+    display: inline-block;
 }
-.dockets-content-header-branch{
-
+.dockets-content-header-branch-code{
+    width: 5%;
+    display: inline-block;
 }
-.dockets-content-header-adjuster{
-
+.dockets-content-header-adjuster-code{
+    width: 7%;
+    display: inline-block;
 }
-.dockets-content-header-time{
-
+.dockets-content-header-code{
+    display: inline-block;
 }
+.dockets-content-header-unit{
+    display: inline-block;
+}
+.dockets-content-header-expense-code{
+    display: inline-block;
+}
+.dockets-content-header-expense-amount{
+    display: inline-block;
+}
+.dockets-content-header-note{
+    display: inline-block;
+}
+.dockets-content-header-invoice-major-no{
+    display: inline-block;
+}
+.dockets-content-header-invoice-date{
+    display: inline-block;
+}
+
 /* ------------------------------------------------ */
 /* Header */
 .header{
@@ -546,6 +598,7 @@ form#trialFee h5{
 }
 
 .paginate{
+    padding-top: 5px;
     box-sizing: border-box;
     border-top: 4px solid black;
     width: 100%;
