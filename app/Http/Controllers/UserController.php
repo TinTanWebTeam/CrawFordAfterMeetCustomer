@@ -95,7 +95,7 @@ class UserController extends Controller
         try{
             if($request->get('key'))
             {
-                $claim = Claim::where('code',$request->get('key'))->where('statusId',1)->first();
+                $claim = Claim::where('code',$request->get('key'))->where('statusId',0)->first();
                 $result = array('Claim'=>$claim);
             }
         }
@@ -359,7 +359,7 @@ class UserController extends Controller
                     $user = User::where('active',1)->where('id',$request->get('dataUser')['Id'])->first();
                     if($user)
                     {
-                        $user->password = crypt(Config::get('app.key'),$request->get('dataUser')['Password']);
+                        $user->password = encrypt($request->get('dataUser')['Password'],Config::get('app.key'));
                         //$user->password = $request->get('dataUser')['Password'];
                         $user->save();
                         $result = array('Action'=>'ChangePassword','Result'=>1);

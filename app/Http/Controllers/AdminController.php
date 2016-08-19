@@ -102,7 +102,7 @@ class AdminController extends Controller
                     $employee = new User();
                     $employee->name = $request->get('dataEmployee')['Name'];
                     $employee->email = $request->get('dataEmployee')['Email'];
-                    $employee->password = crypt(Config::get('app.key'), $request->get('dataEmployee')['Password']);
+                    $employee->password = encrypt($request->get('dataEmployee')['Password'],Config::get('app.key'));
                     $employee->firstName = $request->get('dataEmployee')['FirstName'];
                     $employee->lastName = $request->get('dataEmployee')['LastName'];
                     $employee->salutation = $request->get('dataEmployee')['Salutation'];
@@ -252,7 +252,7 @@ class AdminController extends Controller
         try {
             if ($request->get('key') != null)
             {
-                $claim = Claim::where('code', $request->get('key'))->where('statusId', 1)->first();
+                $claim = Claim::where('code', $request->get('key'))->where('statusId', 0)->first();
                 if ($claim)
                 {
                     //Check from date to date
@@ -539,6 +539,13 @@ class AdminController extends Controller
                         }
                         $IBPending->delete();
                     }
+                    //update column closeDate of table claim
+                    $claim = Claim::where('id',$request->get('data')['idClaim'])->first();
+                    if($claim!=null)
+                    {
+                        $claim->closeDate = $request->get('data')['toDate'];
+                        $claim->save();
+                    }
                     //Insert data to table Claim_task_detail(Docket)
                     $claimTaskDetail = new ClaimTaskDetail();
                     $claimTaskDetail->professionalServices = 2;
@@ -632,11 +639,13 @@ class AdminController extends Controller
                     {
                         $task = ClaimTaskDetail::where('id',$bill->billId)->where('professionalServices',1)
                             ->where('statusId',1)->first();
-                        if($task)
+
+                        if($task!=null)
                         {
                             $task->statusId = 2;
                             $task->save();
                         }
+                        //dd($task);
                         //insert table invoice
                         $invoice = new Invoice();
                         $invoice->idBill = $bill->id;
@@ -1082,6 +1091,7 @@ class AdminController extends Controller
                 $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
                 $claim->updatedBy = $request->get("claim")['updatedBy'];
                 $claim->statusId = 0;
+                $claim->updatedBy = Auth::user()->id;
                 $claim->privileged = $request->get("claim")['privileged'];
                 $claim->organization = $request->get("claim")['organization'];
                 $claim->operatedAs = $request->get("claim")['operatedAs'];
@@ -1127,7 +1137,7 @@ class AdminController extends Controller
         try {
             if ($request->get('key') != null)
             {
-                $claim = Claim::where('code', $request->get('key'))->where('statusId', 1)->first();
+                $claim = Claim::where('code', $request->get('key'))->where('statusId', 0)->first();
                 if ($claim)
                 {
                     $checkIBStatusComplete = ClaimTaskDetail::where('statusId', 2)

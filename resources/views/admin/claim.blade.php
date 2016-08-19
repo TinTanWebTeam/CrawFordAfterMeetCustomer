@@ -1329,6 +1329,7 @@
                                     if(data["Result"]===1)
                                     {
                                         var tr1 = $("#modal-loss-desc-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
+                                        console.log(tr1);
                                         tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
                                         tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
                                         tr1.find("td:eq(2)").empty().append(data["Data"]["name"]);
@@ -1357,7 +1358,7 @@
                                         tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
                                         tr+="<td>"+data["Data"]["code"]+"</td>";
                                         tr+="<td>"+data["Data"]["name"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editSourceCode()'><span class='glyphicon glyphicon-edit'></span></button></td>";
+                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editSourceCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
                                         tr+="</tr>";
                                         $("#modal-source-code-table-body").append(tr);
                                         $("#modal-source-code-modify").modal("hide");
@@ -1404,7 +1405,7 @@
                                         tr+="<td>"+data["Data"]["code"]+"</td>";
                                         tr+="<td>"+data["Data"]["name"]+"</td>";
                                         tr+="<td>"+data["Data"]["branchTypeCode"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillBranchFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editBranch()'><span class='glyphicon glyphicon-edit'></span></button></td>";
+                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillBranchFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editBranch(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
                                         tr+="</tr>";
                                         $("#modal-branch-table-body").append(tr);
                                         $("#modal-branch-modify").modal("hide");
@@ -1481,8 +1482,8 @@
                                         tr+="<td>"+data["Data"]["code"]+"</td>";
                                         tr+="<td>"+data["Data"]["fullName"]+"</td>";
                                         tr+="<td>"+data["Data"]["sourceCustomerId"]+"</td>";
-                                        tr+="<td>"+data["Data"]["address"]+"</td>";
-                                        tr+="<td>"+data["Data"]["contactPersonFirstName"]+"</td>";
+                                        tr+="<td style='display: none'>"+data["Data"]["address"]+"</td>";
+                                        tr+="<td style='display:none '>"+data["Data"]["contactPersonFirstName"]+"</td>";
                                         tr+="<td><button class='btn btn-success' onclick='claimView.fillInsurerCodeFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editInsurerCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
                                         tr+="</tr>";
                                         $("tbody[id=modal-insurer-code-table-body]").append(tr);
@@ -1513,6 +1514,11 @@
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
                     }
                     $("table[id=table_claim]").find("input").val("");
+                    $("textarea[name=insuredAddress]").val("");
+                    $("input[name=sirBreached]").prop("checked",false);
+                    $("input[name=claimAssignment]").prop("checked",false);
+                    $("input[name=taxable]").prop("checked",false);
+                    $("input[name=privileged]").prop("checked",false);
                 },
                 fillClaimToForm : function (claimId) {
                     $("table[id=table_claim]").find("label[class=error]").hide();
@@ -1520,19 +1526,26 @@
                         console.log(data);
                         if(data.status === 201){
                             for(var i = 0; i < Object.keys(data.data).length;i++){
-                                console.log(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
-                                if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
-                                {
-                                    $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
-                                }
-                                else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
-                                {
+                                console.log(Object.keys(data.data)[i]);
+                                if(Object.keys(data.data)[i]==="rate"){
                                     $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
                                 }
                                 else
                                 {
-                                    $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                    if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+                                    {
+                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                    }
+                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
+                                    {
+                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                    }
+                                    else
+                                    {
+                                        $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                    }
                                 }
+
                             }
                         }
                         if(data.data.sirBreached===1)
