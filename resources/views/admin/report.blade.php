@@ -316,29 +316,9 @@
                                                 <span>Date Added</span>
                                             </div>
                                         </div>
-                                        <div class="assists-content-body">
-                                            <div class="element">
-                                                <div class="assists-content-header-branch">
-                                                <span>Branch</span>
-                                                </div>
-                                                <div class="assists-content-header-adjuster-first-name">
-                                                    <span>Adjuster First Name</span>
-                                                </div>
-                                                <div class="assists-content-header-adjuster-time">
-                                                    <span>Time</span>
-                                                </div>
-                                                <div class="assists-content-header-rate">
-                                                    <span>Rate</span>
-                                                </div>
-                                                <div class="assists-content-header-fee-type">
-                                                    <span>Type</span>
-                                                </div>
-                                                <div class="assists-content-header-date-added">
-                                                    <span>Date Added</span>
-                                                </div>
-                                            </div>
-                                            <div class="element">
-                                                <div class="assists-content-header-branch">
+
+                                        <div class="element">
+                                            <div class="assists-content-header-branch">
                                                 <span>Branch</span>
                                             </div>
                                             <div class="assists-content-header-adjuster-first-name">
@@ -356,6 +336,25 @@
                                             <div class="assists-content-header-date-added">
                                                 <span>Date Added</span>
                                             </div>
+                                        </div>
+                                        <div class="element">
+                                            <div class="assists-content-header-branch">
+                                                <span>Branch</span>
+                                            </div>
+                                            <div class="assists-content-header-adjuster-first-name">
+                                                <span>Adjuster First Name</span>
+                                            </div>
+                                            <div class="assists-content-header-adjuster-time">
+                                                <span>Time</span>
+                                            </div>
+                                            <div class="assists-content-header-rate">
+                                                <span>Rate</span>
+                                            </div>
+                                            <div class="assists-content-header-fee-type">
+                                                <span>Type</span>
+                                            </div>
+                                            <div class="assists-content-header-date-added">
+                                                <span>Date Added</span>
                                             </div>
                                         </div>
                                     </div>
@@ -366,9 +365,67 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span>Date</span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                <span>Branch<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                <span>Adjuster<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                <span>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                <span>Units</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                <span>Expense<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                <span>Expense<br>Amount</span>
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                <span>Note</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                <span>Invoice<br>MajorNo</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                <span>Invoice<br>Date</span>
+                                            </div>
+                                        </div>
+                                        <div class="element">
+                                            <div class="dockets-content-header-date">
+                                                <span>Date</span>
+                                            </div>
+                                            <div class="dockets-content-header-branch-code">
+                                                <span>Branch Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                <span>Adjuster Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                <span>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                <span>Units</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                <span>Expense Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                <span>Expense Amount</span>
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                <span>Note</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                <span>Invoice MajorNo</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                <span>Invoice Date</span>
                                             </div>
                                         </div>
                                     </div>
@@ -429,34 +486,34 @@
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
                                             <div class="dockets-content-header-date">
-                                                <span></span>
+                                                <span>Date</span>
                                             </div>
                                             <div class="dockets-content-header-branch-code">
-                                                
+                                                <span>Branch<br>Code</span>
                                             </div>
                                             <div class="dockets-content-header-adjuster-code">
-                                                
+                                                <span>Adjuster<br>Code</span>
                                             </div>
                                             <div class="dockets-content-header-code">
-                                                
+                                                <span>Code</span>
                                             </div>
                                             <div class="dockets-content-header-unit">
-                                                
+                                                <span>Units</span>
                                             </div>
                                             <div class="dockets-content-header-expense-code">
-                                                
+                                                <span>Expense<br>Code</span>
                                             </div>
                                             <div class="dockets-content-header-expense-amount">
-                                                
+                                                <span>Expense<br>Amount</span>
                                             </div>
                                             <div class="dockets-content-header-note">
-                                                
+                                                <span>Note</span>
                                             </div>
                                             <div class="dockets-content-header-invoice-major-no">
-                                                
+                                                <span>Invoice<br>MajorNo</span>
                                             </div>
                                             <div class="dockets-content-header-invoice-date">
-                                                
+                                                <span>Invoice<br>Date</span>
                                             </div>
                                         </div>
                                     </div>
@@ -578,9 +635,35 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span>Date</span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                <span>Branch<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                <span>Adjuster<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                <span>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                <span>Units</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                <span>Expense<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                <span>Expense<br>Amount</span>
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                <span>Note</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                <span>Invoice<br>MajorNo</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                <span>Invoice<br>Date</span>
                                             </div>
                                         </div>
                                     </div>
@@ -640,9 +723,35 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span>Date</span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                <span>Branch<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                <span>Adjuster<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                <span>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                <span>Units</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                <span>Expense<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                <span>Expense<br>Amount</span>
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                <span>Note</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                <span>Invoice<br>MajorNo</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                <span>Invoice<br>Date</span>
                                             </div>
                                         </div>
                                     </div>
@@ -702,9 +811,35 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span>Date</span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                <span>Branch<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                <span>Adjuster<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                <span>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                <span>Units</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                <span>Expense<br>Code</span>
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                <span>Expense<br>Amount</span>
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                <span>Note</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                <span>Invoice<br>MajorNo</span>
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                <span>Invoice<br>Date</span>
                                             </div>
                                         </div>
                                     </div>
@@ -767,7 +902,7 @@
             importStyle: false,           
             loadCSS: "admin/css/style.css", 
             removeInline: false,   
-            printDelay: 333,    
+            printDelay: 2000,    
             header: null,    
             formValues: true           
         });
