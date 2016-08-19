@@ -441,7 +441,9 @@ form#trialFee h5{
     display: inline-block;
     box-sizing: border-box;
 }
-
+.assists-content-body{
+    padding-top: 10px;
+}
 
 .dockets{
     padding-top: 20px;
@@ -569,5 +571,9 @@ label.error{
     color: #B52929;
 }
 #ourFile{
+    display: inline-block;
+}
+
+#print_date{
     display: inline-block;
 }
