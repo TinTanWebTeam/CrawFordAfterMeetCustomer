@@ -992,7 +992,6 @@ class AdminController extends Controller
                 $claim->incident = $request->get("claim")['incident'];
 //              $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
                 $claim->accountCode = $request->get("claim")['accountCode'];
-                $claim->accountPolicyId = $request->get("claim")['policy'];
                 $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
                 $claim->insuredLastName = $request->get("claim")['insuredLastName'];
                 $claim->insuredAddress = $request->get("claim")['insuredAddress'];
@@ -1054,9 +1053,9 @@ class AdminController extends Controller
                 $claim->code = $request->get("claim")['code'];
                 $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
                 $claim->incident = $request->get("claim")['incident'];
-//            $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
+//              $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
                 $claim->accountCode = $request->get("claim")['accountCode'];
-                $claim->accountPolicyId = $request->get("claim")['policy'];
+                //$claim->accountPolicyId = $request->get("claim")['policy'];
                 $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
                 $claim->insuredLastName = $request->get("claim")['insuredLastName'];
                 $claim->insuredAddress = $request->get("claim")['insuredAddress'];
@@ -1082,7 +1081,7 @@ class AdminController extends Controller
                 $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'];
                 $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'];
                 //$claim->disabilityCode = $request->get("claim")['disabilityCode'];
-                //$claim->outComeCode = $request->get("claim")['outComeCode'];
+                // $claim->outComeCode = $request->get("claim")['outComeCode'];
                 //$claim->lastChanged = $request->get("claim")['lastChanged'];
                 $claim->partnershipId = $request->get("claim")['partnershipId'];
                 $claim->adjusterCode = $request->get("claim")['adjusterCode'];
@@ -1090,8 +1089,6 @@ class AdminController extends Controller
                 //$claim->feeType = $request->get("claim")['feeType'];
                 $claim->taxable = $request->get("claim")['taxable'];
                 $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
-                $claim->updatedBy = $request->get("claim")['updatedBy'];
-                $claim->statusId = 0;
                 $claim->updatedBy = Auth::user()->id;
                 $claim->privileged = $request->get("claim")['privileged'];
                 $claim->organization = $request->get("claim")['organization'];
@@ -1106,7 +1103,7 @@ class AdminController extends Controller
                 $claim->firstContact = $request->get("claim")['firstContact'];
                 $claim->proscription = $request->get("claim")['proscription'];
                 //$claim->initialReserve = $request->get("claim")['initialReserve'];
-                //$claim->currentRes = $request->get("claim")['currentRes'];
+                //claim->currentRes = $request->get("claim")['currentRes'];
                 //$claim->adjustReserve = $request->get("claim")['adjustReserve'];
                 $claim->save();
                 //take code of final claim

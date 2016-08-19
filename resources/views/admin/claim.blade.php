@@ -1084,6 +1084,7 @@
     </div>
 </div>
 <script>
+
     $(document).on('keypress',':input:not(textarea):not([type=submit])', function (e) {
         if (e.which == 13) e.preventDefault();
     });
@@ -1096,9 +1097,9 @@
                     code : null,
                     branchSeqNo : null,
                     incident : null,
-                    assignmentTypeCode : null,
+                    //assignmentTypeCode : null,
                     accountCode : null,
-                    accountPolicyId : null,
+                    //accountPolicyId : null,
                     insuredFirstName : null,
                     insuredLastName : null,
                     insuredClaim : null,
@@ -1111,7 +1112,7 @@
                     insurerCode : null,
                     brokerCode : null,
                     branchCode : null,
-                    branchTypeCode : null,
+                    //branchTypeCode : null,
                     destroyedDate : null,
                     lossLocation : null,
                     lineOfBusinessCode : null,
@@ -1119,17 +1120,17 @@
                     receiveDate : null,
                     openDate : null,
                     closeDate : null,
-                    insuredContactedDate : null,
-                    limitationDate : null,
+                    //insuredContactedDate : null,
+                    //limitationDate : null,
                     policyInceptionDate : null,
                     policyExpiryDate : null,
                     disabilityCode : null,
                     outComeCode : null,
-                    lastChanged : null,
+                    //lastChanged : null,
                     partnershipId : null,
                     adjusterCode : null,
                     rate : null,
-                    feeType : null,
+                    //feeType : null,
                     taxable : null,
                     estimatedClaimValue : null,
                     createdBy : null,
@@ -1184,15 +1185,13 @@
                     if($("form[id=form_claim]").valid())
                     {
                         for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
-                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val() !== ""){
-                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
+                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
+                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
                             }
                             else
                             {
-                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
+                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
                             }
-//                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
-//                            }
                         }
                         claimView.claimViewObject.id = $("input[name=id]").val();
                         claimView.claimViewObject.insuredAddress = $("textarea[name=insuredAddress]").val();
