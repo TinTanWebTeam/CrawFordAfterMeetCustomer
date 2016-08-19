@@ -1184,12 +1184,15 @@
                     if($("form[id=form_claim]").valid())
                     {
                         for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
-                            if($("#"+Object.keys(claimView.claimViewObject)[i])){
+                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val() !== ""){
                                 claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
                             }
-                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
+                            else
+                            {
                                 claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
                             }
+//                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
+//                            }
                         }
                         claimView.claimViewObject.id = $("input[name=id]").val();
                         claimView.claimViewObject.insuredAddress = $("textarea[name=insuredAddress]").val();
