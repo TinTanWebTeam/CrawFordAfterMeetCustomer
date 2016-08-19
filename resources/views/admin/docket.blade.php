@@ -439,11 +439,11 @@
         <tr style="border-bottom: 1px solid black;">
             <th class="text-bold text-center">Date</th>
             <th class="text-bold text-center">Adjuster Code</th>
-            <th class="text-bold text-center">Professional Code</th>
-            <th class="text-bold text-center">Professional Unit</th>
-            <th class="text-bold text-center">Professional Note</th>
+            <th class="text-bold text-center">Code</th>
+            <th class="text-bold text-center">Unit</th>
+            <th class="text-bold text-center">Note</th>
             <th class="text-bold text-center">Expense Code</th>
-            <th class="text-bold text-center">Expense Unit</th>
+            <th class="text-bold text-center">Expense Amount</th>
             <th class="text-bold text-center">Expense Note</th>
         </tr>
         </thead>

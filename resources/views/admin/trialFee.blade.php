@@ -133,7 +133,7 @@
                         <div class="col-sm-3">
                             <h5 style="text-align: right">From Date:</h5>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-9">
                             <input type="date" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                         <div class="col-sm-3">
                             <h5 style="text-align: right">To Date:</h5>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-9">
                             <input type="date" name="ToDate" id="ToDate" value="{{date('Y-m-d')}}" onchange="trialFeeView.loadTaskDetailByDate()">
                         </div>
                     </div>
