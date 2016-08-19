@@ -496,18 +496,45 @@ form#trialFee h5{
     font-size: 32px;
     font-weight: 600;
 }
+.dockets-content-header{
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid black;
+}
 .dockets-content-header-date{
-
+    width: 10%;
+    display: inline-block;
 }
-.dockets-content-header-branch{
-
+.dockets-content-header-branch-code{
+    width: 5%;
+    display: inline-block;
 }
-.dockets-content-header-adjuster{
-
+.dockets-content-header-adjuster-code{
+    width: 7%;
+    display: inline-block;
 }
-.dockets-content-header-time{
-
+.dockets-content-header-code{
+    display: inline-block;
 }
+.dockets-content-header-unit{
+    display: inline-block;
+}
+.dockets-content-header-expense-code{
+    display: inline-block;
+}
+.dockets-content-header-expense-amount{
+    display: inline-block;
+}
+.dockets-content-header-note{
+    display: inline-block;
+}
+.dockets-content-header-invoice-major-no{
+    display: inline-block;
+}
+.dockets-content-header-invoice-date{
+    display: inline-block;
+}
+
 /* ------------------------------------------------ */
 /* Header */
 .header{

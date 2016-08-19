@@ -428,9 +428,35 @@
                                     </div>
                                     <div class="dockets-content">
                                         <div class="dockets-content-header">
-                                            <div class="dockets-content-header-row-1">
+                                            <div class="dockets-content-header-date">
+                                                <span></span>
                                             </div>
-                                            <div class="dockets-content-header-row-2">
+                                            <div class="dockets-content-header-branch-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-adjuster-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-unit">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-expense-code">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-expense-amount">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-note">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-invoice-major-no">
+                                                
+                                            </div>
+                                            <div class="dockets-content-header-invoice-date">
+                                                
                                             </div>
                                         </div>
                                     </div>
