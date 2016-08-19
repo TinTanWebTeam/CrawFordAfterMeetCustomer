@@ -319,6 +319,7 @@ class AdminController extends Controller
 
     public function showInformationOfCustomer(Request $request)
     {
+
         $result = null;
         try {
             if ($request->get('idCustomer') != null) {

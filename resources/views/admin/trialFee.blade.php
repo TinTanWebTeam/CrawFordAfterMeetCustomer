@@ -460,13 +460,8 @@
                     disbursements: null,
                     total: null
                 },
-
+                codeCustomer:null,
                 convertStringToDate: function (date) {
-//                    var currentDate = new Date(date);
-//                    var datetime =("0" + currentDate.getDate()).slice(-2)+"-"
-//                            + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
-//                            + currentDate.getFullYear();
-//                    return datetime;
                     var currentDate = new Date(date);
                     var datetime = currentDate.getFullYear() +"-"
                             + ("0" + (currentDate.getMonth() + 1)).slice(-2)  +"-"
@@ -488,6 +483,7 @@
                     gl.find("tr:eq(9)").empty().append("<td style='width: 266px;height:43px'>Disbursements</td>");
                     gl.find("tr:eq(10)").empty().append("<td style='width: 266px;height:43px'>Total</td>");
                 },
+
                 chooseClaimWhenUseEventEnterKey: function (e) {
                     $("button[name=actionViewListIB]").prop("disabled",false);
                     if (e.keyCode === 13) {
@@ -501,6 +497,7 @@
                                 $("div[id=modalNotification]").modal("show");
                             }
                             else {
+                                trialFeeView.codeCustomer = data["Claim"]["insurerCode"];
                                 $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data["check"]));
                                 $("input[name=idClaim]").val(data["Claim"]["id"]);
                                 $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
@@ -552,6 +549,18 @@
                         });
                     }
                 },
+                showInformationOfCustomer: function (codeInsured) {
+                    $.post(url + "showInformationOfCustomer", {
+                        _token: _token,
+                        idCustomer:codeInsured
+                    }, function (data) {
+                        console.log(data);
+                        $("select#chooseCustomer").val(data["code"]).prop("disabled",true);
+                        $("textarea[name=addressCustomer]").val(data["address"]).prop("readOnly",true).css("background-color","#F3EDED");
+                        $("input[name=insurerCustomer]").val(data["fullName"]).prop("readOnly",true).css("background-color","#F3EDED");
+                        $("input[name=policyCustomer]").css("background-color","#F3EDED");
+                    });
+                },
                 loadDataToTableTotal: function (data) {
                     var arrSum = [];
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
@@ -595,17 +604,7 @@
                         }
                     }
                 },
-                showInformationOfCustomer: function (codeInsured) {
-                    $.post(url + "showInformationOfCustomer", {
-                        _token: _token,
-                        idCustomer:codeInsured
-                    }, function (data) {
-                        $("select#chooseCustomer").val(data["code"]);
-                        $("textarea[name=addressCustomer]").val(data["address"]);
-                        $("input[name=insurerCustomer]").val(data["fullName"]);
 
-                    });
-                },
                 sumTotalValueofInputOfTableListTaskDetail: function (element) {
                     var trList = $("tbody[id=tbodyTableListTaskDetail]").find("tr");
                     var sum = 0;
@@ -682,6 +681,7 @@
                                 if (data["Result"] === 1) {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim success!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    trialFeeView.cancel();
                                 }
                                 else {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim no success!!!");
@@ -692,6 +692,7 @@
                                 if (data["Result"] === 1) {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim success!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    trialFeeView.cancel();
                                 }
                                 else {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim no success!!!");
@@ -736,7 +737,7 @@
                     $("div[id=modalListClaimIB]").modal("hide");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
-                        console.log(data);
+                        trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
                         if(data[0]==="Pending")
@@ -820,6 +821,7 @@
                     $("textarea[name=addressCustomer]").val("");
                     $("select[id=chooseCustomer]").val($("select[id=chooseCustomer] option:eq(0)").val());
                     trialFeeView.clearTable();
+                    trialFeeView.codeCustomer = null;
                 },
                 loadTaskDetailByDate:function()
                 {
