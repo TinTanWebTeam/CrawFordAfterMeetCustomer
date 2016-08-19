@@ -194,7 +194,6 @@
                                                 <span>Fee Type:</span>
                                                 <span>Taxable:</span>
                                                 <span>Estimated Claim Value:</span>
-                                                <span>&nbsp;</span>
                                             </div>
                                             <div class="claim-info-col-3-row-2-col-2">
                                                 <span>&nbsp;<div id="adjusterCode" style="display: inline-block"></div></span>
@@ -202,11 +201,9 @@
                                                 <span>&nbsp;<div id="feeType" style="display: inline-block"></div></span>
                                                 <span>&nbsp;<div id="taxable" style="display: inline-block"></div></span>
                                                 <span>&nbsp;<div id="estimatedClaimValue" style="display: inline-block"></div></span>
-                                                <span>&nbsp;</span>
                                             </div>
                                             <div class="claim-info-col-3-row-2-col-3">
                                                 <span>&nbsp;<div id="adjusterName" style="display: inline-block"></div></span>
-                                                <span>&nbsp;</span>
                                                 <span>&nbsp;</span>
                                                 <span>&nbsp;</span>
                                                 <span>&nbsp;</span>
@@ -303,14 +300,14 @@
                                             <div class="assists-content-header-adjuster-first-name">
                                                 <span>Adjuster First Name</span>
                                             </div>
-                                            <div class="assists-content-header-adjuster-last-name">
-                                                <span>Adjuster Last Name</span>
+                                            <div class="assists-content-header-adjuster-time">
+                                                <span>Time</span>
                                             </div>
                                             <div class="assists-content-header-rate">
                                                 <span>Rate</span>
                                             </div>
                                             <div class="assists-content-header-fee-type">
-                                                <span>Fee Type</span>
+                                                <span>Type</span>
                                             </div>
                                             <div class="assists-content-header-date-added">
                                                 <span>Date Added</span>
@@ -324,38 +321,38 @@
                                                 <div class="assists-content-header-adjuster-first-name">
                                                     <span>Adjuster First Name</span>
                                                 </div>
-                                                <div class="assists-content-header-adjuster-last-name">
-                                                    <span>Adjuster Last Name</span>
+                                                <div class="assists-content-header-adjuster-time">
+                                                    <span>Time</span>
                                                 </div>
                                                 <div class="assists-content-header-rate">
                                                     <span>Rate</span>
                                                 </div>
                                                 <div class="assists-content-header-fee-type">
-                                                    <span>Fee Type</span>
+                                                    <span>Type</span>
                                                 </div>
                                                 <div class="assists-content-header-date-added">
                                                     <span>Date Added</span>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="element">
                                                 <div class="assists-content-header-branch">
                                                 <span>Branch</span>
-                                                </div>
-                                                <div class="assists-content-header-adjuster-first-name">
-                                                    <span>Adjuster First Name</span>
-                                                </div>
-                                                <div class="assists-content-header-adjuster-last-name">
-                                                    <span>Adjuster Last Name</span>
-                                                </div>
-                                                <div class="assists-content-header-rate">
-                                                    <span>Rate</span>
-                                                </div>
-                                                <div class="assists-content-header-fee-type">
-                                                    <span>Fee Type</span>
-                                                </div>
-                                                <div class="assists-content-header-date-added">
-                                                    <span>Date Added</span>
-                                                </div>    
+                                            </div>
+                                            <div class="assists-content-header-adjuster-first-name">
+                                                <span>Adjuster First Name</span>
+                                            </div>
+                                            <div class="assists-content-header-adjuster-time">
+                                                <span>Time</span>
+                                            </div>
+                                            <div class="assists-content-header-rate">
+                                                <span>Rate</span>
+                                            </div>
+                                            <div class="assists-content-header-fee-type">
+                                                <span>Type</span>
+                                            </div>
+                                            <div class="assists-content-header-date-added">
+                                                <span>Date Added</span>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

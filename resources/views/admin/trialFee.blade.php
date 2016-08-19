@@ -83,19 +83,19 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-9">
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <h5 style="text-align: right">Claim#:</h5>
                                     <input name="action" id="action" style="display: none" value="1">
                                     <input name="idClaim" id="idClaim" style="display: none">
                                 </div>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <input name="Claim" id="Claim"
                                            onkeypress="trialFeeView.chooseClaimWhenUseEventEnterKey(event)" style="margin-left: 4px;display: inline-block">
                                 </div>
                                 <div class="col-sm-2">
-                                    <button type="button" class="btn btn-default" name="actionViewListIB" onclick="trialFeeView.loadIBClaim()" disabled
+                                    <button type="button" class="btn btn-primary" name="actionViewListIB" onclick="trialFeeView.loadIBClaim()" disabled
                                     style="height: 28px;width: 50px;">
                                     ...
                                     </button>
@@ -131,7 +131,7 @@
                 <div class="col-sm-6">
                     <div class="row">
                         <div class="col-sm-3">
-                            <h5 style="text-align: right">From Date:</h5>
+                            <h5 style="text-align: right">From:</h5>
                         </div>
                         <div class="col-sm-9">
                             <input type="date" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
@@ -141,7 +141,7 @@
                 <div class="col-sm-6">
                     <div class="row">
                         <div class="col-sm-3">
-                            <h5 style="text-align: right">To Date:</h5>
+                            <h5 style="text-align: right">To:</h5>
                         </div>
                         <div class="col-sm-9">
                             <input type="date" name="ToDate" id="ToDate" value="{{date('Y-m-d')}}" onchange="trialFeeView.loadTaskDetailByDate()">
@@ -332,7 +332,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th style="background-color: blue;color: white;text-align: center">GL</th>
+                    <th style="background-color: rgba(52, 52, 80, 0.55);;color: white;text-align: center">GL</th>
                 </tr>
                 <tr>
                     <th style="text-align: center">Account</th>
@@ -382,7 +382,7 @@
             <table class="table table-bordered" style="width: 700px;">
                 <thead id="theadTableListTaskDetail">
                 <tr>
-                    <th colspan="50" style="text-align: center;background-color: blue;color: white">Branch/Adjuster
+                    <th colspan="50" style="text-align: center;background-color: rgba(52, 52, 80, 0.55);;color: white">Branch/Adjuster
                         Subtotals:
                     </th>
                 </tr>
@@ -411,7 +411,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th colspan="2" style="background-color: blue;color: white;text-align: center">Total</th>
+                    <th colspan="2" style="background-color: rgba(52, 52, 80, 0.55);;color: white;text-align: center">Total</th>
                 </tr>
                 <tr>
                     <th style="text-align: center">Actual</th>
