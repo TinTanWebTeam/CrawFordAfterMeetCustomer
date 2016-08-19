@@ -365,7 +365,7 @@ class AdminController extends Controller
                         $claimTaskDetail = new ClaimTaskDetail();
                         $claimTaskDetail->professionalServices = 1;
                         $claimTaskDetail->professionalServicesTime = 0;
-                        $claimTaskDetail->professionalServicesNote = 'Interim Billing';
+                        $claimTaskDetail->professionalServicesNote = 'Interim Billing(Status:Pending)';
                         $claimTaskDetail->billDate = $request->get('data')['toDate'];
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 1;
@@ -442,7 +442,7 @@ class AdminController extends Controller
                         $claimTaskDetail = new ClaimTaskDetail();
                         $claimTaskDetail->professionalServices = 1;
                         $claimTaskDetail->professionalServicesTime = 0;
-                        $claimTaskDetail->professionalServicesNote = 'Interim Billing';
+                        $claimTaskDetail->professionalServicesNote = 'Interim Billing(Status:Complete)';
                         $claimTaskDetail->billDate = $request->get('data')['toDate'];
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 2;
@@ -1325,8 +1325,8 @@ class AdminController extends Controller
                 ->leftJoin('task_categories as cate1','claim_task_details.professionalServices','=','cate1.id')
                 ->leftJoin('task_categories as cate2','claim_task_details.expense','=','cate2.id')
                 ->where('claim_task_details.claimId',$request->get('idClaim'))
-                ->where('claim_task_details.professionalServices','!=',1)
-                ->where('claim_task_details.professionalServices','!=',2)
+//                ->where('claim_task_details.professionalServices','!=',1)
+//                ->where('claim_task_details.professionalServices','!=',2)
                 ->orderBy('claim_task_details.created_at','desc')
                 ->select(
                     'claim_task_details.id as idTask',

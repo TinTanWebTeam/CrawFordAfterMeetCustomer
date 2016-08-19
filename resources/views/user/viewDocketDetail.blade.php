@@ -7,6 +7,7 @@
        <td style='text-align: center'>{{ $item->professionalUnit }}</td>
        <td>{{ $item->professionalNote }}</td>
        <td style='text-align: center'>{{ $item->expense }}</td>
+       <td style='text-align: center'>{{ $item->expenseAmount }}</td>
        <td>{{ $item->expenseNote }}</td>
    </tr>
 @endforeach

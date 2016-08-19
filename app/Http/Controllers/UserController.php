@@ -127,6 +127,7 @@ class UserController extends Controller
                     'claim_task_details.professionalServicesTime as professionalUnit',
                     'claim_task_details.professionalServicesNote as professionalNote',
                     'claim_task_details.expenseNote as expenseNote',
+                    'claim_task_details.expenseAmount as expenseAmount',
                     'claim_task_details.created_at as date'
                 )
                 ->get();

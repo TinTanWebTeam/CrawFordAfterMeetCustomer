@@ -360,6 +360,7 @@
                 <th class="text-bold text-center">Time</th>
                 <th class="text-bold text-center">Description</th>
                 <th class="text-bold text-center">Expense Code</th>
+                <th class="text-bold text-center">Expense Amount</th>
                 <th class="text-bold text-center">Expense Note</th>
             </tr>
             </thead>
