@@ -131,16 +131,6 @@
 </div>
 {{--End Model list task expense--}}
 
-{{--Model Show Confirm  --}}
-{{--<div class="modal fade" id="modal-confirm" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">--}}
-    {{--<div class="modal-dialog">--}}
-        {{--<div class="modal-content">--}}
-            {{--<div class="modal-body" id="modalContent" style="text-align: center">--}}
-
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-{{--</div>--}}
 <div class="modal fade" id="modal-confirm">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -161,7 +151,7 @@
 {{--End Model Show Confirm--}}
 
 <div class="row">
-    <form action="" style="background-color: #fff;width: 100%">
+    <form id="formClaim" style="background-color: #fff;width: 100%">
         <div class="row" style="padding: 20px;">
             <div class="col-sm-4">
                 <div class="row">
@@ -215,6 +205,14 @@
                     </div>
                     <div class="col-sm-10">
                         <input type="text" id="LossLocation" name="LossLocation" value="" style="display: inline-block;background-color: #E6D8D8" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <h5 style="display: inline-block" class="text-right">From date: </h5>
+                    </div>
+                    <div class="col-sm-10">
+                        <input type="text" id="fromDate" name="fromDate" value="" style="display: inline-block;background-color: #E6D8D8" readonly>
                     </div>
                 </div>
             </div>
@@ -488,12 +486,21 @@
                     ExpenseAmountOverrideValue:null
 
                 },
+                checkDate:null,
                 resetTaskObject: function () {
                     for (var propertyName in docketView.taskObject) {
                         if (docketView.taskObject.hasOwnProperty(propertyName)) {
                             docketView.taskObject.propertyName = null;
                         }
                     }
+                },
+                convertStringToDate:function(date)
+                {
+                    var currentDate = new Date(date);
+                    var datetime = currentDate.getFullYear() +"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)  +"-"
+                            + ("0" + currentDate.getDate()).slice(-2);
+                    return datetime;
                 },
                 firstToUpperCase:function(str){
                     return str.substr(0, 1).toUpperCase() + str.substr(1);
@@ -507,6 +514,8 @@
                         }, function (data) {
                             console.log(data);
                             if(data){
+                                docketView.checkDate = data["Date"];
+                                $("input[name=fromDate]").val(data["Date"]);
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=LossDate]").val(data["Claim"]["lossDate"]);
@@ -569,66 +578,93 @@
                 {
                     if($("input[name=ClaimCode]").val()==="")
                     {
+                        //validator required claim
                         $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter claimId");
                         $("div[id=modal-confirm]").modal("show");
                     }
                     else
                     {
-                        if($("input[name=ProfessionalServices]").val()==="")
+                        var currentTime = new Date();
+                        var hour = currentTime.getHours();
+                        var min  = currentTime.getMinutes();
+                        var sec  = currentTime.getSeconds();
+                        var compareDate =  docketView.checkDate;
+                        var current = $("input[name=ChooseDate]").val() + " " + hour + ":" + min + ":" + sec;
+                        if(current < compareDate)
                         {
-                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter ProfessionalServices");
-                            $("div[id=modal-confirm]").modal("show");
+                           $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date create is not correct!!!");
+                           $("div[id=modal-confirm]").modal("show");
                         }
                         else
                         {
-                            docketView.resetTaskObject();
-                            for(var i = 0;i<Object.keys(docketView.taskObject).length;i++)
-                            {
-                                docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#"+Object.keys(docketView.taskObject)[i]).val();
-                            }
-                            console.log(docketView.taskObject);
-                            $.post(url+"assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:docketView.taskObject,Date:$("input[name=ChooseDate]").val()},function(data){
-                                console.log(data);
-                                if(data["Action"]==="AddNew")
-                                {
-                                    if(data["Result"]===1)
-                                    {
-                                        $("div[id=modal-confirm]").find("div[id=modalContent]").text("Add New Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancel();
-                                        $.post(url+"loadViewDocketDetail",{_token:_token,idClaim:docketView.taskObject.ClaimId},function(view){
-                                            $("tbody[id=tbodyDocket]").empty().append(view);
-                                        });
-                                    }
-                                    else if(data["Result"]===2)
-                                    {
-                                        $("div[id=modal-confirm]").find("div[id=modalContent]").text("Add New No Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                    else{
-                                        $("div[id=modal-confirm]").find("div[id=modalContent]").text("This user is not define");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                }
-                                else{
-                                    if(data["Result"]===1)
-                                    {
-                                        $("div[id=modal-confirm]").find("div[id=modalContent]").text("Update Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancel();
-                                    }
-                                    else
-                                    {
-                                        $("div[id=modal-confirm]").find("div[id=modalContent]").text("Update No Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                }
-                            });
+                            $("form[id=formClaim]").validate({
+                                      rules: {
+                                          InsuredName: "required"
+
+                                      },
+                                      messages: {
+                                          InsuredName: "ID is required"
+                                      }
+                                  });
+                            if($("form[id=formClaim]").valid()){
+                                      if($("input[name=ProfessionalServices]").val()==="")
+                                      {
+                                          $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter ProfessionalServices");
+                                          $("div[id=modal-confirm]").modal("show");
+                                      }
+                                      else
+                                      {
+                                          docketView.resetTaskObject();
+                                          for(var i = 0;i<Object.keys(docketView.taskObject).length;i++)
+                                          {
+                                              docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#"+Object.keys(docketView.taskObject)[i]).val();
+                                          }
+                                          console.log(docketView.taskObject);
+                                          $.post(url+"assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:docketView.taskObject,Date:current},function(data){
+                                              console.log(data);
+                                              if(data["Action"]==="AddNew")
+                                              {
+                                                  if(data["Result"]===1)
+                                                  {
+                                                      $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
+                                                      $("div[id=modal-confirm]").modal("show");
+                                                      docketView.cancel();
+                                                      $.post(url+"loadViewDocketDetail",{_token:_token,idClaim:docketView.taskObject.ClaimId},function(view){
+                                                          $("tbody[id=tbodyDocket]").empty().append(view);
+                                                      });
+                                                  }
+                                                  else if(data["Result"]===2)
+                                                  {
+                                                      $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
+                                                      $("div[id=modal-confirm]").modal("show");
+                                                  }
+                                                  else{
+                                                      $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
+                                                      $("div[id=modal-confirm]").modal("show");
+                                                  }
+                                              }
+                                              else{
+                                                  if(data["Result"]===1)
+                                                  {
+                                                      $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
+                                                      $("div[id=modal-confirm]").modal("show");
+                                                      docketView.cancel();
+                                                  }
+                                                  else
+                                                  {
+                                                      $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update No Success");
+                                                      $("div[id=modal-confirm]").modal("show");
+                                                  }
+                                              }
+                                          });
+                                      }
+                                  }
                         }
                     }
                 },
                 cancel:function()
                 {
+                    docketView.openDateClaim = null;
                     $("button[name=actionAssignmentTask]").text("Add New");
                     $("input[name=Action]").val("1");
                     $("form[id=formTask]").find("input").val("");

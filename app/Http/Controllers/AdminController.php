@@ -25,6 +25,7 @@ use App\TravelRelatedExp;
 use App\TypeOfDamage;
 use App\User;
 use Auth;
+use Carbon\Carbon;
 use Config;
 use DateTime;
 use DB;
@@ -366,7 +367,8 @@ class AdminController extends Controller
                         $claimTaskDetail->professionalServices = 1;
                         $claimTaskDetail->professionalServicesTime = 0;
                         $claimTaskDetail->professionalServicesNote = 'Interim Billing(Status:Pending)';
-                        $claimTaskDetail->billDate = $request->get('data')['toDate'];
+                        $a = Carbon::createFromFormat('d-m-Y H:i:s',$request->get('data')['toDate']);
+                        $claimTaskDetail->billDate = $a;
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 1;
                         $claimTaskDetail->claimId = $request->get('data')['idClaim'];
@@ -443,7 +445,8 @@ class AdminController extends Controller
                         $claimTaskDetail->professionalServices = 1;
                         $claimTaskDetail->professionalServicesTime = 0;
                         $claimTaskDetail->professionalServicesNote = 'Interim Billing(Status:Complete)';
-                        $claimTaskDetail->billDate = $request->get('data')['toDate'];
+                        $a = Carbon::createFromFormat('d-m-Y H:i:s',$request->get('data')['toDate']);
+                        $claimTaskDetail->billDate = $a;
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 2;
                         $claimTaskDetail->claimId = $request->get('data')['idClaim'];
@@ -544,7 +547,8 @@ class AdminController extends Controller
                     $claim = Claim::where('id',$request->get('data')['idClaim'])->first();
                     if($claim!=null)
                     {
-                        $claim->closeDate = $request->get('data')['toDate'];
+                        $a = Carbon::createFromFormat('d-m-Y H:i:s',$request->get('data')['toDate']);
+                        $claim->closeDate = $a;
                         $claim->save();
                     }
                     //Insert data to table Claim_task_detail(Docket)
@@ -552,7 +556,8 @@ class AdminController extends Controller
                     $claimTaskDetail->professionalServices = 2;
                     $claimTaskDetail->professionalServicesTime = 0;
                     $claimTaskDetail->professionalServicesNote = 'Final Billing';
-                    $claimTaskDetail->billDate = $request->get('data')['toDate'];
+                    $a = Carbon::createFromFormat('d-m-Y H:i:s',$request->get('data')['toDate']);
+                    $claimTaskDetail->billDate = $a;
                     $claimTaskDetail->active = 1;
                     $claimTaskDetail->statusId = 2;
                     $claimTaskDetail->claimId = $request->get('data')['idClaim'];
@@ -650,7 +655,8 @@ class AdminController extends Controller
                         //insert table invoice
                         $invoice = new Invoice();
                         $invoice->idBill = $bill->id;
-                        $invoice->invoiceDay = $request->get('data')['toDate'];
+                        $a = Carbon::createFromFormat('d-m-Y H:i:s',$request->get('data')['toDate']);
+                        $invoice->invoiceDay = $a;
                         $invoice->save();
                     }
                     $result = array('Action' => 'UpdateClaim', 'Result' => 1);
@@ -977,6 +983,7 @@ class AdminController extends Controller
 
     public function saveClaim(Request $request,$claimId)
     {
+        //dd($request->all());
         $result = null;
         //check validator
         if ($this->validatorAdmin($request->get('claim'), "createClaim")->fails()) {
@@ -990,13 +997,11 @@ class AdminController extends Controller
                 $claim->code = $request->get("claim")['code'];
                 $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
                 $claim->incident = $request->get("claim")['incident'];
-//              $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
                 $claim->accountCode = $request->get("claim")['accountCode'];
                 $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
                 $claim->insuredLastName = $request->get("claim")['insuredLastName'];
                 $claim->insuredAddress = $request->get("claim")['insuredAddress'];
                 $claim->insuredClaim = $request->get("claim")['insuredClaim'];
-                //$claim->tradingAs = $request->get("claim")['tradingAs'];
                 $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
                 $claim->lossDescCode = $request->get("claim")['lossDescCode'];
                 $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
@@ -1004,25 +1009,14 @@ class AdminController extends Controller
                 $claim->insurerCode = $request->get("claim")['insurerCode'];
                 $claim->brokerCode = $request->get("claim")['brokerCode'];
                 $claim->branchCode = $request->get("claim")['branchCode'];
-//            $claim->branchTypeCode = $request->get("claim")['branchTypeCode'];
-                $claim->destroyedDate = $request->get("claim")['destroyedDate'];
                 $claim->lossLocation = $request->get("claim")['lossLocation'];
                 $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
                 $claim->lossDate = $request->get("claim")['lossDate'];
                 $claim->receiveDate = $request->get("claim")['receiveDate'];
                 $claim->openDate = $request->get("claim")['openDate'];
-                $claim->closeDate = $request->get("claim")['closeDate'];
-                //$claim->insuredContactedDate = $request->get("claim")['insuredContactedDate'];
-                //$claim->limitationDate = $request->get("claim")['limitationDate'];
-                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'];
-                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'];
-                //$claim->disabilityCode = $request->get("claim")['disabilityCode'];
-                // $claim->outComeCode = $request->get("claim")['outComeCode'];
-                //$claim->lastChanged = $request->get("claim")['lastChanged'];
                 $claim->partnershipId = $request->get("claim")['partnershipId'];
                 $claim->adjusterCode = $request->get("claim")['adjusterCode'];
                 $claim->rate = $request->get("claim")['rate'];
-                //$claim->feeType = $request->get("claim")['feeType'];
                 $claim->taxable = $request->get("claim")['taxable'];
                 $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
                 $claim->createdBy = Auth::user()->id;
@@ -1036,13 +1030,8 @@ class AdminController extends Controller
                 $claim->sirBreached = $request->get("claim")['sirBreached'];
                 $claim->claimAssignment = $request->get("claim")['claimAssignment'];
                 $claim->policy = $request->get("claim")['policy'];
-                $claim->reOpen = $request->get("claim")['reOpen'];
-                $claim->eBoxDestroyed = $request->get("claim")['eBoxDestroyed'];
-                $claim->firstContact = $request->get("claim")['firstContact'];
                 $claim->proscription = $request->get("claim")['proscription'];
-                //$claim->initialReserve = $request->get("claim")['initialReserve'];
-                //claim->currentRes = $request->get("claim")['currentRes'];
-                //$claim->adjustReserve = $request->get("claim")['adjustReserve'];
+
                 $claim->save();
                 //take code of final claim
                 $code = Claim::orderBy('created_at','desc')->first()->code;
@@ -1053,14 +1042,11 @@ class AdminController extends Controller
                 $claim->code = $request->get("claim")['code'];
                 $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
                 $claim->incident = $request->get("claim")['incident'];
-//              $claim->assignmentTypeCode = $request->get("claim")['assignmentTypeCode'];
                 $claim->accountCode = $request->get("claim")['accountCode'];
-                //$claim->accountPolicyId = $request->get("claim")['policy'];
                 $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
                 $claim->insuredLastName = $request->get("claim")['insuredLastName'];
                 $claim->insuredAddress = $request->get("claim")['insuredAddress'];
                 $claim->insuredClaim = $request->get("claim")['insuredClaim'];
-                //$claim->tradingAs = $request->get("claim")['tradingAs'];
                 $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
                 $claim->lossDescCode = $request->get("claim")['lossDescCode'];
                 $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
@@ -1068,25 +1054,14 @@ class AdminController extends Controller
                 $claim->insurerCode = $request->get("claim")['insurerCode'];
                 $claim->brokerCode = $request->get("claim")['brokerCode'];
                 $claim->branchCode = $request->get("claim")['branchCode'];
-//            $claim->branchTypeCode = $request->get("claim")['branchTypeCode'];
-                $claim->destroyedDate = $request->get("claim")['destroyedDate'];
                 $claim->lossLocation = $request->get("claim")['lossLocation'];
                 $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
                 $claim->lossDate = $request->get("claim")['lossDate'];
                 $claim->receiveDate = $request->get("claim")['receiveDate'];
                 $claim->openDate = $request->get("claim")['openDate'];
-                $claim->closeDate = $request->get("claim")['closeDate'];
-                //$claim->insuredContactedDate = $request->get("claim")['insuredContactedDate'];
-                //$claim->limitationDate = $request->get("claim")['limitationDate'];
-                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'];
-                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'];
-                //$claim->disabilityCode = $request->get("claim")['disabilityCode'];
-                // $claim->outComeCode = $request->get("claim")['outComeCode'];
-                //$claim->lastChanged = $request->get("claim")['lastChanged'];
                 $claim->partnershipId = $request->get("claim")['partnershipId'];
                 $claim->adjusterCode = $request->get("claim")['adjusterCode'];
                 $claim->rate = $request->get("claim")['rate'];
-                //$claim->feeType = $request->get("claim")['feeType'];
                 $claim->taxable = $request->get("claim")['taxable'];
                 $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
                 $claim->updatedBy = Auth::user()->id;
@@ -1098,13 +1073,7 @@ class AdminController extends Controller
                 $claim->sirBreached = $request->get("claim")['sirBreached'];
                 $claim->claimAssignment = $request->get("claim")['claimAssignment'];
                 $claim->policy = $request->get("claim")['policy'];
-                $claim->reOpen = $request->get("claim")['reOpen'];
-                $claim->eBoxDestroyed = $request->get("claim")['eBoxDestroyed'];
-                $claim->firstContact = $request->get("claim")['firstContact'];
                 $claim->proscription = $request->get("claim")['proscription'];
-                //$claim->initialReserve = $request->get("claim")['initialReserve'];
-                //claim->currentRes = $request->get("claim")['currentRes'];
-                //$claim->adjustReserve = $request->get("claim")['adjustReserve'];
                 $claim->save();
                 //take code of final claim
                 $code = Claim::orderBy('created_at','desc')->first()->code;
@@ -1145,10 +1114,13 @@ class AdminController extends Controller
                         ->orderBy('billDate', 'desc')
                         ->first();
                     if ($checkIBStatusComplete) {
+                        //$demo = explode(" ",$checkIBStatusComplete->billDate);
                         $check = $checkIBStatusComplete->billDate;
                     }
 
                     //load data
+                    //$demo1 = explode(" ",$request->get('date'));
+                    $dateCompare = $request->get('date');
                     $query = DB::table('claim_task_details')
                         ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
                         ->leftJoin('rate_details', 'claim_task_details.userId', '=', 'rate_details.userId')
@@ -1169,11 +1141,12 @@ class AdminController extends Controller
                         );
                     if($check==null)
                     {
-                        $query->where('claim_task_details.billDate','<',$request->get('date'));
+                        //$c = explode(" ",$query->billDate);
+                        $query->where('claim_task_details.billDate','<',$dateCompare);
                     }
                     else
                     {
-                        $query->where('claim_task_details.billDate','<=',$request->get('date'))->where('claim_task_details.billDate','>',$check);
+                        $query->where('claim_task_details.billDate','<=',$dateCompare)->where('claim_task_details.billDate','>=',$check);
                     }
                     $listClaimTaskDetail = $query->get();
                     $collect = collect($listClaimTaskDetail);
@@ -1298,12 +1271,35 @@ class AdminController extends Controller
 
     public function loadClaimByEventEnterKey(Request $request)
     {
+//        $now = Carbon::now();
+//        dd($now->hour);
         $result = null;
+        $date = null;
         try{
             if($request->get('key'))
             {
                 $claim = Claim::where('code',$request->get('key'))->where('statusId',0)->first();
-                $result = array('Claim'=>$claim);
+                if($claim)
+                {
+                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId',2)->orderBy('billDate','desc')->first();
+                    if($checkDateIBcompleteFB!=null)
+                    {
+                        $date = $checkDateIBcompleteFB->billDate;
+                    }
+                    else
+                    {
+                        $checkIBPending = ClaimTaskDetail::where('statusId',1)->first();
+                        if($checkIBPending==null)
+                        {
+                            $date = $claim->openDate;
+                        }
+                        else
+                        {
+                            $date = $checkIBPending->billDate;
+                        }
+                    }
+                    $result = array('Claim'=>$claim,'Date'=>$date);
+                }
             }
         }
         catch(Exception $ex)
@@ -1700,6 +1696,7 @@ class AdminController extends Controller
 
     public function saveAddNewUpdateBranch(Request $request)
     {
+        //dd($request->all());
         $result = null;
         if($request->get('idBranch')==='0')
         {
@@ -1724,7 +1721,7 @@ class AdminController extends Controller
         {
             try
             {
-                $branchCode = SourceCustomer::where('id',$request->get('idBranch'))->where('active',1)->first();
+                $branchCode = Branch::where('id',$request->get('idBranch'))->where('active',1)->first();
                 if($branchCode)
                 {
                     $branchCode->code = $request->get('codeBranch');

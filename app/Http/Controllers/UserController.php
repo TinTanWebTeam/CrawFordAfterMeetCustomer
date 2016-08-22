@@ -92,11 +92,36 @@ class UserController extends Controller
     {
         //dd($request->get('key'));
         $result = null;
+        $date = null;
         try{
             if($request->get('key'))
             {
                 $claim = Claim::where('code',$request->get('key'))->where('statusId',0)->first();
-                $result = array('Claim'=>$claim);
+                if($claim)
+                {
+                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId',2)->orderBy('billDate','desc')->first();
+                    if($checkDateIBcompleteFB!=null)
+                    {
+                        $date = $checkDateIBcompleteFB->billDate;
+                    }
+                    else
+                    {
+                        $checkIBPending = ClaimTaskDetail::where('statusId',1)->first();
+                        if($checkIBPending==null)
+                        {
+                            $date = $claim->openDate;
+                        }
+                        else
+                        {
+                            $date = $checkIBPending->billDate;
+                        }
+                    }
+                    $result = array('Claim'=>$claim,'Date'=>$date);
+                }
+                else
+                {
+                    $result = array('Claim'=>"null",'Date'=>$date);
+                }
             }
         }
         catch(Exception $ex)

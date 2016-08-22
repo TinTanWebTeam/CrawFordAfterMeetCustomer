@@ -162,7 +162,7 @@
                         <h5 class="text-right">Closed:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -178,7 +178,7 @@
                         <h5 class="text-right">Reopened:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="reOpen" name="reOpen"/>
+                        <input type="text" id="reOpen" name="reOpen" readonly style="background-color: #EFE5E5"/>
                     </div>
                 </td>
             </tr>
@@ -210,7 +210,7 @@
                         <h5 class="text-right">Destroy:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="destroyedDate" name="destroyedDate">
+                        <input type="text" id="destroyedDate" name="destroyedDate" readonly style="background-color: #EFE5E5"/>
                     </div>
                 </td>
             </tr>
@@ -242,7 +242,7 @@
                         <h5 class="text-right">EBox Destroy:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="eBoxDestroyed" name="eBoxDestroyed">
+                        <input type="text" id="eBoxDestroyed" name="eBoxDestroyed" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -269,7 +269,7 @@
                         <h5 class="text-right">First Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="firstContact" name="firstContact">
+                        <input type="text" id="firstContact" name="firstContact" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -305,7 +305,7 @@
                         <h5 class="text-right">Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="contact" name="contact">
+                        <input type="text" id="contact" name="contact" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -388,7 +388,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="policyInceptionDate" name="policyInceptionDate">
+                        <input type="text" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -399,7 +399,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="policyExpiryDate" name="policyExpiryDate">
+                        <input type="text" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -1113,7 +1113,7 @@
                     brokerCode : null,
                     branchCode : null,
                     //branchTypeCode : null,
-                    destroyedDate : null,
+                    //destroyedDate : null,
                     lossLocation : null,
                     lineOfBusinessCode : null,
                     lossDate : null,
@@ -1122,10 +1122,10 @@
                     closeDate : null,
                     //insuredContactedDate : null,
                     //limitationDate : null,
-                    policyInceptionDate : null,
-                    policyExpiryDate : null,
+                    //policyInceptionDate : null,
+                   // policyExpiryDate : null,
                     disabilityCode : null,
-                    outComeCode : null,
+                    //outComeCode : null,
                     //lastChanged : null,
                     partnershipId : null,
                     adjusterCode : null,
@@ -1144,14 +1144,14 @@
                     sirBreached : null,
                     claimAssignment : null,
                     policy : null,
-                    reOpen : null,
-                    eBoxDestroyed : null,
-                    firstContact : null,
+                    //reOpen : null,
+                    //eBoxDestroyed : null,
+                    //firstContact : null,
                     proscription : null,
                     created_at : null,
                     updated_at : null,
-                    importDate : null,
-                    importCloseDate : null
+                    //importDate : null,
+                    //importCloseDate : null
                 },
                 codeClaim:$("input[name=code]").val(),
                 resetClaimViewObject : function(){
@@ -1173,92 +1173,110 @@
                             claimTypeCode: "required",
                             lossDescCode: "required",
                             insurerCode: "required",
-                            sourceCode: "required"
+                            sourceCode: "required",
+                            insuredFirstName:"required",
+                            insuredLastName:"required",
+                            openDate:"required"
                         },
                         messages: {
                             claimTypeCode: "Claim type is required",
                             lossDescCode: "Loss desc is required",
                             insurerCode:"Insurer code is required",
-                            sourceCode:"Source code is required"
+                            sourceCode:"Source code is required",
+                            insuredFirstName:"Insured FirstName is required",
+                            insuredLastName:"Insured LastName is required",
+                            openDate:"Open date is required"
                         }
                     });
                     if($("form[id=form_claim]").valid())
                     {
-                        for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
-                            if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
-                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
+                        if($("input[name=lossDate]").val() > $("input[name=openDate]").val())
+                        {
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Loss date is not larger than open date!!! ");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
+                        else
+                        {
+                            var currentTime = new Date();
+                            var hour = currentTime.getHours();
+                            var min  = currentTime.getMinutes();
+                            var sec  = currentTime.getSeconds();
+                            for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
+                                if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
+                                    claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
+                                }
+                                else
+                                {
+                                    claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
+                                }
+                            }
+
+                            claimView.claimViewObject.openDate = $("input[name=openDate]").val() +" "+hour + ":" + min + ":" + sec;
+                            claimView.claimViewObject.receiveDate = $("input[name=receiveDate]").val() +" "+hour + ":" + min + ":" + sec;
+                            claimView.claimViewObject.lossDate = $("input[name=lossDate]").val() +" "+hour + ":" + min + ":" + sec;
+                            claimView.claimViewObject.proscription = $("input[name=proscription]").val() +" "+hour + ":" + min + ":" + sec;
+
+                            claimView.claimViewObject.id = $("input[name=id]").val();
+                            claimView.claimViewObject.insuredAddress = $("textarea[name=insuredAddress]").val();
+                            if($("input[name=sirBreached]").is(":checked"))
+                            {
+                                claimView.claimViewObject.sirBreached = 1;
                             }
                             else
                             {
-                                claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
+                                claimView.claimViewObject.sirBreached = 0;
                             }
-                        }
-                        claimView.claimViewObject.id = $("input[name=id]").val();
-                        claimView.claimViewObject.insuredAddress = $("textarea[name=insuredAddress]").val();
-                        if($("input[name=sirBreached]").is(":checked"))
-                        {
-                            claimView.claimViewObject.sirBreached = 1;
-                        }
-                        else
-                        {
-                            claimView.claimViewObject.sirBreached = 0;
-                        }
-                        if($("input[name=taxable]").is(":checked"))
-                        {
-                            claimView.claimViewObject.taxable = 1;
-                        }
-                        else
-                        {
-                            claimView.claimViewObject.taxable = 0;
-                        }
-                        if($("input[name=claimAssignment]").is(":checked"))
-                        {
-                            claimView.claimViewObject.claimAssignment = 1;
-                        }
-                        else
-                        {
-                            claimView.claimViewObject.claimAssignment = 0;
-                        }
-                        if($("input[name=privileged]").is(":checked"))
-                        {
-                            claimView.claimViewObject.privileged = 1;
-                        }
-                        else
-                        {
-                            claimView.claimViewObject.privileged = 0;
-                        }
-                        console.log(claimView.claimViewObject);
-                        $.post(url+'saveClaim/'+ claimView.claimViewObject.id,{_token:_token,claim : claimView.claimViewObject},function (data) {
-                            console.log(data);
-                            if(data["Action"]==="AddNew")
+                            if($("input[name=taxable]").is(":checked"))
                             {
-                                if(data["Result"]===1)
-                                {
-                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new Claim Success");
-                                    $("div[id=modal-confirm]").modal("show");
-                                    claimView.cancel();
-                                    $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
-                                }
+                                claimView.claimViewObject.taxable = 1;
                             }
                             else
                             {
-                                if(data["Result"]===1)
-                                {
-
-                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Update Claim Success");
-                                    $("div[id=modal-confirm]").modal("show");
-                                    claimView.cancel();
-                                    $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
-                                }
+                                claimView.claimViewObject.taxable = 0;
                             }
-                        });
-                    }
-                    else
-                    {
+                            if($("input[name=claimAssignment]").is(":checked"))
+                            {
+                                claimView.claimViewObject.claimAssignment = 1;
+                            }
+                            else
+                            {
+                                claimView.claimViewObject.claimAssignment = 0;
+                            }
+                            if($("input[name=privileged]").is(":checked"))
+                            {
+                                claimView.claimViewObject.privileged = 1;
+                            }
+                            else
+                            {
+                                claimView.claimViewObject.privileged = 0;
+                            }
+                            $.post(url+'saveClaim/'+ claimView.claimViewObject.id,{_token:_token,claim : claimView.claimViewObject},function (data) {
+                                console.log(data);
+                                if(data["Action"]==="AddNew")
+                                {
+                                    if(data["Result"]===1)
+                                    {
+                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new Claim Success");
+                                        $("div[id=modal-confirm]").modal("show");
+                                        claimView.cancel();
+                                        $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
+                                    }
+                                }
+                                else
+                                {
+                                    if(data["Result"]===1)
+                                    {
+
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Update Claim Success");
+                                        $("div[id=modal-confirm]").modal("show");
+                                        claimView.cancel();
+                                        $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
+                                    }
+                                }
+                            });
+                        }
 
                     }
-
-
                 },
                 saveAddNewUpdateClaimType:function()
                 {

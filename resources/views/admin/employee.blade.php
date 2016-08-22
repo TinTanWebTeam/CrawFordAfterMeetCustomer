@@ -325,7 +325,7 @@
                                 <h5 style="text-align: right">Flat</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Flat" id="Flat">
+                                <input type="text" name="Flat" id="Flat" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                         <div class="row">
@@ -341,7 +341,7 @@
                                 <h5 style="text-align: right">Blended :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Blended" id="Blended">
+                                <input type="text" name="Blended" id="Blended" readonly style="background-color: #F3EDED">
                             </div>
                         </div>
                     </fieldset>
@@ -406,44 +406,44 @@
                                 <input type="text" name="NetworkID_changed" id="NetworkID_changed">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-5">
-                                <h5 style="text-align: right">Windows Users ID :</h5>
-                            </div>
-                            <div class="col-sm-7">
-                                <input type="text" name="ajaxAddNewAndSaveUpdateDateWindowsUsersID" id="ajaxAddNewAndSaveUpdateDateWindowsUsersID">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h5 style="text-align: right">Locked :</h5>
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Locked" disabled>
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="text" name="LockedDetail" id="LockedDetail" readonly style="background-color: #F3EDED">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h5 style="text-align: right">Inactive :</h5>
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="radio" class="radio" name="checkboxLockAndActive" value="Inactive" disabled>
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="text" name="InactiveDetail" id="InactiveDetail" readonly style="background-color: #F3EDED">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h5 style="text-align: right">Default Profile :</h5>
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="checkbox" class="checkbox" name="DefaultProfile" id="DefaultProfile" value="defaultProfile">
-                            </div>
-                        </div>
+                        {{--<div class="row">--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<h5 style="text-align: right">Windows Users ID :</h5>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-7">--}}
+                                {{--<input type="text" name="ajaxAddNewAndSaveUpdateDateWindowsUsersID" id="ajaxAddNewAndSaveUpdateDateWindowsUsersID">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="row">--}}
+                            {{--<div class="col-sm-4">--}}
+                                {{--<h5 style="text-align: right">Locked :</h5>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-2">--}}
+                                {{--<input type="radio" class="radio" name="checkboxLockAndActive" value="Locked" disabled>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-6">--}}
+                                {{--<input type="text" name="LockedDetail" id="LockedDetail" readonly style="background-color: #F3EDED">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="row">--}}
+                            {{--<div class="col-sm-4">--}}
+                                {{--<h5 style="text-align: right">Inactive :</h5>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-2">--}}
+                                {{--<input type="radio" class="radio" name="checkboxLockAndActive" value="Inactive" disabled>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-6">--}}
+                                {{--<input type="text" name="InactiveDetail" id="InactiveDetail" readonly style="background-color: #F3EDED">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="row">--}}
+                            {{--<div class="col-sm-4">--}}
+                                {{--<h5 style="text-align: right">Default Profile :</h5>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-sm-2">--}}
+                                {{--<input type="checkbox" class="checkbox" name="DefaultProfile" id="DefaultProfile" value="defaultProfile">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </fieldset>
                 </div>
             </div>
@@ -608,8 +608,13 @@
                                 {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Add New Success");
                                     $("div[id=modalNotification]").modal("show");
-                                    $("input[name=ajaxActionType]").val("1");
+                                    $("input[name=ajaxActionType]").val("1");s
                                     employeeView.ResetForm();
+                                }
+                                else if(data["Result"]===0)
+                                {
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This id has already exist!!!Please choose id other");
+                                    $("div[id=modalNotification]").modal("show");
                                 }
                                 else
                                 {

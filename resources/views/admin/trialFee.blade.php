@@ -134,7 +134,7 @@
                             <h5 style="text-align: right">From:</h5>
                         </div>
                         <div class="col-sm-9">
-                            <input type="date" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
+                            <input type="text" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                             <h5>Loss Date:</h5>
                         </td>
                         <td>
-                            <input type="date" name="lossDate" id="lossDate" readonly style="background-color: #F3EDED">
+                            <input type="text" name="lossDate" id="lossDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Initial Reserve:</h5>
@@ -213,7 +213,7 @@
                             <h5>Received:</h5>
                         </td>
                         <td>
-                            <input type="date" name="receiveDate" id="receiveDate" readonly style="background-color: #F3EDED">
+                            <input type="text" name="receiveDate" id="receiveDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Current Res:</h5>
@@ -227,7 +227,7 @@
                             <h5>Opened:</h5>
                         </td>
                         <td>
-                            <input type="date" name="openDate" id="openDate" readonly style="background-color: #F3EDED">
+                            <input type="text" name="openDate" id="openDate" readonly style="background-color: #F3EDED">
                         </td>
                         <td class="text-right">
                             <h5>Adjust Res:</h5>
@@ -463,9 +463,9 @@
                 codeCustomer:null,
                 convertStringToDate: function (date) {
                     var currentDate = new Date(date);
-                    var datetime = currentDate.getFullYear() +"-"
-                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)  +"-"
-                            + ("0" + currentDate.getDate()).slice(-2);
+                    var datetime = ("0" + currentDate.getDate()).slice(-2)+"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)+"-"
+                            + currentDate.getFullYear();
                     return datetime;
                 },
                 loadTableGL:function()
@@ -497,8 +497,9 @@
                                 $("div[id=modalNotification]").modal("show");
                             }
                             else {
+                                var arrayTimeCheck = data["check"].split(" ");
                                 trialFeeView.codeCustomer = data["Claim"]["insurerCode"];
-                                $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data["check"]));
+                                $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheck[0])+" "+arrayTimeCheck[1]);
                                 $("input[name=idClaim]").val(data["Claim"]["id"]);
                                 $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
@@ -628,13 +629,18 @@
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
-                    if($("input[name=FromDate]").val() > $("input[name=ToDate]").val())
+                    //compare date
+                    var currentTime = new Date();
+                    var hour = currentTime.getHours();
+                    var min  = currentTime.getMinutes();
+                    var sec  = currentTime.getSeconds();
+                    var compareDate =  $("input[name=FromDate]").val();
+                    var current = trialFeeView.convertStringToDate($("input[name=ToDate]").val())+ " " + hour + ":" + min + ":" + sec;
+                    if(current < compareDate)
                     {
                         $("div[id=modalConfirm]").modal("hide");
                         $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill date can't smaller than start date !!! ");
                         $("div[id=modalNotification]").modal("show");
-
-
                     }
                     else
                     {
@@ -665,7 +671,7 @@
                             billToCustomer: $("select#chooseCustomer option:selected").val(),
                             Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
                             TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
-                            toDate:$("input[name=ToDate]").val(),
+                            toDate:current,
                             billType: $("input[name=bill-type]:checked").attr("id"),
                             billStatus:$("input[name=bill-status]:checked").attr("id"),
                             ArrayData: objectUserAll
@@ -679,22 +685,26 @@
                             $("div[id=modalConfirm]").find("div[class=modal-footer]").hide();
                             if (data["Action"] === "BillClaim") {
                                 if (data["Result"] === 1) {
+                                    $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim success!!!");
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                 }
                                 else {
+                                    $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim no success!!!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
                             else {
                                 if (data["Result"] === 1) {
+                                    $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim success!!!");
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                 }
                                 else {
+                                    $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim no success!!!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
@@ -737,13 +747,16 @@
                     $("div[id=modalListClaimIB]").modal("hide");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
+                        console.log(data);
                         trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
                         if(data[0]==="Pending")
                         {
-                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data[1]["FromDate"])).prop("readOnly",true);
-                            $("input[name=ToDate]").val(trialFeeView.convertStringToDate(data[1]["ToDate"])).prop("readOnly",true);
+                            var arrayTimeCheckFromDate = data[1]["FromDate"].split(" ");
+                            var arrayTimeCheckToDate = data[1]["ToDate"].split(" ");
+                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheckFromDate[0])+" "+arrayTimeCheckFromDate[1]).prop("readOnly",true);
+                            $("input[name=ToDate]").attr("type","text").val(trialFeeView.convertStringToDate(arrayTimeCheckToDate[0])+" "+arrayTimeCheckToDate[1]).prop("readOnly",true);
                             //load data to table
                             var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;
                             var k =0;
@@ -765,9 +778,10 @@
                         }
                         else
                         {
-                            console.log(trialFeeView.convertStringToDate(data[1]["FromDate"]));
-                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(data[1]["FromDate"])).prop("readOnly",true);
-                            $("input[name=ToDate]").val(trialFeeView.convertStringToDate(data[1]["ToDate"])).prop("readOnly",true);
+                            var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
+                            var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");
+                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheckFromDateCL[0])+" "+arrayTimeCheckFromDateCL[1]).prop("readOnly",true);
+                            $("input[name=ToDate]").attr("type","text").val(trialFeeView.convertStringToDate(arrayTimeCheckToDateCL[0])+" "+arrayTimeCheckToDateCL[1]).prop("readOnly",true);
                             //insert data default
                             trialFeeView.clearTable();
                             trialFeeView.loadTableGL();
@@ -816,8 +830,9 @@
                 },
                 cancel:function()
                 {
+                    $("button[name=actionViewListIB]").prop("disabled",true);
                     $("form#trialFee").find("input").val("");
-                    $("input[name=ToDate]").prop("readOnly",false);
+                    $("input[name=ToDate]").prop("readOnly",false).attr("type","date");
                     $("textarea[name=addressCustomer]").val("");
                     $("select[id=chooseCustomer]").val($("select[id=chooseCustomer] option:eq(0)").val());
                     trialFeeView.clearTable();
@@ -827,6 +842,7 @@
                 {
                     $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),date:$("input[name=ToDate]").val()},function(data)
                     {
+                        console.log(data);
                         if(data["listClaimTaskDetail"].length === 0)
                         {
                             trialFeeView.clearTable();

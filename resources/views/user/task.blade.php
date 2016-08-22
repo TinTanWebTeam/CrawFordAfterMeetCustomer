@@ -73,7 +73,7 @@
 {{--End Model Show Confirm--}}
 
 <div class="row">
-        <form action="" style="background-color: #fff;width: 100%" class="form-task">
+        <form action="" style="background-color: #fff;width: 100%" id="form-claim">
             <div class="row" style="padding: 20px;">
                 <div class="col-sm-4">
                     <div class="row">
@@ -129,6 +129,14 @@
                         </div>
                         <div class="col-sm-10">
                             <input type="text" id="lossLocation" name="lossLocation" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5 style="display: inline-block" class="text-right">From date: </h5>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" id="fromDate" name="fromDate" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                 </div>
@@ -411,6 +419,7 @@
                     RateDefault:$("input[name=ProfessionalServicesRate]").val()
                 },
                 idUserOther:null,
+                checkDate:null,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
                         if (taskView.taskObject.hasOwnProperty(propertyName)) {
@@ -429,6 +438,8 @@
                             key: $("input[name=ClaimCode]").val()
                         }, function (data) {
                             if(data){
+                                taskView.checkDate = data["Date"];
+                                $("input[name=fromDate]").val(data["Date"]);
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=insuredName]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=lossDate]").val(data["Claim"]["lossDate"]);
@@ -538,55 +549,78 @@
                     }
                     else
                     {
-                        if($("input[name=ProfessionalServices]").val()==="")
+                        var currentTime = new Date();
+                        var hour = currentTime.getHours();
+                        var min  = currentTime.getMinutes();
+                        var sec  = currentTime.getSeconds();
+                        var compareDate =  taskView.checkDate;
+                        var current = $("input[name=ChooseDate]").val() + " " + hour + ":" + min + ":" + sec;
+                        if(current < compareDate)
                         {
-                            alert("You must enter ProfessionalServices");
+                            alert("error");
                         }
                         else
                         {
-                            taskView.resetTaskObject();
-                            for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
-                            {
-                                taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
-                            }
-                            console.log(taskView.taskObject);
-                            $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,Date:$("input[name=ChooseDate]").val()},function(data){
-                                console.log(data);
-                                if(data["Action"]==="AddNew")
-                                {
-                                    if(data["Result"]===1)
-                                    {
-                                        $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
-                                        $("div[id=modalConfirm]").modal("show");
-                                        $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
-                                            $("tbody[id=tbodyDocket]").empty().append(view);
-                                        });
-                                        taskView.cancel();
-                                    }
-                                    else if(data["Result"]===0)
-                                    {
-                                        $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                        $("div[id=modalConfirm]").modal("show");
-                                    }
-                                    else{
-                                        $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                        $("div[id=modalConfirm]").modal("show");
-                                    }
-                                }
-                                else{
-                                    if(data["Result"]===1)
-                                    {
-                                        $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
-                                        $("div[id=modalConfirm]").modal("show");
-                                        taskView.cancel();
-                                    }
-                                    else
-                                    {
-                                        $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update No Success");
-                                        $("div[id=modalConfirm]").modal("show");
-                                    }
+                            $("form[id=form-claim]").validate({
+                                rules: {
+                                    insuredName: "required"
+
+                                },
+                                messages: {
+                                    insuredName: "ID is required"
                                 }
                             });
+                            if($("form[id=form-claim]").valid()){
+                                if($("input[name=ProfessionalServices]").val()==="")
+                                {
+                                    alert("You must enter ProfessionalServices");
+                                }
+                                else
+                                {
+                                    taskView.resetTaskObject();
+                                    for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
+                                    {
+                                        taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
+                                    }
+                                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,Date:current},function(data){
+                                        console.log(data);
+                                        if(data["Action"]==="AddNew")
+                                        {
+                                            if(data["Result"]===1)
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
+                                                $("div[id=modalConfirm]").modal("show");
+                                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                                });
+                                                taskView.cancel();
+                                            }
+                                            else if(data["Result"]===0)
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
+                                                $("div[id=modalConfirm]").modal("show");
+                                            }
+                                            else{
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
+                                                $("div[id=modalConfirm]").modal("show");
+                                            }
+                                        }
+                                        else{
+                                            if(data["Result"]===1)
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
+                                                $("div[id=modalConfirm]").modal("show");
+                                                taskView.cancel();
+                                            }
+                                            else
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update No Success");
+                                                $("div[id=modalConfirm]").modal("show");
+                                            }
+                                        }
+                                    });
+                                }
+                            }
                         }
                     }
                 },
