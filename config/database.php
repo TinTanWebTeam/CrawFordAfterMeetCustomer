@@ -26,8 +26,8 @@ return [
     |
     */
 
-    // 'default' => env('DB_CONNECTION', 'mysql'),
-    'default' => 'sqlsrv',
+    'default' => env('DB_CONNECTION', 'mysql'),
+    //'default' => 'sqlsrv',
     /*
     |--------------------------------------------------------------------------
     | Database Connections
