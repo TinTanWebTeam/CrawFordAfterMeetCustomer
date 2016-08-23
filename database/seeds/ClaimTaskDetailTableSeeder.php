@@ -13,14 +13,14 @@ class ClaimTaskDetailTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
-        foreach (range(1, 4) as $index) {
-            ClaimTaskDetail::create([
-                'professionalServices' => rand(1,3),
-                'professionalServicesTime' => rand(1,10),
-                'professionalServicesNote'=>$faker->paragraph(3),
-                'expense' => rand(1,3)
-            ]);
-        }
+//        $faker = Factory::create();
+//        foreach (range(1, 4) as $index) {
+//            ClaimTaskDetail::create([
+//                'professionalServices' => rand(1,3),
+//                'professionalServicesTime' => rand(1,10),
+//                'professionalServicesNote'=>$faker->paragraph(3),
+//                'expense' => rand(1,3)
+//            ]);
+//        }
     }
 }

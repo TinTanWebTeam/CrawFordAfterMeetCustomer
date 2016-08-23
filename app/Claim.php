@@ -55,7 +55,8 @@ class Claim extends Model
         'proscription',
         'initialReserve',
         'currentRes',
-        'adjustReserve'
+        'adjustReserve',
+        'contact'
     ];
 
 }

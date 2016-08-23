@@ -72,6 +72,7 @@ class CreateClaimsTable extends Migration
             $table->decimal('initialReserve')->default(0);
             $table->decimal('currentRes')->default(0);
             $table->decimal('adjustReserve')->default(0);
+            $table->string('contact',200)->nullable();
 
             $table->timestamps();
         });

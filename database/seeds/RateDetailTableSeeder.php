@@ -13,13 +13,13 @@ class RateDetailTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach(range(1,5) as $index){
-            $faker = Factory::create();
-            RateDetail::create([
-                'value'=>11.5,
-                'description'=>$faker->paragraph(3),
-                'rateTypeId'=>random_int(1,3),
-            ]);
-        }
+//        foreach(range(1,5) as $index){
+//            $faker = Factory::create();
+//            RateDetail::create([
+//                'value'=>11.5,
+//                'description'=>$faker->paragraph(3),
+//                'rateTypeId'=>random_int(1,3),
+//            ]);
+//        }
     }
 }

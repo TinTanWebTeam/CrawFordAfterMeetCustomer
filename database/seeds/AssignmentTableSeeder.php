@@ -13,12 +13,12 @@ class AssignmentTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
-        foreach (range(1, 10) as $index) {
-            Assignment::create([
-                'claimId' => $index,
-                'userId' => $index
-            ]);
-        }
+//        $faker = Factory::create();
+//        foreach (range(1, 10) as $index) {
+//            Assignment::create([
+//                'claimId' => $index,
+//                'userId' => $index
+//            ]);
+//        }
     }
 }

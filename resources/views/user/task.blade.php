@@ -99,10 +99,18 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
+                            <h5 style="display: inline-block" class="text-right">From date: </h5>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="text" id="fromDate" name="fromDate" value="" style="display: inline-block;background-color: #E2D8D8" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
                             <h5 style="display: inline-block" class="text-right">Choose Date:</h5>
                         </div>
                         <div class="col-sm-8">
-                            <input type="date"  name="ChooseDate" id="ChooseDate" value="" style="display: inline-block">
+                            <input type="date"  name="ChooseDate" id="ChooseDate" value="{{date('Y-m-d')}}" style="display: inline-block">
                         </div>
                     </div>
                 </div>
@@ -112,7 +120,7 @@
                             <h5 style="display: inline-block" class="text-right">Insured Name: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="insuredName" name="insuredName" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
+                            <input type="text" id="insuredName" name="insuredName" value="" style="display: inline-block;width: 600px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -120,7 +128,7 @@
                             <h5 style="display: inline-block" class="text-right">Loss Date: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="lossDate" name="lossDate" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
+                            <input type="text" id="lossDate" name="lossDate" value="" style="display: inline-block;width: 600px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -128,15 +136,15 @@
                             <h5 style="display: inline-block" class="text-right">Loss Location: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="lossLocation" name="lossLocation" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
+                            <input type="text" id="lossLocation" name="lossLocation" value="" style="display: inline-block;width: 600px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <h5 style="display: inline-block" class="text-right">From date: </h5>
+                            <h5 style="display: inline-block" class="text-right">Open date: </h5>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="fromDate" name="fromDate" value="" style="display: inline-block;width: 300px;background-color: #E2D8D8" readonly>
+                            <input type="text" id="openDate" name="openDate" value="" style="display: inline-block;width: 600px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
                 </div>
@@ -427,6 +435,20 @@
                         }
                     }
                 },
+                convertStringToDate: function (date) {
+                    var currentDate = new Date(date);
+                    var datetime = ("0" + currentDate.getDate()).slice(-2)+"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)+"-"
+                            + currentDate.getFullYear();
+                    return datetime;
+                },
+                formatYMD: function (date) {
+                    var currentDate = new Date(date);
+                    var datetime = ("0" + currentDate.getFullYear() +"-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2)+"-"
+                            + currentDate.getDate()).slice(-2);
+                    return datetime;
+                },
                 firstToUpperCase:function(str){
                     return str.substr(0, 1).toUpperCase() + str.substr(1);
                 },
@@ -439,7 +461,10 @@
                         }, function (data) {
                             if(data){
                                 taskView.checkDate = data["Date"];
-                                $("input[name=fromDate]").val(data["Date"]);
+                                var openDateFR = data["Claim"]["openDate"].split(" ");
+                                var fromDateFR = data["Date"].split(" ");
+                                $("input[name=openDate]").val(taskView.convertStringToDate(openDateFR[0])+" "+openDateFR[1]);
+                                $("input[name=fromDate]").val(taskView.convertStringToDate(fromDateFR[0])+" "+fromDateFR[1]);
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=insuredName]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=lossDate]").val(data["Claim"]["lossDate"]);
@@ -462,7 +487,11 @@
 
 
                     $.post(url+"user/viewDetailTask",{_token:_token,idDocket:$(element).attr("id")},function(data){
-                        console.log(data);
+
+                        var a = data["Task"]["billDate"].split(" ");
+                        var b = a[0].split("-");
+                        console.log((b[0]));
+                        $("input[name=ChooseDate]").val(b[0]+"-"+b[1]+"-"+b[2]);
                         for(var propertyName in data["Task"])
                         {
                             if(propertyName!=="userId")
@@ -542,26 +571,13 @@
                 },
                 assignmentTask:function()
                 {
-                    console.log();
                     if($("input[name=ClaimCode]").val()==="")
                     {
                         alert("You must enter claimId");
                     }
                     else
                     {
-                        var currentTime = new Date();
-                        var hour = currentTime.getHours();
-                        var min  = currentTime.getMinutes();
-                        var sec  = currentTime.getSeconds();
-                        var compareDate =  taskView.checkDate;
-                        var current = $("input[name=ChooseDate]").val() + " " + hour + ":" + min + ":" + sec;
-                        if(current < compareDate)
-                        {
-                            alert("error");
-                        }
-                        else
-                        {
-                            $("form[id=form-claim]").validate({
+                        $("form[id=form-claim]").validate({
                                 rules: {
                                     insuredName: "required"
 
@@ -570,7 +586,7 @@
                                     insuredName: "ID is required"
                                 }
                             });
-                            if($("form[id=form-claim]").valid()){
+                        if($("form[id=form-claim]").valid()){
                                 if($("input[name=ProfessionalServices]").val()==="")
                                 {
                                     alert("You must enter ProfessionalServices");
@@ -582,7 +598,7 @@
                                     {
                                         taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
                                     }
-                                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,Date:current},function(data){
+                                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
                                         console.log(data);
                                         if(data["Action"]==="AddNew")
                                         {
@@ -605,23 +621,34 @@
                                                 $("div[id=modalConfirm]").modal("show");
                                             }
                                         }
-                                        else{
+                                        else if(data["Action"]==="Update")
+                                        {
                                             if(data["Result"]===1)
                                             {
                                                 $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
                                                 $("div[id=modalConfirm]").modal("show");
                                                 taskView.cancel();
                                             }
-                                            else
+                                            else if(data["Result"]===0)
                                             {
                                                 $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update No Success");
                                                 $("div[id=modalConfirm]").modal("show");
                                             }
+                                            else
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
+                                                $("div[id=modalConfirm]").modal("show");
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not larger than from date!!!");
+                                            $("div[id=modalConfirm]").modal("show");
                                         }
                                     });
                                 }
                             }
-                        }
                     }
                 },
                 cancel:function()

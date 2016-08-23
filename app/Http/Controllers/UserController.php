@@ -9,6 +9,7 @@ use App\RateDetail;
 use App\TaskCategory;
 use App\User;
 use Auth;
+use Carbon\Carbon;
 use Config;
 use DB;
 use Illuminate\Http\Request;
@@ -106,15 +107,7 @@ class UserController extends Controller
                     }
                     else
                     {
-                        $checkIBPending = ClaimTaskDetail::where('statusId',1)->first();
-                        if($checkIBPending==null)
-                        {
-                            $date = $claim->openDate;
-                        }
-                        else
-                        {
-                            $date = $checkIBPending->billDate;
-                        }
+                        $date = $claim->openDate;
                     }
                     $result = array('Claim'=>$claim,'Date'=>$date);
                 }
@@ -162,94 +155,119 @@ class UserController extends Controller
 
     public function assignmentTask(Request $request)
     {
+        //dd($request->all());
         $result = null;
-        if($request->get('action')==1)
+        $timeToDate = Carbon::now();
+        $a = explode(" ",$request->get('fromDate'));
+        $toDate = $request->get('toDate')." ".$timeToDate->hour.":".$timeToDate->minute.":".$timeToDate->second;
+        $fromDate = Carbon::parse($a[0])->format('Y-m-d')." ".$a[1];
+        if($toDate < $fromDate)
         {
-            if ($this->validatorUser($request->get('taskObject'), "assignmentTask")->fails()) {
-                $result = array('Action'=>'AddNew','Result'=>2);
-            }
-            else
-            {
-                try{
-                    $task = new ClaimTaskDetail();
-                    $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
-                    $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-
-                    $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                    $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                    $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-
-                    $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
-                    $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
-                    $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
-
-                    $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
-                    $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
-                    $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
-
-                    $task->expense = $request->get('taskObject')['Expense'];
-                    $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                    $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-                    $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
-                    $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
-
-                    $task->claimId = $request->get('taskObject')['ClaimId'];
-                    $task->userId = $request->get('taskObject')['UserId'];
-                    $task->createdBy = $request->get('taskObject')['UserId'];
-                    $task->updatedBy = $request->get('taskObject')['UserId'];
-                    $task->billDate = $request->get('Date');
-                    $task->save();
-                    $result = array('Action'=>'AddNew','Result'=>1);
-                }
-                catch(Exception $ex)
-                {
-                    return $ex;
-                }
-            }
+            array('Action'=>'ErrorDate');
         }
         else
         {
-            if($request->get('idUserOther')!= Auth::user()->id)
+            if($request->get('action')==1)
             {
-                $result = array('Action'=>'Update','Result'=>0);
+                if ($this->validatorUser($request->get('taskObject'), "assignmentTask")->fails()) {
+                    $result = array('Action'=>'AddNew','Result'=>2);
+                }
+                else
+                {
+                    try{
+                        $task = new ClaimTaskDetail();
+                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                        $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+
+                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+
+                        $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
+                        $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
+                        $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
+
+                        $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
+                        $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
+                        $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
+
+                        $task->expense = $request->get('taskObject')['Expense'];
+                        $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                        $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
+                        $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
+
+                        $task->claimId = $request->get('taskObject')['ClaimId'];
+                        $task->userId = $request->get('taskObject')['UserId'];
+                        $task->createdBy = $request->get('taskObject')['UserId'];
+                        $task->updatedBy = $request->get('taskObject')['UserId'];
+                        $task->billDate = $toDate;
+                        $task->save();
+                        $result = array('Action'=>'AddNew','Result'=>1);
+                    }
+                    catch(Exception $ex)
+                    {
+                        return $ex;
+                    }
+                }
             }
             else
             {
-                try{
-                    if($request->get('idTask'))
-                    {
-                        $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
-                        if($task)
+                if($request->get('idUserOther')!= Auth::user()->id)
+                {
+                    $result = array('Action'=>'Update','Result'=>0);
+                }
+                else
+                {
+                    try{
+                        if($request->get('idTask'))
                         {
-                            $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
-                            $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+                            $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
+                            if($task)
+                            {
+                                $z = explode(" ",$request->get('fromDate'));
+                                $fromDate = Carbon::parse($z[0])->format('Y-m-d')." ".$z[1];
+                                $timeToDate = Carbon::now();
+                                $toDate = $request->get('toDate')." ".$timeToDate->hour.":".$timeToDate->minute.":".$timeToDate->second;
+                                if($task->billDate < $fromDate)
+                                {
+                                    $result = array('Action'=>'Update','Result'=>2);
+                                }
+                                else
+                                {
+                                   $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                                   $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+                                   $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                   $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                                   $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
 
-                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                            $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                                   $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
+                                   $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
+                                   $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
 
-                            $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
-                            $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
-                            $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
+                                   $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
+                                   $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
+                                   $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
 
-                            $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
-                            $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
-                            $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
+                                   $task->expense = $request->get('taskObject')['Expense'];
+                                   $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                                   $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                                   $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
+                                   $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
 
-                            $task->expense = $request->get('taskObject')['Expense'];
-                            $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-                            $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
-                            $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
+                                   $task->billDate =  $toDate;
 
-                            $task->save();
-                            $result = array('Action'=>'Update','Result'=>1);
+                                   $task->save();
+                                   $result = array('Action'=>'Update','Result'=>1);
+                               }
+
+                            }
                         }
                     }
-                }
-                catch(Exception $ex)
-                {
-                    return $ex;
+                    catch(Exception $ex)
+                    {
+                        return $ex;
+                    }
                 }
             }
         }

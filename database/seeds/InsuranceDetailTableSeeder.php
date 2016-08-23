@@ -13,14 +13,14 @@ class InsuranceDetailTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
-        foreach (range(1, 30) as $index) {
-            InsuranceDetail::create([
-                'code' => 'CODE' . str_random(3) . (string) date_timestamp_get(date_create()),
-                'name' => $faker->name,
-                'description' => $faker->paragraph(1),
-                'typeOfInsuranceId'=>1
-            ]);
-        }
+//        $faker = Factory::create();
+//        foreach (range(1, 30) as $index) {
+//            InsuranceDetail::create([
+//                'code' => 'CODE' . str_random(3) . (string) date_timestamp_get(date_create()),
+//                'name' => $faker->name,
+//                'description' => $faker->paragraph(1),
+//                'typeOfInsuranceId'=>1
+//            ]);
+//        }
     }
 }

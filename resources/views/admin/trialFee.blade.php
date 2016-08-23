@@ -629,21 +629,6 @@
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
-                    //compare date
-                    var currentTime = new Date();
-                    var hour = currentTime.getHours();
-                    var min  = currentTime.getMinutes();
-                    var sec  = currentTime.getSeconds();
-                    var compareDate =  $("input[name=FromDate]").val();
-                    var current = trialFeeView.convertStringToDate($("input[name=ToDate]").val())+ " " + hour + ":" + min + ":" + sec;
-                    if(current < compareDate)
-                    {
-                        $("div[id=modalConfirm]").modal("hide");
-                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill date can't smaller than start date !!! ");
-                        $("div[id=modalNotification]").modal("show");
-                    }
-                    else
-                    {
                         //get array object user
                         var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                         var theadList = $("thead[id=theadTableListTaskDetail]");
@@ -671,7 +656,8 @@
                             billToCustomer: $("select#chooseCustomer option:selected").val(),
                             Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
                             TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
-                            toDate:current,
+                            FromDate:$("input[name=FromDate]").val(),
+                            ToDate:$("input[name=ToDate]").val(),
                             billType: $("input[name=bill-type]:checked").attr("id"),
                             billStatus:$("input[name=bill-status]:checked").attr("id"),
                             ArrayData: objectUserAll
@@ -696,7 +682,8 @@
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
-                            else {
+                            else if(data["Action"] === "UpdateClaim")
+                            {
                                 if (data["Result"] === 1) {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim success!!!");
@@ -709,9 +696,13 @@
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
+                            else
+                            {
+                                $("div[id=modalConfirm]").modal("hide");
+                                $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("To date is not larger than from date!!!");
+                                $("div[id=modalNotification]").modal("show");
+                            }
                         })
-                    }
-
                 },
                 loadIBClaim: function () {
                     $.post(url+"viewBillOfClaimByStatus",{_token:_token,idClaim:$("input[name=idClaim]").val(),status:$("input[name=btnStatus]:checked").val()},function(data){
@@ -840,7 +831,7 @@
                 },
                 loadTaskDetailByDate:function()
                 {
-                    $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),date:$("input[name=ToDate]").val()},function(data)
+                    $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),fromDate:$("input[name=FromDate]").val(),toDate:$("input[name=ToDate]").val()},function(data)
                     {
                         console.log(data);
                         if(data["listClaimTaskDetail"].length === 0)

@@ -269,7 +269,7 @@
                         <h5 class="text-right">First Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="firstContact" name="firstContact" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="firstContact" name="firstContact">
                     </div>
                 </td>
             </tr>
@@ -305,7 +305,7 @@
                         <h5 class="text-right">Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="contact" name="contact" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="contact" name="contact">
                     </div>
                 </td>
             </tr>
@@ -1146,7 +1146,8 @@
                     policy : null,
                     //reOpen : null,
                     //eBoxDestroyed : null,
-                    //firstContact : null,
+                    firstContact : null,
+                    contact:null,
                     proscription : null,
                     created_at : null,
                     updated_at : null,
@@ -1190,18 +1191,7 @@
                     });
                     if($("form[id=form_claim]").valid())
                     {
-                        if($("input[name=lossDate]").val() > $("input[name=openDate]").val())
-                        {
-                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Loss date is not larger than open date!!! ");
-                            $("div[id=modal-confirm]").modal("show");
-                        }
-                        else
-                        {
-                            var currentTime = new Date();
-                            var hour = currentTime.getHours();
-                            var min  = currentTime.getMinutes();
-                            var sec  = currentTime.getSeconds();
-                            for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
+                        for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                                 if($("#"+Object.keys(claimView.claimViewObject)[i]).val()===""){
                                     claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = "";
                                 }
@@ -1210,12 +1200,6 @@
                                     claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = $("#"+Object.keys(claimView.claimViewObject)[i]).val();
                                 }
                             }
-
-                            claimView.claimViewObject.openDate = $("input[name=openDate]").val() +" "+hour + ":" + min + ":" + sec;
-                            claimView.claimViewObject.receiveDate = $("input[name=receiveDate]").val() +" "+hour + ":" + min + ":" + sec;
-                            claimView.claimViewObject.lossDate = $("input[name=lossDate]").val() +" "+hour + ":" + min + ":" + sec;
-                            claimView.claimViewObject.proscription = $("input[name=proscription]").val() +" "+hour + ":" + min + ":" + sec;
-
                             claimView.claimViewObject.id = $("input[name=id]").val();
                             claimView.claimViewObject.insuredAddress = $("textarea[name=insuredAddress]").val();
                             if($("input[name=sirBreached]").is(":checked"))
@@ -1262,7 +1246,7 @@
                                         $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
                                     }
                                 }
-                                else
+                                else if(data["Action"]==="Update")
                                 {
                                     if(data["Result"]===1)
                                     {
@@ -1273,8 +1257,18 @@
                                         $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
                                     }
                                 }
+                                else if(data["Action"]==="Error1")
+                                {
+                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than received date");
+                                    $("div[id=modal-confirm]").modal("show");
+                                }
+                                else
+                                {
+                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than open date");
+                                    $("div[id=modal-confirm]").modal("show");
+                                }
                             });
-                        }
+
 
                     }
                 },
@@ -1292,14 +1286,7 @@
                         {
                             if(data["Result"]===1)
                             {
-                                var tr = "";
-                                tr+="<tr>";
-                                tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
-                                tr+="<td>"+data["Data"]["code"]+"</td>";
-                                tr+="<td>"+data["Data"]["name"]+"</td>";
-                                tr+="<td><button class='btn btn-success' onclick='claimView.fillClaimTypeFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editClaimType(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                                tr+="</tr>";
-                                $("#modal-claim-type-table-body").append(tr);
+                                claimView.getAllClaimType();
                                 $("#modal-claim-type-modify").modal("hide");
                                 $("#modal-claim-type").modal("show");
                             }
@@ -1308,10 +1295,7 @@
                         {
                             if(data["Result"]===1)
                             {
-                                var tr1 = $("#modal-claim-type-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
-                                tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
-                                tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
-                                tr1.find("td:eq(2)").empty().append(data["Data"]["name"]);
+                                claimView.getAllClaimType();
                                 $("#modal-claim-type-modify").modal("hide");
                                 $("#modal-claim-type").modal("show");
                             }
@@ -1332,14 +1316,7 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr = "";
-                                        tr+="<tr>";
-                                        tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
-                                        tr+="<td>"+data["Data"]["code"]+"</td>";
-                                        tr+="<td>"+data["Data"]["name"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillLossDescFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editLossDesc(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                                        tr+="</tr>";
-                                        $("#modal-loss-desc-table-body").append(tr);
+                                        claimView.getAllLossDesc();
                                         $("#modal-loss-desc-code-modify").modal("hide");
                                         $("#modal-loss-desc-code").modal("show");
                                     }
@@ -1348,11 +1325,7 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr1 = $("#modal-loss-desc-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
-                                        console.log(tr1);
-                                        tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
-                                        tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
-                                        tr1.find("td:eq(2)").empty().append(data["Data"]["name"]);
+                                        claimView.getAllLossDesc();
                                         $("#modal-loss-desc-code-modify").modal("hide");
                                         $("#modal-loss-desc-code").modal("show");
                                     }
@@ -1373,14 +1346,7 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr = "";
-                                        tr+="<tr>";
-                                        tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
-                                        tr+="<td>"+data["Data"]["code"]+"</td>";
-                                        tr+="<td>"+data["Data"]["name"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editSourceCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                                        tr+="</tr>";
-                                        $("#modal-source-code-table-body").append(tr);
+                                        claimView.getAllSourceCode();
                                         $("#modal-source-code-modify").modal("hide");
                                         $("#modal-source-code").modal("show");
                                         //insert option in select of table insurer
@@ -1393,11 +1359,7 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr1 = $("#modal-source-code-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
-                                        console.log(tr1);
-                                        tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
-                                        tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
-                                        tr1.find("td:eq(2)").empty().append(data["Data"]["name"]);
+                                        claimView.getAllSourceCode();
                                         $("#modal-source-code-modify").modal("hide");
                                         $("#modal-source-code").modal("show");
                                     }
@@ -1419,31 +1381,30 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr = "";
-                                        tr+="<tr>";
-                                        tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
-                                        tr+="<td>"+data["Data"]["code"]+"</td>";
-                                        tr+="<td>"+data["Data"]["name"]+"</td>";
-                                        tr+="<td>"+data["Data"]["branchTypeCode"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillBranchFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editBranch(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                                        tr+="</tr>";
-                                        $("#modal-branch-table-body").append(tr);
+                                        claimView.getAllBranch();
                                         $("#modal-branch-modify").modal("hide");
                                         $("select#branch_code_modify_branch_type").prop("disabled",false).val($("select#branch_code_modify_branch_type option:eq(0)").val());
                                         $("#modal-branch").modal("show");
+                                    }
+                                    else
+                                    {
+                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new branch no success");
+                                        $("div[id=modal-confirm]").modal("show");
                                     }
                                 }
                                 else
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr1 = $("#modal-branch-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
-                                        tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
-                                        tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
-                                        tr1.find("td:eq(2)").empty().append(data["Data"]["name"]);
+                                        claimView.getAllBranch();
                                         $("#modal-branch-modify").modal("hide");
                                         $("select#branch_code_modify_branch_type").prop("disabled",false).val($("select#branch_code_modify_branch_type option:eq(0)").val());
                                         $("#modal-branch").modal("show");
+                                    }
+                                    else
+                                    {
+                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new branch no success");
+                                        $("div[id=modal-confirm]").modal("show");
                                     }
                                 }
                             })
@@ -1496,17 +1457,7 @@
                                     if(data["Result"]===1)
                                     {
 
-                                        var tr = "";
-                                        tr+="<tr>";
-                                        tr+= "<td style='display: none'>"+data["Data"]["id"]+"</td>";
-                                        tr+="<td>"+data["Data"]["code"]+"</td>";
-                                        tr+="<td>"+data["Data"]["fullName"]+"</td>";
-                                        tr+="<td>"+data["Data"]["sourceCustomerId"]+"</td>";
-                                        tr+="<td style='display: none'>"+data["Data"]["address"]+"</td>";
-                                        tr+="<td style='display:none '>"+data["Data"]["contactPersonFirstName"]+"</td>";
-                                        tr+="<td><button class='btn btn-success' onclick='claimView.fillInsurerCodeFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editInsurerCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                                        tr+="</tr>";
-                                        $("tbody[id=modal-insurer-code-table-body]").append(tr);
+                                        claimView.getAllInsurerCode();
                                         $("div[id=modal-insurer-modify]").modal("hide");
                                         $("div[id=modal-insurer-code]").modal("show");
 
@@ -1516,13 +1467,7 @@
                                 {
                                     if(data["Result"]===1)
                                     {
-                                        var tr1 = $("#modal-insurer-code-table-body").find("td:contains("+data["Data"]["id"]+")").parent();
-                                        tr1.find("td:eq(0)").empty().append(data["Data"]["id"]);
-                                        tr1.find("td:eq(1)").empty().append(data["Data"]["code"]);
-                                        tr1.find("td:eq(2)").empty().append(data["Data"]["fullName"]);
-                                        tr1.find("td:eq(3)").empty().append(data["Data"]["sourceCustomerId"]);
-                                        tr1.find("td:eq(4)").empty().append(data["Data"]["address"]);
-                                        tr1.find("td:eq(5)").empty().append(data["Data"]["contactPersonFirstName"]);
+                                        claimView.getAllInsurerCode();
                                         $("div[id=modal-insurer-modify]").modal("hide");
                                         $("div[id=modal-insurer-code]").modal("show");
                                     }
@@ -1539,11 +1484,23 @@
                     $("input[name=claimAssignment]").prop("checked",false);
                     $("input[name=taxable]").prop("checked",false);
                     $("input[name=privileged]").prop("checked",false);
+
+                    $("input[name=receiveDate]").prop("readOnly",false);
+                    $("input[name=openDate]").prop("readOnly",false);
+                    $("input[name=lossDate]").prop("readOnly",false);
+                    $("input[name=proscription]").prop("readOnly",false);
+                    $("input[name=firstContact]").prop("readOnly",false);
+                    $("input[name=contact]").prop("readOnly",false);
                 },
                 fillClaimToForm : function (claimId) {
+                    $("input[name=receiveDate]").prop("readOnly",true);
+                    $("input[name=openDate]").prop("readOnly",true);
+                    $("input[name=lossDate]").prop("readOnly",true);
+                    $("input[name=proscription]").prop("readOnly",true);
+                    $("input[name=firstContact]").prop("readOnly",true);
+                    $("input[name=contact]").prop("readOnly",true);
                     $("table[id=table_claim]").find("label[class=error]").hide();
                     $.get(url+"getClaimByCode/"+claimId,function (data) {
-                        console.log(data);
                         if(data.status === 201){
                             for(var i = 0; i < Object.keys(data.data).length;i++){
                                 console.log(Object.keys(data.data)[i]);
@@ -1661,7 +1618,7 @@
                 editClaimType:function(element)
                 {
                     $("input[name=claimType_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=claimType_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=claimType_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=claimType_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
                     $("div[id=modal-claim-type]").modal("hide");
                     $("div[id=modal-claim-type-modify]").modal("show");
@@ -1669,7 +1626,7 @@
                 editLossDesc:function(element)
                 {
                     $("input[name=lossDesc_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=lossDesc_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=lossDesc_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=lossDesc_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
                     $("#modal-loss-desc-code").modal("hide");
                     $("#modal-loss-desc-code-modify").modal("show");
@@ -1678,7 +1635,7 @@
                 {
 
                     $("input[name=source_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=source_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=source_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=source_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
                     $("#modal-source-code").modal("hide");
                     $("#modal-source-code-modify").modal("show");
@@ -1686,7 +1643,7 @@
                 editBranch:function(element)
                 {
                     $("input[name=branch_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=branch_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=branch_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=branch_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
                     $("select#branch_code_modify_branch_type").val($(element).parent().parent().find("td").eq(3).html()).prop("disabled",true);
 
@@ -1696,7 +1653,7 @@
                 editInsurerCode:function(element)
                 {
                     $("input[name=insurer_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=insurer_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
                     $("select#insurer_code_modify_sourceCustomerId").val($(element).parent().parent().find("td").eq(3).html()).prop("disabled",true);
 
@@ -1706,6 +1663,36 @@
 
                     $("#modal-insurer-code").modal("hide");
                     $("#modal-insurer-modify").modal("show");
+                },
+                getAllBranch:function()
+                {
+                    $.get(url + 'getAllBranch',function (data) {
+                        $("#modal-branch-table-body").empty().append(data);
+                    });
+                },
+                getAllClaimType:function()
+                {
+                    $.get(url + 'getAllClaimType',function (data) {
+                        $("#modal-claim-type-table-body").empty().append(data);
+                    });
+                },
+                getAllLossDesc:function()
+                {
+                    $.get(url + 'getAllLossDesc',function (data) {
+                        $("#modal-loss-desc-table-body").empty().append(data);
+                    });
+                },
+                getAllSourceCode:function()
+                {
+                    $.get(url + 'getAllSourceCode',function (data) {
+                        $("#modal-source-code-table-body").empty().append(data);
+                    });
+                },
+                getAllInsurerCode:function()
+                {
+                    $.get(url + 'getAllInsurerCode',function (data) {
+                        $("#modal-insurer-code-table-body").empty().append(data);
+                    });
                 }
             };
         }
@@ -1717,23 +1704,12 @@
         /* source code */
         $("input#sourceCode").dblclick(function () {
             $("#modal-source-code").modal("show");
-            $.get(url + 'getAllSourceCode',function (data) {
-                var tr = "";
-                for(var i = 0;i<data.length;i++){
-                    tr+= "<tr>";
-                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
-                    tr+="<td>"+data[i].code+"</td>";
-                    tr+="<td>"+data[i].name+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillSourceCustomerFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editSourceCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                    tr+="</tr>";
-                }
-                $("#modal-source-code-table-body").empty().append(tr);
-            });
+            claimView.getAllSourceCode();
         });
         $("#modal-source-code").find("button#addNewUpdate").click(function () {
             //Reset form
             $("#source_code_modify_id").val("0");
-            $("#source_code_modify_code").val("");
+            $("#source_code_modify_code").val("").prop("readOnly",false).css("background-color","");
             $("#source_code_modify_name").val("");
 
             $("#modal-source-code").modal("hide");
@@ -1745,27 +1721,13 @@
         /* insurer code */
         $("input#insurerCode").dblclick(function () {
             $("#modal-insurer-code").modal("show");
-            $.get(url + 'getAllInsurerCode',function (data) {
-                var tr = "";
-                for(var i = 0;i<data.length;i++){
-                    tr+= "<tr>";
-                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
-                    tr+="<td>"+data[i].code+"</td>";
-                    tr+="<td>"+data[i].fullName+"</td>";
-                    tr+="<td style='text-align: center'>"+data[i].sourceCustomerId+"</td>";
-                    tr+="<td style='display: none'>"+data[i].address+"</td>";
-                    tr+="<td style='display: none'>"+data[i].contactPersonFirstName+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillInsurerCodeFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editInsurerCode(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                    tr+="</tr>";
-                }
-                $("#modal-insurer-code-table-body").empty().append(tr);
-            });
+            claimView.getAllInsurerCode();
         });
         $("div#modal-insurer-code").find("button#addNewUpdate").click(function () {
             //Reset form
             $("select#insurer_code_modify_sourceCustomerId").val($("select#insurer_code_modify_sourceCustomerId option:eq(0)").val()).prop("disabled",false);
             $("input[name=insurer_code_modify_id]").val("0");
-            $("input[name=insurer_code_modify_code]").val("");
+            $("input[name=insurer_code_modify_code]").val("").prop("readOnly",false).css("background-color","");
             $("input[name=insurer_code_modify_name]").val("");
             $("input[name=insurer_code_modify_contact_person]").val("");
             $("textarea[name=insurer_code_modify_address]").val("");
@@ -1780,23 +1742,12 @@
         /* claim type */
         $("input#claimTypeCode").dblclick(function () {
             $("#modal-claim-type").modal("show");
-            $.get(url + 'getAllClaimType',function (data) {
-                var tr = "";
-                for(var i = 0;i<data.length;i++){
-                    tr+= "<tr>";
-                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
-                    tr+="<td>"+data[i].code+"</td>";
-                    tr+="<td>"+data[i].name+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillClaimTypeFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editClaimType(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                    tr+="</tr>";
-                }
-                $("#modal-claim-type-table-body").empty().append(tr);
-            });
+            claimView.getAllClaimType();
         });
         $("#modal-claim-type").find("button#addNewUpdate").click(function () {
             //reset form
             $("#claimType_code_modify_id").val("0");
-            $("#claimType_code_modify_code").val("");
+            $("#claimType_code_modify_code").val("").prop("readOnly",false).css("background-color","");
             $("#claimType_code_modify_name").val("");
 
             $("#modal-claim-type").modal("hide");
@@ -1809,23 +1760,12 @@
         /* Loss Desc Code */
         $("input[name=lossDescCode]").dblclick(function(){
             $("div[id=modal-loss-desc-code]").modal("show");
-            $.get(url + 'getAllLossDesc',function (data) {
-                var tr = "";
-                for(var i = 0;i<data.length;i++){
-                    tr+= "<tr>";
-                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
-                    tr+="<td>"+data[i].code+"</td>";
-                    tr+="<td>"+data[i].name+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillLossDescFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editLossDesc(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                    tr+="</tr>";
-                }
-                $("#modal-loss-desc-table-body").empty().append(tr);
-            });
+            claimView.getAllLossDesc();
         });
         $("div[id=modal-loss-desc-code]").find("button[id=addNewUpdate]").click(function(){
             //Reset form
             $("input[id=lossDesc_code_modify_id]").val("0");
-            $("input[id=lossDesc_code_modify_code]").val("");
+            $("input[id=lossDesc_code_modify_code]").val("").prop("readOnly",false).css("background-color","");
             $("input[id=lossDesc_code_modify_name]").val("");
 
             $("div[id=modal-loss-desc-code]").modal("hide");
@@ -1857,24 +1797,12 @@
         /* Branch Code */
         $("input[name=branchCode]").dblclick(function(){
             $("div[id=modal-branch]").modal("show");
-            $.get(url + 'getAllBranch',function (data) {
-                var tr = "";
-                for(var i = 0;i<data.length;i++){
-                    tr+= "<tr>";
-                    tr+= "<td style='display: none'>"+data[i].id+"</td>";
-                    tr+="<td>"+data[i].code+"</td>";
-                    tr+="<td>"+data[i].name+"</td>";
-                    tr+="<td>"+data[i].branchTypeCode+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillBranchFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button class='btn btn-info' onclick='claimView.editBranch(this)'><span class='glyphicon glyphicon-edit'></span></button></td>";
-                    tr+="</tr>";
-                }
-                $("#modal-branch-table-body").empty().append(tr);
-            });
+            claimView.getAllBranch();
         });
         $("div[id=modal-branch]").find("button[id=addNewUpdate]").click(function(){
             $("select#branch_code_modify_branch_type").prop("disabled",false).val($("select#branch_code_modify_branch_type option:eq(0)").val());
             $("input[id=branch_code_modify_id]").val("0");
-            $("input[id=branch_code_modify_code]").val("");
+            $("input[id=branch_code_modify_code]").val("").prop("readOnly",false).css("background-color","");
             $("input[id=branch_code_modify_name]").val("");
 
             $("div[id=modal-branch]").modal("hide");

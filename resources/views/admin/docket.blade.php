@@ -584,20 +584,7 @@
                     }
                     else
                     {
-                        var currentTime = new Date();
-                        var hour = currentTime.getHours();
-                        var min  = currentTime.getMinutes();
-                        var sec  = currentTime.getSeconds();
-                        var compareDate =  docketView.checkDate;
-                        var current = $("input[name=ChooseDate]").val() + " " + hour + ":" + min + ":" + sec;
-                        if(current < compareDate)
-                        {
-                           $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date create is not correct!!!");
-                           $("div[id=modal-confirm]").modal("show");
-                        }
-                        else
-                        {
-                            $("form[id=formClaim]").validate({
+                        $("form[id=formClaim]").validate({
                                       rules: {
                                           InsuredName: "required"
 
@@ -606,7 +593,7 @@
                                           InsuredName: "ID is required"
                                       }
                                   });
-                            if($("form[id=formClaim]").valid()){
+                        if($("form[id=formClaim]").valid()){
                                       if($("input[name=ProfessionalServices]").val()==="")
                                       {
                                           $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter ProfessionalServices");
@@ -620,7 +607,7 @@
                                               docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#"+Object.keys(docketView.taskObject)[i]).val();
                                           }
                                           console.log(docketView.taskObject);
-                                          $.post(url+"assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:docketView.taskObject,Date:current},function(data){
+                                          $.post(url+"assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:docketView.taskObject,ChooseDate:$("input[name=ChooseDate]").val(),FromDate:$("input[name=fromDate]").val()},function(data){
                                               console.log(data);
                                               if(data["Action"]==="AddNew")
                                               {
@@ -643,7 +630,8 @@
                                                       $("div[id=modal-confirm]").modal("show");
                                                   }
                                               }
-                                              else{
+                                              else if(data["Action"]==="Update")
+                                              {
                                                   if(data["Result"]===1)
                                                   {
                                                       $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
@@ -656,10 +644,14 @@
                                                       $("div[id=modal-confirm]").modal("show");
                                                   }
                                               }
+                                              else
+                                              {
+                                                  $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not lager than from date!!!");
+                                                  $("div[id=modal-confirm]").modal("show");
+                                              }
                                           });
                                       }
                                   }
-                        }
                     }
                 },
                 cancel:function()

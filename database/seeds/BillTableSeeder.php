@@ -13,16 +13,16 @@ class BillTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
-        foreach (range(1, 5) as $index) {
-            Bill::create([
-               'percentage'=>15.2,
-                'billToId'=>$faker->name,
-                'claimOfficer'=>$faker->name,
-                'policyNumber'=>$faker->name,
-                'CompClaimNumber'=>$faker->name,
-                'claimId'=>random_int(1,3)
-            ]);
-        }
+//        $faker = Factory::create();
+//        foreach (range(1, 5) as $index) {
+//            Bill::create([
+//               'percentage'=>15.2,
+//                'billToId'=>$faker->name,
+//                'claimOfficer'=>$faker->name,
+//                'policyNumber'=>$faker->name,
+//                'CompClaimNumber'=>$faker->name,
+//                'claimId'=>random_int(1,3)
+//            ]);
+//        }
     }
 }
