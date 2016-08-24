@@ -106,9 +106,16 @@ form#trialFee h5{
 .report{
     font-size: 16px;
     width: 1654px;
-    margin: 0 auto;
     background-color: gray;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-transform: scale(0.708,0.708);
+    -moz-transform: scale(0.708,0.708);
+    -ms-transform: scale(0.708,0.708);
+    -o-transform: scale(0.708,0.708);
+    transform: scale(0.708,0.708);
+    display: block;
+    -webkit-transform-origin-x: 0;
+    -webkit-transform-origin-y: 0;
 }
 /* ---------------------------------------------- */
 /* Page */
@@ -270,7 +277,7 @@ form#trialFee h5{
     padding-left: 10px;
     margin-top: 6px;
     display: block;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
 }
 .co-insurers-content-header-percentage{
@@ -356,7 +363,7 @@ form#trialFee h5{
 .reserves-content-header span{
     margin-top: 6px;
     display: block;
-    font-size: 20px;
+    font-size: 16px;
 }
 .reserves-content-header-date{
     text-align: center;
@@ -440,7 +447,7 @@ form#trialFee h5{
     padding-left: 12px;
     margin-top: 6px;
     display: inline-block;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
 }
 .assists-content-header-branch{

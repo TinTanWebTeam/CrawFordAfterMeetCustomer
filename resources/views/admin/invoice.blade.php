@@ -43,10 +43,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row">
-                                <div class="col-sm-5">
+                                <div class="col-sm-4">
                                     <h5 style="text-align: right">Invoice #</h5>
                                 </div>
-                                <div class="col-sm-7">
+                                <div class="col-sm-8">
                                     <input type="text" name="Invoice" id="Invoice" onkeypress="invoiceView.loadInvoiceByEventEnterKey(event)" ondblclick="invoiceView.loadListInvoice()">
                                 </div>
                             </div>
