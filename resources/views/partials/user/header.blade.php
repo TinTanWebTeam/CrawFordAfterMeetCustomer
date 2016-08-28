@@ -16,6 +16,7 @@
 			<ul class="nav navbar-nav">
 				<li><a href="javascript:;">Profile</a></li>
 				<li><a href="javascript:;">Task</a></li>
+				<li><a href="javascript:;">Claim</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

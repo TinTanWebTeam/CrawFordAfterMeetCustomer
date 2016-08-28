@@ -22,7 +22,14 @@ $(function() {
                 $("div#page_container").empty().append(viewTaskUser);
             });
         }
-
+    });
+    Catogories.find("li").eq(2).click(function() {
+        if ($(this).find("a").text() === "Claim") {
+            setActiveMenu($(this));
+            $.get(url + "user/claim", function(viewClaim) {
+                $("div#page_container").empty().append(viewClaim);
+            });
+        }
     });
 
 });
