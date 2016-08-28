@@ -1177,7 +1177,10 @@
                             sourceCode: "required",
                             insuredFirstName:"required",
                             insuredLastName:"required",
-                            openDate:"required"
+                            openDate:"required",
+                            lossDate:"required",
+                            receiveDate:"required",
+                            adjusterCode:"required"
                         },
                         messages: {
                             claimTypeCode: "Claim type is required",
@@ -1186,7 +1189,10 @@
                             sourceCode:"Source code is required",
                             insuredFirstName:"Insured FirstName is required",
                             insuredLastName:"Insured LastName is required",
-                            openDate:"Open date is required"
+                            openDate:"Open date is required",
+                            lossDate:"Loss date is required",
+                            receiveDate:"Receive date is required",
+                            adjusterCode:"AdjusterCode is required"
                         }
                     });
                     if($("form[id=form_claim]").valid())
@@ -1478,6 +1484,7 @@
                     for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
                     }
+                    $("input[name=code]").prop("readOnly",false).css("brackground-color","");
                     $("table[id=table_claim]").find("input").val("");
                     $("textarea[name=insuredAddress]").val("");
                     $("input[name=sirBreached]").prop("checked",false);
@@ -1493,6 +1500,7 @@
                     $("input[name=contact]").prop("readOnly",false);
                 },
                 fillClaimToForm : function (claimId) {
+                    $("input[name=code]").prop("readOnly",true).css("brackground-color","#EFE5E5");
                     $("input[name=receiveDate]").prop("readOnly",true);
                     $("input[name=openDate]").prop("readOnly",true);
                     $("input[name=lossDate]").prop("readOnly",true);
@@ -1836,3 +1844,4 @@
         });
     });
 </script>
+{{--demo--}}

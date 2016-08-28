@@ -2,7 +2,7 @@
 <div class="modal fade" id="modalListTaskCaterogyTime" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body" id="modalContent" style="text-align: center">List Task Category</div>
+            <div class="modal-body" id="modalContent" style="text-align: center">List Time Code</div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -34,8 +34,17 @@
 <div class="modal fade" id="modalListTaskCaterogyExpense" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body" id="modalContent" style="text-align: center">List Task Category</div>
+            <div class="modal-body" id="modalContent" style="text-align: center">List Expense Code</div>
             <div class="table-responsive">
+                <select class="form-control" style="width: 50%" id="selectTypeExpense" onchange="taskView.onChangeWhenChooseExpenseType(this)">
+                    <option value="GeneralExp">General Expenses</option>
+                    <option value="CommPhotoExp">Comm && Photo Expenses</option>
+                    <option value="ConsultFeesExp">Consultants Fees && Expenses</option>
+                    <option value="TravelRelatedExp">Travel Related Expenses</option>
+                    <option value="Disbursements">Disbursements</option>
+                    <option value="GSTfreeDisb">GSTfreeDisb</option>
+                </select>
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -44,16 +53,8 @@
                         <th>Description</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @if($listTask !=null)
-                        @foreach($listTask as $item)
-                            <tr id="{{$item->id}}" onclick="taskView.chooseTaskExpenseWhenUseEventDoubleClick(this)" style="cursor: pointer">
-                                <td>{{$item->code}}</td>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->description}}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    <tbody id="tbodyListExpense">
+
                     </tbody>
                 </table>
             </div>
@@ -93,7 +94,6 @@
                         </div>
                         <div class="col-sm-8">
                             <input type="text" id="UserId" name="UserId" value="{{Auth::user()->id}}" style="display: none">
-                            <input type="text" id="UserOther" name="UserOther"  style="display: none">
                             <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                                                 </div>
                                                 @if($rateDefault!=null)
                                                     <div class="col-sm-8">
-                                                        <input type="text" name="ProfessionalServicesRate" id="ProfessionalServicesRate" value="{{$rateDefault}}USD" style="width:80px" onkeyup="taskView.automaticInitialValueTimeOfInputRate()">
+                                                        <input type="text" name="ProfessionalServicesRate" id="ProfessionalServicesRate" value="{{$rateDefault}}" readonly style="width:80px;background-color:#E2D8D8" onkeyup="taskView.automaticInitialValueTimeOfInputRate()">
                                                     </div>
                                                 @endif
                                             </div>
@@ -250,7 +250,7 @@
                                                     <h5 style="text-align:right">Units</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesTimeBillValue" id="ProfessionalServicesTimeBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ProfessionalServicesTimeBillValue" id="ProfessionalServicesTimeBillValue"  style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -258,7 +258,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmountBillValue" id="ProfessionalServicesAmountBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ProfessionalServicesAmountBillValue" id="ProfessionalServicesAmountBillValue" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -266,7 +266,7 @@
                                                     <h5 style="text-align:right">Rate/Unit</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesRateBillValue" id="ProfessionalServicesRateBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ProfessionalServicesRateBillValue" id="ProfessionalServicesRateBillValue"  style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -279,7 +279,7 @@
                                                     <h5 style="text-align:right">Units</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesTimeOverrideValue" id="ProfessionalServicesTimeOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideTimeOfInputTime()">
+                                                    <input type="text" name="ProfessionalServicesTimeOverrideValue" id="ProfessionalServicesTimeOverrideValue"  style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideTimeOfInputTime()">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -287,7 +287,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmountOverrideValue" id="ProfessionalServicesAmountOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ProfessionalServicesAmountOverrideValue" id="ProfessionalServicesAmountOverrideValue"  style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -295,7 +295,7 @@
                                                     <h5 style="text-align:right">Rate/Unit</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesRateOverrideValue" id="ProfessionalServicesRateOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideRateOfInputRate()">
+                                                    <input type="text" name="ProfessionalServicesRateOverrideValue" id="ProfessionalServicesRateOverrideValue"  style="width:80px;background-color: #E2D8D8" readonly onkeyup="taskView.automaticUserOverideRateOfInputRate()">
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -330,7 +330,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmountBillValue" id="ExpenseAmountBillValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ExpenseAmountBillValue" id="ExpenseAmountBillValue"  style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -343,7 +343,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmountOverrideValue" id="ExpenseAmountOverrideValue" value="0" style="width:80px;background-color: #E2D8D8" readonly>
+                                                    <input type="text" name="ExpenseAmountOverrideValue" id="ExpenseAmountOverrideValue" style="width:80px;background-color: #E2D8D8" readonly>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -378,6 +378,8 @@
                 <th class="text-bold text-center">Expense Code</th>
                 <th class="text-bold text-center">Expense Amount</th>
                 <th class="text-bold text-center">Expense Note</th>
+                <th class="text-bold text-center">InvoiceMajorNo</th>
+                <th class="text-bold text-center">InvoiceDate</th>
             </tr>
             </thead>
             <tbody id="tbodyDocket">
@@ -424,9 +426,9 @@
                     ExpenseAmountBillValue:null,
                     ExpenseAmountOverrideValue:null,
 
-                    RateDefault:$("input[name=ProfessionalServicesRate]").val()
+
                 },
-                idUserOther:null,
+                RateDefault:$("input[name=ProfessionalServicesRate]").val(),
                 checkDate:null,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
@@ -459,7 +461,14 @@
                             _token: _token,
                             key: $("input[name=ClaimCode]").val()
                         }, function (data) {
-                            if(data){
+                            console.log(data);
+                            if(data["Claim"]==="null")
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim not exist!!!");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+                            else
+                            {
                                 taskView.checkDate = data["Date"];
                                 var openDateFR = data["Claim"]["openDate"].split(" ");
                                 var fromDateFR = data["Date"].split(" ");
@@ -475,22 +484,16 @@
                                     $("tbody[id=tbodyDocket]").empty().append(view);
                                 });
                             }
-
                         });
                     }
                 },
                 viewDetailTask:function(element)
                 {
-                    taskView.idUserOther = $(element).find("td:eq(0)").text();
                     $("button[name=actionAttackTask]").text("Update");
                     $("input[name=Action]").val("0");
-
-
                     $.post(url+"user/viewDetailTask",{_token:_token,idDocket:$(element).attr("id")},function(data){
-
                         var a = data["Task"]["billDate"].split(" ");
                         var b = a[0].split("-");
-                        console.log((b[0]));
                         $("input[name=ChooseDate]").val(b[0]+"-"+b[1]+"-"+b[2]);
                         for(var propertyName in data["Task"])
                         {
@@ -502,31 +505,38 @@
                         $("#IdTask").val($(element).attr("id"));
                         $("#ProfessionalServicesCode").val(data["professionalCode"]);
                         $("#ExpenseCode").val(data["expenseCode"]);
-                        //User current can't fix information of user other
-                        if($(element).find("td:eq(0)").text() !== $("input[name=UserId]").val())
+                        if(data["ErrorUser"]==="True")
                         {
-                            $("button[name=actionAttackTask]").prop("disabled",true);
+                            $("button[name=actionAttackTask]").hide();
                         }
                         else
                         {
-                            $("button[name=actionAttackTask]").prop("disabled",false);
-                        }
-                        //change User overide when billValue have value
-                        if(parseFloat($("input[name=ProfessionalServicesAmountBillValue]").val()) !== 0)
-                        {
-                            $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
-                            $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
-                            $("input[name=ProfessionalServicesRate]").prop("readOnly",true).css("background-color","#E2D8D8");
+                            $("button[name=actionAttackTask]").show();
+                            //check invoice
+                            if(data["Task"]["invoiceMajorNo"]!==null)
+                            {
+                                $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
+                                $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
+                            }
+                            else if(data["Task"]["professionalServicesRateBillValue"]!==null)
+                            {
+                                $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
+                                $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
+                            }
+                            else
+                            {
+                                $("input[name=ProfessionalServicesTime]").prop("readOnly",false).css("background-color","");
+                                $("input[name=ExpenseAmount]").prop("readOnly",false).css("background-color","");
+                            }
 
-                            $("input[name=ProfessionalServicesTimeOverrideValue]").prop("readOnly",false).css("background-color","");
-                            $("input[name=ProfessionalServicesAmountOverrideValue]").prop("readOnly",true).css("background-color","#E2D8D8");
-                            $("input[name=ProfessionalServicesRateOverrideValue]").prop("readOnly",false).css("background-color","");
                         }
-                        if(parseFloat($("input[name=ExpenseAmountBillValue]").val()) !== 0)
-                        {
-                            $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
-                            $("input[name=ExpenseAmountOverrideValue]").prop("readOnly",false).css("background-color","");
-                        }
+
+
+
+
+
+
+
                     });
                 },
                 automaticInitialValueTimeOfInputUnit:function()
@@ -587,18 +597,12 @@
                                 }
                             });
                         if($("form[id=form-claim]").valid()){
-                                if($("input[name=ProfessionalServices]").val()==="")
-                                {
-                                    alert("You must enter ProfessionalServices");
-                                }
-                                else
-                                {
-                                    taskView.resetTaskObject();
-                                    for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
-                                    {
+                               taskView.resetTaskObject();
+                               for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
+                               {
                                         taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
                                     }
-                                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),idUserOther:taskView.idUserOther,taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
+                               $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
                                         console.log(data);
                                         if(data["Action"]==="AddNew")
                                         {
@@ -627,11 +631,19 @@
                                             {
                                                 $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
                                                 $("div[id=modalConfirm]").modal("show");
+                                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                                });
                                                 taskView.cancel();
                                             }
                                             else if(data["Result"]===0)
                                             {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update No Success");
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update task of user other");
+                                                $("div[id=modalConfirm]").modal("show");
+                                            }
+                                            else if(data["Result"]===2)
+                                            {
+                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
                                                 $("div[id=modalConfirm]").modal("show");
                                             }
                                             else
@@ -641,13 +653,22 @@
                                             }
 
                                         }
-                                        else
+                                        else if(data["Action"]==="ErrorDate")
                                         {
-                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not larger than from date!!!");
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
                                             $("div[id=modalConfirm]").modal("show");
                                         }
+                                        else if(data["Action"]==="ErrorCloseClaim")
+                                        {
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
+                                            $("div[id=modalConfirm]").modal("show");
+                                        }
+                                        else{
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
+                                            $("div[id=modalConfirm]").modal("show");
+                                        }
+
                                     });
-                                }
                             }
                     }
                 },
@@ -664,23 +685,21 @@
                     $("button[name=actionAttackTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
 
-                    //Value ProfessionalServices
+                    //Value ProfessionalServices sdsd
                     $("input[name=ProfessionalServicesTime]").prop("readOnly",false).val("0").css("background-color","");
-                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",false).val("0").css("background-color","");
-                    $("input[name=ProfessionalServicesRate]").prop("readOnly",false).val(taskView.taskObject.RateDefault).css("background-color","");
+                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+                    $("input[name=ProfessionalServicesRate]").prop("readOnly",true).val(taskView.RateDefault).css("background-color","#E2D8D8");
 
-                    $("input[name=ProfessionalServicesTimeBillValue]").val("0");
-                    $("input[name=ProfessionalServicesAmountBillValue]").val("0");
-                    $("input[name=ProfessionalServicesRateBillValue]").val("0");
+                    $("input[name=ProfessionalServicesTimeBillValue]").val("");
+                    $("input[name=ProfessionalServicesAmountBillValue]").val("");
+                    $("input[name=ProfessionalServicesRateBillValue]").val("");
 
-                    $("input[name=ProfessionalServicesTimeOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
-                    $("input[name=ProfessionalServicesAmountOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
-                    $("input[name=ProfessionalServicesRateOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+
 
                     //Expense
                     $("input[name=ExpenseAmount]").prop("readOnly",false).val("0").css("background-color","");
-                    $("input[name=ExpenseAmountBillValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
-                    $("input[name=ExpenseAmountOverrideValue]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+
+
 
 
                 },
@@ -696,6 +715,7 @@
                 },
                 showModelListTaskExpense:function()
                 {
+                    taskView.loadExpenseCodeByType($("select#selectTypeExpense option:eq(0)").val());
                     $("div[id=modalListTaskCaterogyExpense]").modal("show");
                 },
                 chooseTaskExpenseWhenUseEventDoubleClick:function(element)
@@ -703,8 +723,17 @@
                     $("input[name=Expense]").val($(element).attr("id"));
                     $("input[name=ExpenseCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modalListTaskCaterogyExpense]").modal("hide");
+                },
+                loadExpenseCodeByType:function(type)
+                {
+                    $.post(url+"user/loadExpenseCodeByType",{_token:_token,typeExpense:type},function(data){
+                        $("tbody[id=tbodyListExpense]").empty().append(data);
+                    });
+                },
+                onChangeWhenChooseExpenseType:function(element)
+                {
+                    taskView.loadExpenseCodeByType($(element).find("option:selected").val());
                 }
-
 
 
 

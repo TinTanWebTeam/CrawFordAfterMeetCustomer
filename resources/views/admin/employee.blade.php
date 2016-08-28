@@ -304,7 +304,7 @@
                 <div class="col-sm-6">
                     <div class="row">
                         <div class="col-sm-4">
-                            <h5 style="text-align: right">PasswordConfirm :</h5>
+                            <h5 style="text-align: right">Password Confirm :</h5>
                         </div>
                         <div class="col-sm-8">
                             <input type="password" name="PasswordConfirm" id="PasswordConfirm" style="width: 100%">
@@ -511,11 +511,15 @@
                      $("form[id=formEmployee]").validate({
                            rules: {
                                 Name: "required",
-                                Password: "required",
+                                Password: {
+                                    required:true,
+                                    minlength:6
+                                },
                                 FirstName: "required",
                                 LastName: "required",
                                 PasswordConfirm: {
                                     required: true,
+                                    minlength:6,
                                     equalTo: "#Password"
                                 },
                                Email: {
@@ -525,11 +529,15 @@
                             },
                             messages: {
                                 Name: "ID is required",
-                                Password: "Password is required",
+                                Password:{
+                                    required:"Password is required",
+                                    minlength:"Password must be at least 6 characters"
+                                },
                                 FirstName: "First Name is required",
                                 LastName: "Last Name is required",
                                 PasswordConfirm: {
                                     required: "Password Confirm is required",
+                                    minlength:"Password confirm must be at least 6 characters !!!",
                                     equalTo: "Password Confirm is not the same password"
                                 },
                                 Email: {
@@ -608,12 +616,12 @@
                                 {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Add New Success");
                                     $("div[id=modalNotification]").modal("show");
-                                    $("input[name=ajaxActionType]").val("1");s
+                                    $("input[name=ajaxActionType]").val("1");
                                     employeeView.ResetForm();
                                 }
                                 else if(data["Result"]===0)
                                 {
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This id has already exist!!!Please choose id other");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This id or email has already exist!!!Please choose id or email other");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                                 else
@@ -660,14 +668,14 @@
                 {
                     //Reset class error
                     $("form[id=formEmployee]").find("label[class=error]").hide();
-
+                    $("input[name=Name]").prop("readOnly",true).css("background-color","#F3EDED");
                     $("input[name=ajaxActionType]").empty().val("0");
                     $("button[name=btnAction]").text("Save Update");
                     $("div[id=modalListEmployee]").modal("hide");
                     $.post(url+"viewEmployeeDetailWhenChooseRowOfEventDoubleClick",{_token:_token,idEmployee:$(element).attr("id")},function(data){
                         $("select#Position").val(data["Object"]["positionId"]);
                         $("select#Sex").val(data["Object"]["sex"]);
-                        //set value password
+                        //set value password sd
                         $("input[name=Password]").val("SamePassword").prop("readOnly",true).css("background-color","#EADFDF");
                         $("input[name=PasswordConfirm]").val("SamePassword").prop("readOnly",true).css("background-color","#EADFDF");
 
@@ -783,6 +791,7 @@
                         $("input[name=LockedDetail]").prop("readOnly",true).css("background-color","#F3EDED");
                         $("input[name=Password]").css("background-color","").prop("readOnly",false);
                         $("input[name=PasswordConfirm]").css("background-color","").prop("readOnly",false);
+                        $("input[name=Name]").prop("readOnly",false).css("background-color","");
 
 
                     //}

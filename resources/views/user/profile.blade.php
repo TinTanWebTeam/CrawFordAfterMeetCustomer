@@ -506,16 +506,24 @@
                     if (type === "0") {
                         $("form[id=formEmployee]").validate({
                             rules: {
-                                Password: "required",
+                                Password: {
+                                    required:true,
+                                    minlength:6
+                                },
                                 PasswordConfirm: {
                                     required: true,
+                                    minlength:6,
                                     equalTo: "#Password"
                                 }
                             },
                             messages: {
-                                Password: "Password is required",
+                                Password:{
+                                    required: "Password is required",
+                                    minlength: "Your password must be at least 6 characters!!!"
+                                },
                                 PasswordConfirm: {
                                     required: "Password Confirm is required",
+                                    minlength: "Your password confirm must be at least 6 characters!!!",
                                     equalTo: "Password Confirm is not the same password"
                                 }
                             }
@@ -693,3 +701,4 @@
         }
     })
 </script>
+{{--demo--}}

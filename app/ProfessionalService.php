@@ -12,6 +12,7 @@ class ProfessionalService extends Model
         'billId',
         'userId',
         'value',
+        'rateChange',
         'createdBy',
         'updatedBy'
     ];

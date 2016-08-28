@@ -9,5 +9,8 @@
        <td style='text-align: center'>{{ $item->expense }}</td>
        <td style='text-align: center'>{{ $item->expenseAmount }}</td>
        <td>{{ $item->expenseNote }}</td>
+       <td>{{ $item->invoiceMajorNo }}</td>
+       <td>{{ $item->invoiceDate }}</td>
    </tr>
 @endforeach
+{{--demo--}}

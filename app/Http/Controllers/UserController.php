@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function task()
     {
-        $listTask = TaskCategory::where('active',1)->where('code','!=','IB')->where('code','!=','FB')->get();
+        $listTask = TaskCategory::where('active',1)->where('code','!=','IB')->where('code','!=','FB')->where('name','TimeCode')->get();
         $rate = RateDetail::where('userId',Auth::user()->id)
             ->where('active',1)
             ->where('rateTypeId',2)
@@ -89,15 +89,20 @@ class UserController extends Controller
             ->with('userCreated',$userCreated)
             ->with('userChanged',$userChanged);
     }
+
+    public function claim()
+    {
+        return view('user.claim');
+    }
     public function loadClaimByEventEnterKey(Request $request)
     {
-        //dd($request->get('key'));
+        //dd($request->get('key'));sdsd
         $result = null;
         $date = null;
         try{
             if($request->get('key'))
             {
-                $claim = Claim::where('code',$request->get('key'))->where('statusId',0)->first();
+                $claim = Claim::where('code',$request->get('key'))->first();
                 if($claim)
                 {
                     $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId',2)->orderBy('billDate','desc')->first();
@@ -146,129 +151,129 @@ class UserController extends Controller
                     'claim_task_details.professionalServicesNote as professionalNote',
                     'claim_task_details.expenseNote as expenseNote',
                     'claim_task_details.expenseAmount as expenseAmount',
-                    'claim_task_details.created_at as date'
+                    'claim_task_details.billDate as date',
+                    'claim_task_details.invoiceMajorNo as invoiceMajorNo',
+                    'claim_task_details.invoiceDate as invoiceDate'
+
+
                 )
                 ->get();
+            //dd($claim_task_detail) demo
             return view('user.viewDocketDetail')->with('claim_task_detail',$claim_task_detail);
         }
     }
 
     public function assignmentTask(Request $request)
     {
-        //dd($request->all());
         $result = null;
-        $timeToDate = Carbon::now();
-        $a = explode(" ",$request->get('fromDate'));
-        $toDate = $request->get('toDate')." ".$timeToDate->hour.":".$timeToDate->minute.":".$timeToDate->second;
-        $fromDate = Carbon::parse($a[0])->format('Y-m-d')." ".$a[1];
-        if($toDate < $fromDate)
+        //check claim close
+        $checkClaimClose = Claim::where('id',$request->get('taskObject')['ClaimId'])->first();
+        if($checkClaimClose)
         {
-            array('Action'=>'ErrorDate');
-        }
-        else
-        {
-            if($request->get('action')==1)
+            //dd(typeOf($checkClaimClose->statusId));
+            if($checkClaimClose->statusId =="3")
             {
-                if ($this->validatorUser($request->get('taskObject'), "assignmentTask")->fails()) {
-                    $result = array('Action'=>'AddNew','Result'=>2);
-                }
-                else
-                {
-                    try{
-                        $task = new ClaimTaskDetail();
-                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
-                        $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-
-                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-
-                        $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
-                        $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
-                        $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
-
-                        $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
-                        $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
-                        $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
-
-                        $task->expense = $request->get('taskObject')['Expense'];
-                        $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-                        $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
-                        $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
-
-                        $task->claimId = $request->get('taskObject')['ClaimId'];
-                        $task->userId = $request->get('taskObject')['UserId'];
-                        $task->createdBy = $request->get('taskObject')['UserId'];
-                        $task->updatedBy = $request->get('taskObject')['UserId'];
-                        $task->billDate = $toDate;
-                        $task->save();
-                        $result = array('Action'=>'AddNew','Result'=>1);
-                    }
-                    catch(Exception $ex)
-                    {
-                        return $ex;
-                    }
-                }
+                $result = array('Action'=>'ErrorCloseClaim');
             }
             else
             {
-                if($request->get('idUserOther')!= Auth::user()->id)
+                $now = Carbon::now();
+                $timeNow = Carbon::parse($now)->format('Y-m-d H:i:s');
+                $a = explode(" ",$request->get('fromDate'));
+                $fromDate = Carbon::parse($a[0])->format('Y-m-d')." ".$a[1];
+
+                $toDate = $request->get('toDate')." ".Carbon::parse($now)->format('H:i:s');
+                if($toDate < $fromDate)
                 {
-                    $result = array('Action'=>'Update','Result'=>0);
+                    $result= array('Action'=>'ErrorDate');
+                }
+                else if($toDate > $timeNow)
+                {
+                    $result= array('Action'=>'ErrorDateNow');
                 }
                 else
                 {
-                    try{
-                        if($request->get('idTask'))
+                    if($request->get('action')==1)
+                    {
+                        try{
+                            $task = new ClaimTaskDetail();
+                            $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                            $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+
+                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                            $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+
+
+                            $task->expense = $request->get('taskObject')['Expense'];
+                            $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+
+
+                            $task->claimId = $request->get('taskObject')['ClaimId'];
+                            $task->userId = $request->get('taskObject')['UserId'];
+                            $task->createdBy = $request->get('taskObject')['UserId'];
+                            $task->updatedBy = $request->get('taskObject')['UserId'];
+                            $task->billDate = $toDate;
+                            $task->save();
+                            $result = array('Action'=>'AddNew','Result'=>1);
+                        }
+                        catch(Exception $ex)
                         {
-                            $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
-                            if($task)
-                            {
-                                $z = explode(" ",$request->get('fromDate'));
-                                $fromDate = Carbon::parse($z[0])->format('Y-m-d')." ".$z[1];
-                                $timeToDate = Carbon::now();
-                                $toDate = $request->get('toDate')." ".$timeToDate->hour.":".$timeToDate->minute.":".$timeToDate->second;
-                                if($task->billDate < $fromDate)
-                                {
-                                    $result = array('Action'=>'Update','Result'=>2);
-                                }
-                                else
-                                {
-                                   $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
-                                   $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-                                   $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                                   $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                                   $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-
-                                   $task->professionalServicesTimeBillValue = $request->get('taskObject')['ProfessionalServicesTimeBillValue'];
-                                   $task->professionalServicesRateBillValue = $request->get('taskObject')['ProfessionalServicesRateBillValue'];
-                                   $task->professionalServicesAmountBillValue = $request->get('taskObject')['ProfessionalServicesAmountBillValue'];
-
-                                   $task->professionalServicesTimeOverrideValue = $request->get('taskObject')['ProfessionalServicesTimeOverrideValue'];
-                                   $task->professionalServicesRateOverrideValue = $request->get('taskObject')['ProfessionalServicesRateOverrideValue'];
-                                   $task->professionalServicesAmountOverrideValue = $request->get('taskObject')['ProfessionalServicesAmountOverrideValue'];
-
-                                   $task->expense = $request->get('taskObject')['Expense'];
-                                   $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                                   $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-                                   $task->expenseAmountBillValue = $request->get('taskObject')['ExpenseAmountBillValue'];
-                                   $task->expenseAmountOverrideValue = $request->get('taskObject')['ExpenseAmountOverrideValue'];
-
-                                   $task->billDate =  $toDate;
-
-                                   $task->save();
-                                   $result = array('Action'=>'Update','Result'=>1);
-                               }
-
-                            }
+                            return $ex;
                         }
                     }
-                    catch(Exception $ex)
+                    else
                     {
-                        return $ex;
+                        try{
+                            if($request->get('idTask'))
+                            {
+                                $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
+                                if($task)
+                                {
+                                    //check this task already bill
+                                    $checkIB = ClaimTaskDetail::where('professionalServices',1)->where('statusId',1)->where('billDate','>',$task->billDate)->first();
+                                    if($checkIB!=null)
+                                    {
+                                        $result = array('Action'=>'Update','Result'=>2);//can't fix task has already bill Pending
+                                    }
+                                    else if($task->invoiceMajorNo!=null)
+                                    {
+                                        $result = array('Action'=>'Update','Result'=>3);//can't fix task has already bill pending complete or final bill
+                                    }
+                                    else if($task->userId != Auth::user()->id)
+                                    {
+                                        $result = array('Action'=>'Update','Result'=>0);//can't fix task of user other
+                                    }
+                                    else
+                                    {
+                                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                                        $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+                                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+
+                                        $task->expense = $request->get('taskObject')['Expense'];
+                                        $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
+                                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+
+                                        $task->billDate =  $toDate;
+                                        $task->updatedBy = $request->get('taskObject')['UserId'];
+                                        $task->save();
+                                        $result = array('Action'=>'Update','Result'=>1);
+                                    }
+
+                                }
+                            }
+                        }
+                        catch(Exception $ex)
+                        {
+                            return $ex;
+                        }
+
                     }
                 }
+
             }
         }
         return $result;
@@ -277,17 +282,32 @@ class UserController extends Controller
     public function viewDetailTask(Request $request)
     {
         $data = null;
+        $professionalCode = null;
         $expenseCode = null;
         try{
-            if($request->get('idDocket'))
-            {
-                $task = ClaimTaskDetail::where('id',$request->get('idDocket'))->where('active',1)->first();
-                $professionalCode = TaskCategory::where('id',$task->professionalServices)->where('active',1)->first()->code;
-                if($task->expense)
+            if($request->get('idDocket')) {
+                $task = ClaimTaskDetail::where('id', $request->get('idDocket'))->where('active', 1)->first();
+                if ($task != null)
                 {
-                    $expenseCode = TaskCategory::where('id',$task->expense)->where('active',1)->first()->code;
+                    //Take time and expense
+                    if($task->professionalServices)
+                    {
+                        $professionalCode = TaskCategory::where('id',$task->professionalServices)->where('active',1)->first()->code;
+                    }
+                    if($task->expense)
+                    {
+                        $expenseCode = TaskCategory::where('id',$task->expense)->where('active',1)->first()->code;
+                    }
+                    //Test user other
+                    if($task->userId!= Auth::user()->id)
+                    {
+                        $data = array('Task'=>$task,'professionalCode'=>$professionalCode,'expenseCode'=>$expenseCode,'ErrorUser'=>'True');
+                    }
+                    else
+                    {
+                        $data = array('Task'=>$task,'professionalCode'=>$professionalCode,'expenseCode'=>$expenseCode,'ErrorUser'=>'False');
+                    }
                 }
-                $data = array('Task'=>$task,'professionalCode'=>$professionalCode,'expenseCode'=>$expenseCode);
             }
         }
         catch(Exception $ex)
@@ -421,5 +441,45 @@ class UserController extends Controller
 
         }
         return $result;
+    }
+
+    public function loadClaimByEventEnterKeyWhenUserSeeClaim(Request $request)
+    {
+        $result = null;
+        try
+        {
+            $claim = Claim::where('code', $request->get('key'))->first();
+            if ($claim) {
+                $userCreatedBy = User::where('roleId',1)->where('id',$claim->createdBy)->first()->name;
+                $userUpdatedBy = User::where('roleId',1)->where('id',$claim->updatedBy)->first()->name;
+                return [
+                    'status' => 201,
+                    'data' => $claim,
+                    'userCreatedBy'=>$userCreatedBy,
+                    'userUpdatedBy'=>$userUpdatedBy
+                ];
+            }
+            return [
+                'status' => 301,
+                'data' => null
+            ];
+        }
+        catch(Exception $ex)
+        {
+
+        }
+    }
+
+    public function loadExpenseCodeByType(Request $request)
+    {
+        try
+        {
+            $expense = TaskCategory::where('name',$request->get('typeExpense'))->where('code','!=','IB')->where('code','!=','FB')->get();
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return view('user.taskExpense')->with('expense',$expense);
     }
 }

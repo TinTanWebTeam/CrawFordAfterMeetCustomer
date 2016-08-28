@@ -23,31 +23,40 @@ class TaskCategoryTableSeeder extends Seeder
             'name' => 'FB',
             'description' => 'Final Bill',
         ]);
-//        $faker = Factory::create();
-//        $codes = [
-//            'SV',
-//            'DR',
-//            'AU',
-//            'EXP',
-//            'RA',
-//            'TA',
-//            'RF'
-//        ];
-//        $names = [
-//            'Site Visit',
-//            'Prepare & Dictate',
-//            'Audit',
-//            'Meeting with contractor',
-//            'Biding document',
-//            'Checking',
-//            'Review doc'
-//        ];
-//        foreach (range(1, 3) as $index) {
-//            TaskCategory::create([
-//                'code' =>  $codes[$index],
-//                'name' => $names[$index],
-//                'description' => $faker->paragraph(3)
-//            ]);
-//        }
+        TaskCategory::create([
+            'code' => 'AA',
+            'name' => 'TimeCode',
+            'description' => 'Receive / analyse Instructions',
+        ]);
+        TaskCategory::create([
+            'code' => 'AST',
+            'name' => 'TimeCode',
+            'description' => 'Contact / supervise Assist Adjuster',
+        ]);
+        TaskCategory::create([
+            'code' => 'FF',
+            'name' => 'GeneralExp',
+            'description' => 'Legal Filing Fees',
+        ]);
+        TaskCategory::create([
+            'code' => 'IN',
+            'name' => 'CommPhotoExp',
+            'description' => 'Interpreter Fees',
+        ]);
+        TaskCategory::create([
+            'code' => 'CL',
+            'name' => 'ConsultFeesExp',
+            'description' => 'Consultants Fee',
+        ]);
+        TaskCategory::create([
+            'code' => 'AF',
+            'name' => 'TravelRelatedExp	',
+            'description' => 'Air Fare',
+        ]);
+        TaskCategory::create([
+            'code' => 'DB',
+            'name' => 'Disbursements',
+            'description' => 'Disbursements',
+        ]);
     }
 }

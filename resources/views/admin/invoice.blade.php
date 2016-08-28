@@ -1,4 +1,5 @@
 {{--Model List Invoice--}}
+{{--demo--}}
 <div class="modal fade" id="modalListInvoice" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -43,10 +44,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-5">
                                     <h5 style="text-align: right">Invoice #</h5>
                                 </div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-7">
                                     <input type="text" name="Invoice" id="Invoice" onkeypress="invoiceView.loadInvoiceByEventEnterKey(event)" ondblclick="invoiceView.loadListInvoice()">
                                 </div>
                             </div>

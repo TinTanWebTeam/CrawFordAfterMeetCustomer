@@ -19,7 +19,7 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->decimal('professionalServicesTime')->nullable();
             $table->decimal('professionalServicesTimeBillValue')->nullable();
             $table->decimal('professionalServicesTimeOverrideValue')->nullable();
-            
+
             $table->string('professionalServicesNote')->nullable();
             //rate
             $table->decimal('professionalServicesRate')->nullable();
@@ -35,7 +35,7 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->decimal('expenseAmount')->nullable();
             $table->decimal('expenseAmountBillValue')->nullable();
             $table->decimal('expenseAmountOverrideValue')->nullable();
-            
+
             $table->string('expenseNote')->nullable();
 
             $table->boolean('active')->default(1);
@@ -45,7 +45,7 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->integer('createdBy')->default(0); //if not equal 0 will be reference to id in user
             $table->integer('updatedBy')->default(0); //if not equal 0 will be reference to id in user
 
-            //Date bill
+            //Date bill dsd
             $table->dateTime('billDate')->nullable();
             $table->string('invoiceMajorNo')->nullable();
             $table->dateTime('invoiceDate')->nullable();

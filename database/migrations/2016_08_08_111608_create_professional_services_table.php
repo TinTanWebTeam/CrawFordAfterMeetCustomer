@@ -15,7 +15,8 @@ class CreateProfessionalServicesTable extends Migration
         Schema::create('professional_services', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('billId');//if not null to reference to id in bill
-            $table->integer('userId');//if not null to reference to id in user
+            $table->integer('userId');//if sdsdnot null to reference to id in user
+            $table->integer('rateChange')->default(0);
             $table->decimal('value')->default(0);
             $table->timestamps();
         });
