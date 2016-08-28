@@ -668,3 +668,77 @@ label.error{
 .element{
     text-align: center;
 }
+.wip-header{
+    padding-top: 30px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+.wip-header-row-1{
+    padding-top: 5px;
+    border-top: 6px solid black;
+    height: 80px;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.wip-header-row-2{
+    padding-top: 10px;
+    height: 70px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    box-sizing: border-box;
+    width: 100%;
+}
+.wip-header-row-1-left{
+    box-sizing: border-box;
+    float: left;
+    display: inline-block;
+    padding-top: 10px;
+}
+.wip-header-row-1-left span{
+    font-size: 28px;
+    font-weight: 600;
+}
+.wip-header-row-1-right{
+    padding-top: 5px;
+    box-sizing: border-box;
+    float: right;
+    display: inline-block;
+}
+.wip-header-row-1-right span{
+    font-size: 16px;
+    font-style: italic;
+}
+.wip-header-row-2-left{
+    padding-left: 5%;
+    width: 50%;
+    box-sizing: border-box;
+    float: left;
+    display: inline-block;
+}
+.wip-header-row-2-right{
+    padding-left: 5%;
+    width: 50%;
+    box-sizing: border-box;
+    float: left;
+    display: inline-block;
+}
+.as-of{
+    display: inline-block;
+}
+.branch{
+    display: inline-block;
+}
+.wip-header-row-2-left-row-1{
+    
+}
+.wip-header-row-2-left-row-2{
+    
+}
+.wip-header-row-2-right-row-1{
+
+}
+.wip-header-row-2-right-row-2{
+    
+}
