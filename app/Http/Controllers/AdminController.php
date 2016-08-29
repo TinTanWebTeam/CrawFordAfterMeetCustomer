@@ -30,6 +30,7 @@ use Config;
 use DateTime;
 use DB;
 use Illuminate\Http\Request;
+use App\ExtendOfDamage;
 
 use App\Http\Requests;
 use Mockery\Exception;
@@ -369,7 +370,7 @@ class AdminController extends Controller
                             ];
                             array_push($arrayAll,$arrayA);
                         }
-                        $result = array('Claim' => $claim, 'check' => $date, 'customer' => $billToId, 'total' => $billTotal, 'listClaimTaskDetail' => $arrayAll);
+                        $result = array('Claim' => $claim, 'check' =>$date,'customer' => $billToId, 'total' => $billTotal, 'listClaimTaskDetail' => $arrayAll);
                     }
                 } else {
                     $result = "Error";
