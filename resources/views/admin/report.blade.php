@@ -59,7 +59,8 @@
                             <tr>
                                 <th>Invoice Id</th>
                                 <th>Claim Id</th>
-                                <th>Invoice Date</th>    
+                                <th>Invoice Date</th>  
+                                <th>Choose</th>  
                             </tr>
                         </thead>
                         <tbody id="invoice-table-body">
@@ -79,7 +80,18 @@
 <!-- TAB CONTENT -->
 <div class="tab-content">
     <div class="active tab-pane fade in" id="tab1">
-        <div class="row" style="background-color: #fff;">
+    <div class="row" style="background-color: #fff;padding-top:10px;padding-bottom:10px">
+        <div class="col-sm-3">
+            Claim ID: <input type="text" name="claim_id" id="claim_id">
+            <br>
+            Invoice ID: <input type="text" name="invoice_id" id="invoice_id">
+        </div>
+        <div class="col-sm-9">
+            <button class="pull-right">Print Report</button>
+        </div>  
+    </div>
+    <hr>
+    <div class="row" style="background-color: #fff;">
         <div class="report">
                     <div class="page" id="page_1">
                         <div class="header">
@@ -87,7 +99,7 @@
                                 <div class="marginTop">
                                 </div>
                                 <div class="logo">
-                                    <img src="{{ asset('img/logo.jpg ') }}" alt="logo" class="logo-img">
+                                    <img src="{{ asset('img/logo.jpg') }}" alt="logo" class="logo-img">
                                 </div>
                                 <div class="ourFile">
                                     <div class="claim-report">
@@ -95,12 +107,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -459,12 +471,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -547,12 +559,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -609,12 +621,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -697,12 +709,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -785,12 +797,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -950,12 +962,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1314,12 +1326,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1402,12 +1414,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1464,12 +1476,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1552,12 +1564,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1640,12 +1652,12 @@
                                             <span class="claim-report-text bold">Claim Report</span>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <span class="claim-report-print-date">Printed: <div id="print_date">13/06/2016 10:03:49 AM</div></span>
+                                            <span class="claim-report-print-date">Printed: <div data-id="print_date">13/06/2016 10:03:49 AM</div></span>
                                         </div>
                                     </div>
                                     <div class="claim-report-outfile">
                                         <div>
-                                            <span class="claim-report-text bold">Our File #: <div id="ourFile">1001682</div></span>
+                                            <span class="claim-report-text bold">Our File #: <div data-id="ourFile">1001682</div></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1756,24 +1768,21 @@
         });
     });
 
-    $("#show_invoice").click(function (e) {
-        $.get(url + 'getAllClaim/' + $("#claim_id").val() ,function (result) {
+    $("#invoice_id").on('dblclick',function (e) {
+        $.get(url + 'getAllInvoiceByClaimId/' + $("#claim_id").val() ,function (result) {
             if(result.status == "success"){
                 var row = "";
-                for (var i = 0; i < listClaim.length; i++) {
+                for (var i = 0; i < result.data.length; i++) {
                     var tr = "<tr>";
-                    tr += "<td>" + listClaim[i]["code"] + "</td>";
-                    tr += "<td>"+ listClaim[i]["insuredLastName"] + "</td>";
-                    tr += "<td>"+ listClaim[i]["lossLocation"] + "</td>";
-                    tr += "<td>"+ listClaim[i]["receiveDate"] + "</td>";
-                    tr += "<td>"+ listClaim[i]["openDate"] + "</td>";
-                    tr += "<td>"+ listClaim[i]["adjusterCode"] + "</td>";
-                    tr += "<td><button class='btn btn-xs btn-success' onclick='getReportData(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
+                    tr += "<td>" + result.data[i].invoice_id + "</td>";
+                    tr += "<td>"+ result.data[i].claim_id + "</td>";
+                    tr += "<td>"+ result.data[i].invoice_date + "</td>";
+                    tr += "<td><button class='btn btn-xs btn-success' onclick='getReportData(\"" + result.data[i].invoice_id + "\",\"" + result.data[i].bill_id + "\",\"" + result.data[i].claim_id + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
                     tr += "</tr>";
                     row += tr;
                 }
+                $("#invoice-table-body").empty().append(row);
             }
-            $("#invoice-talbe-body").empty().append(row);
         });
         $("#modal-invoice-report").modal("show");   
     });
@@ -1783,9 +1792,161 @@
         $("#modal-claim").modal("hide");   
     }
 
-    function getReportData(reportCode) {
-        $.get(url + 'getReportData/' + reportCode ,function (result) {
+    function getReportData(invoice_id,bill_id,claim_id) {
+        $("#invoice_id").val(invoice_id);
+        $("#modal-invoice-report").modal("hide");
+        $.get(url + 'getReportData/' + invoice_id +'/' + bill_id + '/' + claim_id,function (result) {
+            $("div[data-id=print_date]").each(function(index){
+                $(this).empty().append(result.print_date);
+            });
+            $("div[data-id=ourFile]").each(function(index){
+                $(this).empty().append(result.claim.ourFile);
+            });
+            $("#branchSeqNo").empty().append(result.claim.branchSeqNo);
+            $("#incidentNo").empty().append(result.claim.incidentNo);
+            $("#assignmentTypeCode").empty().append(result.claim.assignmentTypeCode);
+            $("#accountCode").empty().append(result.claim.accountCode);
+            $("#insuredName").empty().append(result.claim.insuredName);   
+            $("#insuredClaimNo").empty().append(result.claim.insuredClaimNo);
+            $("#tradingAs").empty().append(result.claim.tradingAs);
+            $("#claimTypeCode").empty().append(result.claim.claimTypeCode + " - " + result.claim.claimTypeCodeDetail);
+            $("#lossDescCode").empty().append(result.claim.lossDescCode + " - " + result.claim.lossDescCodeDetail);
+            $("#catastrophicLoss").empty().append(result.claim.catastrophicLoss);
+            $("#sourceCode").empty().append(result.claim.sourceCode + " - " + result.claim.sourceCodeDetail);
+            $("#insurerCode").empty().append(result.claim.insurerCode);
+            $("#brockerCode").empty().append(result.claim.brockerCode);
+            $("#branchCode").empty().append(result.claim.branchCode + " - " + result.claim.branchCodeDetail);
+            $("#destroyedDate").empty().append(function(){
+                if(result.claim.destroyedDate){
+                    var destroyedDate = new Date(result.claim.destroyedDate.substring(0,10));
+                    var dd = destroyedDate.getDate();
+                    var mm = destroyedDate.getMonth()+1; //January is 0!
 
+                    var yyyy = destroyedDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#lossLocation").empty().append(result.claim.lossLocation);
+            $("#lineOfBusinessCode").empty().append(result.claim.lineOfBusinessCode);
+            $("#receiveDate").empty().append(function(){
+                if(result.claim.receiveDate){
+                    var receiveDate = new Date(result.claim.receiveDate.substring(0,10));
+                    var dd = receiveDate.getDate();
+                    var mm = receiveDate.getMonth()+1; //January is 0!
+
+                    var yyyy = receiveDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#openDate").empty().append(function(){
+                if(result.claim.openDate){
+                    var openDate = new Date(result.claim.openDate.substring(0,10));
+                    var dd = openDate.getDate();
+                    var mm = openDate.getMonth()+1; //January is 0!
+
+                    var yyyy = openDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#closeDate").empty().append(function(){
+                if(result.claim.closeDate){
+                    var openDate = new Date(result.claim.closeDate.substring(0,10));
+                    var dd = closeDate.getDate();
+                    var mm = closeDate.getMonth()+1; //January is 0!
+
+                    var yyyy = closeDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#insuredContactedDate").empty().append(function(){
+                if(result.claim.receiveDate){
+                    var openDate = new Date(result.claim.receiveDate.substring(0,10));
+                    var dd = openDate.getDate();
+                    var mm = openDate.getMonth()+1; //January is 0!
+
+                    var yyyy = openDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#limitationDate").empty().append(function(){
+                if(result.claim.receiveDate){
+                    var openDate = new Date(result.claim.receiveDate.substring(0,10));
+                    var dd = openDate.getDate();
+                    var mm = openDate.getMonth()+1; //January is 0!
+
+                    var yyyy = openDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#policyInceptionDate").empty().append(function(){
+                if(result.claim.receiveDate){
+                    var openDate = new Date(result.claim.receiveDate.substring(0,10));
+                    var dd = openDate.getDate();
+                    var mm = openDate.getMonth()+1; //January is 0!
+
+                    var yyyy = openDate.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    return dd+'-'+mm+'-'+yyyy;
+                }
+                return "";
+            });
+            $("#disabilityCode").empty().append(result.claim.disabilityCode);
+            $("#outComeCode").empty().append(result.claim.outComeCode);
+            $("#lastChanged").empty().append(result.claim.lastChanged);
+            $("#partnershipId").empty().append(result.claim.partnershipId);
+            $("#adjusterCode").empty().append(result.claim.adjusterCode);
+            $("#adjusterName").empty().append(result.claim.adjusterCodeDetail);
+            $("#rate").empty().append(result.claim.rate);
+            $("#feeType").empty().append("Hourly");
+            $("#taxable").empty().append("True");
+            $("#estimatedClaimValue").empty().append(result.claim.estimatedClaimValue);
         });
     }
-</script>
+</script> 

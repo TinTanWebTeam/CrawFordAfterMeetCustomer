@@ -657,11 +657,7 @@ form#trialFee h5{
 label.error{
     color: #B52929;
 }
-#ourFile{
-    display: inline-block;
-}
-
-#print_date{
+[data-id=ourFile]{
     display: inline-block;
 }
 
@@ -741,4 +737,7 @@ label.error{
 }
 .wip-header-row-2-right-row-2{
     
+}
+[data-id=print_date]{
+    display: inline-block;
 }
