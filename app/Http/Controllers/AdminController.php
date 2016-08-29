@@ -85,7 +85,7 @@ class AdminController extends Controller
             ->join('bills', 'invoices.idBill', '=', 'bills.id')
             ->join('claims', 'bills.claimId', '=', 'claims.id')
             ->select(
-                'invoices.idBill as invoice',
+                'invoices.invoiceMajorNo as invoice',
                 'invoices.invoiceDay as invoiceDay',
                 'bills.billToId as billTo',
                 'bills.total as total',
@@ -1542,7 +1542,7 @@ class AdminController extends Controller
                 ->join('claim_task_details', 'bills.billId', '=', 'claim_task_details.id')
                 ->join('task_categories', 'claim_task_details.professionalServices', '=', 'task_categories.id')
                 ->join('claims', 'claim_task_details.claimId', '=', 'claims.id')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     'invoices.invoiceDay as invoiceDay',
                     'bills.billToId as billTo',
@@ -1560,7 +1560,7 @@ class AdminController extends Controller
             $professionalService = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('professional_services', 'bills.id', '=', 'professional_services.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(professional_services.value) as professionalServices')
                 )->get();
@@ -1568,7 +1568,7 @@ class AdminController extends Controller
             $generalExp = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('general_exps', 'bills.id', '=', 'general_exps.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(general_exps.value) as generalExp')
                 )->get();
@@ -1577,7 +1577,7 @@ class AdminController extends Controller
             $commPhotoExp = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('comm_photo_exps', 'bills.id', '=', 'comm_photo_exps.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(comm_photo_exps.value) as commPhotoExp')
                 )->get();
@@ -1586,7 +1586,7 @@ class AdminController extends Controller
             $consultFeesExp = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('consult_fees_exps', 'bills.id', '=', 'consult_fees_exps.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(consult_fees_exps.value) as consultFeesExp')
                 )->get();
@@ -1595,7 +1595,7 @@ class AdminController extends Controller
             $travelRelatedExp = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('travel_related_exps', 'bills.id', '=', 'travel_related_exps.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(travel_related_exps.value) as travelRelatedExp')
                 )->get();
@@ -1604,7 +1604,7 @@ class AdminController extends Controller
             $gstFreeDisb = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('gst_free_disbs', 'bills.id', '=', 'gst_free_disbs.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(gst_free_disbs.value) as gstFreeDisb')
                 )->get();
@@ -1613,7 +1613,7 @@ class AdminController extends Controller
             $disbursement = DB::table('invoices')
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('disbursements', 'bills.id', '=', 'disbursements.billId')
-                ->where('invoices.idBill', $request->get('key'))
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(disbursements.value) as $disbursement')
                 )->get();

@@ -20,7 +20,7 @@
                             @foreach($query as $item)
                                 <tr id="{{$item->invoice}}" onclick="invoiceView.viewDetailInvoice(this)" style="cursor: pointer">
                                     <td>{{$item->invoice}}</td>
-                                    <td>{{$item->invoiceDay}}</td>
+                                    <td>{{\Carbon\Carbon::parse($item->invoiceDay)->format('d-m-Y')}}</td>
                                     <td>{{$item->billTo}}</td>
                                     <td>{{$item->total}}</td>
                                     <td>{{$item->claimCode}}</td>

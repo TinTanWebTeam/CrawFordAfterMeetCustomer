@@ -757,6 +757,8 @@
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                     $("input[name=invoiceMajorNo]").val(data["invoiceMajorNoNew"]);
+                                    //load again
+                                    trialFeeView.loadIBClaimConfirnm();
                                 }
                                 else {
                                     $("div[id=modalConfirm]").modal("hide");
@@ -772,6 +774,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                     $("input[name=invoiceMajorNo]").val(data["invoiceMajorNoNew"]);
+                                    trialFeeView.loadIBClaimConfirnm();
                                 }
                                 else {
                                     $("div[id=modalConfirm]").modal("hide");
@@ -793,7 +796,8 @@
                             }
                         })
                 },
-                loadIBClaim: function () {
+                loadIBClaimConfirnm:function()
+                {
                     $.post(url+"viewBillOfClaimByStatus",{_token:_token,idClaim:$("input[name=idClaim]").val(),status:$("input[name=btnStatus]:checked").val()},function(data){
                         var row ="";
                         for(var i = 0;i<data.length;i++)
@@ -809,6 +813,9 @@
                         }
                         $("tbody[id=tbodyTableBillOfClaim]").empty().append(row);
                     });
+                },
+                loadIBClaim: function () {
+                    trialFeeView.loadIBClaimConfirnm();
                     $("div[id=modalListClaimIB]").modal("show");
                 },
                 viewDetailIBClaim: function (element) {
