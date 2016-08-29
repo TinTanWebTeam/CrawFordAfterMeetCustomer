@@ -63,8 +63,8 @@
                     </div>
                     <div style="display: inline-block;width: 58%">
                         <select name="currency" id="currency" style="width: 100%" disabled>
-                            <option value="usd">USD</option>
-                            <option value="vnd">VND</option>
+                            <option value="usd">VND</option>
+                            <option value="vnd">USD</option>
                         </select>
                     </div>
                 </td>
@@ -162,7 +162,7 @@
                         <h5 class="text-right">Closed:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -261,7 +261,7 @@
                         <h5 class="text-right">Rate:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" id="rate" name="rate">
+                        <input type="text" id="rate" name="rate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
                 <td>
@@ -388,7 +388,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="policyInceptionDate" name="policyInceptionDate">
                     </div>
                 </td>
             </tr>
@@ -399,7 +399,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="policyExpiryDate" name="policyExpiryDate">
                     </div>
                 </td>
             </tr>
@@ -410,15 +410,6 @@
             </tr>
             <tr>
                 <td colspan="4" rowspan="6"  style="border: 1px solid #c5c0c0;border-radius: 10px;padding: 10px;width: 878px;">
-                    <h5>Co-insurers Detail</h5>
-                    <div class="table-responsive" style="width: 878px;">
-                        <table class="table table-bordered" style="width: 878px;">
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                            <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
-                        </table>
-                    </div>
                 </td>
                 <td rowspan="6" style="border: 1px solid #c5c0c0;border-radius: 10px;padding: 10px">
                     <div>
@@ -942,6 +933,9 @@
                             <th data-name="lastName">
                                 Last Name
                             </th>
+                            <th data-name="Rate">
+                                Rate
+                            </th>
                             <th>
                             </th>
                         </tr>
@@ -1122,8 +1116,8 @@
                     closeDate : null,
                     //insuredContactedDate : null,
                     //limitationDate : null,
-                    //policyInceptionDate : null,
-                   // policyExpiryDate : null,
+                    policyInceptionDate : null,
+                    policyExpiryDate : null,
                     disabilityCode : null,
                     //outComeCode : null,
                     //lastChanged : null,
@@ -1175,7 +1169,6 @@
                             lossDescCode: "required",
                             insurerCode: "required",
                             sourceCode: "required",
-                            insuredFirstName:"required",
                             insuredLastName:"required",
                             openDate:"required",
                             lossDate:"required",
@@ -1187,7 +1180,6 @@
                             lossDescCode: "Loss desc is required",
                             insurerCode:"Insurer code is required",
                             sourceCode:"Source code is required",
-                            insuredFirstName:"Insured FirstName is required",
                             insuredLastName:"Insured LastName is required",
                             openDate:"Open date is required",
                             lossDate:"Loss date is required",
@@ -1261,6 +1253,11 @@
                                         $("div[id=modal-confirm]").modal("show");
                                         claimView.cancel();
                                         $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
+                                    }
+                                    else
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Close Date is not correct!!!");
+                                        $("div[id=modal-confirm]").modal("show");
                                     }
                                 }
                                 else if(data["Action"]==="Error1")
@@ -1484,7 +1481,7 @@
                     for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
                     }
-                    $("input[name=code]").prop("readOnly",false).css("brackground-color","");
+                    $("input[name=code]").prop("readOnly",false).css("background-color","");
                     $("table[id=table_claim]").find("input").val("");
                     $("textarea[name=insuredAddress]").val("");
                     $("input[name=sirBreached]").prop("checked",false);
@@ -1498,9 +1495,12 @@
                     $("input[name=proscription]").prop("readOnly",false);
                     $("input[name=firstContact]").prop("readOnly",false);
                     $("input[name=contact]").prop("readOnly",false);
+
+                    $("input[name=closeDate]").prop("readOnly",true).css("background-color","#EFE5E5");
                 },
                 fillClaimToForm : function (claimId) {
-                    $("input[name=code]").prop("readOnly",true).css("brackground-color","#EFE5E5");
+                    $("input[name=closeDate]").prop("readOnly",false).css("background-color","");
+                    $("input[name=code]").prop("readOnly",true).css("background-color","#EFE5E5");
                     $("input[name=receiveDate]").prop("readOnly",true);
                     $("input[name=openDate]").prop("readOnly",true);
                     $("input[name=lossDate]").prop("readOnly",true);
@@ -1611,6 +1611,7 @@
                 fillAdjusterFromModalToInput:function(element)
                 {
                     $("input[name=adjusterCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=rate]").val($(element).parent().parent().find("td").eq(5).html());
                     $("#modal-adjuster").modal("hide");
                 },
                 fillBranchFromModalToInput:function(element)
@@ -1621,6 +1622,7 @@
                 fillInsurerCodeFromModalToInput:function(element)
                 {
                     $("input[name=insurerCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(3).html());
                     $("#modal-insurer-code").modal("hide");
                 },
                 editClaimType:function(element)
@@ -1795,6 +1797,7 @@
                     tr+="<td>"+data[i].email+"</td>";
                     tr+="<td>"+data[i].firstName+"</td>";
                     tr+="<td>"+data[i].lastName+"</td>";
+                    tr+="<td>"+data[i].rate+"</td>";
                     tr+="<td><button class='btn btn-success' onclick='claimView.fillAdjusterFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button></td>";
                     tr+="</tr>";
                 }

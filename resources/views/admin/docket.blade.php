@@ -283,9 +283,7 @@
                                     <h5 style="text-align:right">Sort Description:</h5>
                                 </div>
                                 <div class="col-sm-9">
-			    			<textarea rows="4" cols="40" style="resize: none;" name="ProfessionalServicesNote"
-                                      id="ProfessionalServicesNote">
-			    			</textarea>
+			    			<textarea rows="4" cols="40" style="resize: none;" name="ProfessionalServicesNote" id="ProfessionalServicesNote"></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -310,8 +308,7 @@
                                     <h5 style="text-align:right">Sort Description:</h5>
                                 </div>
                                 <div class="col-sm-9">
-		    			<textarea rows="4" cols="40" style="resize: none;" name="ExpenseNote" id="ExpenseNote">
-		    			</textarea>
+		    			        <textarea rows="4" cols="40" style="resize: none;" name="ExpenseNote" id="ExpenseNote"></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -625,6 +622,7 @@
                     $("button[name=actionAssignmentTask]").text("Update");
                     $("input[name=Action]").val("0");
                     $.post(url + "viewDetailTask", {_token: _token, idDocket: $(element).attr("id")}, function (data) {
+                        console.log(data);
                         //Binding data
                         $("input[name=IdTask]").val(data["Task"]["id"]);
                         $("#UserId").val($(element).find("td:eq(2)").text());
@@ -636,14 +634,24 @@
                                 $("#" + docketView.firstToUpperCase(propertyName)).val(data["Task"][propertyName]);
                             }
                         }
-                        $("button[name=actionAssignmentTask]").prop("disabled", true);
-                        $("input[name=ProfessionalServicesTime]").prop("readOnly", true).css("background-color", "#E6D8D8");
-                        $("input[name=ExpenseAmount]").prop("readOnly", true).css("background-color", "#E6D8D8");
-                        if(data["Task"]["professionalServicesRateBillValue"] !==null) {
-                            $("input[name=ProfessionalServicesTimeBillValue]").val(data["Task"]["professionalServicesTime"]);
-                            $("input[name=ProfessionalServicesAmountBillValue]").val(parseFloat(data["Task"]["professionalServicesTime"]) * parseFloat(data["Task"]["professionalServicesRateBillValue"]));
-                            $("input[name=ProfessionalServicesRateBillValue]").val(data["Task"]["professionalServicesRateBillValue"]);
-                        }
+
+//                        if(data["Task"]["professionalServicesRateBillValue"] !==null) {
+//                            $("input[name=ProfessionalServicesTimeBillValue]").val(data["Task"]["professionalServicesTime"]);
+//                            $("input[name=ProfessionalServicesAmountBillValue]").val(parseFloat(data["Task"]["professionalServicesTime"]) * parseFloat(data["Task"]["professionalServicesRateBillValue"]));
+//                            $("input[name=ProfessionalServicesRateBillValue]").val(data["Task"]["professionalServicesRateBillValue"]);
+//                        }
+                          if(data["errorInvoiceMajorNo"]==="True")
+                          {
+                              $("button[name=actionAssignmentTask]").prop("disabled", true);
+                              $("input[name=ProfessionalServicesTime]").prop("readOnly", true).css("background-color", "#E6D8D8");
+                              $("input[name=ExpenseAmount]").prop("readOnly", true).css("background-color", "#E6D8D8");
+                          }
+                          else
+                          {
+                              $("button[name=actionAssignmentTask]").prop("disabled", false);
+                              $("input[name=ProfessionalServicesTime]").prop("readOnly",false).css("background-color", "");
+                              $("input[name=ExpenseAmount]").prop("readOnly", false).css("background-color", "");
+                          }
 
 
                     });
@@ -697,7 +705,7 @@
                                     if (data["Result"] === 1) {
                                         $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
                                         $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancel();
+                                        docketView.cancelAfterAddNew();
                                         $.post(url + "loadViewDocketDetail", {
                                             _token: _token,
                                             idClaim: docketView.taskObject.ClaimId
@@ -718,7 +726,7 @@
                                     if (data["Result"] === 1) {
                                         $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
                                         $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancel();
+                                        docketView.cancelAfterAddNew();
                                     }
                                     else {
                                         $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
@@ -741,20 +749,37 @@
                 },
                 cancel: function () {
                     docketView.openDateClaim = null;
+                    $("form[id=formClaim]").find("input").val("");
+                    $("input[name=ChooseDate]").val("");
                     $("button[name=actionAssignmentTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
-                    $("form[id=formTask]").find("input").val("");
-                    $("form[id=formTask]").find("textarea").val("");
-                    $("form[id=formClaim]").find("input").val("");
-
-                    $("input[name=ProfessionalServicesTime]").prop("readOnly", false).css("background-color", "");
-                    $("input[name=ExpenseAmount]").prop("readOnly", false).css("background-color", "");
-
-                    $("input[name=ProfessionalServicesCode]").val("");
-                    $("input[name=ExpenseCode]").val("");
-
+                    $("input[name=ProfessionalServicesRate]").val("");
+                    docketView.cancelAfterAddNew();
+                    $("input[name=ExpenseAmount]").val("");
                     $("tbody[id=tbodyDocket]").empty();
 
+                },
+                cancelAfterAddNew:function()
+                {
+                    $("input[name=ChooseDate]").val("");
+                    //Time
+                    $("input[name=ProfessionalServicesCode]").val("");
+                    $("textarea[name=ProfessionalServicesNote]").val("");
+                    //Initial Value time
+                    $("input[name=ProfessionalServicesTime]").prop("readOnly", false).css("background-color", "").val("");
+                    $("input[name=ProfessionalServicesAmount]").val("");
+                    //Billable value time
+                    $("input[name=ProfessionalServicesTimeBillValue]").val("");
+                    $("input[name=ProfessionalServicesAmountBillValue]").val("");
+                    $("input[name=ProfessionalServicesRateBillValue]").val("");
+
+                    //Expense
+                    $("input[name=ExpenseCode]").val("");
+                    $("textarea[name=ExpenseNote]").val("");
+                    //Initial value expense
+                    $("input[name=ExpenseAmount]").val("0");
+                    //Billable value time
+                    $("input[name=ExpenseAmountBillValue]").val("");
                 },
                 loadListProfessionalService: function () {
                     $.post(url + "loadListTimeCode", {_token: _token}, function (view) {

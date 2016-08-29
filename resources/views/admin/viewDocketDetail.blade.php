@@ -5,10 +5,10 @@
         <td style='text-align: center'>{{ $item->adjuster }}</td>
         <td style='text-align: center'>{{ $item->professionalServices }}</td>
         <td style='text-align: center'>{{ $item->professionalUnit }}</td>
-        <td>{{ $item->professionalNote }}</td>
+        <td>{{substr($item->professionalNote,0,15)}}....</td>
         <td style='text-align: center'>{{ $item->expense }}</td>
         <td style='text-align: center'>{{ $item->expenseAmount }}</td>
-        <td>{{ $item->expenseNote }}</td>
+        <td>{{substr($item->expenseNote,0,15)}}....</td>
         <td style="text-align: center">{{$item->invoiceMajorNo}}</td>
         <td style="text-align: center">{{$item->invoiceDate}}</td>
     </tr>

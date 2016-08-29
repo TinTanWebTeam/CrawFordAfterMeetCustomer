@@ -1260,7 +1260,7 @@ class AdminController extends Controller
 
     public function saveClaim(Request $request, $claimId)
     {
-        //dd($request->all());
+       // dd($request->all());
         $result = null;
         //check validator
         if ($this->validatorAdmin($request->get('claim'), "createClaim")->fails()) {
@@ -1324,7 +1324,13 @@ class AdminController extends Controller
                     $claim->contact = $request->get("claim")['contact'];
 
                     $timeProscriptionNow = Carbon::now();
-                    $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;;
+                    $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+
+                    $timePolicyInceptionDateNow = Carbon::now();
+                    $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+
+                    $timePolicyExpiryDateNow = Carbon::now();
+                    $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
 
                     $claim->save();
                     //take code of final claim
@@ -1368,11 +1374,52 @@ class AdminController extends Controller
                 $claim->sirBreached = $request->get("claim")['sirBreached'];
                 $claim->claimAssignment = $request->get("claim")['claimAssignment'];
                 $claim->policy = $request->get("claim")['policy'];
+
+                $timePolicyInceptionDateNow = Carbon::now();
+                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+
+                $timePolicyExpiryDateNow = Carbon::now();
+                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
 //                $claim->proscription = $request->get("claim")['proscription'];
-                $claim->save();
-                //take code of final claim
-                $code = Claim::orderBy('created_at', 'desc')->first()->code;
-                $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
+                if($request->get('claim')['closeDate']!=null)//insert close date when have value closeDate
+                {
+                    $checkDate=null;
+                    $claimDetail = ClaimTaskDetail::orderBy('billDate','desc')->first();
+                    if($claimDetail!=null)//check date
+                    {
+                        $checkDate = $claimDetail->billDate;
+                    }
+                    else
+                    {
+                        $checkDate = $claim->opendDate;
+                    }
+                    $now = Carbon::now();
+                    $closeDate = $request->get('claim')['closeDate']." ".Carbon::parse($now)->format('H:i:s');
+                    //Close claim
+                    if($closeDate > $checkDate)
+                    {
+                        $claim->closeDate =$closeDate;
+                        $claim->statusId = 3;
+                        $claim->save();
+                        //take code of final claim
+                        $code = Claim::orderBy('created_at', 'desc')->first()->code;
+                        $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
+                    }
+                    else
+                    {
+                        //Error
+                        $result = array('Action' => 'Update', 'Claim' => 'null', 'Result' => 2);//Error
+                    }
+
+                }
+                else
+                {
+                    $claim->save();
+                    //take code of final claim
+                    $code = Claim::orderBy('created_at', 'desc')->first()->code;
+                    $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
+                }
+
             }
         }
         return $result;
@@ -1828,14 +1875,24 @@ class AdminController extends Controller
             if ($request->get('idDocket'))
             {
                 $task = ClaimTaskDetail::where('id', $request->get('idDocket'))->where('active', 1)->first();
-                if($task->professionalServices)
+                if($task)
                 {
-                    $professionalCode = TaskCategory::where('id', $task->professionalServices)->where('active', 1)->first()->code;
+                    if($task->professionalServices)
+                    {
+                        $professionalCode = TaskCategory::where('id', $task->professionalServices)->where('active', 1)->first()->code;
+                    }
+                    if ($task->expense) {
+                        $expenseCode = TaskCategory::where('id', $task->expense)->where('active', 1)->first()->code;
+                    }
+                    if($task->invoiceMajorNo!=null)
+                    {
+                        $data = array('Task' => $task, 'professionalCode' => $professionalCode, 'expenseCode' => $expenseCode,'errorInvoiceMajorNo'=>'True');
+                    }
+                    else
+                    {
+                        $data = array('Task' => $task, 'professionalCode' => $professionalCode, 'expenseCode' => $expenseCode,'errorInvoiceMajorNo'=>'False');
+                    }
                 }
-                if ($task->expense) {
-                    $expenseCode = TaskCategory::where('id', $task->expense)->where('active', 1)->first()->code;
-                }
-                $data = array('Task' => $task, 'professionalCode' => $professionalCode, 'expenseCode' => $expenseCode);
             }
         } catch (Exception $ex) {
             return $ex;
@@ -1951,7 +2008,18 @@ class AdminController extends Controller
 
     public function getAllAdjuster()
     {
-        return User::where('roleId', '!=', 1)->get();
+        $user = DB::table('users')
+                    ->join('rate_details','users.id','=','rate_details.userId')
+                    ->where('users.roleId','!=',1)
+                    ->select(
+                        'users.id as id',
+                        'users.name as name',
+                        'users.email as email',
+                        'users.firstName as firstName',
+                        'users.lastName as lastName',
+                        'rate_details.value as rate'
+                    )->get();
+        return $user;
     }
 
     public function getAllBranch()
