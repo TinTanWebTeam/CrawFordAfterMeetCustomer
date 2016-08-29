@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('viewDetailTask','AdminController@viewDetailTask');
 
     Route::post('checkTheSameNameWhenCreateEmployee','AdminController@checkTheSameNameWhenCreateEmployee');
+    Route::get('getAllInvoiceByClaimId/{claim_id}','AdminController@getAllInvoiceByClaimId');
+    Route::get('getReportData/{invoice_major_no}/{bill_id}/{claim_id}','AdminController@getReportData');
 });
 
 /*

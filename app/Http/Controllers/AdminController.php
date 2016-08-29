@@ -2140,4 +2140,97 @@ class AdminController extends Controller
         return $result;
     }
 
+    public function getAllInvoiceByClaimId($claim_id)
+    {
+        $result = DB::table('invoices')
+            ->leftJoin('bills','bills.id','=','invoices.idBill')
+            ->leftJoin('claims','bills.claimId','=','claims.id')
+            ->where('claims.code','=',$claim_id)
+            ->select(
+                'invoices.invoiceMajorNo as invoice_id',
+                'claims.code as claim_id',
+                'bills.id as bill_id',
+                'invoices.created_at as invoice_date'
+            )->get();
+        return [
+            'status' => 'success',
+            'data' => $result
+        ];
+    }
+
+    public function getReportData($invoice_major_no,$bill_id,$claim_code)
+    {
+        $claim = Claim::where('code',$claim_code)->first();
+        $branch = Branch::where('code',$claim->branchCode)->first();
+        $insuranceDetail = InsuranceDetail::where('code',$claim->claimTypeCode)->first();
+        $extendOfDamage = ExtendOfDamage::where('code',$claim->lossDescCode)->first();
+        $adjuster = User::where('name',$claim->adjusterCode)->first();
+        $sourceCode = SourceCustomer::where('code',$claim->sourceCode)->first();
+        $docket = ClaimTaskDetail::where('invoiceMajorNo',$invoice_major_no)->orderBy('created_at','asc')->get();
+        $assit_array = [];
+        foreach ($docket->groupBy('userId') as $key => $value) {
+            $assit_detail = User::where('id',$key)->first();
+            $sum = collect($value)->sum('professionalServicesTime');
+            array_push($assit_array, [
+                'assit' => $assit_detail,
+                'time' => $sum
+            ]);
+        }
+
+        $bill = Bill::where('id',$bill_id)->first();
+        return [
+            'claim' => [
+                'ourFile' => $claim->code,
+                'branchSeqNo' => $claim->branchSeqNo,
+                'incident' => $claim->incident,
+                'assignmentTypeCode' => $claim->assignmentTypeCode,
+                'accountCode' => $claim->accountCode,
+                'accountPolicyId' => $claim->accountPolicyId,
+                'insuredName' => $claim->insuredName,
+                'insuredClaim' => $claim->insuredClaim,
+                'tradingAs' => $claim->tradingAs,
+                'claimTypeCode' => $claim->claimTypeCode,
+                'claimTypeCodeDetail' => $insuranceDetail->name,
+                'lossDescCode' => $claim->lossDescCode,
+                'lossDescCodeDetail' => $extendOfDamage == null ? '' : $extendOfDamage->name,
+                'catastrophicLoss' => $claim->catastrophicLoss,
+                'sourceCode' => $claim->sourceCode,
+                'sourceCodeDetail' => $sourceCode->name,
+                'insurerCode' => $claim->insurerCode,
+                'branchCode' => $claim->branchCode,
+                'branchCodeDetail' => $branch->name,
+                'branchTypeCode' => $claim->branchTypeCode,
+                'destroyedDate' => $claim->destroyedDate,
+                'lossLocation' => $claim->lossLocation,
+                'lineOfBusinessCode' => $claim->lineOfBusinessCode,
+                'lossDate' => $claim->lossDate,
+                'firstContact' => $claim->firstContact,
+                'receiveDate' => $claim->receiveDate,
+                'openDate' => $claim->openDate,
+                'closeDate' => $claim->closeDate,
+                'insuredContactedDate' => $claim->insuredContactedDate,
+                'limitationDate' => $claim->limitationDate,
+                'policyInceptionDate' => $claim->policyInceptionDate,
+                'policyExpiryDate' => $claim->policyExpiryDate,
+                'disabilityCode' => $claim->disabilityCode,
+                'outComeCode' => $claim->outComeCode,
+                'lastChange' => $claim->lastChange,
+                'partnershipId' => $claim->partnershipId,
+                'adjusterCode' => $claim->adjusterCode,
+                'adjusterCodeDetail' => $adjuster->firstName.' '.$adjuster->lastName,
+                'rate' => $claim->rate,
+                'taxable' => $claim->taxable,
+                'taxable' => $claim->taxable
+            ],
+            'bill' => [
+                'billToId' => $bill->billToId,
+                'claimOfficer' => $bill->claimOfficer,
+                'policyNumber' => $bill->policyNumber
+            ],
+            'assit' => $assit_array,
+            'docket' => $docket,
+            'print_date' => date('d-m-Y H:i:s')
+        ];
+    }
+
 }
