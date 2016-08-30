@@ -550,7 +550,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-note{
-    width: 43%;
+    width: 40%;
     display: inline-block;
 }
 .dockets-content-header-invoice-major-no{
@@ -558,7 +558,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-invoice-date{
-    width: 7%;
+    width: 10%;
     display: inline-block;
 }
 
@@ -761,5 +761,29 @@ label.error{
     padding-top: 10px;
 }
 #docket-contain-page-2 span{
+    font-size: 18px;
+}
+#docket-contain-page-3{
+    padding-top: 10px;
+}
+#docket-contain-page-3 span{
+    font-size: 18px;
+}
+#docket-contain-page-4{
+    padding-top: 10px;
+}
+#docket-contain-page-4 span{
+    font-size: 18px;
+}
+#docket-contain-page-5{
+    padding-top: 10px;
+}
+#docket-contain-page-5 span{
+    font-size: 18px;
+}
+#docket-contain-page-6{
+    padding-top: 10px;
+}
+#docket-contain-page-6 span{
     font-size: 18px;
 }
