@@ -2183,14 +2183,35 @@ class AdminController extends Controller
         $extendOfDamage = ExtendOfDamage::where('code',$claim->lossDescCode)->first();
         $adjuster = User::where('name',$claim->adjusterCode)->first();
         $sourceCode = SourceCustomer::where('code',$claim->sourceCode)->first();
+        $docket_backup = DB::table('claim_task_details')
+            ->leftJoin('users','claim_task_details.userId','=','users.id')
+            ->leftJoin('task_categories as pro','claim_task_details.professionalServices','=','pro.id')
+            ->leftJoin('task_categories as ex','claim_task_details.expense','=','ex.id')
+            ->where('claim_task_details.invoiceMajorNo','=',$invoice_major_no)
+            ->select(
+                'claim_task_details.professionalServicesNote',
+                'claim_task_details.professionalServicesTime',
+                'claim_task_details.expenseNote',
+                'claim_task_details.expenseAmount',
+                'claim_task_details.created_at',
+                'claim_task_details.userId',
+                'claim_task_details.invoiceMajorNo',
+                'claim_task_details.invoiceDate',
+                'pro.code as professionalServices',
+                'ex.code as expense',
+                'users.name as adjusterCode'
+            )->get();
         $docket = ClaimTaskDetail::where('invoiceMajorNo',$invoice_major_no)->orderBy('created_at','asc')->get();
         $assit_array = [];
         foreach ($docket->groupBy('userId') as $key => $value) {
             $assit_detail = User::where('id',$key)->first();
+            $rate = RateDetail::where('userId',$assit_detail->id)->first();
             $sum = collect($value)->sum('professionalServicesTime');
             array_push($assit_array, [
                 'assit' => $assit_detail,
-                'time' => $sum
+                'time' => $sum,
+                'branch' => $branch->code,
+                'rate' => $rate->value
             ]);
         }
 
@@ -2245,7 +2266,7 @@ class AdminController extends Controller
                 'policyNumber' => $bill->policyNumber
             ],
             'assit' => $assit_array,
-            'docket' => $docket,
+            'docket' => $docket_backup,
             'print_date' => date('d-m-Y H:i:s')
         ];
     }
