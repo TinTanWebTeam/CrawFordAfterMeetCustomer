@@ -1263,11 +1263,12 @@ class AdminController extends Controller
     {
        // dd($request->all());
         $result = null;
-        //check validator
+        $checkErrorClaimSame = null;
         if ($this->validatorAdmin($request->get('claim'), "createClaim")->fails()) {
             return "Error Validator";
         } else {
             if ($claimId == '0') {
+                //format date
                 $timeLossDateNow = Carbon::now();
                 $lossDateFR = $request->get("claim")['lossDate'] . " " . $timeLossDateNow->hour . ":" . $timeLossDateNow->minute . ":" . $timeLossDateNow->second;
 
@@ -1275,11 +1276,26 @@ class AdminController extends Controller
                 $receiveDateFR = $request->get("claim")['receiveDate'] . " " . $timeReceiveDateNow->hour . ":" . $timeReceiveDateNow->minute . ":" . $timeReceiveDateNow->second;
 
                 $openDateFR = $request->get("claim")['openDate'] . " " . "00" . ":" . "00" . ":" . "00";
+                //check claimId the same
+                $checkClaim = Claim::where('code',$request->get("claim")['code'])->first();
+                if($checkClaim!=null)
+                {
+                    $checkErrorClaimSame="True";
+                }
+                else
+                {
+                    $checkErrorClaimSame ="False";
+                }
+
                 if ($lossDateFR > $receiveDateFR) {
                     $result = array('Action' => 'Error1');
                 } else if ($lossDateFR > $openDateFR) {
                     $result = array('Action' => 'Error2');
-                } else {
+                }
+                else if ($checkErrorClaimSame=="True") {
+                    $result = array('Action' => 'Error3');
+                }
+                else {
                     //save new claim
                     $claim = new Claim();
                     $claim->code = $request->get("claim")['code'];
@@ -1696,7 +1712,7 @@ class AdminController extends Controller
         try {
             $result = TaskCategory::where('code', '!=', 'IB')
                 ->where('code', '!=', 'FB')
-                ->where('name', 'TimeCode')
+                ->where('name','=', 'TimeCode')
                 ->get();
         } catch (Exception $ex) {
             return $ex;

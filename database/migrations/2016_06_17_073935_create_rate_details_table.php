@@ -14,7 +14,7 @@ class CreateRateDetailsTable extends Migration
     {
         Schema::create('rate_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('value',18,2)->nullable();
+            $table->decimal('value',18,0)->nullable();
             $table->string('description',1000)->nullable();
             $table->boolean('active')->default(1);
             $table->integer('rateTypeId')->unsigned();

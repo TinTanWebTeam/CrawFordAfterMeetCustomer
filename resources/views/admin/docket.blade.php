@@ -275,7 +275,7 @@
                                     <input type="text" id="ProfessionalServices" name="ProfessionalServices"
                                            style="width: auto;display: none">
                                     <input type="text" id="ProfessionalServicesCode" name="ProfessionalServicesCode"
-                                           style="width: auto" ondblclick="docketView.loadListProfessionalService()">
+                                           style="width: auto" readonly onfocus="docketView.loadListProfessionalService()">
                                 </div>
                             </div>
                             <div class="row">
@@ -299,8 +299,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <input type="text" name="Expense" id="Expense" style="width: auto;display: none;">
-                                    <input type="text" name="ExpenseCode" id="ExpenseCode" style="width: auto"
-                                           ondblclick="docketView.loadListExpense()">
+                                    <input type="text" readonly name="ExpenseCode" id="ExpenseCode" style="width: auto"
+                                           onfocus="docketView.loadListExpense()">
                                 </div>
                             </div>
                             <div class="row">
@@ -671,6 +671,65 @@
                 automaticBillableValueRateOfInputUnit: function () {
                     docketView.automaticValue("ProfessionalServicesRateBillValue", "ProfessionalServicesTimeBillValue", "ProfessionalServicesAmountBillValue");
                 },
+                submitAssignmentTask:function()
+                {
+                    docketView.resetTaskObject();
+                    for (var i = 0; i < Object.keys(docketView.taskObject).length; i++) {
+                        docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#" + Object.keys(docketView.taskObject)[i]).val();
+                    }
+                    $.post(url + "assignmentTask", {
+                        _token: _token,
+                        action: $("input[name=Action]").val(),
+                        idTask: $("input[name=IdTask]").val(),
+                        taskObject: docketView.taskObject,
+                        ChooseDate: $("input[name=ChooseDate]").val(),
+                        FromDate: $("input[name=fromDate]").val()
+                    }, function (data) {
+                        if (data["Action"] === "AddNew") {
+                            if (data["Result"] === 1) {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
+                                $("div[id=modal-confirm]").modal("show");
+                                docketView.cancelAfterAddNew();
+                                $.post(url + "loadViewDocketDetail", {
+                                    _token: _token,
+                                    idClaim: docketView.taskObject.ClaimId
+                                }, function (view) {
+                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                });
+                            }
+                            else if (data["Result"] === 2) {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
+                                $("div[id=modal-confirm]").modal("show");
+                            }
+                            else {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
+                                $("div[id=modal-confirm]").modal("show");
+                            }
+                        }
+                        else if (data["Action"] === "Update") {
+                            if (data["Result"] === 1) {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
+                                $("div[id=modal-confirm]").modal("show");
+                                docketView.cancelAfterAddNew();
+                            }
+                            else {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
+                                $("div[id=modal-confirm]").modal("show");
+                            }
+                        }
+                        else if(data["Action"] === "ErrorDate")
+                        {
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not smaller than from date!!!");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
+                        else
+                        {
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not larger than from current date !!!");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
+                    });
+
+                },
                 assignmentTask: function () {
                     if ($("input[name=ClaimCode]").val() === "") {
                         //validator required claim
@@ -688,62 +747,71 @@
                             }
                         });
                         if ($("form[id=formClaim]").valid()) {
-                            docketView.resetTaskObject();
-                            for (var i = 0; i < Object.keys(docketView.taskObject).length; i++) {
-                                docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#" + Object.keys(docketView.taskObject)[i]).val();
-                            }
-                            $.post(url + "assignmentTask", {
-                                _token: _token,
-                                action: $("input[name=Action]").val(),
-                                idTask: $("input[name=IdTask]").val(),
-                                taskObject: docketView.taskObject,
-                                ChooseDate: $("input[name=ChooseDate]").val(),
-                                FromDate: $("input[name=fromDate]").val()
-                            }, function (data) {
-                                console.log(data);
-                                if (data["Action"] === "AddNew") {
-                                    if (data["Result"] === 1) {
-                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancelAfterAddNew();
-                                        $.post(url + "loadViewDocketDetail", {
-                                            _token: _token,
-                                            idClaim: docketView.taskObject.ClaimId
-                                        }, function (view) {
-                                            $("tbody[id=tbodyDocket]").empty().append(view);
-                                        });
-                                    }
-                                    else if (data["Result"] === 2) {
-                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                    else {
-                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                }
-                                else if (data["Action"] === "Update") {
-                                    if (data["Result"] === 1) {
-                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
-                                        $("div[id=modal-confirm]").modal("show");
-                                        docketView.cancelAfterAddNew();
-                                    }
-                                    else {
-                                        $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
-                                        $("div[id=modal-confirm]").modal("show");
-                                    }
-                                }
-                                else if(data["Action"] === "ErrorDate")
+                            //validator time expesn
+                            if($("input[name=ProfessionalServicesCode]").val() !=="")
+                            {
+                                if($("input[name=ProfessionalServicesTime]").val() ==="")
                                 {
-                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not smaller than from date!!!");
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter units of time");
                                     $("div[id=modal-confirm]").modal("show");
                                 }
                                 else
                                 {
-                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not larger than from current date !!!");
+                                    if($("input[name=ExpenseCode]").val() !=="")
+                                    {
+                                        if($("input[name=ExpenseAmount]").val() ==="")
+                                        {
+                                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter amount of expense code");
+                                            $("div[id=modal-confirm]").modal("show");
+                                        }
+                                        else
+                                        {
+                                            docketView.submitAssignmentTask();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        docketView.submitAssignmentTask();
+                                    }
+
+                                }
+                            }
+                            else if($("input[name=ExpenseCode]").val() !=="")
+                            {
+                                if($("input[name=ExpenseAmount]").val() ==="")
+                                {
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter amount of expense code");
                                     $("div[id=modal-confirm]").modal("show");
                                 }
-                            });
+                                else
+                                {
+
+                                    if($("input[name=ProfessionalServicesCode]").val() !=="")
+                                    {
+                                        if($("input[name=ProfessionalServicesTime]").val() ==="")
+                                        {
+                                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter time of time code");
+                                            $("div[id=modal-confirm]").modal("show");
+                                        }
+                                        else
+                                        {
+                                            docketView.submitAssignmentTask();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        docketView.submitAssignmentTask();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter Time code or expense");
+                                $("div[id=modal-confirm]").modal("show");
+                            }
+
+
+
                         }
                     }
                 },
@@ -763,6 +831,7 @@
                 {
                     $("input[name=ChooseDate]").val("");
                     //Time
+                    $("input[name=ProfessionalServices]").val("");
                     $("input[name=ProfessionalServicesCode]").val("");
                     $("textarea[name=ProfessionalServicesNote]").val("");
                     //Initial Value time
@@ -775,9 +844,10 @@
 
                     //Expense
                     $("input[name=ExpenseCode]").val("");
+                    $("input[name=Expense]").val("");
                     $("textarea[name=ExpenseNote]").val("");
                     //Initial value expense
-                    $("input[name=ExpenseAmount]").val("0");
+                    $("input[name=ExpenseAmount]").val("");
                     //Billable value time
                     $("input[name=ExpenseAmountBillValue]").val("");
                 },

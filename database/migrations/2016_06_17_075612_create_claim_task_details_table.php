@@ -16,25 +16,25 @@ class CreateClaimTaskDetailsTable extends Migration
             $table->increments('id');
             $table->integer('professionalServices')->nullable();//cong viec chinh if not equal 0 will be reference to id in task_category
             //unit time
-            $table->decimal('professionalServicesTime')->nullable();
-            $table->decimal('professionalServicesTimeBillValue')->nullable();
-            $table->decimal('professionalServicesTimeOverrideValue')->nullable();
+            $table->decimal('professionalServicesTime',18,1)->nullable();
+            $table->decimal('professionalServicesTimeBillValue',18,1)->nullable();
+            $table->decimal('professionalServicesTimeOverrideValue',18,1)->nullable();
 
             $table->string('professionalServicesNote')->nullable();
             //rate
-            $table->decimal('professionalServicesRate')->nullable();
-            $table->decimal('professionalServicesRateBillValue')->nullable();
-            $table->decimal('professionalServicesRateOverrideValue')->nullable();
+            $table->decimal('professionalServicesRate',18,0)->nullable();
+            $table->decimal('professionalServicesRateBillValue',18,0)->nullable();
+            $table->decimal('professionalServicesRateOverrideValue',18,0)->nullable();
             //amount
-            $table->decimal('professionalServicesAmount')->nullable();
-            $table->decimal('professionalServicesAmountBillValue')->nullable();
-            $table->decimal('professionalServicesAmountOverrideValue')->nullable();
+            $table->decimal('professionalServicesAmount',18,0)->nullable();
+            $table->decimal('professionalServicesAmountBillValue',18,0)->nullable();
+            $table->decimal('professionalServicesAmountOverrideValue',18,0)->nullable();
 
             $table->integer('expense')->nullable();// cong viec phu
 
-            $table->decimal('expenseAmount')->nullable();
-            $table->decimal('expenseAmountBillValue')->nullable();
-            $table->decimal('expenseAmountOverrideValue')->nullable();
+            $table->decimal('expenseAmount',18,0)->nullable();
+            $table->decimal('expenseAmountBillValue',18,0)->nullable();
+            $table->decimal('expenseAmountOverrideValue',18,0)->nullable();
 
             $table->string('expenseNote')->nullable();
 

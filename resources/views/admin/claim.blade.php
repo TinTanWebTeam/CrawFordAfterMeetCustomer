@@ -1265,9 +1265,14 @@
                                     $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than received date");
                                     $("div[id=modal-confirm]").modal("show");
                                 }
-                                else
+                                else if(data["Action"]==="Error2")
                                 {
                                     $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than open date");
+                                    $("div[id=modal-confirm]").modal("show");
+                                }
+                                else
+                                {
+                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Code claim is exist!!!");
                                     $("div[id=modal-confirm]").modal("show");
                                 }
                             });

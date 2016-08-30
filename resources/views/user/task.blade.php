@@ -163,7 +163,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" name="ProfessionalServices" id="ProfessionalServices" style="width: auto;display:none">
-                                        <input type="text" name="ProfessionalServicesCode" id="ProfessionalServicesCode" style="width: auto" ondblclick="taskView.showModelListTaskTime()">
+                                        <input type="text" name="ProfessionalServicesCode" id="ProfessionalServicesCode" style="width: auto" readonly onfocus="taskView.showModelListTaskTime()">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -188,7 +188,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" name="Expense" id="Expense" style="width: auto;display: none">
-                                        <input type="text" name="ExpenseCode" id="ExpenseCode" style="width: auto" ondblclick="taskView.showModelListTaskExpense()">
+                                        <input type="text" name="ExpenseCode" id="ExpenseCode" style="width: auto" readonly onfocus="taskView.showModelListTaskExpense()">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -219,7 +219,7 @@
                                                     <h5 style="text-align:right">Units</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesTime" id="ProfessionalServicesTime" value="0" style="width:80px" onkeyup="taskView.automaticInitialValueTimeOfInputUnit()">
+                                                    <input type="text" name="ProfessionalServicesTime" id="ProfessionalServicesTime"  style="width:80px" onkeyup="taskView.automaticInitialValueTimeOfInputUnit()">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -227,7 +227,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ProfessionalServicesAmount" id="ProfessionalServicesAmount" value="0" style="width:80px;background-color:#E2D8D8 " readonly>
+                                                    <input type="text" name="ProfessionalServicesAmount" id="ProfessionalServicesAmount"  style="width:80px;background-color:#E2D8D8 " readonly>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -317,7 +317,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmount" id="ExpenseAmount" value="0" style="width:80px">
+                                                    <input type="text" name="ExpenseAmount" id="ExpenseAmount"  style="width:80px">
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -579,6 +579,81 @@
                         $("input[name=ProfessionalServicesAmountOverrideValue]").empty().val(parseFloat($("input[name=ProfessionalServicesRateOverrideValue]").val()) * parseFloat($("input[name=ProfessionalServicesTimeOverrideValue]").val()));
                     }
                 },
+                submitAssignmentTask:function()
+                {
+                    taskView.resetTaskObject();
+                    for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
+                    {
+                        taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
+                    }
+                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
+                        console.log(data);
+                        if(data["Action"]==="AddNew")
+                        {
+                            if(data["Result"]===1)
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
+                                $("div[id=modalConfirm]").modal("show");
+                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                });
+                                taskView.cancel();
+                            }
+                            else if(data["Result"]===0)
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+                            else{
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+                        }
+                        else if(data["Action"]==="Update")
+                        {
+                            if(data["Result"]===1)
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
+                                $("div[id=modalConfirm]").modal("show");
+                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                });
+                                taskView.cancel();
+                            }
+                            else if(data["Result"]===0)
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update task of user other");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+                            else if(data["Result"]===2)
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+                            else
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+
+                        }
+                        else if(data["Action"]==="ErrorDate")
+                        {
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
+                            $("div[id=modalConfirm]").modal("show");
+                        }
+                        else if(data["Action"]==="ErrorCloseClaim")
+                        {
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
+                            $("div[id=modalConfirm]").modal("show");
+                        }
+                        else{
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
+                            $("div[id=modalConfirm]").modal("show");
+                        }
+
+                    });
+                },
                 assignmentTask:function()
                 {
                     if($("input[name=ClaimCode]").val()==="")
@@ -597,79 +672,70 @@
                                 }
                             });
                         if($("form[id=form-claim]").valid()){
-                               taskView.resetTaskObject();
-                               for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
-                               {
-                                        taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
+                            //validator time expesn
+                            if($("input[name=ProfessionalServicesCode]").val() !=="")
+                            {
+                                if($("input[name=ProfessionalServicesTime]").val() ==="")
+                                {
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter units of time");
+                                    $("div[id=modalConfirm]").modal("show");
+                                }
+                                else
+                                {
+                                    if($("input[name=ExpenseCode]").val() !=="")
+                                    {
+                                        if($("input[name=ExpenseAmount]").val() ==="")
+                                        {
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter amount of expense code");
+                                            $("div[id=modalConfirm]").modal("show");
+                                        }
+                                        else
+                                        {
+                                            taskView.submitAssignmentTask();
+                                        }
                                     }
-                               $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
-                                        console.log(data);
-                                        if(data["Action"]==="AddNew")
-                                        {
-                                            if(data["Result"]===1)
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
-                                                $("div[id=modalConfirm]").modal("show");
-                                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
-                                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                                });
-                                                taskView.cancel();
-                                            }
-                                            else if(data["Result"]===0)
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                                $("div[id=modalConfirm]").modal("show");
-                                            }
-                                            else{
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                                $("div[id=modalConfirm]").modal("show");
-                                            }
-                                        }
-                                        else if(data["Action"]==="Update")
-                                        {
-                                            if(data["Result"]===1)
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
-                                                $("div[id=modalConfirm]").modal("show");
-                                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
-                                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                                });
-                                                taskView.cancel();
-                                            }
-                                            else if(data["Result"]===0)
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update task of user other");
-                                                $("div[id=modalConfirm]").modal("show");
-                                            }
-                                            else if(data["Result"]===2)
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
-                                                $("div[id=modalConfirm]").modal("show");
-                                            }
-                                            else
-                                            {
-                                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
-                                                $("div[id=modalConfirm]").modal("show");
-                                            }
+                                    else
+                                    {
+                                        taskView.submitAssignmentTask();
+                                    }
 
-                                        }
-                                        else if(data["Action"]==="ErrorDate")
-                                        {
-                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
-                                            $("div[id=modalConfirm]").modal("show");
-                                        }
-                                        else if(data["Action"]==="ErrorCloseClaim")
-                                        {
-                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
-                                            $("div[id=modalConfirm]").modal("show");
-                                        }
-                                        else{
-                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
-                                            $("div[id=modalConfirm]").modal("show");
-                                        }
-
-                                    });
+                                }
                             }
+                            else if($("input[name=ExpenseCode]").val() !=="")
+                            {
+                                if($("input[name=ExpenseAmount]").val() ==="")
+                                {
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter amount of expense code");
+                                    $("div[id=modalConfirm]").modal("show");
+                                }
+                                else
+                                {
+
+                                    if($("input[name=ProfessionalServicesCode]").val() !=="")
+                                    {
+                                        if($("input[name=ProfessionalServicesTime]").val() ==="")
+                                        {
+                                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter time of time code");
+                                            $("div[id=modalConfirm]").modal("show");
+                                        }
+                                        else
+                                        {
+                                            taskView.submitAssignmentTask();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        taskView.submitAssignmentTask();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter Time code or expense");
+                                $("div[id=modalConfirm]").modal("show");
+                            }
+
+                        }
                     }
                 },
                 cancel:function()
@@ -686,8 +752,8 @@
                     $("input[name=Action]").val("1");
 
                     //Value ProfessionalServices sdsd
-                    $("input[name=ProfessionalServicesTime]").prop("readOnly",false).val("0").css("background-color","");
-                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).val("0").css("background-color","#E2D8D8");
+                    $("input[name=ProfessionalServicesTime]").prop("readOnly",false).val("").css("background-color","");
+                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).val("").css("background-color","#E2D8D8");
                     $("input[name=ProfessionalServicesRate]").prop("readOnly",true).val(taskView.RateDefault).css("background-color","#E2D8D8");
 
                     $("input[name=ProfessionalServicesTimeBillValue]").val("");
@@ -697,7 +763,7 @@
 
 
                     //Expense
-                    $("input[name=ExpenseAmount]").prop("readOnly",false).val("0").css("background-color","");
+                    $("input[name=ExpenseAmount]").prop("readOnly",false).val("").css("background-color","");
 
 
 

@@ -304,7 +304,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <h5>Cor Insurer:</h5>
+                            <h5>Officer:</h5>
                         </td>
                         <td>
                             <input type="text" style="width: 30%" id="coInsurer" name="coInsurer">
