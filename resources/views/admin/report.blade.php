@@ -212,7 +212,7 @@
                                         </div>
                                         <div class="claim-info-col-3-row-2-col-2">
                                             <span>&nbsp;&nbsp;<div id="adjusterCode"
-                                                                   style="display: inline-block">SONV1</div></span>
+                                                                   style="display: inline-block"></div></span>
                                             <span>&nbsp;&nbsp;<div id="rate" style="display: inline-block"></div></span>
                                             <span>&nbsp;&nbsp;<div id="feeType"
                                                                    style="display: inline-block"></div></span>
@@ -224,7 +224,7 @@
                                         </div>
                                         <div class="claim-info-col-3-row-2-col-3">
                                             <span>&nbsp;&nbsp;&nbsp;<div id="adjusterName"
-                                                                         style="display: inline-block">Vu Thanh Son</div></span>
+                                                                         style="display: inline-block"></div></span>
                                             <span>&nbsp;&nbsp;&nbsp;</span>
                                             <span>&nbsp;&nbsp;&nbsp;</span>
                                             <span>&nbsp;&nbsp;&nbsp;</span>
@@ -262,13 +262,13 @@
                                         </div>
                                         <div class="co-insurers-content-body-col">
                                             <span><div id="billToCustomerCode"
-                                                       style="display: inline-block">FUBHCM1</div></span>
+                                                       style="display: inline-block"></div></span>
                                         </div>
                                         <div class="co-insurers-content-body-col">
-                                            <span><div id="billToCustomerClaimOfficer" style="display: inline-block">Mr. Nguyen Hung Linh</div></span>
+                                            <span><div id="billToCustomerClaimOfficer" style="display: inline-block"></div></span>
                                         </div>
                                         <div class="co-insurers-content-body-col">
-                                            <span><div id="billToCustomerPolicyNumber" style="display: inline-block">P0014CFE400</div></span>
+                                            <span><div id="billToCustomerPolicyNumber" style="display: inline-block"></div></span>
                                         </div>
                                         <div class="co-insurers-content-body-col-last">
                                             <span>To be advise</span>
@@ -948,10 +948,12 @@
     }
     var data_docket = [];
     var continue_id = 0;
+    var results = null;
     function getReportData(invoice_id, bill_id, claim_id) {
         $("#invoice_id").val(invoice_id);
         $("#modal-invoice-report").modal("hide");
         $.get(url + 'getReportData/' + invoice_id + '/' + bill_id + '/' + claim_id, function (result) {
+            results = result;
             $("div[data-id=print_date]").each(function (index) {
                 $(this).empty().append(result.print_date);
             });
@@ -1145,25 +1147,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
                 row += "<span style='padding-right: 30px'>" + result.docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+result.docket[i].professionalServices + "</span>";
+                if(!result.docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+result.docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+result.docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+result.docket[i].expense == null ? "" : result.docket[i].expense + "</span>";
+                if(!result.docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ result.docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+result.docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+result.docket[i].professionalServicesNote + " <br> " + result.docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
@@ -1205,25 +1215,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
-                row += "<span style='padding-right: 30px'>Code</span>";
+                row += "<span style='padding-right: 30px'>" + data_docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                if(!data_docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+data_docket[i].expense + "</span>";
+                if(!data_docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ data_docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+data_docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+data_docket[i].professionalServicesNote + " <br> " + data_docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;;text-align: left'>"+data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
@@ -1263,25 +1281,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
-                row += "<span style='padding-right: 30px'>Code</span>";
+                row += "<span style='padding-right: 30px'>" + data_docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                if(!data_docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+data_docket[i].expense + "</span>";
+                if(!data_docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ data_docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+data_docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+data_docket[i].professionalServicesNote + " <br> " + data_docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
@@ -1321,25 +1347,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
-                row += "<span style='padding-right: 30px'>Code</span>";
+                row += "<span style='padding-right: 30px'>" + data_docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                if(!data_docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+data_docket[i].expense + "</span>";
+                if(!data_docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ data_docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+data_docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+data_docket[i].professionalServicesNote + " <br> " + data_docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;'>"+data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
@@ -1377,25 +1411,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
-                row += "<span style='padding-right: 30px'>Code</span>";
+                row += "<span style='padding-right: 30px'>" + data_docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                if(!data_docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+data_docket[i].expense + "</span>";
+                if(!data_docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ data_docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+data_docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+data_docket[i].professionalServicesNote + " <br> " + data_docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;'>"+data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
@@ -1432,25 +1474,33 @@
                 row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
-                row += "<span style='padding-right: 30px'>HC1A</span>";
+                row += "<span style='padding-right: 30px'>"+results.claim.branchCode+"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-adjuster-code'>";
-                row += "<span style='padding-right: 30px'>Code</span>";
+                row += "<span style='padding-right: 30px'>" + data_docket[i].adjusterCode + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-code'>";
-                row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                if(!data_docket[i].professionalServices){
+                    row += "<span style='padding-right: 10px'></span>";
+                }else{
+                    row += "<span style='padding-right: 10px'>"+data_docket[i].professionalServices + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
                 row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
-                row += "<span>"+data_docket[i].expense + "</span>";
+                if(!data_docket[i].expense){
+                    row += "<span></span>";
+                }else{
+                    row += "<span>"+ data_docket[i].expense + "</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
                 row += "<span>"+data_docket[i].expenseAmount + "</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
-                row += "<span>"+data_docket[i].professionalServicesNote + " <br> " + data_docket[i].expenseNote +"</span>";
+                row += "<span style='float: left;padding-left: 30px;font-size: 18px;'>"+data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
