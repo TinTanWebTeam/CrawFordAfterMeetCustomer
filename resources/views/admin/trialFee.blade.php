@@ -848,24 +848,72 @@
                             $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheckFromDate[0])+" "+arrayTimeCheckFromDate[1]).prop("readOnly",true);
                             $("input[name=ToDate]").attr("type","text").val(trialFeeView.convertStringToDate(arrayTimeCheckToDate[0])+" "+arrayTimeCheckToDate[1]).prop("readOnly",true);
                             //load data to table
-                            var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;//đếm số user của tag thead
-                            var k =0; //Chạy vòng lặp while của từng user có sẵn của claim vàm load thông tin của bill đó
-                            do{
-                                for(var i = 0;i<count;i++)//chạy vòng lặp for của list time và expense của một user
-                                {
+//                            var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;//đếm số user của tag thead
+//                            var k =0; //Chạy vòng lặp while của từng user có sẵn của claim vàm load thông tin của bill đó
+//                            do{
+//                                for(var i = 0;i<count;i++)//chạy vòng lặp for của list time và expense của một user
+//                                {
+//
+//                                    if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[2][k][i]["name"])
+//                                    {
+//                                        if(k==0)
+//                                        {
+//                                            tbodyListTaskDetail.find("tr:eq(1)").find("td:eq("+i+")").children().empty().val(data[2][k][i]["rate"]);
+//                                        }
+//                                        tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[2][k][i]["value"]);
+//                                    }
+//                                }
+//                                k++;
+//                            }
+//                            while(k<data[2].length);
+                            trialFeeView.clearTable();
+                            trialFeeView.loadTableGL();
+                            for (var a = 0; a < data[2].length; a++) {
+                                theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[2][a]["userName"] + "</th>");
 
-                                    if(theadListTaskDetail.find("tr:eq(1)").find("th:eq("+i+")").text() === data[2][k][i]["name"])
-                                    {
-                                        if(k==0)
-                                        {
-                                            tbodyListTaskDetail.find("tr:eq(1)").find("td:eq("+i+")").children().empty().val(data[2][k][i]["rate"]);
-                                        }
-                                        tbodyListTaskDetail.find("tr:eq("+ (k + 3)+")").find("td:eq("+i+")").children().empty().val(data[2][k][i]["value"]);
+                                tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + ">"+data[2][a]["sumTimeCvChinh"]+"</td>");
+                                tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
+                                tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[2][a]["userName"] + ">" + data[2][a]["rateType"] + "</td>");
+                                tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+
+                                tbodyListTaskDetail.find("tr:eq(4)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(5)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(6)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'</td>");
+                                tbodyListTaskDetail.find("tr:eq(7)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(8)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(9)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(10)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                for (var b = 0; b < data[3].length; b++) {
+                                    switch (b) {
+                                        case 0:
+                                            tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["rate"]);
+                                            break;
+                                        case 1:
+                                            tbodyListTaskDetail.find("tr:eq(4)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 2:
+                                            tbodyListTaskDetail.find("tr:eq(5)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 3:
+                                            tbodyListTaskDetail.find("tr:eq(6)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 4:
+                                            tbodyListTaskDetail.find("tr:eq(7)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 5:
+                                            tbodyListTaskDetail.find("tr:eq(8)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 6:
+                                            tbodyListTaskDetail.find("tr:eq(9)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
+                                        case 7:
+                                            tbodyListTaskDetail.find("tr:eq(10)").find("td[id="+data[3][b][a]["name"]+"]").children().val(data[3][b][a]["value"]);
+                                            break;
                                     }
                                 }
-                                k++;
                             }
-                            while(k<data[2].length);
+
                             //insert total into table total
                             //trialFeeView.loadDataToTableTotal(total);
                             trialFeeView.loadDataToTableTotal();

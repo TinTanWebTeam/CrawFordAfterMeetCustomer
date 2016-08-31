@@ -38,7 +38,7 @@ class CreateClaimTaskDetailsTable extends Migration
 
             $table->string('expenseNote')->nullable();
 
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->default(0);
             $table->integer('claimId')->default(0);//if not equal 0 will be reference to id in Claim
             $table->integer('statusId')->default(0); //if not equal 0 will be reference to id in status
             $table->integer('userId')->default(0); //if not equal 0 will be reference to id in user

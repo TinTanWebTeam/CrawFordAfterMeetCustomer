@@ -16,7 +16,7 @@ class CreateGstFreeDisbsTable extends Migration
             $table->increments('id');
             $table->integer('billId');//if not null to reference to id in bill
             $table->integer('userId');//if not null to reference to id in user
-            $table->decimal('value')->default(0);
+            $table->decimal('value',18,0)->default(0);
             $table->timestamps();
         });
     }

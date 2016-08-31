@@ -171,8 +171,7 @@
                                         <h5 style="text-align:right">Sort Description:</h5>
                                     </div>
                                     <div class="col-sm-9">
-			    			<textarea rows="4" cols="40" style="resize: none;" name="ProfessionalServicesNote" id="ProfessionalServicesNote">
-			    			</textarea>
+			    			<textarea rows="4" cols="40" style="resize: none;" name="ProfessionalServicesNote" id="ProfessionalServicesNote"></textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -196,8 +195,7 @@
                                         <h5 style="text-align:right">Sort Description:</h5>
                                     </div>
                                     <div class="col-sm-9">
-		    			<textarea rows="4" cols="40" style="resize: none;" name="ExpenseNote" id="ExpenseNote">
-		    			</textarea>
+		    			<textarea rows="4" cols="40" style="resize: none;" name="ExpenseNote" id="ExpenseNote"></textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -517,16 +515,13 @@
                             {
                                 $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
                                 $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
-                            }
-                            else if(data["Task"]["professionalServicesRateBillValue"]!==null)
-                            {
-                                $("input[name=ProfessionalServicesTime]").prop("readOnly",true).css("background-color","#E2D8D8");
-                                $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
+                                $("button[name=actionAttackTask]").prop("disabled",true);
                             }
                             else
                             {
                                 $("input[name=ProfessionalServicesTime]").prop("readOnly",false).css("background-color","");
                                 $("input[name=ExpenseAmount]").prop("readOnly",false).css("background-color","");
+                                $("button[name=actionAttackTask]").prop("disabled",false);
                             }
 
                         }
@@ -741,32 +736,29 @@
                 cancel:function()
                 {
                     $("#IdTask").val("");
+                    $("input[id=ChooseDate]").val("");
                     //Time
+                    $("input[id=ProfessionalServices]").val("");
                     $("input[id=ProfessionalServicesCode]").val("");
                     $("textarea[id=ProfessionalServicesNote]").val("");
                     //Expense
+                    $("input[id=Expense]").val("");
                     $("input[id=ExpenseCode]").val("");
                     $("textarea[id=ExpenseNote]").val("");
                     //Button
                     $("button[name=actionAttackTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
 
-                    //Value ProfessionalServices sdsd
+                    //Value ProfessionalServices
                     $("input[name=ProfessionalServicesTime]").prop("readOnly",false).val("").css("background-color","");
-                    $("input[name=ProfessionalServicesAmount]").prop("readOnly",true).val("").css("background-color","#E2D8D8");
-                    $("input[name=ProfessionalServicesRate]").prop("readOnly",true).val(taskView.RateDefault).css("background-color","#E2D8D8");
+                    $("input[name=ProfessionalServicesAmount]").val("");
 
                     $("input[name=ProfessionalServicesTimeBillValue]").val("");
                     $("input[name=ProfessionalServicesAmountBillValue]").val("");
                     $("input[name=ProfessionalServicesRateBillValue]").val("");
 
-
-
                     //Expense
                     $("input[name=ExpenseAmount]").prop("readOnly",false).val("").css("background-color","");
-
-
-
 
                 },
                 showModelListTaskTime:function()

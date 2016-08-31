@@ -228,12 +228,11 @@ class UserController extends Controller
                         try{
                             if($request->get('idTask'))
                             {
-                                $task = ClaimTaskDetail::where('id',$request->get('idTask'))->where('active',1)->first();
+                                $task = ClaimTaskDetail::where('id',$request->get('idTask'))->first();
                                 if($task)
                                 {
                                     //check this task already bill
-                                    $checkIB = ClaimTaskDetail::where('professionalServices',1)->where('statusId',1)->where('billDate','>',$task->billDate)->first();
-                                    if($checkIB!=null)
+                                    if($task->active == 1 && $task->invoiceMajorNo == null)
                                     {
                                         $result = array('Action'=>'Update','Result'=>2);//can't fix task has already bill Pending
                                     }
@@ -286,17 +285,17 @@ class UserController extends Controller
         $expenseCode = null;
         try{
             if($request->get('idDocket')) {
-                $task = ClaimTaskDetail::where('id', $request->get('idDocket'))->where('active', 1)->first();
+                $task = ClaimTaskDetail::where('id', $request->get('idDocket'))->first();
                 if ($task != null)
                 {
                     //Take time and expense
                     if($task->professionalServices)
                     {
-                        $professionalCode = TaskCategory::where('id',$task->professionalServices)->where('active',1)->first()->code;
+                        $professionalCode = TaskCategory::where('id',$task->professionalServices)->first()->code;
                     }
                     if($task->expense)
                     {
-                        $expenseCode = TaskCategory::where('id',$task->expense)->where('active',1)->first()->code;
+                        $expenseCode = TaskCategory::where('id',$task->expense)->first()->code;
                     }
                     //Test user other
                     if($task->userId!= Auth::user()->id)

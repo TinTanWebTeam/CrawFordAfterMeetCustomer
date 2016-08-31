@@ -16,7 +16,7 @@ class CreateExchangeRatesTable extends Migration
             $table->increments('id');
             $table->string('code',50)->unique();
             $table->string('name',500);
-            $table->decimal('value');
+            $table->decimal('value',18,0);
             $table->string('description')->nullable();
             $table->boolean('active')->default(1);// if not null will be reference to properties code of table claims
             $table->timestamps();

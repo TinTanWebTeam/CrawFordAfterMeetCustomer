@@ -17,7 +17,7 @@ class CreateProfessionalServicesTable extends Migration
             $table->integer('billId');//if not null to reference to id in bill
             $table->integer('userId');//if sdsdnot null to reference to id in user
             $table->integer('rateChange')->default(0);
-            $table->decimal('value')->default(0);
+            $table->decimal('value',18,0)->default(0);
             $table->timestamps();
         });
     }

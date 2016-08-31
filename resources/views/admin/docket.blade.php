@@ -712,6 +712,11 @@
                                 $("div[id=modal-confirm]").modal("show");
                                 docketView.cancelAfterAddNew();
                             }
+                            else if(data["Result"]==2)
+                            {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
+                                $("div[id=modal-confirm]").modal("show");
+                            }
                             else {
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
                                 $("div[id=modal-confirm]").modal("show");
