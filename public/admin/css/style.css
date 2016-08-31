@@ -667,20 +667,23 @@ label.error{
 .element{
     text-align: center;
 }
+#docket-contain-page-1 .element{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
 #docket-contain-page-2 .element {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 #docket-contain-page-3 .element {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 #docket-contain-page-4 .element {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 #docket-contain-page-5 .element {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 #docket-contain-page-6 .element {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 .wip-header{
     padding-top: 30px;
