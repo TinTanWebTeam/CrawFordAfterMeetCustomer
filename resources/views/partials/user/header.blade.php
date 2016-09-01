@@ -17,6 +17,7 @@
 				<li><a href="javascript:;">Profile</a></li>
 				<li><a href="javascript:;">Task</a></li>
 				<li><a href="javascript:;">Claim</a></li>
+				<li><a href="javascript:;">Report</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

@@ -730,7 +730,7 @@
 
 {{--claim type--}}
 <div class="modal fade" id="modal-claim-type">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
@@ -742,7 +742,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="tableClaimType">
                         <thead>
                         <tr>
                             <th data-name="id" style="display: none">
@@ -807,7 +807,7 @@
 </div>
 {{--loss desc code--}}
 <div class="modal fade" id="modal-loss-desc-code">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
@@ -819,7 +819,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" ID="tableLossDesc">
                         <thead>
                         <tr>
                             <th data-name="id" style="display: none">
@@ -1688,13 +1688,17 @@
                 getAllClaimType:function()
                 {
                     $.get(url + 'getAllClaimType',function (data) {
+                        $("table[id=tableClaimType]").DataTable().destroy();
                         $("#modal-claim-type-table-body").empty().append(data);
+                        $("table[id=tableClaimType]").DataTable();
                     });
                 },
                 getAllLossDesc:function()
                 {
                     $.get(url + 'getAllLossDesc',function (data) {
+                        $("table[id=tableLossDesc]").DataTable().destroy();
                         $("#modal-loss-desc-table-body").empty().append(data);
+                        $("table[id=tableLossDesc]").DataTable();
                     });
                 },
                 getAllSourceCode:function()

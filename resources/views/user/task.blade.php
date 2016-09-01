@@ -1,10 +1,10 @@
 {{--Model list task time  --}}
 <div class="modal fade" id="modalListTaskCaterogyTime" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent" style="text-align: center">List Time Code</div>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="tableListTime">
                     <thead>
                     <tr>
                         <th>Code</th>
@@ -12,7 +12,7 @@
                         <th>Description</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbodyTableListTime">
                     @if($listTask !=null)
                         @foreach($listTask as $item)
                             <tr id="{{$item->id}}" onclick="taskView.chooseTaskTimeWhenUseEventDoubleClick(this)" style="cursor: pointer">
@@ -764,6 +764,7 @@
                 showModelListTaskTime:function()
                 {
                     $("div[id=modalListTaskCaterogyTime]").modal("show");
+                    $("table[id=tableListTime]").DataTable();
                 },
                 chooseTaskTimeWhenUseEventDoubleClick:function(element)
                 {

@@ -76,12 +76,15 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::get('task','UserController@task');
     Route::get('profile','UserController@profile');
     Route::get('claim','UserController@claim');
+    Route::get('report','UserController@report');
+
     Route::post('loadClaimByEventEnterKey','UserController@loadClaimByEventEnterKey');
     Route::post('assignmentTask','UserController@assignmentTask');
     Route::post('viewDetailTask','UserController@viewDetailTask');
     Route::post('loadViewDocketDetail','UserController@loadViewDocketDetail');
     Route::post('updateInformationOrChangePassword','UserController@updateInformationOrChangePassword');
     Route::post('loadClaimByEventEnterKeyWhenUserSeeClaim','UserController@loadClaimByEventEnterKeyWhenUserSeeClaim');
-    Route::post('loadExpenseCodeByType','UserController@loadExpenseCodeByType');//asdas
+    Route::post('loadExpenseCodeByType','UserController@loadExpenseCodeByType');
+    Route::post('loadReport','UserController@loadReport');
 
 });

@@ -922,7 +922,6 @@ class AdminController extends Controller
     {
         $listUser = DB::table('users')
             ->join('rate_details','users.id','=','rate_details.userId')
-            ->where('users.roleId','!=',1)
             ->select(
                 'users.id as id',
                 'users.name as name',

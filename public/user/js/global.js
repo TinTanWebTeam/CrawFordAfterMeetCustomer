@@ -31,5 +31,13 @@ $(function() {
             });
         }
     });
+    Catogories.find("li").eq(3).click(function() {
+        if ($(this).find("a").text() === "Report") {
+            setActiveMenu($(this));
+            $.get(url + "user/report", function(viewClaim) {
+                $("div#page_container").empty().append(viewClaim);
+            });
+        }
+    });
 
 });
