@@ -2283,8 +2283,10 @@ class AdminController extends Controller
             ->where('claim_task_details.invoiceMajorNo','=',$invoice_major_no)
             ->select(
                 'claim_task_details.professionalServicesNote',
+                'pro.description as professionalServicesNoteDes',
                 'claim_task_details.professionalServicesTime',
                 'claim_task_details.expenseNote',
+                'ex.description as expenseNoteDes',
                 'claim_task_details.expenseAmount',
                 'claim_task_details.created_at',
                 'claim_task_details.userId',

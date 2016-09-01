@@ -1177,6 +1177,13 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
+                if(result.docket[i].professionalServices !=null && result.docket[i].expense != null){
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNoteDes.trim() + ": " + result.docket[i].professionalServicesNote.trim() + "<br>" + result.docket[i].expenseNoteDes.trim() + ": " + result.docket[i].expenseNote.trim() +"</span>";
+                }else if(result.docket[i].professionalServices !=null && result.docket[i].expense == null){
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNoteDes.trim() + ": " + result.docket[i].professionalServicesNote.trim() +"</span>";
+                }else if(result.docket[i].professionalServices == null && result.docket[i].expense != null){
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + result.docket[i].expenseNoteDes.trim() + ": " + result.docket[i].expenseNote.trim() +"</span>";
+                }
                 row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
