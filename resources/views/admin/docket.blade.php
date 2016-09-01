@@ -62,7 +62,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="tableListTime">
                         <thead>
                         <tr>
                             <th data-name="code">
@@ -858,7 +858,9 @@
                 },
                 loadListProfessionalService: function () {
                     $.post(url + "loadListTimeCode", {_token: _token}, function (view) {
+                        $("table[id=tableListTime]").DataTable().destroy();
                         $("tbody[id=modal-time-table-body]").empty().append(view);
+                        $("table[id=tableListTime]").DataTable();
 
                     });
                     $("div[id=modal-time]").modal("show");

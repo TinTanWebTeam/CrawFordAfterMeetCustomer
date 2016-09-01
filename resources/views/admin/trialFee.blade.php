@@ -135,7 +135,7 @@
                             <h5 style="text-align: right">From:</h5>
                         </div>
                         <div class="col-sm-9">
-                            <input type="text" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
+                            <input type="date" name="FromDate" id="FromDate" readonly style="margin-left: 4px;background-color: #F3EDED">
                         </div>
                     </div>
                 </div>
@@ -477,6 +477,7 @@
                     disbursements: null,
                     total: null
                 },
+                timeFrom:null,
                 codeCustomer:null,
                 idBillWhenUpdateBill:null,
                 convertStringToDate: function (date) {
@@ -516,8 +517,9 @@
                             }
                             else {
                                 var arrayTimeCheck = data["check"].split(" ");
+                                trialFeeView.timeFrom = arrayTimeCheck[1];//save time to variable temp to bill
                                 trialFeeView.codeCustomer = data["Claim"]["insurerCode"];
-                                $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheck[0])+" "+arrayTimeCheck[1]);
+                                $("input[name=FromDate]").val(arrayTimeCheck[0]);
                                 $("input[name=idClaim]").val(data["Claim"]["id"]);
                                 $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
@@ -568,7 +570,7 @@
                                                 tbodyList.find("tr:eq(7)").find("td[id="+data["listClaimTaskDetail"][i]["Expense"][j]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
                                                 break;
                                             case "Disbursements":
-                                                tbodyList.find("tr:eq(9)").find("td[id="+data["listClaimTaskDetail"][i]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
+                                                tbodyList.find("tr:eq(9)").find("td[id="+data["listClaimTaskDetail"][i]["Expense"][j]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
                                                 break;
                                             }
                                         }
@@ -592,10 +594,9 @@
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                     var sum = 0;
                     var trSum = tbodyList.find("tr");
-                    for(var i= 3;i<trSum.length - 2;i++)
+                    for(var i= 3;i<=trSum.length - 2;i++)
                     {
                         sum += Number($(trSum[i]).find("td[id="+row+"]").children().val());
-                        //sum += tbodyList.(find("tr")[i]).find("td[id="+row+"]").children().val();
                     }
                     return sum;
                 },
@@ -738,7 +739,7 @@
                             coorInsurer:$("input[name=coInsurer]").val(),
                             Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
                             TotalUpdateInvoice: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(),
-                            FromDate:$("input[name=FromDate]").val(),
+                            FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
                             ToDate:$("input[name=ToDate]").val(),
                             billType: $("input[name=bill-type]:checked").attr("id"),
                             billStatus:$("input[name=bill-status]:checked").attr("id"),
@@ -762,7 +763,7 @@
                                 }
                                 else {
                                     $("div[id=modalConfirm]").modal("hide");
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim no success!!!");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoiceMajorNo has exist!!!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
@@ -778,7 +779,7 @@
                                 }
                                 else {
                                     $("div[id=modalConfirm]").modal("hide");
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Update claim no success!!!");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoiceMajorNo has exist!!!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                             }
@@ -845,7 +846,7 @@
                             var arrayTimeCheckFromDate = data[1]["FromDate"].split(" ");
                             var arrayTimeCheckToDate = data[1]["ToDate"].split(" ");
                             //custom date text box
-                            $("input[name=FromDate]").val(trialFeeView.convertStringToDate(arrayTimeCheckFromDate[0])+" "+arrayTimeCheckFromDate[1]).prop("readOnly",true);
+                            $("input[name=FromDate]").val(arrayTimeCheckFromDate[0]).prop("readOnly",true);
                             $("input[name=ToDate]").attr("type","text").val(trialFeeView.convertStringToDate(arrayTimeCheckToDate[0])+" "+arrayTimeCheckToDate[1]).prop("readOnly",true);
                             //load data to table
 //                            var count = theadListTaskDetail.find("tr:eq(1)").find("th").length;//đếm số user của tag thead
@@ -990,7 +991,7 @@
                 },
                 loadTaskDetailByDate:function()
                 {
-                    $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),fromDate:$("input[name=FromDate]").val(),toDate:$("input[name=ToDate]").val()},function(data)
+                    $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),fromDate:$("input[name=FromDate]").val()+" "+trialFeeView.timeFrom,toDate:$("input[name=ToDate]").val()},function(data)
                     {
                         console.log(data);
                         if(data["listClaimTaskDetail"].length === 0)
@@ -1036,7 +1037,7 @@
                                             tbodyList.find("tr:eq(7)").find("td[id="+data["listClaimTaskDetail"][i]["Expense"][j]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
                                             break;
                                         case "Disbursements":
-                                            tbodyList.find("tr:eq(9)").find("td[id="+data["listClaimTaskDetail"][i]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
+                                            tbodyList.find("tr:eq(9)").find("td[id="+data["listClaimTaskDetail"][i]["Expense"][j]["Name"]+"]").children().val(data["listClaimTaskDetail"][i]["Expense"][j]["expenseAmount"]);
                                             break;
                                     }
                                 }

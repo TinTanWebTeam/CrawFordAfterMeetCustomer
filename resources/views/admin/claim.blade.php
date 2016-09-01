@@ -1601,79 +1601,79 @@
                     }
                 },
                 fillSourceCustomerFromModalToInput: function(element){
-                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("#modal-source-code").modal("hide");
                 },
                 fillClaimTypeFromModalToInput : function(element){
-                    $("input[name=claimTypeCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=claimTypeCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("#modal-claim-type").modal("hide");
                 },
                 fillLossDescFromModalToInput:function(element)
                 {
-                    $("input[name=lossDescCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=lossDescCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("#modal-loss-desc-code").modal("hide");
                 },
                 fillAdjusterFromModalToInput:function(element)
                 {
-                    $("input[name=adjusterCode]").val($(element).parent().parent().find("td").eq(1).html());
-                    $("input[name=rate]").val($(element).parent().parent().find("td").eq(5).html());
+                    $("input[name=adjusterCode]").val($(element).parent().parent().find("td").eq(1).text());
+                    $("input[name=rate]").val($(element).parent().parent().find("td").eq(5).text());
                     $("#modal-adjuster").modal("hide");
                 },
                 fillBranchFromModalToInput:function(element)
                 {
-                    $("input[name=branchCode]").val($(element).parent().parent().find("td").eq(1).html());
+                    $("input[name=branchCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("#modal-branch").modal("hide");
                 },
                 fillInsurerCodeFromModalToInput:function(element)
                 {
-                    $("input[name=insurerCode]").val($(element).parent().parent().find("td").eq(1).html());
-                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(3).html());
+                    $("input[name=insurerCode]").val($(element).parent().parent().find("td").eq(1).text());
+                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(3).text());
                     $("#modal-insurer-code").modal("hide");
                 },
                 editClaimType:function(element)
                 {
-                    $("input[name=claimType_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=claimType_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=claimType_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
+                    $("input[name=claimType_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=claimType_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=claimType_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
                     $("div[id=modal-claim-type]").modal("hide");
                     $("div[id=modal-claim-type-modify]").modal("show");
                 },
                 editLossDesc:function(element)
                 {
-                    $("input[name=lossDesc_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=lossDesc_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=lossDesc_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
+                    $("input[name=lossDesc_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=lossDesc_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=lossDesc_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
                     $("#modal-loss-desc-code").modal("hide");
                     $("#modal-loss-desc-code-modify").modal("show");
                 },
                 editSourceCode:function(element)
                 {
 
-                    $("input[name=source_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=source_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=source_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
+                    $("input[name=source_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=source_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=source_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
                     $("#modal-source-code").modal("hide");
                     $("#modal-source-code-modify").modal("show");
                 },
                 editBranch:function(element)
                 {
-                    $("input[name=branch_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=branch_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=branch_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
-                    $("select#branch_code_modify_branch_type").val($(element).parent().parent().find("td").eq(3).html()).prop("disabled",true);
+                    $("input[name=branch_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=branch_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=branch_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
+                    $("select#branch_code_modify_branch_type").val($(element).parent().parent().find("td").eq(3).text()).prop("disabled",true);
 
                     $("#modal-branch").modal("hide");
                     $("#modal-branch-modify").modal("show");
                 },
                 editInsurerCode:function(element)
                 {
-                    $("input[name=insurer_code_modify_id]").val($(element).parent().parent().find("td").eq(0).html());
-                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().find("td").eq(1).html()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=insurer_code_modify_name]").val($(element).parent().parent().find("td").eq(2).html());
-                    $("select#insurer_code_modify_sourceCustomerId").val($(element).parent().parent().find("td").eq(3).html()).prop("disabled",true);
+                    $("input[name=insurer_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=insurer_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
+                    $("select#insurer_code_modify_sourceCustomerId").val($(element).parent().parent().find("td").eq(3).text()).prop("disabled",true);
 
-                    $("textarea[name=insurer_code_modify_address]").val($(element).parent().parent().find("td").eq(4).html());
-                    $("input[name=insurer_code_modify_contact_person]").val($(element).parent().parent().find("td").eq(5).html());
+                    $("textarea[name=insurer_code_modify_address]").val($(element).parent().parent().find("td").eq(4).text());
+                    $("input[name=insurer_code_modify_contact_person]").val($(element).parent().parent().find("td").eq(5).text());
 
 
                     $("#modal-insurer-code").modal("hide");
