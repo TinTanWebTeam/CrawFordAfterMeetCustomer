@@ -522,7 +522,7 @@ form#trialFee h5{
     border-bottom: 1px solid black;
 }
 .dockets-content-header-date{
-    width: 10%;
+    width: 8%;
     display: inline-block;
 }
 .dockets-content-header-branch-code{
@@ -530,7 +530,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-adjuster-code{
-    width: 7%;
+    width: 9%;
     display: inline-block;
 }
 .dockets-content-header-code{
@@ -546,7 +546,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-expense-amount{
-    width: 5%;
+    width: 7%;
     display: inline-block;
 }
 .dockets-content-header-note{
@@ -558,7 +558,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-invoice-date{
-    width: 10%;
+    width: 8%;
     display: inline-block;
 }
 
