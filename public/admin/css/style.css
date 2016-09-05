@@ -805,3 +805,37 @@ label.error{
 #docket-contain-page-6 span{
     font-size: 18px;
 }
+#invoice_print_page{
+    -webkit-transform: scale(0.960,0.960);
+    -moz-transform: scale(0.960,0.960);
+    -ms-transform: scale(0.960,0.960);
+    -o-transform: scale(0.960,0.960);
+    transform: scale(0.960,0.960);
+    display: block;
+    -webkit-transform-origin-x: 0;
+    -webkit-transform-origin-y: 0;
+    height: 1684px;
+    width: 1190px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 20px;
+}
+.invoice-logo{
+    width: 100%;
+    display: block;
+}
+.invoice-logo-img{
+    margin-left: 70%;
+    display: block;
+    width: 250px;
+    height: auto;
+    margin-right: 80px;
+}
+.fee-statement{
+    display: block;
+    text-align: center;
+}
+.fee-statement h3{
+    text-decoration: underline;
+}
