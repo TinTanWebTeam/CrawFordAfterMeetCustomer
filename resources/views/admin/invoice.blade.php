@@ -468,32 +468,40 @@
             </div>
             <br>
             <br>
+            <br>
+            <br>
             <div style="width: 1150px;display: block">
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
                     <h4>Insured:</h4>
-                    <h4>Loss Description:</h4>
+                    <h4 style="margin-bottom: 0px">Loss Description:</h4>
                 </div>
                 <div style="display: inline-block;width: 73%;box-sizing: border-box">
                     <h4>An Phat Computing Trading and Service Co., Ltd</h4>
-                    <h4>Water damage to electric machinery/equipment</h4>
+                    <h4 style="margin-bottom: 0px">Water damage to electric machinery/equipment</h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
                     <h4>Your Claim No:</h4>
                     <h4>Policy No:</h4>
                 </div>
                 <div style="display: inline-block;width: 34%;box-sizing: border-box">
-                    <h4>Not advised</h4>
+                    <h4 style="margin-top: 0px">Not advised</h4>
                     <h4>PDAR1500085</h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
-                    <h4>Crawford Ref:</h4>
+                    <h4 style="margin-top: 0px">Crawford Ref:</h4>
                     <h4>Loss date:</h4>
                 </div>
                 <div style="display: inline-block;width: 25%;box-sizing: border-box">
-                    <h4>1001685</h4>
+                    <h4 style="margin-top: 0px">1001685</h4>
                     <h4>22 September, 2015</h4>
                 </div>
             </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
             <div style="width: 1150px;display: block">
                 <h4 class="text-center" style="font-weight: 600">Memoradum of Fees</h4>
                 <br>
@@ -582,6 +590,10 @@
 
                     </div>
                 </div>
+                <br>
+                <br>
+                <br>
+                <br>
                 <br>
                 <br>
                 <div style="width: 1150px;border: 2px solid black">
@@ -677,6 +689,11 @@
                         <h5 style="margin-top: 0px">Tax Invoice to be issued upon receiving payment</h5>
                     </div>
                 </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
                 <div style="width: 1150px;">
                     <h5 style="text-align: center;font-weight: 600">Vietnam International Adjuster Co., Ltd</h5>
                     <h5 style="text-align: center;font-weight: 600">5th floor Estar Building, 147-149 Vo Van Tan Street, Ward 6, District 3, Ho Chi Minh City, Vietnam</h5>
