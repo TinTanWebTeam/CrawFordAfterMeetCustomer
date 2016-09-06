@@ -437,7 +437,7 @@
                 <h5>Invoice Print Review</h5>
             </div>
             <div class="col-sm-6">
-                <button class="btn btn-sm btn-primary pull-right" style="margin-top: 10px">Print Invoice</button>
+                <button class="btn btn-sm btn-primary pull-right" style="margin-top: 10px" onclick="print_invoice_page()">Print Invoice</button>
             </div>
         </div>
         <br>
@@ -750,4 +750,16 @@
 
         }
     })
+    function print_invoice_page() {
+        $("#invoice_print_page").printThis({
+            debug: false,
+            importCSS: true,
+            importStyle: false,
+            loadCSS: "admin/css/style.css",
+            removeInline: false,
+            printDelay: 2000,
+            header: null,
+            formValues: true
+        });
+    }
 </script>
