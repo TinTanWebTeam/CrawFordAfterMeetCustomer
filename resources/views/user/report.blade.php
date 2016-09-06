@@ -38,7 +38,7 @@
         </td>
         <td style="padding-left: 10px">
             <button type="button" name="submitReport" class="btn btn-success" onclick="reportView.submitLoadReport()">
-                Xem
+                Search
             </button>
         </td>
     </tr>
@@ -93,8 +93,8 @@
             <h5 style="font-weight: 600">Branch: All Branches</h5>
         </div>
         <div style="display: inline-block;width: 48%;box-sizing: border-box">
-            <h5 style="font-weight: 600">Adjuster Code: LUUTMH1</h5>
-            <h5 style="font-weight: 600">Adjuster Name: Luu Thi Minh Hanh</h5>
+            <h5 style="font-weight: 600">Adjuster Code: {{ strtoupper(Auth::user()->name) }}</h5>
+            <h5 style="font-weight: 600">Adjuster Name: {{ Auth::user()->firstName.' '.Auth::user()->lastName }}</h5>
             <h5 style="font-weight: 600">Region Code: All Regions</h5>
         </div>
     </div>
@@ -156,7 +156,21 @@
                             $("tbody#tbodyTableReport").empty();
                             for (var i = 0; i < data.length; i++) {
                                 row += "<tr>";
-                                row += "<td>" + data[i]["CreatedDate"] + "</td>";
+                                if (data[i]["CreatedDate"]) {
+                                    var receiveDate = new Date(data[i]["CreatedDate"].substring(0, 10));
+                                    var dd = receiveDate.getDate();
+                                    var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                    var yyyy = receiveDate.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    row += "<td>" + dd + '-' + mm + '-' + yyyy + "</td>";
+                                }
+//                                row += "<td>" + data[i]["CreatedDate"] + "</td>";
                                 row += "<td>" + data[i]["Claim"] + "</td>";
                                 if (data[i]["Time"] !== null) {
                                     row += "<td>" + data[i]["Time"] + "</td>";

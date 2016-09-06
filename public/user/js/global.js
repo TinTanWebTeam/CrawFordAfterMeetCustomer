@@ -16,7 +16,7 @@ $(function() {
         }
     });
     Catogories.find("li").eq(1).click(function() {
-        if ($(this).find("a").text() === "Task") {
+        if ($(this).find("a").text() === "Docket") {
             setActiveMenu($(this));
             $.get(url + "user/task", function(viewTaskUser) {
                 $("div#page_container").empty().append(viewTaskUser);

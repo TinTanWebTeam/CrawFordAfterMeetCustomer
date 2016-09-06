@@ -15,7 +15,7 @@
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 			<ul class="nav navbar-nav">
 				<li><a href="javascript:;">Profile</a></li>
-				<li><a href="javascript:;">Task</a></li>
+				<li><a href="javascript:;">Docket</a></li>
 				<li><a href="javascript:;">Claim</a></li>
 				<li><a href="javascript:;">Report</a></li>
 			</ul>
