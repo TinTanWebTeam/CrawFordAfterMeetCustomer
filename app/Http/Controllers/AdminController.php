@@ -267,7 +267,6 @@ class AdminController extends Controller
                     } else {
                         $date = $claim->openDate;
                     }
-
                     //load data
                     if ($date) {
 //                        $listClaimTaskDetail = DB::table('claim_task_details')
@@ -355,6 +354,7 @@ class AdminController extends Controller
                                 'task_categories.name as taskCategory'
                             )
                             ->get();
+//                        dd($listExpense);
                         $arrayAll = [];
                         //$arrayTaskExpense = array("GeneralExp","CommPhotoExp","ConsultFeesExp","TravelRelatedExp","GstFreeDisb","Disbursements");
                         foreach($arrayListTime as $item)
@@ -1292,6 +1292,8 @@ class AdminController extends Controller
     {
         //dd($request->all());
         $result = null;
+        $idTime = 0;
+        $idExpense = 0;
         //Check date
         $now = Carbon::now();
         $timeNow = Carbon::parse($now)->format('Y-m-d H:i:s');
@@ -1315,8 +1317,16 @@ class AdminController extends Controller
                     $userTask = User::where('name', $request->get('taskObject')['UserId'])
                         ->where('roleId', '!=', 1)->first();
                     if ($userTask) {
+                        if($request->get('taskObject')['ProfessionalServices']!=null)
+                        {
+                            $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                        }
+                        if($request->get('taskObject')['Expense']!=null)
+                        {
+                            $idExpense = TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                        }
                         $task = new ClaimTaskDetail();
-                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                        $task->professionalServices = $idTime;
                         $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
 
                         $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
@@ -1324,7 +1334,7 @@ class AdminController extends Controller
                         $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
 
 
-                        $task->expense = $request->get('taskObject')['Expense'];
+                        $task->expense = $idExpense;
                         $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
                         $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
 
@@ -1360,14 +1370,22 @@ class AdminController extends Controller
                             }
                             else
                             {
-                                $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                                if($request->get('taskObject')['ProfessionalServices']!=null)
+                                {
+                                    $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                                }
+                                if($request->get('taskObject')['Expense']!=null)
+                                {
+                                    $idExpense = TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                                }
+                                $task->professionalServices = $idTime;
                                 $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
 
                                 $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
                                 $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
                                 $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
 
-                                $task->expense = $request->get('taskObject')['Expense'];
+                                $task->expense = $idExpense;
                                 $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
                                 $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
 
@@ -2909,6 +2927,56 @@ class AdminController extends Controller
 
         }
         return $data;
+    }
+
+    public function getSearchTime(Request $request)
+    {
+        try
+        {
+            $time = TaskCategory::where('name','TimeCode')
+                                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $time)==0)
+            {
+                return 0;
+            }
+            else if(count($time)>1)
+            {
+                return 2;
+            }
+            else if(count($time)==1)
+            {
+                return $time;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchExpense(Request $request)
+    {
+        try
+        {
+            $expense = TaskCategory::where('name','!=','TimeCode')->where('name','!=','IB')->where('name','!=','FB')
+                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $expense)==0)
+            {
+                return 0;
+            }
+            else if(count($expense)>1)
+            {
+                return 2;
+            }
+            else if(count($expense)==1)
+            {
+                return $expense;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
     }
 
 }

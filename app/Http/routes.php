@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getAllBranch','AdminController@getAllBranch');
     Route::get('getAllInsurerCode','AdminController@getAllInsurerCode');
     Route::get('getAllBrokerCode','AdminController@getAllBrokerCode');
+    Route::get('getSearchTime','AdminController@getSearchTime');
+    Route::get('getSearchExpense','AdminController@getSearchExpense');
 
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');
@@ -79,6 +81,8 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::get('profile','UserController@profile');
     Route::get('claim','UserController@claim');
     Route::get('report','UserController@report');
+    Route::get('getSearchTime','UserController@getSearchTime');
+    Route::get('getSearchExpense','UserController@getSearchExpense');
 
     Route::post('loadClaimByEventEnterKey','UserController@loadClaimByEventEnterKey');
     Route::post('assignmentTask','UserController@assignmentTask');

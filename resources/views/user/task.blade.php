@@ -163,7 +163,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" name="ProfessionalServices" id="ProfessionalServices" style="width: auto;display:none">
-                                        <input type="text" name="ProfessionalServicesCode" id="ProfessionalServicesCode" style="width: auto" readonly onfocus="taskView.showModelListTaskTime()">
+                                        <input type="text" name="ProfessionalServicesCode" id="ProfessionalServicesCode" style="width: auto;text-transform: uppercase"  ondblclick="taskView.showModelListTaskTime()">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -187,7 +187,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" name="Expense" id="Expense" style="width: auto;display: none">
-                                        <input type="text" name="ExpenseCode" id="ExpenseCode" style="width: auto" readonly onfocus="taskView.showModelListTaskExpense()">
+                                        <input type="text" name="ExpenseCode" id="ExpenseCode" style="width: auto;text-transform: uppercase"  ondblclick="taskView.showModelListTaskExpense()">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -768,7 +768,7 @@
                 },
                 chooseTaskTimeWhenUseEventDoubleClick:function(element)
                 {
-                    $("input[name=ProfessionalServices]").val($(element).attr("id"));
+                    $("input[name=ProfessionalServices]").val($(element).find("td:eq(0)").html());
                     $("input[name=ProfessionalServicesCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modalListTaskCaterogyTime]").modal("hide");
                 },
@@ -779,7 +779,7 @@
                 },
                 chooseTaskExpenseWhenUseEventDoubleClick:function(element)
                 {
-                    $("input[name=Expense]").val($(element).attr("id"));
+                    $("input[name=Expense]").val($(element).find("td:eq(0)").html());
                     $("input[name=ExpenseCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modalListTaskCaterogyExpense]").modal("hide");
                 },
@@ -807,4 +807,81 @@
 
         }
     })
+    //setup before functions Time
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 500;  //time in ms, 3 second for example
+    var $inputTime = $("input#ProfessionalServicesCode");
+
+    //on keyup, start the countdown
+    $inputTime.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingTime, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputTime.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingTime() {
+        $.get(url + 'user/getSearchTime', {
+            token: _token,
+            Code: $inputTime.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modalConfirm]").modal("show");
+                $inputTime.val("");
+                $("input#ProfessionalServices").val("");
+            } else if (data === "2") {
+                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modalConfirm]").modal("show");
+                $inputTime.val("");
+                $("input#ProfessionalServices").val("");
+            } else {
+                $inputTime.val(data[0]["code"]);
+                $("input#ProfessionalServices").val(data[0]["code"])
+            }
+        });
+    }
+
+    //setup before functions Expense
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 500;  //time in ms, 3 second for example
+    var $inputExpense = $("input#ExpenseCode");
+
+    //on keyup, start the countdown
+    $inputExpense.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingExpense, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputExpense.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingExpense() {
+        $.get(url + 'user/getSearchExpense', {
+            token: _token,
+            Code: $inputExpense.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modalConfirm]").modal("show");
+                $inputExpense.val("");
+                $("input#Expense").val("");
+            } else if (data === "2") {
+                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modalConfirm]").modal("show");
+                $inputExpense.val("");
+                $("input#Expense").val("");
+            } else {
+                $inputExpense.val(data[0]["code"]);
+                $("input#Expense").val(data[0]["code"]);
+            }
+        });
+    }
 </script>

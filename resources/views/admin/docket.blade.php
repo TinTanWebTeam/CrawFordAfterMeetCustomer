@@ -275,7 +275,7 @@
                                     <input type="text" id="ProfessionalServices" name="ProfessionalServices"
                                            style="width: auto;display: none">
                                     <input type="text" id="ProfessionalServicesCode" name="ProfessionalServicesCode"
-                                           style="width: auto" readonly onfocus="docketView.loadListProfessionalService()">
+                                           style="width: auto;text-transform: uppercase"  ondblclick="docketView.loadListProfessionalService()" >
                                 </div>
                             </div>
                             <div class="row">
@@ -299,8 +299,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <input type="text" name="Expense" id="Expense" style="width: auto;display: none;">
-                                    <input type="text" readonly name="ExpenseCode" id="ExpenseCode" style="width: auto"
-                                           onfocus="docketView.loadListExpense()">
+                                    <input type="text"  name="ExpenseCode" id="ExpenseCode" style="width: auto;text-transform: uppercase"
+                                           ondblclick="docketView.loadListExpense()">
                                 </div>
                             </div>
                             <div class="row">
@@ -884,13 +884,13 @@
                 },
 
                 chooseTaskTimeCode: function (element) {
-                        $("input[name=ProfessionalServices]").val($(element).attr("id"));
+                        $("input[name=ProfessionalServices]").val($(element).find("td:eq(0)").html());
                         $("input[name=ProfessionalServicesCode]").val($(element).find("td:eq(0)").html());
                         $("div[id=modal-time]").modal("hide");
                 },
                 chooseTaskExpenseCode:function(element)
                 {
-                    $("input[name=Expense]").val($(element).attr("id"));
+                    $("input[name=Expense]").val($(element).find("td:eq(0)").html());
                     $("input[name=ExpenseCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modal-expense]").modal("hide");
                 },
@@ -955,4 +955,81 @@
 
         }
     })
+    //setup before functions Time
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 500;  //time in ms, 3 second for example
+    var $inputTime = $("input#ProfessionalServicesCode");
+
+    //on keyup, start the countdown
+    $inputTime.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingTime, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputTime.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingTime() {
+        $.get(url + 'getSearchTime', {
+            token: _token,
+            Code: $inputTime.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputTime.val("");
+                $("input#ProfessionalServices").val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputTime.val("");
+                $("input#ProfessionalServices").val("");
+            } else {
+                $inputTime.val(data[0]["code"]);
+                $("input#ProfessionalServices").val(data[0]["code"])
+            }
+        });
+    }
+
+    //setup before functions Expense
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 500;  //time in ms, 3 second for example
+    var $inputExpense = $("input#ExpenseCode");
+
+    //on keyup, start the countdown
+    $inputExpense.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingExpense, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputExpense.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingExpense() {
+        $.get(url + 'getSearchExpense', {
+            token: _token,
+            Code: $inputExpense.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputExpense.val("");
+                $("input#Expense").val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputExpense.val("");
+                $("input#Expense").val("");
+            } else {
+                $inputExpense.val(data[0]["code"]);
+                $("input#Expense").val(data[0]["code"]);
+            }
+        });
+    }
 </script>

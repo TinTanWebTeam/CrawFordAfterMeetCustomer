@@ -149,6 +149,8 @@ class UserController extends Controller
     public function assignmentTask(Request $request)
     {
         $result = null;
+        $idTime = 0;
+        $idExpense = 0;
         //check claim close
         $checkClaimClose = Claim::where('id', $request->get('taskObject')['ClaimId'])->first();
         if ($checkClaimClose) {
@@ -169,8 +171,16 @@ class UserController extends Controller
                 } else {
                     if ($request->get('action') == 1) {
                         try {
+                            if($request->get('taskObject')['ProfessionalServices']!=null)
+                            {
+                                $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                            }
+                            if($request->get('taskObject')['Expense']!=null)
+                            {
+                                $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                            }
                             $task = new ClaimTaskDetail();
-                            $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                            $task->professionalServices = $idTime;
                             $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
 
                             $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
@@ -178,7 +188,7 @@ class UserController extends Controller
                             $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
 
 
-                            $task->expense = $request->get('taskObject')['Expense'];
+                            $task->expense = $idExpense;
                             $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
                             $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
 
@@ -206,13 +216,21 @@ class UserController extends Controller
                                     } else if ($task->userId != Auth::user()->id) {
                                         $result = array('Action' => 'Update', 'Result' => 0);//can't fix task of user other
                                     } else {
-                                        $task->professionalServices = $request->get('taskObject')['ProfessionalServices'];
+                                        if($request->get('taskObject')['ProfessionalServices']!= null)
+                                        {
+                                            $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                                        }
+                                        if($request->get('taskObject')['Expense']!=null)
+                                        {
+                                            $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                                        }
+                                        $task->professionalServices = $idTime;
                                         $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
                                         $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
                                         $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
                                         $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
 
-                                        $task->expense = $request->get('taskObject')['Expense'];
+                                        $task->expense = $idExpense;
                                         $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
                                         $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
 
@@ -479,5 +497,55 @@ class UserController extends Controller
         }
         return $data;
 
+    }
+
+    public function getSearchTime(Request $request)
+    {
+        try
+        {
+            $time = TaskCategory::where('name','TimeCode')
+                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $time)==0)
+            {
+                return 0;
+            }
+            else if(count($time)>1)
+            {
+                return 2;
+            }
+            else if(count($time)==1)
+            {
+                return $time;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchExpense(Request $request)
+    {
+        try
+        {
+            $expense = TaskCategory::where('name','!=','TimeCode')->where('name','!=','IB')->where('name','!=','FB')
+                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $expense)==0)
+            {
+                return 0;
+            }
+            else if(count($expense)>1)
+            {
+                return 2;
+            }
+            else if(count($expense)==1)
+            {
+                return $expense;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
     }
 }
