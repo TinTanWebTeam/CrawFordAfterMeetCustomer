@@ -434,10 +434,11 @@
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-6">
-                <h5>Invoice Print Review</h5>
+                {{--<h5>Invoice Print Review</h5>--}}
             </div>
             <div class="col-sm-6">
                 <button class="btn btn-sm btn-primary pull-right" style="margin-top: 10px" onclick="print_invoice_page()">Print Invoice</button>
+                <button class="btn btn-sm btn-success pull-right" style="margin-top: 10px;margin-right: 30px" onclick="show_invoice_page()">Show/Hide Review</button>
             </div>
         </div>
         <br>
@@ -751,6 +752,7 @@
         }
     })
     function print_invoice_page() {
+        $("#invoice_print_page").show();
         $("#invoice_print_page").printThis({
             debug: false,
             importCSS: true,
@@ -761,5 +763,8 @@
             header: null,
             formValues: true
         });
+    }
+    function show_invoice_page(){
+        $("#invoice_print_page").toggle();
     }
 </script>
