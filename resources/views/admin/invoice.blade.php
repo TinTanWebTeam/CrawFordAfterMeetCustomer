@@ -35,7 +35,6 @@
 </div>
 {{--Model List Invoice--}}
 
-
 <form action="" class="form-invoice">
     <div class="row" style="background-color: white">
         <div class="col-sm-7">

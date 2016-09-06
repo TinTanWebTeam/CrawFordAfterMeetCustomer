@@ -112,3 +112,18 @@ select{
 form#trialFee h5{
     font-size: 12px;
 }
+.submission_detail{
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+.submission-header{
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+.submission-content{
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
