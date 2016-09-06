@@ -85,11 +85,11 @@
             <h3 style="font-weight: 600">Time Submission Report (Detailed)</h3>
         </div>
         <div style="display: inline-block;width: 48%;box-sizing: border-box">
-            <h6 style="font-style: italic;text-align: right">Printed: 30/06/2016 4:34:34</h6>
+            <h6 style="font-style: italic;text-align: right">Printed: <span id="printed_at">30/06/2016 4:34:34</span></h6>
         </div>
-        <div style="display: inline-block;width: 50%;box-sizing: border-box">
-            <h5 style="font-weight: 600">End Date: 01/05/2016</h5>
-            <h5 style="font-weight: 600">Start Date: 01/05/2016</h5>
+        <div style="display: inline-block;width: 50%;box-sizing: border-box;padding-left: 70px">
+            <h5 style="font-weight: 600">End Date: <span id="end_date">01/05/2016</span></h5>
+            <h5 style="font-weight: 600">Start Date: <span id="start_date">01/05/2016</span></h5>
             <h5 style="font-weight: 600">Branch: All Branches</h5>
         </div>
         <div style="display: inline-block;width: 48%;box-sizing: border-box">
@@ -130,6 +130,10 @@
                 <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
             </div>
         </div>
+        <div id="report_submission_content">
+
+        </div>
+
     </div>
     <br>
     <br>
@@ -210,7 +214,32 @@
                         }
                         $("input[name=sumTimeUnit]").empty().val(sumTime);
                         $("input[name=sumExpenseAmount]").empty().val(sumExpenseAmount);
-
+                        // fill to print report
+                        $("#report_submission_content").empty();
+                        var trSubmission = "";
+//                        <div style="width: 100%">
+//                                <div style="width: 25%;display: inline-block">
+//                                <div style="width: 50%;display: inline-block">
+//                                <div style="text-align: center;font-weight: 600;">Date</div>
+//                                </div>
+//                                <div style="width: 48%;display: inline-block">
+//                                <div style="text-align: center;font-weight: 600;">Claim #</div>
+//                        </div>
+//                        </div>
+//                        <div style="width: 33%;display: inline-block">
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
+//                                </div>
+//                                <div style="width: 7%;display: inline-block"></div>
+//                                <div style="width: 33%;display: inline-block">
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
+//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
+//                                </div>
+//                                </div>
                     });
                 },
                 submitLoadReport: function () {
