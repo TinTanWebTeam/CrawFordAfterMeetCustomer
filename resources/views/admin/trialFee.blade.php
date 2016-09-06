@@ -902,7 +902,6 @@
                             }
                             //insert total into table total
                             trialFeeView.loadDataToTableTotal();
-                            $("button[name=btnBill]").prop("disabled",true);
                         }
                     });
                 },

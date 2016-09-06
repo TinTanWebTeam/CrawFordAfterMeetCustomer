@@ -635,13 +635,13 @@
                                 $("#" + docketView.firstToUpperCase(propertyName)).val(data["Task"][propertyName]);
                             }
                         }
-
-//                        if(data["Task"]["professionalServicesRateBillValue"] !==null) {
-//                            $("input[name=ProfessionalServicesTimeBillValue]").val(data["Task"]["professionalServicesTime"]);
-//                            $("input[name=ProfessionalServicesAmountBillValue]").val(parseFloat(data["Task"]["professionalServicesTime"]) * parseFloat(data["Task"]["professionalServicesRateBillValue"]));
-//                            $("input[name=ProfessionalServicesRateBillValue]").val(data["Task"]["professionalServicesRateBillValue"]);
-//                        }
                           if(data["errorInvoiceMajorNo"]==="True")
+                          {
+                              $("button[name=actionAssignmentTask]").prop("disabled", true);
+                              $("input[name=ProfessionalServicesTime]").prop("readOnly", true).css("background-color", "#E6D8D8");
+                              $("input[name=ExpenseAmount]").prop("readOnly", true).css("background-color", "#E6D8D8");
+                          }
+                          else if(data["errorInvoiceTempNo"]==="True")
                           {
                               $("button[name=actionAssignmentTask]").prop("disabled", true);
                               $("input[name=ProfessionalServicesTime]").prop("readOnly", true).css("background-color", "#E6D8D8");
@@ -829,7 +829,7 @@
                     $("input[name=Action]").val("1");
                     $("input[name=ProfessionalServicesRate]").val("");
                     docketView.cancelAfterAddNew();
-                    $("input[name=ExpenseAmount]").val("");
+                    $("input[name=ExpenseAmount]").val("").prop("readOnly",false).css("background-color","");
                     $("tbody[id=tbodyDocket]").empty();
 
                 },

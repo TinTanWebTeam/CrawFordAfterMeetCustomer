@@ -473,7 +473,7 @@ class AdminController extends Controller
 
     public function loadInformationOfBill(Request $request)
     {
-//        dd($request->all());
+        //dd($request->all());
         $arrayAll = [];
         $arrayData = [];
         $total = null;
@@ -500,9 +500,9 @@ class AdminController extends Controller
                             }
                             //date
                             $date = null;
-                            $checkIB = ClaimTaskDetail::where('professionalServices', 1)
-                                ->where('claimId', $checkIBorFB->claimId)
+                            $checkIB = ClaimTaskDetail::where('claimId', $checkIBorFB->claimId)
                                 ->where('statusId', 2)
+                                ->where('billDate','<',$checkIBorFB->billDate)
                                 ->orderBy('billDate', 'desc')
                                 ->first();
                             if ($checkIB) {
@@ -607,9 +607,11 @@ class AdminController extends Controller
                             $date = null;
                             //Find all IB have status is compete, to known value from date to date
                             $checkIBComplete = ClaimTaskDetail::where('statusId', 2)
-                                ->where('professionalServices', 1)
                                 ->where('claimId',$bill->claimId)
-                                ->Where('id', '!=', $checkIBorFB->id)->orderBy('billDate', 'desc')->first();
+                                ->where('billDate','<',$checkIBorFB->billDate)
+                                ->Where('id', '!=', $checkIBorFB->id)
+                                ->orderBy('billDate', 'desc')
+                                ->first();
                             if ($checkIBComplete) {
                                 $arrayDate = array('FromDate' => $checkIBComplete->billDate, 'ToDate' => $checkIBorFB->billDate);
                                 array_push($arrayAll, $arrayDate);
@@ -1406,6 +1408,10 @@ class AdminController extends Controller
                     if($task->invoiceMajorNo!=null)
                     {
                         $data = array('Task' => $task, 'professionalCode' => $professionalCode, 'expenseCode' => $expenseCode,'errorInvoiceMajorNo'=>'True');
+                    }
+                    else if($task->invoiceTempNo!=null)
+                    {
+                        $data = array('Task' => $task, 'professionalCode' => $professionalCode, 'expenseCode' => $expenseCode,'errorInvoiceTempNo'=>'True');
                     }
                     else
                     {
@@ -2359,12 +2365,12 @@ class AdminController extends Controller
         $invoiceMajorNo = null;
         $fromDate = null;
         $toDate = null;
-        if($request->get('action')==1) // Thêm m?i 1 bill
+        if($request->get('action')==1) // Add new only bill
         {
-            $timeNow = Carbon::now();//l?y ngày gi? hi?n t?i khi thêm 1 bill
+            $timeNow = Carbon::now();//take time now to when add new
             $fromDate = $request->get('data')['FromDate'];
             $toDate = $request->get('data')['ToDate']." ".Carbon::parse($timeNow)->format('H:i:s');
-            //Ki?m tra fromDate và toDate c?a bill tr??c khi thêm m?i
+            //Check fromDate và toDate of bill before add new
             if($toDate<$fromDate)
             {
                 $data = array('Action'=>'AddNew','Error'=>'ToDate<FromDate');
@@ -2375,29 +2381,63 @@ class AdminController extends Controller
             }
             else
             {
-                                    //Th?c hi?n thêm bill
-                if($request->get('data')['billType']=='interim_bill')//Thêm 1 bill lo?i interfim bill
+                                    //Perform Add New
+                if($request->get('data')['billType']=='interim_bill')//Add new Interim Bill
                 {
-                    if($request->get('data')['billStatus']=='pending')// bill lo?i pending(bill t?m)
+                    if($request->get('data')['billStatus']=='pending')// Bill pending
                     {
+                        //Find bill complete or final bill final
+                        $billCompleteFinalBill = ClaimTaskDetail::where('statusId',2)
+                                                 ->where('claimId',$request->get('data')['idClaim'])
+                                                 ->orderBy('billDate','desc')
+                                                 ->first();
 
-                        $IBPending = ClaimTaskDetail::where('professionalServices', 1)
-                            ->where('statusId', 1)
-                            ->where('claimId',$request->get('data')['idClaim'])
-                            ->orderBy('invoiceTempNo','desc')
-                            ->first();
-                        if($IBPending==null)
+                        if($billCompleteFinalBill==null)
                         {
-                            $invoiceTempNo = 10000;
+                                                //New
+                            //Find bill pending not lockeInvoiceNo
+                            $IBPending = ClaimTaskDetail::where('statusId', 1)
+                                ->where('claimId',$request->get('data')['idClaim'])
+                                ->where('lockInvoiceNo',0)
+                                ->orderBy('invoiceTempNo','desc')
+                                ->first();
+                            if($IBPending!=null)
+                            {
+                                $invoiceTempNo = $IBPending->invoiceTempNo +1;
+                            }
+                            else
+                            {
+                                $invoiceTempNo = 10000;
+                            }
+
                         }
                         else
                         {
-                            $IBPending->lockInvoiceNo =1;
-                            $IBPending->save();
-                            $invoiceTempNo1 = $IBPending->invoiceTempNo;
-                            $invoiceTempNo =$invoiceTempNo1+1;
+                            //Find bill pending not lockeInvoiceNo
+                            $IBPending = ClaimTaskDetail::where('statusId', 1)
+                                ->where('claimId',$request->get('data')['idClaim'])
+                                ->where('billDate','>',$billCompleteFinalBill->billDate)
+                                ->where('lockInvoiceNo',0)
+                                ->orderBy('invoiceTempNo','desc')
+                                ->first();
+                            if($IBPending==null)
+                            {
+                                //$invoiceTempNo = 10000;
+                                $invoiceTempNo = ((int)("1".substr($billCompleteFinalBill->invoiceMajorNo,1,4)))+1;
+                            }
+                            else
+                            {
+                                $IBPending->lockInvoiceNo =1;
+                                $IBPending->save();
+                                //Find invoiceTempNo next
+                                $invoiceFind = Invoice::orderBy('invoiceTempNo','desc')->first();
+                                if($invoiceFind!=null)
+                                {
+                                    $invoiceTempNo = $invoiceFind->invoiceTempNo+1;
+                                }
+                            }
                         }
-                        //Thêm 1 công vi?c bill (pending) trên b?ng claim_task_detail
+                        //Add new row task pending
                         $claimTaskDetail = new ClaimTaskDetail();
                         $claimTaskDetail->professionalServices = 1;
                         $claimTaskDetail->professionalServicesTime = 0;
@@ -2410,14 +2450,14 @@ class AdminController extends Controller
                         $claimTaskDetail->userId = Auth::user()->id;
                         $claimTaskDetail->createdBy = Auth::user()->id;
                         $claimTaskDetail->save();
-                        //Thêm 1 dòng trên b?ng bill
+                        //Add new row
                         $bill = new Bill();
                         $bill->billToId = $request->get('data')['billToCustomer'];
                         $bill->claimId = $request->get('data')['idClaim'];
                         $bill->billId = $claimTaskDetail->id;
                         $bill->total = $request->get('data')['Total'];
                         $bill->save();
-                        //Thêm chi ti?t t?ng b?ng công vi?c
+                        //Add new details
                         foreach ($request->get('data')['ArrayData'] as $item) {
                             $user = User::where('name', $item[0])->first();
                             if ($user) {
@@ -2472,14 +2512,14 @@ class AdminController extends Controller
                                 $total->save();
                             }
                         }
-                        //Thêm 1 dòng invoice
+                        //Add new invoice
                         $invoice = new Invoice();
                         $invoice->idBill = $bill->id;
                         $invoice->invoiceDay = $claimTaskDetail->billDate;
                         $invoice->invoiceTempNo = $invoiceTempNo;
                         $invoice->corInsurer = $request->get('data')['coorInsurer'];
                         $invoice->save();
-                        //Thêm rate bill value khi thay ??i và c?p nh?t active = 1 c?a các công v?c
+                        //Add new rate change
                         $listClaimTaskDetail = ClaimTaskDetail::where('statusId',0)
                             ->where('billDate','>=',$fromDate)
                             ->where('billDate','<=',$claimTaskDetail->billDate)
@@ -2487,21 +2527,21 @@ class AdminController extends Controller
                             ->get();
                         foreach($listClaimTaskDetail as $taskDetail)
                         {
-                            //c?p nh?t active = 1 khi ?ã bill
+                            //update active
                             $taskDetail->active =1;
-                            //c?p nh?t invoice MajorTempNo
+                            //update invoiceMajorNo
                             $taskDetail->invoiceTempNo = $invoiceTempNo;
                             $taskDetail->save();
-                            //c?p nh?t rate khi thay ??i
+                            //Update rate change
                             foreach ($request->get('data')['ArrayData'] as $item)
                             {
                                 $idUser = User::where('name',$item[0])->first()->id;
                                 if($idUser)
                                 {
-                                    $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//l?y rate m?c ??nh c?a user
+                                    $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;
                                     if($taskDetail->userId == $idUser)
                                     {
-                                        if($checkRateDefault!=$item[2]) //n?u rate change khác v?i rate m?c ??nh thì c?p nh?t c?t RateBillValue
+                                        if($checkRateDefault!=$item[2])
                                         {
                                             $taskDetail->professionalServicesRateBillValue = $item[2];
                                             $taskDetail->save();
@@ -2510,43 +2550,22 @@ class AdminController extends Controller
                                 }
                             }
                         }
-                        // l?y s? invoiceMajorNo m?i nh?t g?i v? client
-                        $invoiceMajorNoNew = Invoice::orderBy('invoiceMajorNo','desc')->first();
-                        if($invoiceMajorNoNew!=null)
-                        {
-                            $invoiceMajorNo = $invoiceMajorNoNew->invoiceMajorNo + 1;
-                        }
-                        $data = array('Action'=>'AddNew','Error'=>'null','invoiceMajorNoNew'=>$invoiceMajorNo);
+                        $data = array('Action'=>'AddNew','Error'=>'null');
                     }
-                    // k?t thúc bill t?m
-                   else//bill lo?i complete
+                    // End bill pending
+                   else//Bill complete
                    {
-                       //ki?m tra invoiceMajorNo trùng
-                       $invoiceMajorNoCheck = Invoice::where('invoiceMajorNo',$request->get('data')['invoiceMajorNo'])->first();
-                       if($invoiceMajorNoCheck!=null)
-                       {
-                           //Error
-                           $data = array('Action' => 'AddNew', 'Error' => 'InvoiceMajorNoSame','invoiceMajorNoNew'=>"null");
-                       }
-                       else
-                       {
-                           //Xóa bill pending tr??c ?ó n?u có
-                           $IBPending = ClaimTaskDetail::where('professionalServices', 1)->where('statusId', 1)->where('claimId',$request->get('data')['idClaim'])->first();
-                           if ($IBPending) {
-                               $billIB = Bill::where('billId', $IBPending->id)->where('claimId',$request->get('data')['idClaim'])->first();
-                               if ($billIB) {
-                                   ProfessionalService::where('billId', $billIB->id)->delete();
-                                   GeneralExp::where('billId', $billIB->id)->delete();
-                                   CommPhotoExp::where('billId', $billIB->id)->delete();
-                                   ConsultFeesExp::where('billId', $billIB->id)->delete();
-                                   TravelRelatedExp::where('billId', $billIB->id)->delete();
-                                   GstFreeDisb::where('billId', $billIB->id)->delete();
-                                   Disbursement::where('billId', $billIB->id)->delete();
-                                   $billIB->delete();
-                               }
-                               $IBPending->delete();
+                            //get invoiceMajorNo
+                           $invoiceNo = Invoice::orderBy('invoiceMajorNo','desc')->first();
+                           if($invoiceNo)
+                           {
+                               $invoiceMajorNo = $invoiceNo->invoiceMajorNo +1;
                            }
-                           //Thêm 1 dòng công vi?c vào ClaimDetail
+                           else
+                           {
+                               $invoiceMajorNo = 20000;
+                           }
+                           //add new one row bill complete to table task
                            $claimTaskDetail = new ClaimTaskDetail();
                            $claimTaskDetail->professionalServices = 1;
                            $claimTaskDetail->professionalServicesTime = 0;
@@ -2554,18 +2573,26 @@ class AdminController extends Controller
                            $claimTaskDetail->billDate = $toDate;
                            $claimTaskDetail->active = 1;
                            $claimTaskDetail->statusId = 2;
+                           $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
                            $claimTaskDetail->claimId = $request->get('data')['idClaim'];
                            $claimTaskDetail->userId = Auth::user()->id;
                            $claimTaskDetail->createdBy = Auth::user()->id;
                            $claimTaskDetail->save();
-                           //Thêm 1 dòng bill vào table bill
+                           //Add one row to table bill
                            $bill = new Bill();
                            $bill->billToId = $request->get('data')['billToCustomer'];
                            $bill->claimId = $request->get('data')['idClaim'];
                            $bill->billId = $claimTaskDetail->id;
                            $bill->total = $request->get('data')['Total'];
                            $bill->save();
-                           //Thêm chi ti?t các b?ng công vi?c t??ng ?ng
+                            //Add new invoice
+                           $invoice = new Invoice();
+                           $invoice->idBill = $bill->id;
+                           $invoice->invoiceDay = $claimTaskDetail->billDate;
+                           $invoice->invoiceMajorNo = $invoiceMajorNo;
+                           $invoice->corInsurer = $request->get('data')['coorInsurer'];
+                           $invoice->save();
+                           //Add new details
                            foreach ($request->get('data')['ArrayData'] as $item) {
                                $user = User::where('name', $item[0])->first();
                                if ($user) {
@@ -2620,19 +2647,11 @@ class AdminController extends Controller
                                    $total->save();
                                }
                            }
-                           //Thêm 1 dòng invoice
-                           $invoice = new Invoice();
-                           $invoice->idBill = $bill->id;
-                           $invoice->invoiceDay = $claimTaskDetail->billDate;
-                           $invoice->invoiceMajorNo = $request->get('data')['invoiceMajorNo'];
-                           $invoice->corInsurer = $request->get('data')['coorInsurer'];
-                           $invoice->save();
-
                            //insert all row of table claimtaskdetail after have invoice
                            $listClaimTaskDetail = ClaimTaskDetail::where('statusId',0)
                                ->where('billDate','>=',$fromDate)
                                ->where('billDate','<=',$claimTaskDetail->billDate)
-                               ->where('claimId',$request->fget('data')['idClaim'])
+                               ->where('claimId',$request->get('data')['idClaim'])
                                ->get();
                            foreach($listClaimTaskDetail as $taskDetail)
                            {
@@ -2658,47 +2677,25 @@ class AdminController extends Controller
                                    }
                                }
                            }
-                           //g?i s? invoiceMajorNo v? client
-                           $invoiceMajorNoNew = Invoice::orderBy('invoiceMajorNo','desc')->first();
-                           if($invoiceMajorNoNew!=null)
-                           {
-                               $invoiceMajorNo = $invoiceMajorNoNew->invoiceMajorNo + 1;
-                           }
-                           $data = array('Action' => 'AddNew', 'Error' => 'null','invoiceMajorNoNew'=>$invoiceMajorNo);
-                       }
+                           $data = array('Action' => 'AddNew', 'Error' => 'null');
+
 
                    }
-                   //k?t thúc bill complete
+                   //End bill complete
                 }
-                //k?t thúc bill interim_bill
-                else //Thêm 1 bill lo?i final bill
+                //End Interim Bill
+                else //Add new final bill
                 {
-                    //Ki?m tra s? invoiceMajorNo trùng
-                    $invoiceMajorNoCheck = Invoice::where('invoiceMajorNo',$request->get('data')['invoiceMajorNo'])->first();
-                    if($invoiceMajorNoCheck!=null)
-                    {
-                        //Error
-                        $data = array('Action' => 'AddNew', 'Error' => 'InvoiceMajorNoSame','invoiceMajorNoNew'=>"null");
-                    }
-                    else
-                    {
-                        //Xóa bill pending tr??c ?ó n?u có
-                        $IBPending = ClaimTaskDetail::where('professionalServices', 1)->where('statusId', 1)->where('claimId',$request->get('data')['idClaim'])->first();
-                        if ($IBPending) {
-                            $billIB = Bill::where('billId', $IBPending->id)->where('claimId',$request->get('data')['idClaim'])->first();
-                            if ($billIB) {
-                                ProfessionalService::where('billId', $billIB->id)->delete();
-                                GeneralExp::where('billId', $billIB->id)->delete();
-                                CommPhotoExp::where('billId', $billIB->id)->delete();
-                                ConsultFeesExp::where('billId', $billIB->id)->delete();
-                                TravelRelatedExp::where('billId', $billIB->id)->delete();
-                                GstFreeDisb::where('billId', $billIB->id)->delete();
-                                Disbursement::where('billId', $billIB->id)->delete();
-                                $billIB->delete();
-                            }
-                            $IBPending->delete();
+                        $invoiceNo = Invoice::orderBy('invoiceMajorNo','desc')->first();
+                        if($invoiceNo)
+                        {
+                            $invoiceMajorNo = $invoiceNo->invoiceMajorNo +1;
                         }
-                        //Thêm 1 công vi?c bill (complete) trên b?ng claim_task_detail
+                        else
+                        {
+                            $invoiceMajorNo = 20000;
+                        }
+                        //Add new row task final bill
                         $claimTaskDetail = new ClaimTaskDetail();
                         $claimTaskDetail->professionalServices = 2;
                         $claimTaskDetail->professionalServicesTime = 0;
@@ -2706,11 +2703,12 @@ class AdminController extends Controller
                         $claimTaskDetail->billDate = $toDate;
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 2;
+                        $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
                         $claimTaskDetail->claimId = $request->get('data')['idClaim'];
                         $claimTaskDetail->userId = Auth::user()->id;
                         $claimTaskDetail->createdBy = Auth::user()->id;
                         $claimTaskDetail->save();
-                        //Insert data to table Bill
+                        //Add new bill
                         $bill = new Bill();
                         $bill->billToId = $request->get('data')['billToCustomer'];
                         $bill->claimId = $request->get('data')['idClaim'];
@@ -2719,7 +2717,7 @@ class AdminController extends Controller
                         $bill->createdBy = Auth::user()->id;
                         $bill->updatedBy = Auth::user()->id;
                         $bill->save();
-                        //Thêm chi ti?t t?ng b?ng công vi?c
+                        //Add new details
                         foreach ($request->get('data')['ArrayData'] as $item) {
                             $user = User::where('name', $item[0])->first();
                             if ($user) {
@@ -2774,14 +2772,14 @@ class AdminController extends Controller
                                 $total->save();
                             }
                         }
-                        //Thêm 1 dòng trên b?n invoice
+                        //Add new invoice
                         $invoice = new Invoice();
                         $invoice->idBill = $bill->id;
                         $invoice->invoiceDay = $claimTaskDetail->billDate;
-                        $invoice->invoiceMajorNo = $request->get('data')['invoiceMajorNo'];
+                        $invoice->invoiceMajorNo = $invoiceMajorNo;
                         $invoice->corInsurer = $request->get('data')['coorInsurer'];
                         $invoice->save();
-                        //C?p nh?t c?a các công vi?c c?a claim khi có invoice
+                        //Update detail task of user
                         $listClaimTaskDetail = ClaimTaskDetail::where('statusId',0)
                             ->where('billDate','>=',$fromDate)
                             ->where('billDate','<=',$claimTaskDetail->billDate)
@@ -2811,42 +2809,33 @@ class AdminController extends Controller
                                 }
                             }
                         }
-                        //send to client invoiceMajorNo new
-                        $invoiceMajorNoNew = Invoice::orderBy('invoiceMajorNo','desc')->first();
-                        if($invoiceMajorNoNew!=null)
-                        {
-                            $invoiceMajorNo = $invoiceMajorNoNew->invoiceMajorNo + 1;
-                        }
-                        $data = array('Action' => 'AddNew', 'Error' => 'null','invoiceMajorNoNew'=>$invoiceMajorNo);
-                    }
+                        $data = array('Action' => 'AddNew', 'Error' => 'null');
                 }
-                //k?t thúc bil final bill
+                //End final bill
             }
         }
-        //k?t thúc thêm 1 bill
-        else //C?p nh?t 1 bill  IB pending qua complete
+        //End add new only bill
+        else //Update bill from pending to complete
         {
             //dd($request->all());
                 $fromDate = $request->get('data')['FromDate'];
-                //C?p nh?t 1 bill pending qua complete
+                //Update bill from pending to complete
                 try {
                     $bill = Bill::where('id', $request->get('data')['idBill'])->first();
                     if ($bill) {
-                        //c?p nh?t bill pending thành tr?ng thái complete
+                        //Update bill from pending to complete
                         if ($request->get('data')['billStatus'] == 'complete') {
-                                //C?p nh?t c?t total c?a bill
+                                //Update total
                                 $bill->total = $request->get('data')['Total'];
                                 $bill->save();
-                                //C?p nh?t task pending thành complete v?i status = 2
+                                //Update status = 2
                                 $task = ClaimTaskDetail::where('id', $bill->billId)
                                     ->where('statusId', 1)
                                     ->where('claimId',$request->get('data')['idClaim'])
                                     ->where('lockInvoiceNo','!=',1)
                                     ->first();
                                 if ($task != null) {
-                                    $task->statusId = 2;
-                                    $task->save();
-                                    //C?p nh?t invoiceTempNo -> invoiceMajorNo
+                                    //Update invoiceTempNo -> invoiceMajorNo
                                     $invoice = Invoice::where('idBill',$bill->id)->first();
                                     if($invoice)
                                     {
@@ -2854,6 +2843,10 @@ class AdminController extends Controller
                                         $invoice->invoiceMajorNo = "2".$changeNumber;
                                         $invoice->invoiceDay = $task->billDate ;
                                         $invoice->save();
+
+                                        $task->statusId = 2;
+                                        $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                        $task->save();
                                     }
                                     //update các công vi?c c?a bill
                                     $listClaimTaskDetail = ClaimTaskDetail::where('statusId',0)
@@ -2884,11 +2877,11 @@ class AdminController extends Controller
                                         }
                                     }
                                 }
-                                //C?p nh?t d? li?u chi ti?t c?a t?ng user
+                                //Update details of users
                                 foreach ($request->get('data')['ArrayData'] as $item) {
                                     $user = User::where('name', $item[0])->where('active', 1)->first();
                                     if ($user) {
-                                        //Tìm 1 dòng c?a b?ng professionalServices ?? c?p nh?t rate thay ??i (n?u có)
+                                        //Update rate of table professionalServices
                                         $professionalServices = ProfessionalService::where('billId',$request->get('data')['idBill'])->where('userId',$user->id)->first();
                                         if($professionalServices)
                                         {
@@ -2896,7 +2889,7 @@ class AdminController extends Controller
                                             $professionalServices->rateChange = $item[2];
                                             $professionalServices->save();
                                         }
-                                        //C?p nh?t b?ng total
+                                        //Update table total
                                         $total = Total::where('billId',$request->get('data')['idBill'])->where('userId',$user->id)->first();
                                         if($total)
                                         {
