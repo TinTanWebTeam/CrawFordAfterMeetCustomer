@@ -561,7 +561,7 @@
                     BillDate:null,
 
                 },
-                checkDate: null,
+                timeFrom:null,
                 resetTaskObject: function () {
                     for (var propertyName in docketView.taskObject) {
                         if (docketView.taskObject.hasOwnProperty(propertyName)) {
@@ -588,8 +588,9 @@
                         }, function (data) {
                             console.log(data);
                             if (data["Status"]==="Success") {
-                                docketView.checkDate = data["Date"];
-                                $("input[name=fromDate]").val(data["Date"]);
+                                var dateTimeFromDate = data["Date"].split(" ");
+                                docketView.timeFrom = dateTimeFromDate[1]
+                                $("input[name=fromDate]").val(dateTimeFromDate[0]);
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"] + " " + data["Claim"]["insuredLastName"]);
                                 $("input[name=LossDate]").val(data["Claim"]["lossDate"]);
@@ -683,7 +684,7 @@
                         idTask: $("input[name=IdTask]").val(),
                         taskObject: docketView.taskObject,
                         ChooseDate: $("input[name=ChooseDate]").val(),
-                        FromDate: $("input[name=fromDate]").val()
+                        FromDate: $("input[name=fromDate]").val() +" "+docketView.timeFrom
                     }, function (data) {
                         if (data["Action"] === "AddNew") {
                             if (data["Result"] === 1) {

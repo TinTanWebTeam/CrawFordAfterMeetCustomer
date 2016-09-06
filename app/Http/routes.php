@@ -36,13 +36,14 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getAllAdjuster','AdminController@getAllAdjuster');
     Route::get('getAllBranch','AdminController@getAllBranch');
     Route::get('getAllInsurerCode','AdminController@getAllInsurerCode');
+    Route::get('getAllBrokerCode','AdminController@getAllBrokerCode');
 
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');
     Route::post('viewDetailEmployeeWhenUseEvenEnter','AdminController@viewDetailEmployeeWhenUseEvenEnter');
     Route::post('chooseClaimWhenUseEventEnter','AdminController@chooseClaimWhenUseEventEnter');
     Route::post('showInformationOfCustomer','AdminController@showInformationOfCustomer');
-    Route::post('actionBillOfClaimViewTrialFee','AdminController@actionBillOfClaimViewTrialFee');
+    Route::post('Bill','AdminController@Bill');
     Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
     Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
     Route::post('saveClaim/{claimId}','AdminController@saveClaim');
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('saveAddNewUpdateBranch','AdminController@saveAddNewUpdateBranch');
     Route::post('saveAddNewUpdateBranchType','AdminController@saveAddNewUpdateBranchType');
     Route::post('saveAddNewUpdateInsurer','AdminController@saveAddNewUpdateInsurer');
+    Route::post('saveAddNewUpdateBroker','AdminController@saveAddNewUpdateBroker');
 
     Route::post('loadClaimByEventEnterKey','AdminController@loadClaimByEventEnterKey');
     Route::post('loadViewDocketDetail','AdminController@loadViewDocketDetail');

@@ -16,7 +16,8 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->integer('idBill');
             $table->dateTime('invoiceDay');
-            $table->integer('invoiceMajorNo');
+            $table->integer('invoiceMajorNo')->nullable();
+            $table->integer('invoiceTempNo')->nullable();
             $table->string('corInsurer',500);//sdsd
             $table->timestamps();
         });

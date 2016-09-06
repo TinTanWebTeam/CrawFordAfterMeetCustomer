@@ -1077,6 +1077,98 @@
         </div>
     </div>
 </div>
+
+{{--Broker--}}
+<div class="modal fade" id="modal-broker-code">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Broker Code
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" ID="tableBrokerCode">
+                        <thead>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                FirstName
+                            </th>
+                            <th>
+                                LastName
+                            </th>
+                            <th>
+                                Phone
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="modal-broker-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="addNewUpdate">
+                    Add New
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-broker-code-modify">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Broker Modify
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="text" name="broker_code_modify_id" id="broker_code_modify_id" value="0" style="display: none">
+                        <div class="col-sm-6">
+                            <h5>Code</h5>
+                            <input type="text" class="form-control" id="broker_code_modify_code" name="broker_code_modify_code">
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>Phone</h5>
+                            <input type="text" class="form-control" name="broker_code_modify_phone" id="broker_code_modify_phone">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>FirstName</h5>
+                            <input type="text" class="form-control" name="broker_code_modify_firstName" id="broker_code_modify_firstName">
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>LastName</h5>
+                            <input type="text" class="form-control" name="broker_code_modify_lastName" id="broker_code_modify_lastName">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="saveSubmit">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 
     $(document).on('keypress',':input:not(textarea):not([type=submit])', function (e) {
@@ -1482,6 +1574,40 @@
                                 }
                             })
                 },
+                saveAddNewUpdateBroker:function()
+                {
+                    $.post(url+"saveAddNewUpdateBroker",
+                            {
+                                _token:_token,
+                                id:$("#broker_code_modify_id").val(),
+                                code:$("#broker_code_modify_code").val(),
+                                firstName:$("#broker_code_modify_firstName").val(),
+                                lastName:$("#broker_code_modify_lastName").val(),
+                                phone:$("#broker_code_modify_phone").val()
+                            },
+                            function(data){
+                                if(data["Action"]==="AddNew")
+                                {
+                                    if(data["Result"]===1)
+                                    {
+
+                                        claimView.getAllBroker();
+                                        $("div[id=modal-broker-code-modify]").modal("hide");
+                                        $("div[id=modal-broker-code]").modal("show");
+
+                                    }
+                                }
+                                else
+                                {
+                                    if(data["Result"]===1)
+                                    {
+                                        claimView.getAllBroker();
+                                        $("div[id=modal-broker-code-modify]").modal("hide");
+                                        $("div[id=modal-broker-code]").modal("show");
+                                    }
+                                }
+                            })
+                },
                 cancel : function () {
                     for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
@@ -1628,7 +1754,14 @@
                 {
                     $("input[name=insurerCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(3).text());
+                    //fill automatic to Contact of claim
+                    $("input[name=contact]").val($(element).parent().parent().find("td").eq(5).text());
                     $("#modal-insurer-code").modal("hide");
+                },
+                fillBrokerFromModalToInput:function(element)
+                {
+                    $("input[name=brokerCode]").val($(element).parent().parent().find("td").eq(1).text());
+                    $("#modal-broker-code").modal("hide");
                 },
                 editClaimType:function(element)
                 {
@@ -1679,6 +1812,17 @@
                     $("#modal-insurer-code").modal("hide");
                     $("#modal-insurer-modify").modal("show");
                 },
+                editBroker:function(element)
+                {
+                    $("input[name=broker_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
+                    $("input[name=broker_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=broker_code_modify_firstName]").val($(element).parent().parent().find("td").eq(2).text());
+                    $("input[name=broker_code_modify_lastName]").val($(element).parent().parent().find("td").eq(3).text());
+                    $("input[name=broker_code_modify_phone]").val($(element).parent().parent().find("td").eq(4).text());
+
+                    $("#modal-broker-code").modal("hide");
+                    $("#modal-broker-code-modify").modal("show");
+                },
                 getAllBranch:function()
                 {
                     $.get(url + 'getAllBranch',function (data) {
@@ -1711,6 +1855,12 @@
                 {
                     $.get(url + 'getAllInsurerCode',function (data) {
                         $("#modal-insurer-code-table-body").empty().append(data);
+                    });
+                },
+                getAllBroker:function()
+                {
+                    $.get(url + 'getAllBrokerCode',function (data) {
+                        $("#modal-broker-table-body").empty().append(data);
                     });
                 }
             };
@@ -1843,6 +1993,28 @@
         $("div[id=modal-branch-type-modify]").find("button[id=saveSubmit]").click(function(){
             claimView.saveAddNewUpdateBranchType();
         });
+
+        /*Broker Code*/
+        $("input[name=brokerCode]").dblclick(function(){
+            $("div[id=modal-broker-code]").modal("show");
+            claimView.getAllBroker();
+        });
+        $("div[id=modal-broker-code]").find("button[id=addNewUpdate]").click(function(){
+            //Reset form
+            $("input[name=broker_code_modify_id]").val("0");
+            $("input[name=broker_code_modify_code]").val("");
+            $("input[name=broker_code_modify_firstName]").val("");
+            $("input[name=broker_code_modify_lastName]").val("");
+            $("input[name=broker_code_modify_phone]").val("");
+
+            $("div[id=modal-broker-code]").modal("hide");
+            $("div[id=modal-broker-code-modify]").modal("show");
+        });
+        $("div[id=modal-broker-code-modify]").find("button[id=saveSubmit]").click(function(){
+            claimView.saveAddNewUpdateBroker();
+        });
+
+
 
 
         $("input[value=Save]").click(function (e) {

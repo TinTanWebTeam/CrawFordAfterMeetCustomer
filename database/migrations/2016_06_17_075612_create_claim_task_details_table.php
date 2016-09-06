@@ -47,8 +47,11 @@ class CreateClaimTaskDetailsTable extends Migration
 
             //Date bill dsd
             $table->dateTime('billDate')->nullable();
-            $table->string('invoiceMajorNo')->nullable();
+            $table->integer('invoiceMajorNo')->nullable();
             $table->dateTime('invoiceDate')->nullable();
+
+            $table->integer('invoiceTempNo')->nullable();
+            $table->boolean('lockInvoiceNo')->default(0);
 
             $table->timestamps();
         });
