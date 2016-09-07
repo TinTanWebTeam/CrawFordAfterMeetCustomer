@@ -344,7 +344,33 @@
                                     subUnit += Number(data[i]["Unit"]);
                                     subAmount += Number(data[i]["ExpenseAmount"]);
                                 }
+                                if(i == (data.length -1)){
+                                    trSubmission += '<div style="width: 100%;margin-top: 10px">';
+                                    trSubmission += '<div style="width: 25%;display: inline-block">';
+                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;"></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;"></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '</div>';
+                                }
                             }
+
                         }
                         $("#report_submission_content").empty().append(trSubmission);
 //                        <div style="width: 100%">
