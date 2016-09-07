@@ -60,7 +60,7 @@ class AdminController extends Controller
     public function getViewEmployee()
     {
         $position = Position::where('active', 1)->get();
-        $listUser = User::where('active', 1)->where('roleId', 2)->get();
+        $listUser = User::where('active', 1)->get();
         return view('admin.employee')->with('position', $position)->with('listUser', $listUser);
     }
 
@@ -399,8 +399,6 @@ class AdminController extends Controller
         }
         return $result;
     }
-
-
 
     public function getAllClaim()
     {
@@ -1724,6 +1722,7 @@ class AdminController extends Controller
         }
         return $result;
     }
+
     public function getAllInvoiceByClaimId($claim_id)
     {
         $result = DB::table('invoices')
@@ -2388,7 +2387,7 @@ class AdminController extends Controller
             $timeNow = Carbon::now();//take time now to when add new
             $fromDate = $request->get('data')['FromDate'];
             $toDate = $request->get('data')['ToDate']." ".Carbon::parse($timeNow)->format('H:i:s');
-            //Check fromDate và toDate of bill before add new
+            //Check fromDate vï¿½ toDate of bill before add new
             if($toDate<$fromDate)
             {
                 $data = array('Action'=>'AddNew','Error'=>'ToDate<FromDate');
@@ -2866,7 +2865,7 @@ class AdminController extends Controller
                                         $task->invoiceMajorNo = $invoice->invoiceMajorNo;
                                         $task->save();
                                     }
-                                    //update các công vi?c c?a bill
+                                    //update cï¿½c cï¿½ng vi?c c?a bill
                                     $listClaimTaskDetail = ClaimTaskDetail::where('statusId',0)
                                         ->where('billDate','>=',$fromDate)
                                         ->where('billDate','<=',$task->billDate)
