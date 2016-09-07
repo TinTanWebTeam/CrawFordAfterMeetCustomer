@@ -2979,4 +2979,156 @@ class AdminController extends Controller
         }
     }
 
+    public function getSearchInsurer(Request $request)
+    {
+        $arrayData =null;
+        try
+        {
+            $insurer = Customer::where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $insurer)==0)
+            {
+                //return 0;
+                $arrayData = array('Result'=>0);
+            }
+            else if(count($insurer)>1)
+            {
+                //return 2;
+                $arrayData = array('Result'=>2);
+            }
+            else if(count($insurer)==1)
+            {
+                foreach($insurer as $item)
+                {
+                    $arrayData = array('Result'=>1,'Data'=>$item->code,'Source'=>$item->sourceCustomerId,'Contact'=>$item->contactPersonFirstName);
+                }
+                //return $insurer;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $arrayData;
+    }
+
+    public function getSearchClaimType(Request $request)
+    {
+        try
+        {
+            $claimType = InsuranceDetail::where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $claimType)==0)
+            {
+                return 0;
+            }
+            else if(count($claimType)>1)
+            {
+                return 2;
+            }
+            else if(count($claimType)==1)
+            {
+                return $claimType;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchLossDesc(Request $request)
+    {
+        try
+        {
+            $lossDesc = TypeOfDamage::where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $lossDesc)==0)
+            {
+                return 0;
+            }
+            else if(count($lossDesc)>1)
+            {
+                return 2;
+            }
+            else if(count($lossDesc)==1)
+            {
+                return $lossDesc;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchBroker(Request $request)
+    {
+        try
+        {
+            $broker = Broker::where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $broker)==0)
+            {
+                return 0;
+            }
+            else if(count($broker)>1)
+            {
+                return 2;
+            }
+            else if(count($broker)==1)
+            {
+                return $broker;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchAdjuster(Request $request)
+    {
+        try
+        {
+            $adjuster = User::where('name','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $adjuster)==0)
+            {
+                return 0;
+            }
+            else if(count($adjuster)>1)
+            {
+                return 2;
+            }
+            else if(count($adjuster)==1)
+            {
+                return $adjuster;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
+    public function getSearchBranch(Request $request)
+    {
+        try
+        {
+            $branch = Branch::where('code','LIKE','%'.$request->get('Code').'%')->get();
+            if(count( $branch)==0)
+            {
+                return 0;
+            }
+            else if(count($branch)>1)
+            {
+                return 2;
+            }
+            else if(count($branch)==1)
+            {
+                return $branch;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+    }
+
 }

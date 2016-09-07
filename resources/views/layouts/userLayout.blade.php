@@ -36,6 +36,9 @@
 		<script src="{{ asset('libs/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 		<!-- jquery validator -->
 		<script src="{{ asset('libs/jquery/jquery.validate.min.js') }}"></script>
+		<!-- jquery format current -->
+		<script src="{{ asset('libs/jquery/jquery.formatCurrency-1.4.0.min.js') }}"></script>
+
 		<!-- print plugin -->
 		<script src="{{ asset('admin/js/printThis.js') }}"></script>
 		<!-- Global JavaScript -->

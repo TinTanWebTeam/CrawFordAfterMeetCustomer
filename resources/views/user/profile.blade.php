@@ -428,6 +428,10 @@
 <br>
 
 <script>
+    $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
+    $("input[name=Hourly]").on('blur',function(){
+        $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
+    });
     $(function(){
         $("select#Position").val({{$user->positionId}});
         $("select#Sex").val("{{$user->sex}}");
@@ -460,7 +464,7 @@
                     Created_at:$("input[name=Created_at]").val(),
                     Changed_at:$("input[name=Changed_at]").val(),
                     Flat:$("input[name=Flat]").val(),
-                    Hourly:$("input[name=Hourly]").val(),
+                    Hourly:String($("input[name=Hourly]").val()).replace(",",""),
                     Blended:$("input[name=Blended]").val()
                 },
                 resetUserObject: function () {
@@ -502,7 +506,6 @@
                 ActionUpdateOrChangePassword:function()
                 {
                     var type = $("input[name=ajaxActionType]").val();
-                    console.log(type);
                     if (type === "0") {
                         $("form[id=formEmployee]").validate({
                             rules: {
@@ -555,9 +558,8 @@
                     }
                     if ($("form[id=formEmployee]").valid()) {
                         profileView.constructorObjectUser();
-                        console.log(profileView.userObject);
+                        profileView.userObject.Hourly = String($("input[name=Hourly]").val()).replace(",","");
                         $.post(url+"user/updateInformationOrChangePassword",{_token:_token,idAction:$("input[name=ajaxActionType]").val(),dataUser:profileView.userObject},function(data){
-                            console.log(data);
                             if(data["Action"]==="Update")
                             {
                                 if(data["Result"]===1)
@@ -565,6 +567,7 @@
                                     $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update success");
                                     $("div[id=modal-confirm]").modal("show");
                                     profileView.actionCancel();
+                                    $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
                                 }
                                 else if(data["Result"]===0)
                                 {
@@ -604,6 +607,7 @@
                             }
 
                         });
+
                     }
                 },
                 convertStringToDate:function(date)
@@ -647,7 +651,6 @@
 
                         $("select[id=Position]").prop("disabled",false);
                         $("select[id=Sex]").prop("disabled",false);
-                        console.log($("form[id=formEmployee]").find("input").length);
                         for(var i =0;i<$("form[id=formEmployee]").find("input").length;i++)
                         {
                             var name =$("form[id=formEmployee]").find($("input")[i]).attr("name");

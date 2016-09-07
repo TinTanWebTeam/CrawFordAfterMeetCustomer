@@ -187,14 +187,14 @@
                     <h5 class="text-right">Claim Type:</h5>
                 </td>
                 <td>
-                    <input type="text" id="claimTypeCode" name="claimTypeCode">
+                    <input type="text" id="claimTypeCode" name="claimTypeCode" style="text-transform: uppercase">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
                         <h5>Insurer:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" id="insurerCode" name="insurerCode">
+                        <input type="text" id="insurerCode" name="insurerCode" style="text-transform: uppercase">
                     </div>
                 </td>
                 <td>
@@ -219,14 +219,14 @@
                     <h5 class="text-right">Loss Desc:</h5>
                 </td>
                 <td>
-                    <input type="text" id="lossDescCode" name="lossDescCode">
+                    <input type="text" id="lossDescCode" name="lossDescCode" style="text-transform: uppercase">
                 </td>
                 <td>
                     <div style="display: inline-block;width: 20%">
                         <h5>Broker:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" id="brokerCode" name="brokerCode">
+                        <input type="text" id="brokerCode" name="brokerCode" style="text-transform: uppercase">
                     </div>
                 </td>
                 <td>
@@ -285,7 +285,7 @@
                         <h5>Source:</h5>
                     </div>
                     <div style="display: inline-block;width: 78%">
-                        <input type="text" id="sourceCode" name="sourceCode">
+                        <input type="text" id="sourceCode" name="sourceCode" readonly>
                     </div>
                 </td>
                 <td>
@@ -621,7 +621,7 @@
 
 {{--insurer code--}}
 <div class="modal fade" id="modal-insurer-code">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
@@ -633,19 +633,19 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="tableInsurer">
                         <thead>
                         <tr>
                             <th data-name="id" style="display: none">
                                 Id
                             </th>
-                            <th data-name="code">
+                            <th data-name="code" style="width: 100px">
                                 Code
                             </th>
                             <th data-name="name">
                                 Name
                             </th>
-                            <th data-name="sourceCustomerId">
+                            <th data-name="sourceCustomerId" style="width: 120px">
                                 Source Customer
                             </th>
                             <th data-name="address" style="display: none;">
@@ -1752,10 +1752,10 @@
                 },
                 fillInsurerCodeFromModalToInput:function(element)
                 {
-                    $("input[name=insurerCode]").val($(element).parent().parent().find("td").eq(1).text());
-                    $("input[name=sourceCode]").val($(element).parent().parent().find("td").eq(3).text());
+                    $("input[name=insurerCode]").val($(element).parent().parent().parent().parent().find("td").eq(1).text());
+                    $("input[name=sourceCode]").val($(element).parent().parent().parent().parent().find("td").eq(3).text());
                     //fill automatic to Contact of claim
-                    $("input[name=contact]").val($(element).parent().parent().find("td").eq(5).text());
+                    $("input[name=contact]").val($(element).parent().parent().parent().parent().find("td").eq(5).text());
                     $("#modal-insurer-code").modal("hide");
                 },
                 fillBrokerFromModalToInput:function(element)
@@ -1800,13 +1800,13 @@
                 },
                 editInsurerCode:function(element)
                 {
-                    $("input[name=insurer_code_modify_id]").val($(element).parent().parent().find("td").eq(0).text());
-                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=insurer_code_modify_name]").val($(element).parent().parent().find("td").eq(2).text());
-                    $("select#insurer_code_modify_sourceCustomerId").val($(element).parent().parent().find("td").eq(3).text()).prop("disabled",true);
+                    $("input[name=insurer_code_modify_id]").val($(element).parent().parent().parent().parent().find("td").eq(0).text());
+                    $("input[name=insurer_code_modify_code]").val($(element).parent().parent().parent().parent().find("td").eq(1).text()).prop("readOnly",true).css("background-color","#EFE5E5");
+                    $("input[name=insurer_code_modify_name]").val($(element).parent().parent().parent().parent().find("td").eq(2).text());
+                    $("select#insurer_code_modify_sourceCustomerId").val($(element).parent().parent().parent().parent().find("td").eq(3).text()).prop("disabled",true);
 
-                    $("textarea[name=insurer_code_modify_address]").val($(element).parent().parent().find("td").eq(4).text());
-                    $("input[name=insurer_code_modify_contact_person]").val($(element).parent().parent().find("td").eq(5).text());
+                    $("textarea[name=insurer_code_modify_address]").val($(element).parent().parent().parent().parent().find("td").eq(4).text());
+                    $("input[name=insurer_code_modify_contact_person]").val($(element).parent().parent().parent().parent().find("td").eq(5).text());
 
 
                     $("#modal-insurer-code").modal("hide");
@@ -1854,7 +1854,9 @@
                 getAllInsurerCode:function()
                 {
                     $.get(url + 'getAllInsurerCode',function (data) {
+                        $("table[id=tableInsurer]").DataTable().destroy();
                         $("#modal-insurer-code-table-body").empty().append(data);
+                        $("table[id=tableInsurer]").DataTable();
                     });
                 },
                 getAllBroker:function()
@@ -1871,10 +1873,10 @@
             $("#modal-insured-address").modal("show");
         });
         /* source code */
-        $("input#sourceCode").dblclick(function () {
-            $("#modal-source-code").modal("show");
-            claimView.getAllSourceCode();
-        });
+//        $("input#sourceCode").dblclick(function () {
+//            $("#modal-source-code").modal("show");
+//            claimView.getAllSourceCode();
+//        });
         $("#modal-source-code").find("button#addNewUpdate").click(function () {
             //Reset form
             $("#source_code_modify_id").val("0");
@@ -2027,5 +2029,228 @@
             $("input[name=code]").val(claimView.codeClaim);
         });
     });
+                            //Text transform Insurer
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputInsurer = $("input#insurerCode");
+
+    //on keyup, start the countdown
+    $inputInsurer.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingInsurer, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputInsurer.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingInsurer() {
+        $.get(url + 'getSearchInsurer', {
+            token: _token,
+            Code: $inputInsurer.val()
+        }, function (data) {
+            console.log(data);
+            if (data["Result"] === 0) {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this insurer!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputInsurer.val("");
+                $("input#sourceCode").val("");
+                $("input#contact").val("");
+            } else if (data["Result"] === 2) {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this insurer!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputInsurer.val("");
+                $("input#sourceCode").val("");
+                $("input#contact").val("");
+            } else {
+                $inputInsurer.val(data["Data"]);
+                $("input#sourceCode").val(data["Source"]);
+                $("input#contact").val(data["Contact"]);
+            }
+        });
+    }
+
+                        //Text transform Claim Type
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputClaimType = $("input#claimTypeCode");
+
+    //on keyup, start the countdown
+    $inputClaimType.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingClaimType, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputClaimType.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingClaimType() {
+        $.get(url + 'getSearchClaimType', {
+            token: _token,
+            Code: $inputClaimType.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this claim type!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputClaimType.val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this claim type!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputClaimType.val("");
+            } else {
+                $inputClaimType.val(data[0]["code"]);
+
+            }
+        });
+    }
+
+                    //Text transform Loss desc
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputLossDesc = $("input#lossDescCode");
+
+    //on keyup, start the countdown
+    $inputLossDesc.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingLossDesc, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputLossDesc.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingLossDesc() {
+        $.get(url + 'getSearchLossDesc', {
+            token: _token,
+            Code: $inputLossDesc.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this loss desc!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputLossDesc.val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this loss desc!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputLossDesc.val("");
+            } else {
+                $inputLossDesc.val(data[0]["code"]);
+            }
+        });
+    }
+
+                //Text transform Broker
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputBroker = $("input#brokerCode");
+
+    //on keyup, start the countdown
+    $inputBroker.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingBroker, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputBroker.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingBroker() {
+        $.get(url + 'getSearchBroker', {
+            token: _token,
+            Code: $inputBroker.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this broker!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputBroker.val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this broker desc!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputBroker.val("");
+            } else {
+                $inputBroker.val(data[0]["code"]);
+            }
+        });
+    }
+
+                //Text transform Adjuster
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputAdjuster = $("input#adjusterCode");
+
+    //on keyup, start the countdown
+    $inputAdjuster.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingAdjuster, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputAdjuster.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingAdjuster() {
+        $.get(url + 'getSearchAdjuster', {
+            token: _token,
+            Code: $inputAdjuster.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this adjuster!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputAdjuster.val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this adjuster !Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputAdjuster.val("");
+            } else {
+                $inputAdjuster.val(data[0]["name"]);
+            }
+        });
+    }
+
+                    //Text transform Branch
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 800;  //time in ms, 3 second for example
+    var $inputBranch = $("input#branchCode");
+
+    //on keyup, start the countdown
+    $inputBranch.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingBranch, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $inputBranch.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTypingBranch() {
+        $.get(url + 'getSearchBranch', {
+            token: _token,
+            Code: $inputBranch.val()
+        }, function (data) {
+            if (data === "0") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this branch!Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputBranch.val("");
+            } else if (data === "2") {
+                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this branch !Please choose other one");
+                $("div[id=modal-confirm]").modal("show");
+                $inputBranch.val("");
+            } else {
+                $inputBranch.val(data[0]["code"]);
+            }
+        });
+    }
 </script>
 {{--demo--}}

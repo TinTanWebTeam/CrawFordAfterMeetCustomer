@@ -464,6 +464,10 @@
 <br>
 
 <script>
+    $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
+    $("input[name=Hourly]").on('blur',function(){
+        $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
+    });
     $(function(){
         if(typeof(employeeView)==="undefined")
         {
@@ -607,9 +611,8 @@
                                 employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("#"+Object.keys(employeeView.EmployeeObject)[i]).val();
                             }
                         }
-                        console.log(employeeView.EmployeeObject);
+                        employeeView.EmployeeObject.Hourly = String($("input[name=Hourly]").val()).replace(",","");
                         $.post(url+"addNewAndUpdateEmployee",{_token:_token,idAction:$("input[name=ajaxActionType]").val(),dataEmployee:employeeView.EmployeeObject},function(data){
-                            console.log(data);
                             if(data["Action"]==="AddNew")
                             {
                                 if(data["Result"]===1)
@@ -618,6 +621,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").val("1");
                                     employeeView.ResetForm();
+                                    String($("input[name=Hourly]").val()).replace(",","");
                                 }
                                 else if(data["Result"]===0)
                                 {
@@ -638,6 +642,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").empty().val("1");
                                     employeeView.ResetForm();
+                                    String($("input[name=Hourly]").val()).replace(",","");
                                 }
                                 else
                                 {
@@ -673,6 +678,7 @@
                     $("button[name=btnAction]").text("Save Update");
                     $("div[id=modalListEmployee]").modal("hide");
                     $.post(url+"viewEmployeeDetailWhenChooseRowOfEventDoubleClick",{_token:_token,idEmployee:$(element).attr("id")},function(data){
+
                         $("select#Position").val(data["Object"]["positionId"]);
                         $("select#Sex").val(data["Object"]["sex"]);
                         //set value password sd
@@ -729,6 +735,7 @@
                         {
                             employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("#"+Object.keys(employeeView.EmployeeObject)[i]).val();
                         }
+                        $("input[name=Hourly]").formatCurrency({roundToDecimalPlace:0});
                     });
 
                 },

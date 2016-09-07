@@ -148,6 +148,7 @@ class UserController extends Controller
 
     public function assignmentTask(Request $request)
     {
+//        dd($request->all());
         $result = null;
         $idTime = 0;
         $idExpense = 0;
@@ -434,7 +435,7 @@ class UserController extends Controller
     {
         $data = null;
         $fromDate = $request->get('fromDate')." "."00:00:00";
-        $toDate = $request->get('toDate')." "."12:00:00";
+        $toDate = $request->get('toDate')." "."23:59:59";
         if ($request->get('allClaim') === 'True') {
             try {
 

@@ -315,7 +315,7 @@
                                                     <h5 style="text-align:right">Amount</h5>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <input type="text" name="ExpenseAmount" id="ExpenseAmount"  style="width:80px">
+                                                    <input type="text" name="ExpenseAmount" id="ExpenseAmount"  style="width:80px" onchange="taskView.formatCurrency1()">
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -392,6 +392,7 @@
 
 
 <script>
+    $("input[name=ProfessionalServicesRate]").formatCurrency({roundToDecimalPlace:0});
     $(document).on('keypress',':input:not(textarea):not([type=submit])', function (e) {
         if (e.which == 13) e.preventDefault();
     });
@@ -579,7 +580,16 @@
                     taskView.resetTaskObject();
                     for(var i = 0;i<Object.keys(taskView.taskObject).length;i++)
                     {
-                        taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
+                        if(Object.keys(taskView.taskObject)[i]==="ExpenseAmount")
+                        {
+                            taskView.taskObject[Object.keys(taskView.taskObject)[i]] =$("#"+Object.keys(taskView.taskObject)[i]).val();
+
+                        }
+                        else
+                        {
+                            taskView.taskObject[Object.keys(taskView.taskObject)[i]] = $("#"+Object.keys(taskView.taskObject)[i]).val();
+
+                        }
                     }
                     $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
                         console.log(data);
@@ -792,8 +802,11 @@
                 onChangeWhenChooseExpenseType:function(element)
                 {
                     taskView.loadExpenseCodeByType($(element).find("option:selected").val());
+                },
+                formatCurrency1:function()
+                {
+                    $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
                 }
-
 
 
 
