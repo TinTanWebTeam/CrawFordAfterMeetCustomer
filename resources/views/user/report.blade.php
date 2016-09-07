@@ -215,12 +215,45 @@
                         $("input[name=sumTimeUnit]").empty().val(sumTime);
                         $("input[name=sumExpenseAmount]").empty().val(sumExpenseAmount);
                         // fill to print report
+                        var fromDate = $("input[name=fromDate]").val();
+                        if (fromDate) {
+                            var receiveDate = new Date(fromDate.substring(0, 10));
+                            var dd = receiveDate.getDate();
+                            var mm = receiveDate.getMonth() + 1; //January is 0!
 
+                            var yyyy = receiveDate.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+                            fromDate = dd + '-' + mm + '-' + yyyy;
+                        }
+                        var toDate = $("input[name=toDate]").val();
+                        if (toDate) {
+                            var receiveDate = new Date(toDate.substring(0, 10));
+                            var dd = receiveDate.getDate();
+                            var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                            var yyyy = receiveDate.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+                            toDate = dd + '-' + mm + '-' + yyyy;
+                        }
+                        $("span[id=start_date]").text(fromDate);
+                        $("span[id=end_date]").text(toDate);
                         var trSubmission = "";
                         if (data.length > 0) {
                             var rowDate = data[0]["CreatedDate"].substring(0, 10);
                             var subUnit = 0.0;
                             var subAmount = 0;
+                            var totalUnit = 0.0;
+                            var totalAmount = 0;
                             for (var i = 0; i < data.length; i++) {
                                 if(rowDate == data[i]["CreatedDate"].substring(0, 10)){
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
@@ -269,6 +302,8 @@
                                     trSubmission += '</div>';
                                     subUnit += Number(data[i]["Unit"]);
                                     subAmount += Number(data[i]["ExpenseAmount"]);
+                                    totalUnit += Number(data[i]["Unit"]);
+                                    totalAmount += Number(data[i]["ExpenseAmount"]);
                                 }else{
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
                                     trSubmission += '<div style="width: 25%;display: inline-block">';
@@ -281,7 +316,7 @@
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 33%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
@@ -293,7 +328,7 @@
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-
+                                    trSubmission += '<hr>';
                                     rowDate = data[i]["CreatedDate"];
                                     subUnit = 0.0;
                                     subAmount = 0;
@@ -343,6 +378,8 @@
                                     trSubmission += '</div>';
                                     subUnit += Number(data[i]["Unit"]);
                                     subAmount += Number(data[i]["ExpenseAmount"]);
+                                    totalUnit += Number(data[i]["Unit"]);
+                                    totalAmount += Number(data[i]["ExpenseAmount"]);
                                 }
                                 if(i == (data.length -1)){
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
@@ -356,9 +393,33 @@
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 33%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<hr>';
+                                    trSubmission += '<div style="width: 100%;margin-top: 30px">';
+                                    trSubmission += '<div style="width: 25%;display: inline-block">';
+                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;"></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;"></div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600;font-size: 16px;font-style:italic">Total All:</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600;font-size: 16px;font-style:italic">' + totalUnit.toFixed(1) + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600;;font-size: 16px;font-style:italic">'+ totalAmount.toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 7%;display: inline-block"></div>';
                                     trSubmission += '<div style="width: 33%;display: inline-block">';
