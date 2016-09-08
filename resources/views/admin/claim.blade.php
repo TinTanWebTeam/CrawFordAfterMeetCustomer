@@ -1695,6 +1695,7 @@
                             $("option[value=determined]").attr("selected","selected");
                             $("option[value=undetermined]").removeAttr("selected");
                         }
+                        $("input[name=rate]").formatCurrency({roundToDecimalPlace:0})
                     });
                     $("#modal-claim").modal("hide");
                 },
@@ -1775,6 +1776,7 @@
                             }
 
                             $("input[name=id]").val(data.data.id);
+                            $("input[name=rate]").formatCurrency({roundToDecimalPlace:0})
                         });
                     }
                 },
@@ -2158,7 +2160,6 @@
                 $inputClaimType.val("");
             } else {
                 $inputClaimType.val(data[0]["code"]);
-
             }
         });
     }
