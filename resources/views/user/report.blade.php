@@ -103,9 +103,7 @@
     <div class="submission-content">
         <div style="width: 100%;margin-bottom: 5px">
             <div style="width: 25%;display: inline-block"></div>
-            <div style="width: 33%;display: inline-block"><div style="text-align: center;font-size: 14px;font-weight: 600;border: 2px solid black">Billable</div></div>
-            <div style="width: 7%;display: inline-block"></div>
-            <div style="width: 33%;display: inline-block"><div style="text-align: center;font-size: 14px;font-weight: 600;border: 2px solid black">UnBillable</div></div>
+            <div style="width: 73%;display: inline-block"><div style="text-align: center;font-size: 14px;font-weight: 600;border: 2px solid black">Billable</div></div>
         </div>
         <div style="width: 100%">
             <div style="width: 25%;display: inline-block">
@@ -116,18 +114,11 @@
                     <div style="text-align: center;font-weight: 600;">Claim #</div>
                 </div>
             </div>
-            <div style="width: 33%;display: inline-block">
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
-            </div>
-            <div style="width: 7%;display: inline-block"></div>
-            <div style="width: 33%;display: inline-block">
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
-                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
+            <div style="width: 73%;display: inline-block">
+                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time Code</div></div>
+                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time Units</div></div>
+                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense Code</div></div>
+                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense Amount</div></div>
             </div>
         </div>
         <div id="report_submission_content">
@@ -281,26 +272,19 @@
                                     trSubmission += '<div style="text-align: center;">' + data[i]["Claim"] + '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 73%;display: inline-block">';
                                     if(data[i]["Time"] == 'null' || data[i]["Time"] == null){
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
                                     }else{
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">'+ data[i]["Time"] +'</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px">'+ data[i]["Unit"] +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data[i]["Unit"] +'</div></div>';
                                     if(data[i]["ExpenseCode"] == 'null' || data[i]["ExpenseCode"] == null){
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px"></div></div>';
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
                                     }else{
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px">'+ data[i]["ExpenseCode"] +'</div></div>';
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data[i]["ExpenseCode"] +'</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center">'+ Number(data[i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
-                                    trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;">0.0</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;">0</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ Number(data[i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     subUnit += Number(data[i]["Unit"]);
@@ -317,18 +301,11 @@
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 73%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
-                                    trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<hr>';
@@ -357,26 +334,19 @@
                                     trSubmission += '<div style="text-align: center;">' + data[i]["Claim"] + '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 73%;display: inline-block">';
                                     if(data[i]["Time"] == 'null' || data[i]["Time"] == null){
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
                                     }else{
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">'+ data[i]["Time"] +'</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px">'+ data[i]["Unit"] +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data[i]["Unit"] +'</div></div>';
                                     if(data[i]["ExpenseCode"] == 'null' || data[i]["ExpenseCode"] == null){
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px"></div></div>';
                                     }else{
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px">'+ data[i]["ExpenseCode"] +'</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center">'+ Number(data[i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
-                                    trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;">0.0</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;">0</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ Number(data[i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     subUnit += Number(data[i]["Unit"]);
@@ -394,18 +364,11 @@
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
-                                    trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">Subtotal :</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;text-align: center;">' + subUnit.toFixed(1) + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<hr>';
@@ -418,18 +381,11 @@
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
+                                    trSubmission += '<div style="width: 73%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600;font-size: 16px;font-style:italic">Total All:</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;font-weight: 600;font-size: 16px;font-style:italic">' + totalUnit.toFixed(1) + '</div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 20px;text-align: center;font-weight: 600;;font-size: 16px;font-style:italic">'+ totalAmount.toLocaleString() +'</div></div>';
-                                    trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 7%;display: inline-block"></div>';
-                                    trSubmission += '<div style="width: 33%;display: inline-block">';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 30px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 15px;text-align: center;"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 45px;text-align: center;"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;font-size: 16px;font-style:italic;text-align: center;">' + totalUnit.toFixed(1) + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;;font-size: 16px;font-style:italic">'+ totalAmount.toLocaleString() +'</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                 }
