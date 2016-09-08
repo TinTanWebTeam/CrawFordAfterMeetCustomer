@@ -611,7 +611,7 @@
                                 employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("#"+Object.keys(employeeView.EmployeeObject)[i]).val();
                             }
                         }
-                        employeeView.EmployeeObject.Hourly = String($("input[name=Hourly]").val()).replace(",","");
+                        employeeView.EmployeeObject.Hourly = $("input[name=Hourly]").val().replace(/,/g,"");
                         $.post(url+"addNewAndUpdateEmployee",{_token:_token,idAction:$("input[name=ajaxActionType]").val(),dataEmployee:employeeView.EmployeeObject},function(data){
                             if(data["Action"]==="AddNew")
                             {
@@ -621,7 +621,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").val("1");
                                     employeeView.ResetForm();
-                                    String($("input[name=Hourly]").val()).replace(",","");
+                                    String($("input[name=Hourly]").val()).replace(/,/g,"");
                                 }
                                 else if(data["Result"]===0)
                                 {
@@ -642,7 +642,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     $("input[name=ajaxActionType]").empty().val("1");
                                     employeeView.ResetForm();
-                                    String($("input[name=Hourly]").val()).replace(",","");
+                                    $("input[name=Hourly]").val().replace(/,/g,"");
                                 }
                                 else
                                 {

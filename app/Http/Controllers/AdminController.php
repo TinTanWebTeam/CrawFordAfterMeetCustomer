@@ -109,7 +109,7 @@ class AdminController extends Controller
             try {
                 //Check exists
                 $userCheck = User::where('name', $request->get('dataEmployee')['Name'])->orWhere('email',$request->get('dataEmployee')['Email'])
-                    ->where('roleId', 2)->first();
+                ->first();
                 if ($userCheck == null)
                 {
                     $employee = new User();
@@ -164,7 +164,7 @@ class AdminController extends Controller
             //dd($request->get('dataEmployee'));
             try {
                 if ($request->get('dataEmployee')['Id'] != null) {
-                    $employee = User::where('id', $request->get('dataEmployee')['Id'])->where('roleId', '!=', 1)->first();
+                    $employee = User::where('id', $request->get('dataEmployee')['Id'])->first();
                     if ($employee) {
                         $employee->email = $request->get('dataEmployee')['Email'];
                         $employee->firstName = $request->get('dataEmployee')['FirstName'];
@@ -208,7 +208,7 @@ class AdminController extends Controller
         try {
             if ($request->get('idEmployee') != null) {
                 $user = User::where('active', 1)->where('id', $request->get('idEmployee'))
-                    ->where('roleId', 2)->first();
+                    ->first();
                 if ($user) {
                     $nameCreated = User::where('active', 1)->where('id', $user->userID_created)->first()->name;
                     $nameUpdated = User::where('active', 1)->where('id', $user->userID_changed)->first()->name;
@@ -227,7 +227,7 @@ class AdminController extends Controller
         $result = null;
         try {
             if ($request->get('key') != null) {
-                $user = User::where('active', 1)->where('name', $request->get('key'))->where('roleId', 2)->first();
+                $user = User::where('active', 1)->where('name', $request->get('key'))->first();
                 if ($user != null) {
                     $nameCreated = User::where('active', 1)->where('id', $user->userID_created)->first()->name;
                     $result = array('Data' => $user, 'Result' => 1, 'nameCreated' => $nameCreated);
@@ -1312,8 +1312,7 @@ class AdminController extends Controller
         else {
             if ($request->get('action') == 1) { // assignment task
                 try {
-                    $userTask = User::where('name', $request->get('taskObject')['UserId'])
-                        ->where('roleId', '!=', 1)->first();
+                    $userTask = User::where('name', $request->get('taskObject')['UserId'])->first();
                     if ($userTask) {
                         if($request->get('taskObject')['ProfessionalServices']!=null)
                         {
@@ -1551,7 +1550,6 @@ class AdminController extends Controller
     {
         $user = DB::table('users')
                     ->join('rate_details','users.id','=','rate_details.userId')
-                    ->where('users.roleId','!=',1)
                     ->select(
                         'users.id as id',
                         'users.name as name',
@@ -1967,7 +1965,7 @@ class AdminController extends Controller
                                     //update rate bill value when bill change
                                     foreach ($request->get('data')['ArrayData'] as $item)
                                     {
-                                        $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                        $idUser = User::where('name',$item[0])->first()->id;
                                         if($idUser)
                                         {
                                             $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change
@@ -2098,7 +2096,7 @@ class AdminController extends Controller
                                     //update rate bill value when bill change
                                     foreach ($request->get('data')['ArrayData'] as $item)
                                     {
-                                        $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                        $idUser = User::where('name',$item[0])->first()->id;
                                         if($idUser)
                                         {
                                             $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change
@@ -2245,7 +2243,7 @@ class AdminController extends Controller
                                 //update rate bill value when bill change
                                 foreach ($request->get('data')['ArrayData'] as $item)
                                 {
-                                    $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                    $idUser = User::where('name',$item[0])->first()->id;
                                     if($idUser)
                                     {
                                         $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change
@@ -2320,7 +2318,7 @@ class AdminController extends Controller
                                 $taskDetail->save();
                                 foreach ($request->get('data')['ArrayData'] as $item)
                                 {
-                                    $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                    $idUser = User::where('name',$item[0])->first()->id;
                                     if($idUser)
                                     {
                                         $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change
@@ -2679,7 +2677,7 @@ class AdminController extends Controller
                                //c?p nh?t rate thay ??i
                                foreach ($request->get('data')['ArrayData'] as $item)
                                {
-                                   $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                   $idUser = User::where('name',$item[0])->first()->id;
                                    if($idUser)
                                    {
                                        $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change
@@ -2878,7 +2876,7 @@ class AdminController extends Controller
                                         $taskDetail->save();
                                         foreach ($request->get('data')['ArrayData'] as $item)
                                         {
-                                            $idUser = User::where('roleId','!=',1)->where('name',$item[0])->first()->id;
+                                            $idUser = User::where('name',$item[0])->first()->id;
                                             if($idUser)
                                             {
                                                 $checkRateDefault = RateDetail::where('userId',$idUser)->first()->value;//check rate default vs rate change

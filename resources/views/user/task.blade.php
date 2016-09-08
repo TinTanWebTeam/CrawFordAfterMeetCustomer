@@ -427,7 +427,7 @@
 
 
                 },
-                RateDefault:$("input[name=ProfessionalServicesRate]").val(),
+                RateDefault:$("input[name=ProfessionalServicesRate]").val().replace(/,/g,""),
                 checkDate:null,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
@@ -504,6 +504,8 @@
                         $("#IdTask").val($(element).attr("id"));
                         $("#ProfessionalServicesCode").val(data["professionalCode"]);
                         $("#ExpenseCode").val(data["expenseCode"]);
+                        $("#ProfessionalServices").val(data["professionalCode"]);
+                        $("#Expense").val(data["expenseCode"]);
                         if(data["ErrorUser"]==="True")
                         {
                             $("button[name=actionAttackTask]").hide();
@@ -526,23 +528,24 @@
                             }
 
                         }
-
-
-
-
-
-
+                        $("input#ProfessionalServicesAmount").formatCurrency({roundToDecimalPlace:0});
+                        $("input#ProfessionalServicesRate").formatCurrency({roundToDecimalPlace:0});
+                        $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
 
                     });
                 },
                 automaticInitialValueTimeOfInputUnit:function()
                 {
+
                     if($("input[name=ProfessionalServicesTime]").val()==="")
                     {
                         $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()));
                     }
                     else{
-                        $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()) * parseFloat($("input[name=ProfessionalServicesTime]").val()));
+                        var Rate = $("input[name=ProfessionalServicesRate]").val().replace(/,/g,"");
+                        var Time = $("input[name=ProfessionalServicesTime]").val();
+                        var Sum = Rate * Time;
+                        $("input[name=ProfessionalServicesAmount]").empty().val(Sum).formatCurrency({roundToDecimalPlace:0});
                     }
                 },
                 automaticInitialValueTimeOfInputRate:function()
@@ -591,6 +594,9 @@
 
                         }
                     }
+                    taskView.taskObject.ProfessionalServicesAmount = String(taskView.taskObject.ProfessionalServicesAmount).replace(/,/g,"");
+                    taskView.taskObject.ProfessionalServicesRate = String(taskView.taskObject.ProfessionalServicesRate).replace(/,/g,"");
+                    taskView.taskObject.ExpenseAmount = $("input#ExpenseAmount").val().replace(/,/g,"");
                     $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
                         console.log(data);
                         if(data["Action"]==="AddNew")

@@ -1715,14 +1715,35 @@
                 },
                 fillClaim : function (inputElement,event) {
                     if(event.keyCode === 13){
-                        $.get(url+"getClaimByCode/"+$(inputElement).val(),function (result) {
-                            if(result.status === 201){
-                                console.log(result.data);
-                                for(var i = 0; i < Object.keys(result.data).length;i++){
-                                    $("#" + Object.keys(result.data)[i]).val(result.data[Object.keys(result.data)[i]]);
+                        $.get(url+"getClaimByCode/"+$(inputElement).val(),function (data) {
+                            if(data.status === 201){
+//                                console.log(result.data);
+//                                for(var i = 0; i < Object.keys(result.data).length;i++){
+//                                    $("#" + Object.keys(result.data)[i]).val(result.data[Object.keys(result.data)[i]]);
+//                                }
+                                for(var i = 0; i < Object.keys(data.data).length;i++){
+                                    if(Object.keys(data.data)[i]==="rate"){
+                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                    }
+                                    else
+                                    {
+                                        if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+                                        {
+                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                        }
+                                        else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
+                                        {
+                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                        }
+                                        else
+                                        {
+                                            $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                        }
+                                    }
                                 }
                             }
-                            $("input[name=id]").val(result.data.id);
+
+                            $("input[name=id]").val(data.data.id);
                         });
                     }
                 },

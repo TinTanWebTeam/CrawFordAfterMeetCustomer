@@ -940,7 +940,7 @@
                 chooseUserWhenAssignmentTask:function(element)
                 {
                     $("input[name=UserId]").val($(element).find("td:eq(0)").text());
-                    $("input[name=ProfessionalServicesRate]").val($(element).find("td:eq(6)").text());
+                    $("input[name=ProfessionalServicesRate]").val($(element).find("td:eq(6)").text()).formatCurrency({roundToDecimalPlace:0});
                     $("div[id=modalListEmployee]").modal("hide");
                 },
                 showUserWhenAssignmentTask:function()
