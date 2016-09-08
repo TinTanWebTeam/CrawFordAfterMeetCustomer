@@ -135,7 +135,7 @@
                             <h5>To Date:</h5>
                         </td>
                         <td colspan="3">
-                            <input type="date" name="ToDate" id="ToDate"  value="{{date('Y-m-d')}}">
+                            <input type="date" name="ToDate" id="ToDate"  value="{{date('Y-m-d')}}" onchange="trialFeeView.loadTaskDetailByDate()">
                         </td>
                     </tr>
                 </table>
@@ -683,7 +683,9 @@
                     console.log(objectUserAll);
                     if(objectUserAll==="null")
                     {
-                        alert("Error");
+                        $("div[id=modalConfirm]").modal("hide");
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Data is not correct!!!");
+                        $("div[id=modalNotification]").modal("show");
                     }
                     else
                     {
@@ -920,7 +922,6 @@
                     trialFeeView.clearTable();
                     trialFeeView.codeCustomer = null;
                     $("tbody[id=tbodyTableBillByStatus]").empty();
-
                 },
                 loadTaskDetailByDate:function()
                 {

@@ -2560,6 +2560,7 @@ class AdminController extends Controller
                             ->where('billDate','<=',$claimTaskDetail->billDate)
                             ->where('claimId',$request->get('data')['idClaim'])
                             ->get();
+                        dd($listClaimTaskDetail);
                         foreach($listClaimTaskDetail as $taskDetail)
                         {
                             //update active
