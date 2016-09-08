@@ -123,7 +123,7 @@ class UserController extends Controller
                 ->where('claim_task_details.claimId', $request->get('idClaim'))
                 ->where('claim_task_details.professionalServices', '!=', 1)
                 ->where('claim_task_details.professionalServices', '!=', 2)
-                ->orderBy('claim_task_details.created_at', 'desc')
+                ->orderBy('claim_task_details.billDate', 'desc')
                 ->select(
                     'claim_task_details.id as idTask',
                     'claim_task_details.userId as idUser',

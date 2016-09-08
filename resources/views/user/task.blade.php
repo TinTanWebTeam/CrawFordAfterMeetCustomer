@@ -361,21 +361,22 @@
             </div>
             <br>
         </form>
+        <hr>
         <table style="background-color: #fff;width: 100%" class="table-claim-report-assist">
             <thead>
             <tr class="assist">
                 <th colspan="10"><h4 class="text-center">Docket</h4></th>
             </tr>
-            <tr style="border-bottom: 1px solid black;">
+            <tr style="border-bottom: 1px solid black;margin-bottom:20px">
                 <th class="text-bold text-center" style="display: none">IdUser</th>
                 <th class="text-bold text-center">Date</th>
                 <th class="text-bold text-center">Adjuster Name</th>
                 <th class="text-bold text-center">Code</th>
                 <th class="text-bold text-center">Time</th>
-                <th class="text-bold text-center">Description</th>
+                <th class="text-bold text-center" style="display:none">Description</th>
                 <th class="text-bold text-center">Expense Code</th>
                 <th class="text-bold text-center">Expense Amount</th>
-                <th class="text-bold text-center">Expense Note</th>
+                <th class="text-bold text-center" style="display:none">Expense Note</th>
                 <th class="text-bold text-center">InvoiceMajorNo</th>
                 <th class="text-bold text-center">InvoiceDate</th>
             </tr>
@@ -471,11 +472,50 @@
                                 taskView.checkDate = data["Date"];
                                 var openDateFR = data["Claim"]["openDate"].split(" ");
                                 var fromDateFR = data["Date"].split(" ");
-                                $("input[name=openDate]").val(taskView.convertStringToDate(openDateFR[0])+" "+openDateFR[1]);
-                                $("input[name=fromDate]").val(taskView.convertStringToDate(fromDateFR[0])+" "+fromDateFR[1]);
+                                if (data["Claim"]["openDate"]) {
+                                    var openDate = new Date(data["Claim"]["openDate"].substring(0, 10));
+                                    var dd = openDate.getDate();
+                                    var mm = openDate.getMonth() + 1; //January is 0!
+
+                                    var yyyy = openDate.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    $("input[name=openDate]").val(dd + '-' + mm + '-' + yyyy);
+                                }
+                                if (data["Date"]) {
+                                    var fromDate = new Date(data["Date"].substring(0, 10));
+                                    var dd = fromDate.getDate();
+                                    var mm = fromDate.getMonth() + 1; //January is 0!
+
+                                    var yyyy = fromDate.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    $("input[name=fromDate]").val(dd + '-' + mm + '-' + yyyy);
+                                }
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=insuredName]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
-                                $("input[name=lossDate]").val(data["Claim"]["lossDate"]);
+                                if (data["Claim"]["lossDate"]) {
+                                    var lossDate = new Date(data["Claim"]["lossDate"].substring(0, 10));
+                                    var dd = lossDate.getDate();
+                                    var mm = lossDate.getMonth() + 1; //January is 0!
+
+                                    var yyyy = lossDate.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    $("input[name=lossDate]").val(dd + '-' + mm + '-' + yyyy);
+                                }
                                 $("input[name=lossLocation]").val(data["Claim"]["lossLocation"]);
                                 taskView.taskObject.ClaimId = data["Claim"]["id"];
                                 //Insert to table docket
@@ -684,6 +724,16 @@
                             });
                         if($("form[id=form-claim]").valid()){
                             //validator time expesn
+                            if(String($("input[name=ProfessionalServicesCode]").val()).trim() !== "" && String($("textarea[name=ProfessionalServicesNote]").val()).trim() == ""){
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter description");
+                                $("div[id=modalConfirm]").modal("show");
+                                return;
+                            }
+                            if(String($("input[name=ExpenseCode]").val()).trim() !== "" && String($("textarea[name=ExpenseNote]").val()).trim() == ""){
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter description");
+                                $("div[id=modalConfirm]").modal("show");
+                                return;
+                            }
                             if($("input[name=ProfessionalServicesCode]").val() !=="")
                             {
                                 if($("input[name=ProfessionalServicesTime]").val() ==="")
