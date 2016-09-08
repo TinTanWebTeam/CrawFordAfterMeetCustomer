@@ -447,7 +447,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <input type="text" name="ExpenseAmount" id="ExpenseAmount"
-                                                       style="width:80px">
+                                                       style="width:80px" onblur="docketView.formatCurrencyExpense()">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -528,6 +528,7 @@
 </div>
 
 <script>
+    $("input[name=ExpenseAmount]").formatCurrency({roundToDecimalPlace:0});
     $(document).on('keypress', ':input:not(textarea):not([type=submit])', function (e) {
         if (e.which == 13) e.preventDefault();
     });
@@ -635,6 +636,9 @@
                                 $("#" + docketView.firstToUpperCase(propertyName)).val(data["Task"][propertyName]);
                             }
                         }
+                        $("input#ProfessionalServicesAmount").formatCurrency({roundToDecimalPlace:0});
+                        $("input#ProfessionalServicesRate").formatCurrency({roundToDecimalPlace:0});
+                        $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
                           if(data["errorInvoiceMajorNo"]==="True")
                           {
                               $("button[name=actionAssignmentTask]").prop("disabled", true);
@@ -661,7 +665,17 @@
                     $("input[name=" + C + "]").empty().val(parseFloat($("input[name=" + A + "]").val()) * parseFloat($("input[name=" + B + "]").val()));
                 },
                 automaticInitialValueTimeOfInputUnit: function () {
-                    docketView.automaticValue("ProfessionalServicesTime", "ProfessionalServicesRate", "ProfessionalServicesAmount");
+                    if($("input[name=ProfessionalServicesTime]").val()==="")
+                    {
+                        $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()));
+                    }
+                    else{
+                        var Rate = $("input[name=ProfessionalServicesRate]").val().replace(/,/g,"");
+                        var Time = $("input[name=ProfessionalServicesTime]").val();
+                        var Sum = Rate * Time;
+                        $("input[name=ProfessionalServicesAmount]").empty().val(Sum).formatCurrency({roundToDecimalPlace:0});
+                    }
+//                    docketView.automaticValue("ProfessionalServicesTime", "ProfessionalServicesRate", "ProfessionalServicesAmount");
                 },
                 automaticInitialValueTimeOfInputRate: function () {
                     docketView.automaticValue("ProfessionalServicesRate", "ProfessionalServicesTime", "ProfessionalServicesAmount");
@@ -678,6 +692,9 @@
                     for (var i = 0; i < Object.keys(docketView.taskObject).length; i++) {
                         docketView.taskObject[Object.keys(docketView.taskObject)[i]] = $("#" + Object.keys(docketView.taskObject)[i]).val();
                     }
+                    docketView.taskObject.ProfessionalServicesAmount = String(docketView.taskObject.ProfessionalServicesAmount).replace(/,/g,"");
+                    docketView.taskObject.ProfessionalServicesRate = String(docketView.taskObject.ProfessionalServicesRate).replace(/,/g,"");
+                    docketView.taskObject.ExpenseAmount = $("input#ExpenseAmount").val().replace(/,/g,"");
                     $.post(url + "assignmentTask", {
                         _token: _token,
                         action: $("input[name=Action]").val(),
@@ -946,6 +963,10 @@
                 showUserWhenAssignmentTask:function()
                 {
                     $("div[id=modalListEmployee]").modal("show");
+                },
+                formatCurrencyExpense:function()
+                {
+                    $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
                 }
 
 

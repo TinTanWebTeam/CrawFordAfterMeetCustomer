@@ -1641,11 +1641,6 @@
                 fillClaimToForm : function (claimId) {
                     $("input[name=closeDate]").prop("readOnly",false).css("background-color","");
                     $("input[name=code]").prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=receiveDate]").prop("readOnly",true);
-                    $("input[name=openDate]").prop("readOnly",true);
-                    $("input[name=lossDate]").prop("readOnly",true);
-                    $("input[name=proscription]").prop("readOnly",true);
-                    $("input[name=firstContact]").prop("readOnly",true);
                     $("input[name=contact]").prop("readOnly",true);
                     $("table[id=table_claim]").find("label[class=error]").hide();
                     $.get(url+"getClaimByCode/"+claimId,function (data) {

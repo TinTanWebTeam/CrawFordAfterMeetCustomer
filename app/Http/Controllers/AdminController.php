@@ -853,6 +853,13 @@ class AdminController extends Controller
                 }
             } else {
                 //update claim
+                $timeLossDateNow = Carbon::now();
+                $lossDateFR = $request->get("claim")['lossDate'] . " " . $timeLossDateNow->hour . ":" . $timeLossDateNow->minute . ":" . $timeLossDateNow->second;
+
+                $timeReceiveDateNow = Carbon::now();
+                $receiveDateFR = $request->get("claim")['receiveDate'] . " " . $timeReceiveDateNow->hour . ":" . $timeReceiveDateNow->minute . ":" . $timeReceiveDateNow->second;
+
+                $openDateFR = $request->get("claim")['openDate'] . " " . "00" . ":" . "00" . ":" . "00";
                 $claim = Claim::where('id', $claimId)->first();
                 $claim->code = $request->get("claim")['code'];
                 $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
@@ -866,6 +873,19 @@ class AdminController extends Controller
                 $claim->lossDescCode = $request->get("claim")['lossDescCode'];
                 $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
                 $claim->sourceCode = $request->get("claim")['sourceCode'];
+                $claim->openDate = $openDateFR;
+                $claim->receiveDate = $receiveDateFR;
+                $claim->lossDate = $lossDateFR;
+                $timeFirstContactNow = Carbon::now();
+                $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                $timeProscriptionNow = Carbon::now();
+                $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+
+                $timePolicyInceptionDateNow = Carbon::now();
+                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+
+                $timePolicyExpiryDateNow = Carbon::now();
+                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
                 $claim->insurerCode = $request->get("claim")['insurerCode'];
                 $claim->brokerCode = $request->get("claim")['brokerCode'];
                 $claim->branchCode = $request->get("claim")['branchCode'];
@@ -3127,7 +3147,5 @@ class AdminController extends Controller
             return $ex;
         }
     }
-
-
 
 }
