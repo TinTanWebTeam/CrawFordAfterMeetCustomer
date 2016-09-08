@@ -247,6 +247,9 @@
                         }
                         $("span[id=start_date]").text(fromDate);
                         $("span[id=end_date]").text(toDate);
+                        $.get(url + "user/getTimeNowServer",function(tineNowServer){
+                            $("span[id=printed_at]").text(tineNowServer);
+                        });
                         var trSubmission = "";
                         if (data.length > 0) {
                             var rowDate = data[0]["CreatedDate"].substring(0, 10);
