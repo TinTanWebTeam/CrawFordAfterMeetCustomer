@@ -549,4 +549,8 @@ class UserController extends Controller
             return $ex;
         }
     }
+
+    public function getTimeNowServer(){
+        return date('d-m-Y h:i:s');
+    }
 }

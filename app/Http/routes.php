@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::get('report','UserController@report');
     Route::get('getSearchTime','UserController@getSearchTime');
     Route::get('getSearchExpense','UserController@getSearchExpense');
+    Route::get('getTimeNowServer','UserController@getTimeNowServer');
 
     Route::post('loadClaimByEventEnterKey','UserController@loadClaimByEventEnterKey');
     Route::post('assignmentTask','UserController@assignmentTask');
