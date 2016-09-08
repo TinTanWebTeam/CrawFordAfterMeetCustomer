@@ -234,7 +234,7 @@
                         <h5 class="text-right">Adjuster:</h5>
                     </div>
                     <div style="display: inline-block;width: 68%">
-                        <input type="text" id="adjusterCode" name="adjusterCode">
+                        <input type="text" id="adjusterCode" name="adjusterCode" style="text-transform: uppercase">
                     </div>
                 </td>
                 <td>
@@ -508,7 +508,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="claim-table">
                         <thead>
                         <tr>
                             <th>
@@ -518,7 +518,7 @@
                                 Insured Name
                             </th>
                             <th>
-                                Loss Location
+                                Insurer Code
                             </th>
                             <th>
                                 Receive Date
@@ -529,7 +529,8 @@
                             <th>
                                 Adjuster
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose
                             </th>
                         </tr>
                         </thead>
@@ -567,7 +568,8 @@
                             <th data-name="name">
                                 Name
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose/Edit
                             </th>
                         </tr>
                         </thead>
@@ -584,6 +586,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modal-source-code-modify">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -654,7 +657,8 @@
                             <th data-name="contactPerson" style="display: none">
                                 Contact Person
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose
                             </th>
                         </tr>
                         </thead>
@@ -754,7 +758,8 @@
                             <th data-name="name">
                                 Name
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose/Edit
                             </th>
                         </tr>
                         </thead>
@@ -831,7 +836,8 @@
                             <th data-name="name">
                                 Name
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose/Edit
                             </th>
                         </tr>
                         </thead>
@@ -903,7 +909,7 @@
 </div>
 {{--Adjuster--}}
 <div class="modal fade" id="modal-adjuster">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
@@ -915,7 +921,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="table-adjuster">
                         <thead>
                         <tr>
                             <th data-name="id" style="display: none">
@@ -936,7 +942,8 @@
                             <th data-name="Rate">
                                 Rate
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose
                             </th>
                         </tr>
                         </thead>
@@ -978,7 +985,8 @@
                             <th data-name="branchType">
                                 Branch Type
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose/Edit
                             </th>
                         </tr>
                         </thead>
@@ -1107,7 +1115,8 @@
                             <th>
                                 Phone
                             </th>
-                            <th>
+                            <th class="text-center">
+                                Choose/Edit
                             </th>
                         </tr>
                         </thead>
@@ -1701,15 +1710,42 @@
                             var tr = "<tr>";
                             tr += "<td>" + listClaim[i]["code"] + "</td>";
                             tr += "<td>"+ listClaim[i]["insuredLastName"] + "</td>";
-                            tr += "<td>"+ listClaim[i]["lossLocation"] + "</td>";
-                            tr += "<td>"+ listClaim[i]["receiveDate"] + "</td>";
-                            tr += "<td>"+ listClaim[i]["openDate"] + "</td>";
-                            tr += "<td>"+ listClaim[i]["adjusterCode"] + "</td>";
-                            tr += "<td><button class='btn btn-xs btn-success' onclick='claimView.fillClaimToForm(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
+                            tr += "<td>"+ listClaim[i]["insurerCode"] + "</td>";
+                            if (listClaim[i]["receiveDate"]) {
+                                var receiveDate = new Date(listClaim[i]["receiveDate"].substring(0, 10));
+                                var dd = receiveDate.getDate();
+                                var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = receiveDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            if (listClaim[i]["openDate"]) {
+                                var openDate = new Date(listClaim[i]["openDate"].substring(0, 10));
+                                var dd = openDate.getDate();
+                                var mm = openDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = openDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            tr += "<td>"+ String(listClaim[i]["adjusterCode"]).toUpperCase() + "</td>";
+                            tr += "<td class='text-center'><button class='btn btn-xs btn-success' onclick='claimView.fillClaimToForm(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
                             tr += "</tr>";
                             row += tr;
                         }
                         $("#claim-talbe-body").empty().append(row);
+                        $("#claim-table").DataTable();
                     });
                     $("#modal-claim").modal("show");
                 },
@@ -1764,6 +1800,7 @@
                 {
                     $("input[name=adjusterCode]").val($(element).parent().parent().find("td").eq(1).text());
                     $("input[name=rate]").val($(element).parent().parent().find("td").eq(5).text());
+                    $("input[name=rate]").formatCurrency({roundToDecimalPlace:0})
                     $("#modal-adjuster").modal("hide");
                 },
                 fillBranchFromModalToInput:function(element)
@@ -1980,10 +2017,11 @@
                     tr+="<td>"+data[i].firstName+"</td>";
                     tr+="<td>"+data[i].lastName+"</td>";
                     tr+="<td>"+data[i].rate+"</td>";
-                    tr+="<td><button class='btn btn-success' onclick='claimView.fillAdjusterFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button></td>";
+                    tr+="<td class='text-center'><button class='btn btn-success' onclick='claimView.fillAdjusterFromModalToInput(this)'><span class='glyphicon glyphicon-check'></span></button></td>";
                     tr+="</tr>";
                 }
                 $("#modal-adjuster-table-body").empty().append(tr);
+                $("#table-adjuster").DataTable();
             });
         });
 
