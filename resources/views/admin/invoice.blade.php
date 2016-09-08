@@ -1,39 +1,4 @@
 {{--Model List Invoice--}}
-{{--demo--}}
-<div class="modal fade" id="modalListInvoice" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body" id="modalContent" style="text-align: center">List Invoice</div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Invoice</th>
-                        <th>Invoice Date</th>
-                        <th>BillTo</th>
-                        <th>Total</th>
-                        <th>claimCode</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbodyTableInvoice">
-                        @if($query!=null)
-                            @foreach($query as $item)
-                                <tr id="{{$item->invoice}}" onclick="invoiceView.viewDetailInvoice(this)" style="cursor: pointer">
-                                    <td>{{$item->invoice}}</td>
-                                    <td>{{\Carbon\Carbon::parse($item->invoiceDay)->format('d-m-Y')}}</td>
-                                    <td>{{$item->billTo}}</td>
-                                    <td>{{$item->total}}</td>
-                                    <td>{{$item->claimCode}}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{{--Model List Invoice--}}
 
 <form action="" class="form-invoice">
     <div class="row" style="background-color: white">
@@ -43,11 +8,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row">
-                                <div class="col-sm-5">
+                                <div class="col-sm-4">
                                     <h5 style="text-align: right">Invoice #</h5>
                                 </div>
-                                <div class="col-sm-7">
-                                    <input type="text" name="Invoice" id="Invoice" onkeypress="invoiceView.loadInvoiceByEventEnterKey(event)" ondblclick="invoiceView.loadListInvoice()">
+                                <div class="col-sm-8">
+                                    <input type="text" name="Invoice" id="Invoice" readonly style="background-color: #EAD8D8">
                                 </div>
                             </div>
                         </div>
@@ -160,7 +125,7 @@
                                 <h5 style="text-align: right">Claim #:</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Claim" id="Claim" readonly style="background-color: #EAD8D8">
+                                <input type="text" name="Claim" id="Claim" ondblclick="getAllClaim()" onkeyup="getClaimAndInvoiceByClaimId(this)">
                             </div>
                         </div>
                     </div>
@@ -423,6 +388,22 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <div class="row" style="padding: 10px;border: 1px solid #AFAFAF;margin-left: 10px">
+                <table class="table table-hover" id="table-invoice">
+                	<thead>
+                		<tr>
+                			<th>Invoice Id</th>
+                            <th>Invoice Date</th>
+                            <th>Invoice Type</th>
+                            <th>Claim Id</th>
+                		</tr>
+                	</thead>
+                	<tbody id="table-invoice-body">
+
+                	</tbody>
+                </table>
+            </div>
 
         </div>
     </div>
@@ -488,7 +469,7 @@
                     <h4>PDAR1500085</h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
-                    <h4 style="margin-top: 0px">Crawford Ref:</h4>
+                    <h4 style="margin-top: 0px">VIA Ref:</h4>
                     <h4>Loss date:</h4>
                 </div>
                 <div style="display: inline-block;width: 25%;box-sizing: border-box">
@@ -669,7 +650,7 @@
                             <h5 style="margin-top: 0px;margin-bottom: 0px">In the Name of:</h5>
                         </div>
                         <div style="width: 60%;display: inline-block">
-                            <h5 style="margin-top: 0px;margin-bottom: 0px">Vietnam International Adhuster Co., Ltd</h5>
+                            <h5 style="margin-top: 0px;margin-bottom: 0px">Vietnam International Adjuster Co., Ltd</h5>
                         </div>
                     </div>
                     <div style="width: 100%">
@@ -697,7 +678,7 @@
                 <div style="width: 1150px;">
                     <h5 style="text-align: center;font-weight: 600">Vietnam International Adjuster Co., Ltd</h5>
                     <h5 style="text-align: center;font-weight: 600">5th floor Estar Building, 147-149 Vo Van Tan Street, Ward 6, District 3, Ho Chi Minh City, Vietnam</h5>
-                    <h5 style="text-align: center;font-weight: 600">Telephone:&nbsp;&nbsp;&nbsp;(84)&nbsp;8&nbsp;3930&nbsp;3777&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fax:&nbsp;&nbsp;&nbsp;(84)&nbsp;8&nbsp;3930&nbsp;3777</h5>
+                    <h5 style="text-align: center;font-weight: 600">Telephone:&nbsp;&nbsp;&nbsp;(84)&nbsp;8&nbsp;3930&nbsp;3777&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fax:&nbsp;&nbsp;&nbsp;(84)&nbsp;8&nbsp;3930&nbsp;2777</h5>
                 </div>
             </div>
         </div>
@@ -714,54 +695,7 @@
                 invoiceObject: {
 
                 },
-                convertStringToDate: function (date) {
-                    var currentDate = new Date(date);
-                    var datetime = currentDate.getFullYear() + "-"
-                            + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
-                            + ("0" + currentDate.getDate()).slice(-2);
-                    return datetime;
-                },
-                getData:function(key)
-                {
-                    $.post(url+"loadInvoiceByEventEnterKey",{_token:_token,key:key},function(data){
-                        console.log(data);
-                        $("input[name=InvoiceDate]").val(invoiceView.convertStringToDate(data[0][0]["invoiceDay"]));
-                        $("input[name=BillTo]").val(data[0][0]["billTo"]);
-                        $("input[name=BillType]").val(data[0][0]["typeInvoice"]);
-                        $("input[name=Organization]").val(data[0][0]["organization"]);
-                        $("input[name=Claim]").val(data[0][0]["Claim"]);
-                        $("input[name=AdjusterID]").val(data[0][0]["adjusterId"]);
-                        $("input[name=LossDate]").val(invoiceView.convertStringToDate(data[0][0]["lossDate"]));
-                        $("input[name=BranchID]").val(data[0][0]["branchId"]);
-                        $("input[name=InsuredName]").val(data[0][0]["insuredFirstName"]+" "+data[0][0]["insuredLastName"]);
-                        $("input[name=Policy]").val(data[0][0]["policy"]);
 
-                        $("input[name=Professional]").val(data[1][0]["professionalServices"]);
-                        $("input[name=GeneralExp]").val(data[2][0]["generalExp"]);
-                        $("input[name=CommPhotoExp]").val(data[3][0]["commPhotoExp"]);
-                        $("input[name=ConsultFeesExp]").val(data[4][0]["consultFeesExp"]);
-                        $("input[name=TravelRelatedExp]").val(data[5][0]["travelRelatedExp"]);
-                        $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
-                        $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
-                    });
-
-                },
-                loadInvoiceByEventEnterKey:function(e)
-                {
-                    if (e.keyCode === 13)
-                    {
-                        invoiceView.getData($("input[name=Invoice]").val());
-                    }
-                },
-                loadListInvoice:function()
-                {
-                    $("div[id=modalListInvoice]").modal("show");
-                },
-                viewDetailInvoice:function(element)
-                {
-                    invoiceView.getData($(element).attr("id"));
-                    $("div[id=modalListInvoice]").modal("hide");
-                }
             };
         }
         else {
