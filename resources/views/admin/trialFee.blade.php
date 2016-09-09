@@ -443,7 +443,29 @@
                     gl.find("tr:eq(9)").empty().append("<td style='width: 266px;height:43px'>Disbursements</td>");
                     gl.find("tr:eq(10)").empty().append("<td style='width: 266px;height:43px'>Total</td>");
                 },
+                formatInputCurrencyTableDataUser:function()
+                {
+                    var trTableDataUser = $("#tbodyTableListTaskDetail").find("tr");
+                    trTableDataUser.eq(1).children().children().formatCurrency({roundToDecimalPlace:0});
+                    for(var i =3;i<trTableDataUser.length;i++)
+                    {
+                        $(trTableDataUser[i]).children().children().formatCurrency({roundToDecimalPlace:0});
+                    }
+                },
+                formatInputCurrencyTableTotal:function()
+                {
+                    var trTableDataTotal = $("#tbodyListTotal").find("tr");
+                    trTableDataTotal.eq(1).children().formatCurrency({roundToDecimalPlace:0});
+                    for(var i =3;i<trTableDataTotal.length;i++)
+                    {
+                        $(trTableDataTotal[i]).find("td:eq(0)").formatCurrency({roundToDecimalPlace:0});
+                    }
+                    for(var i =3;i<trTableDataTotal.length;i++)
+                    {
+                        $(trTableDataTotal[i]).find("td:eq(1)").children().formatCurrency({roundToDecimalPlace:0});
+                    }
 
+                },
                 chooseClaimWhenUseEventEnterKey: function (e) {
                     trialFeeView.clearTable();
                     $("button[name=actionViewListIB]").prop("disabled",false);
@@ -486,7 +508,14 @@
                                         //Insert data to thead of table
                                         theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "</th>");
                                         //Insert data to tbody of table
-                                        tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"] + "</td>");
+                                        if(data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"]===null)
+                                        {
+                                            tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "></td>");
+                                        }
+                                        else
+                                        {
+                                            tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"] + "</td>");
+                                        }
                                         tbodyList.find("tr:eq(1)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "><input type='text' id='' name='' value=" + data["listClaimTaskDetail"][i]["Time"]["Rate"] + " onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
                                         tbodyList.find("tr:eq(2)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["RateType"] + "</td>");
                                         // Time
@@ -519,10 +548,11 @@
                                             }
                                         }
                                         tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "><input type='text' id='' name='' value="+trialFeeView.sumAllRow(data["listClaimTaskDetail"][i]["Time"]["Name"])+" readonly style='background-color: #EAE2E2'></td>");
-
                                         //insert total into table total
                                         trialFeeView.loadDataToTableTotal();
                                     }
+                                    trialFeeView.formatInputCurrencyTableTotal();
+                                    trialFeeView.formatInputCurrencyTableDataUser();
                                 }
                                 else
                                 {
@@ -568,9 +598,11 @@
                         for (var j = 0; j < trSum.length; j++) {
                             if ($(trSum[j]).find('input').length > 0) {
                                 sum += Number($(trSum[j]).find('input').val());
+                                //sum += $(trSum[j]).find('input').val();
                             }
                             else {
                                 sum += Number($(trSum[j]).text());
+                                //sum += $(trSum[j]).text();
                             }
                         }
                         arrSum.push(sum);
@@ -597,14 +629,63 @@
                             }
                         }
                     }
+
+                },
+                loadDataToTableTotal1: function () {
+                    var arrSum = [];
+                    var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
+                    var tbodyListTotal = $("tbody[id=tbodyListTotal]");
+                    tbodyListTotal.find("tr:eq(1)").empty().append("<td>---</td>").append("<td>---</td>");
+                    tbodyListTotal.find("tr:eq(2)").empty().append("<td>---</td>").append("<td>---</td>");
+                    var indexToFill = [0, 3, 4, 5, 6, 7, 8, 9, 10];
+                    for (var k = 0; k < indexToFill.length; k++) {
+                        var trSum = tbodyList.find('tr').eq(indexToFill[k]).find('td');
+                        var sum = 0;
+                        for (var j = 0; j < trSum.length; j++) {
+                            if ($(trSum[j]).find('input').length > 0) {
+                                sum += Number($(trSum[j]).find('input').val().replace(/,/g,""));
+                                //sum += $(trSum[j]).find('input').val();
+                            }
+                            else {
+                                sum += Number($(trSum[j]).text().replace(/,/g,""));
+                                //sum += $(trSum[j]).text();
+                            }
+                        }
+                        arrSum.push(sum);
+                    }
+                    var h = 1;
+                    for (var z = 0; z < tbodyListTotal.find("tr").length; z++) {
+                        if (z === 0) {
+                            tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[z] + "</td>").append("<td>" + arrSum[z] + "</td>")
+                        }
+                        if (z > 2 && z <= 10) {
+                            if ($("input[name=action]").val() === "0") {
+//                                if (z === 10) {
+//                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + data + "></td>");
+//                                    h++;
+//                                }
+                                //else {
+                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
+                                h++;
+                                //}
+                            }
+                            else {
+                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
+                                h++;
+                            }
+                        }
+                    }
+
                 },
                 sumTotalValueofInputOfTableListTaskDetail: function (element) {
+
+                    $(element).formatCurrency({roundToDecimalPlace:0});
                     var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
 
-                    var rate = tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+$(element).parent().attr("id")+"]").children().val();
+                    var rate = tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+$(element).parent().attr("id")+"]").children().val().replace(/,/g,"");
                     var time = tbodyListTaskDetail.find("tr:eq(0)").find("td[id="+$(element).parent().attr("id")+"]").text();
-                    tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+$(element).parent().attr("id")+"]").children().val(rate * parseFloat(time));
 
+                    tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+$(element).parent().attr("id")+"]").children().val(rate * parseFloat(time));
                     var trList = tbodyListTaskDetail.find("tr");
                     var sum = 0;
                     for (var i = 0; i < trList.length; i++) {
@@ -614,7 +695,11 @@
                     }
 
                     tbodyListTaskDetail.find("tr:eq(10)").find("td[id=" + $(element).parent().attr("id") + "]").children().val(sum);
-                    trialFeeView.loadDataToTableTotal(element);
+                    trialFeeView.loadDataToTableTotal1(element);
+                    //Format currency
+                    trialFeeView.formatInputCurrencyTableTotal();
+                    trialFeeView.formatInputCurrencyTableDataUser();
+
                 },
                 actionBillOfClaim: function () {
                     if($("input[id=final_bill]").is(":checked"))
@@ -649,19 +734,19 @@
                             var list = tbodyList.find("td[id=" + arrayuser[z] + "]");
                             for (var h = 0; h < $(list).length; h++) {
                                 if (h ==0) {
-                                    array1.push($(list[h]).text());
+                                    array1.push($(list[h]).text().replace(/,/g,""));
                                 }
                                 else if(h ==1)
                                 {
-                                    array1.push($(list[h]).children().val());
+                                    array1.push($(list[h]).children().val().replace(/,/g,""));
                                 }
                                 else if(h ==2)
                                 {
-                                    array1.push($(list[h]).text());
+                                    array1.push($(list[h]).text().replace(/,/g,""));
                                 }
                                 else
                                 {
-                                    array1.push($(list[h]).children().val());
+                                    array1.push($(list[h]).children().val().replace(/,/g,""));
                                 }
                             }
                             objectUserAll1.push(array1);
@@ -680,7 +765,6 @@
                         billStatus:$("input[name=bill-status]:checked").attr("id"),
                         ArrayData: objectUserAll
                     };
-                    console.log(objectUserAll);
                     if(objectUserAll==="null")
                     {
                         $("div[id=modalConfirm]").modal("hide");
@@ -694,7 +778,6 @@
                             action: $("input[name=action]").val(),
                             data: arrayBill
                         }, function (data) {
-                            console.log(data);
                             if (data["Action"] === "AddNew") { //AddNew
                                 if (data["Error"] === "ToDate<FromDate") {
                                     $("div[id=modalConfirm]").modal("hide");
@@ -759,14 +842,6 @@
                 viewDetailIBClaim: function (element) {
                     var total = $(element).find("td:eq(4)").text();
                     trialFeeView.idBillWhenUpdateBill = $(element).attr("id");
-//                    if($(element).find("td:eq(2)").text()==="Complete")
-//                    {
-//                        $("button[name=btnBill]").text("Update Bill ").prop('disabled', true);
-//                    }
-//                    else
-//                    {
-//                        $("button[name=btnBill]").text("Update Bill ");
-//                    }
                     $("input[name=action]").val("0");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
@@ -842,6 +917,8 @@
                                 }
                             }
                             trialFeeView.loadDataToTableTotal();
+                            trialFeeView.formatInputCurrencyTableTotal();
+                            trialFeeView.formatInputCurrencyTableDataUser();
                         }
                         else
                         {
@@ -904,6 +981,8 @@
                             }
                             //insert total into table total
                             trialFeeView.loadDataToTableTotal();
+                            trialFeeView.formatInputCurrencyTableTotal();
+                            trialFeeView.formatInputCurrencyTableDataUser();
                         }
                     });
                 },

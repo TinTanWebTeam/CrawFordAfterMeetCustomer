@@ -73,6 +73,56 @@
 </div>
 {{--End Model Show Confirm--}}
 
+{{--Model Show Claim  --}}
+<div class="modal fade" id="modal-claim">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Claim List
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="claim-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                Insured Name
+                            </th>
+                            <th>
+                                Insurer Code
+                            </th>
+                            <th>
+                                Receive Date
+                            </th>
+                            <th>
+                                Open Date
+                            </th>
+                            <th>
+                                Adjuster
+                            </th>
+                            <th class="text-center">
+                                Choose
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="claim-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{--End Model Show Claim  --}}
+
 <div class="row">
         <form action="" style="background-color: #fff;width: 100%" id="form-claim">
             <div class="row" style="padding: 20px;">
@@ -85,16 +135,16 @@
                             <input type="text"  name="ClaimId" id="ClaimId" value="" style="display: none">
                             <input type="text"  name="Action" id="Action" value="1" style="display: none">
                             <input type="text"  name="IdTask" id="IdTask" style="display: none">
-                            <input type="text"  name="ClaimCode" id="ClaimCode" value="" style="display: inline-block" onkeypress="taskView.loadClaimByEventEnterKey(event)">
+                            <input type="text"  name="ClaimCode" id="ClaimCode" value="" style="display: inline-block" onkeypress="taskView.loadClaimByEventEnterKey(event)" ondblclick="taskView.loadClaimByEventDoubleClick()">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            <h5 style="display: inline-block" class="text-right">Employee Id:</h5>
+                            <h5 style="display: inline-block" class="text-right">Adjuster Id:</h5>
                         </div>
                         <div class="col-sm-8">
                             <input type="text" id="UserId" name="UserId" value="{{Auth::user()->id}}" style="display: none">
-                            <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #E2D8D8" readonly>
+                            <input type="text" id="UserCode" name="UserCode" value="{{Auth::user()->name}}" style="display: inline-block;background-color: #E2D8D8;text-transform: uppercase" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -430,6 +480,7 @@
                 },
                 RateDefault:$("input[name=ProfessionalServicesRate]").val().replace(/,/g,""),
                 checkDate:null,
+                TimeDefault:null,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
                         if (taskView.taskObject.hasOwnProperty(propertyName)) {
@@ -472,6 +523,7 @@
                                 taskView.checkDate = data["Date"];
                                 var openDateFR = data["Claim"]["openDate"].split(" ");
                                 var fromDateFR = data["Date"].split(" ");
+                                taskView.TimeDefault = fromDateFR[1];
                                 if (data["Claim"]["openDate"]) {
                                     var openDate = new Date(data["Claim"]["openDate"].substring(0, 10));
                                     var dd = openDate.getDate();
@@ -637,7 +689,7 @@
                     taskView.taskObject.ProfessionalServicesAmount = String(taskView.taskObject.ProfessionalServicesAmount).replace(/,/g,"");
                     taskView.taskObject.ProfessionalServicesRate = String(taskView.taskObject.ProfessionalServicesRate).replace(/,/g,"");
                     taskView.taskObject.ExpenseAmount = $("input#ExpenseAmount").val().replace(/,/g,"");
-                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val(),toDate:$("input[name=ChooseDate]").val()},function(data){
+                    $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val() +" "+taskView.TimeDefault,toDate:$("input[name=ChooseDate]").val()},function(data){
                         console.log(data);
                         if(data["Action"]==="AddNew")
                         {
@@ -802,7 +854,6 @@
                 cancel:function()
                 {
                     $("#IdTask").val("");
-                    $("input[id=ChooseDate]").val("");
                     //Time
                     $("input[id=ProfessionalServices]").val("");
                     $("input[id=ProfessionalServicesCode]").val("");
@@ -812,7 +863,7 @@
                     $("input[id=ExpenseCode]").val("");
                     $("textarea[id=ExpenseNote]").val("");
                     //Button
-                    $("button[name=actionAttackTask]").text("Add New").prop("disabled",false);
+                    $("button[name=actionAttackTask]").text("Add New").prop("disabled",false).show();
                     $("input[name=Action]").val("1");
 
                     //Value ProfessionalServices
@@ -862,9 +913,90 @@
                 formatCurrency1:function()
                 {
                     $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+                },
+                getAllClaim:function()
+                {
+                    $.get(url+"user/getAllClaim",{_token:_token},function(view){
+                        $("#claim-table").DataTable().destroy();
+                        $("#claim-table-body").empty().append(view);
+                        $("#claim-table").DataTable();
+                    });
+
+                },
+                loadClaimByEventDoubleClick:function()
+                {
+                    taskView.getAllClaim();
+                    $("#modal-claim").modal("show");
+                },
+                fillClaimToForm:function(element)
+                {
+                    $.post(url+"user/loadClaimByEventEnterKey",{_token:_token,key: $(element).attr("id")},function(data){
+                        if(data["Claim"]==="null")
+                        {
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim not exist!!!");
+                            $("div[id=modalConfirm]").modal("show");
+                        }
+                        else
+                        {
+                            taskView.checkDate = data["Date"];
+                            var openDateFR = data["Claim"]["openDate"].split(" ");
+                            var fromDateFR = data["Date"].split(" ");
+                            taskView.TimeDefault = fromDateFR[1];
+                            if (data["Claim"]["openDate"]) {
+                                var openDate = new Date(data["Claim"]["openDate"].substring(0, 10));
+                                var dd = openDate.getDate();
+                                var mm = openDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = openDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                $("input[name=openDate]").val(dd + '-' + mm + '-' + yyyy);
+                            }
+                            if (data["Date"]) {
+                                var fromDate = new Date(data["Date"].substring(0, 10));
+                                var dd = fromDate.getDate();
+                                var mm = fromDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = fromDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                $("input[name=fromDate]").val(dd + '-' + mm + '-' + yyyy);
+                            }
+                            $("input[name=ClaimCode]").val(data["Claim"]["code"]);
+                            $("input[name=ClaimId]").val(data["Claim"]["id"]);
+                            $("input[name=insuredName]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
+                            if (data["Claim"]["lossDate"]) {
+                                var lossDate = new Date(data["Claim"]["lossDate"].substring(0, 10));
+                                var dd = lossDate.getDate();
+                                var mm = lossDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = lossDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                $("input[name=lossDate]").val(dd + '-' + mm + '-' + yyyy);
+                            }
+                            $("input[name=lossLocation]").val(data["Claim"]["lossLocation"]);
+                            taskView.taskObject.ClaimId = data["Claim"]["id"];
+                            //Insert to table docket
+                            $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:data["Claim"]["id"]},function(view){
+                                $("tbody[id=tbodyDocket]").empty().append(view);
+                            });
+                        }
+                    });
+                    $("#modal-claim").modal("hide");
                 }
-
-
 
 
 

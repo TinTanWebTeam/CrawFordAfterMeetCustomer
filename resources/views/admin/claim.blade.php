@@ -1334,7 +1334,6 @@
                                 claimView.claimViewObject.privileged = 0;
                             }
                             $.post(url+'saveClaim/'+ claimView.claimViewObject.id,{_token:_token,claim : claimView.claimViewObject},function (data) {
-                                console.log(data);
                                 if(data["Action"]==="AddNew")
                                 {
                                     if(data["Result"]===1)
