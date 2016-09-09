@@ -49,7 +49,7 @@ class AdminController extends Controller
         $codeID = null;
         $branchType = BranchType::where('active', 1)->get();
         $sourceCustomer = SourceCustomer::where('active', 1)->get();
-        $code = Claim::orderBy('created_at', 'desc')->first();
+        $code = Claim::orderBy('code', 'desc')->first();
         if ($code != null) {
             $codeID = $code->code;
         }
@@ -402,7 +402,7 @@ class AdminController extends Controller
 
     public function getAllClaim()
     {
-        return Claim::all();
+        return Claim::orderBy('code','desc')->get();
     }
 
     public function getClaimByCode($code)
@@ -523,6 +523,7 @@ class AdminController extends Controller
                                 ->where('claim_task_details.claimId', '=', $checkIBorFB->claimId)
                                 ->where('claim_task_details.billDate', '>', $date)
                                 ->where('claim_task_details.billDate', '<', $checkIBorFB->billDate)
+                                ->where('claim_task_details.created_at','<',$checkIBorFB->created_at)
                                 ->groupBy('users.name')
                                 ->select(
                                     'users.name as userName',
@@ -630,6 +631,7 @@ class AdminController extends Controller
                                 ->where('claim_task_details.claimId', '=', $checkIBorFB->claimId)
                                 ->where('claim_task_details.billDate', '>', $date)
                                 ->where('claim_task_details.billDate', '<', $checkIBorFB->billDate)
+                                ->where('claim_task_details.active','=',1)
                                 ->groupBy('users.name')
                                 ->select(
                                     'users.name as userName',
@@ -833,22 +835,33 @@ class AdminController extends Controller
                     $claim->policy = $request->get("claim")['policy'];
 
                     $timeFirstContactNow = Carbon::now();
-                    $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                    if($request->get("claim")['firstContact']!=null)
+                    {
+                        $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                    }
 
                     $claim->contact = $request->get("claim")['contact'];
 
                     $timeProscriptionNow = Carbon::now();
-                    $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                    if( $request->get("claim")['proscription']!=null)
+                    {
+                        $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                    }
 
                     $timePolicyInceptionDateNow = Carbon::now();
-                    $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                    if($request->get("claim")['policyInceptionDate']!=null)
+                    {
+                        $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                    }
 
                     $timePolicyExpiryDateNow = Carbon::now();
-                    $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
-
+                    if( $request->get("claim")['policyExpiryDate'])
+                    {
+                        $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+                    }
                     $claim->save();
                     //take code of final claim
-                    $code = Claim::orderBy('created_at', 'desc')->first()->code;
+                    $code = Claim::orderBy('code', 'desc')->first()->code;
                     $result = array('Action' => 'AddNew', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
                 }
             } else {
@@ -876,16 +889,30 @@ class AdminController extends Controller
                 $claim->openDate = $openDateFR;
                 $claim->receiveDate = $receiveDateFR;
                 $claim->lossDate = $lossDateFR;
+
                 $timeFirstContactNow = Carbon::now();
-                $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                if($request->get("claim")['firstContact']!=null)
+                {
+                    $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                }
+
                 $timeProscriptionNow = Carbon::now();
-                $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                if($request->get("claim")['proscription']!=null)
+                {
+                    $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                }
 
                 $timePolicyInceptionDateNow = Carbon::now();
-                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                if($request->get("claim")['policyInceptionDate']!=null)
+                {
+                    $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                }
 
                 $timePolicyExpiryDateNow = Carbon::now();
-                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+                if($request->get("claim")['policyExpiryDate']!=null)
+                {
+                    $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+                }
                 $claim->insurerCode = $request->get("claim")['insurerCode'];
                 $claim->brokerCode = $request->get("claim")['brokerCode'];
                 $claim->branchCode = $request->get("claim")['branchCode'];
@@ -936,7 +963,7 @@ class AdminController extends Controller
                         $claim->statusId = 3;
                         $claim->save();
                         //take code of final claim
-                        $code = Claim::orderBy('created_at', 'desc')->first()->code;
+                        $code = Claim::orderBy('code', 'desc')->first()->code;
                         $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
                     }
                     else
@@ -950,7 +977,7 @@ class AdminController extends Controller
                 {
                     $claim->save();
                     //take code of final claim
-                    $code = Claim::orderBy('created_at', 'desc')->first()->code;
+                    $code = Claim::orderBy('code', 'desc')->first()->code;
                     $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
                 }
 
@@ -1346,14 +1373,22 @@ class AdminController extends Controller
                         $task->professionalServices = $idTime;
                         $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
 
-                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                        if($request->get('taskObject')['ProfessionalServicesTime']!=null)
+                        {
+                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                        }
                         $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-
+                        if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
+                        {
+                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                        }
 
                         $task->expense = $idExpense;
                         $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                        if($request->get('taskObject')['ExpenseAmount']!=null)
+                        {
+                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                        }
 
                         $task->active = 0;
                         $task->claimId = $request->get('taskObject')['ClaimId'];
@@ -1398,13 +1433,22 @@ class AdminController extends Controller
                                 $task->professionalServices = $idTime;
                                 $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
 
-                                $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                if($request->get('taskObject')['ProfessionalServicesTime']!=null)
+                                {
+                                    $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                }
                                 $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                                $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                                if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
+                                {
+                                    $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                                }
 
                                 $task->expense = $idExpense;
                                 $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                                $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                                if($request->get('taskObject')['ExpenseAmount']!=null)
+                                {
+                                    $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                                }
 
                                 $task->billDate = $chooseDate;
                                 $task->updatedBy = Auth::user()->id;
@@ -2395,6 +2439,7 @@ class AdminController extends Controller
 
     public function Bill(Request $request)
     {
+        //dd($request->all());
         $data = null;
         $invoiceTempNo =null ;
         $invoiceMajorNo = null;
@@ -2560,7 +2605,6 @@ class AdminController extends Controller
                             ->where('billDate','<=',$claimTaskDetail->billDate)
                             ->where('claimId',$request->get('data')['idClaim'])
                             ->get();
-                        dd($listClaimTaskDetail);
                         foreach($listClaimTaskDetail as $taskDetail)
                         {
                             //update active
@@ -2889,6 +2933,7 @@ class AdminController extends Controller
                                         ->where('billDate','>=',$fromDate)
                                         ->where('billDate','<=',$task->billDate)
                                         ->where('claimId',$bill->claimId)
+                                        ->where('active',1)
                                         ->get();
                                     foreach($listClaimTaskDetail as $taskDetail)
                                     {

@@ -181,19 +181,26 @@ class UserController extends Controller
                                 $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
                             }
                             $task = new ClaimTaskDetail();
+
                             $task->professionalServices = $idTime;
                             $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-
-                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                            if($request->get('taskObject')['ProfessionalServicesTime']!=null)
+                            {
+                                $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                            }
                             $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-
+                            if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
+                            {
+                                $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                            }
 
                             $task->expense = $idExpense;
                             $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                            if($request->get('taskObject')['ExpenseAmount']!=null)
+                            {
+                                $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
 
-
+                            }
                             $task->claimId = $request->get('taskObject')['ClaimId'];
                             $task->userId = $request->get('taskObject')['UserId'];
                             $task->createdBy = $request->get('taskObject')['UserId'];
@@ -227,13 +234,22 @@ class UserController extends Controller
                                         }
                                         $task->professionalServices = $idTime;
                                         $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-                                        $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                        if($request->get('taskObject')['ProfessionalServicesTime']!=null)
+                                        {
+                                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+                                        }
                                         $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                                        $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                                        if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
+                                        {
+                                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+                                        }
 
                                         $task->expense = $idExpense;
                                         $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                                        $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                                        if($request->get('taskObject')['ExpenseAmount']!=null)
+                                        {
+                                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+                                        }
 
                                         $task->billDate = $toDate;
                                         $task->updatedBy = $request->get('taskObject')['UserId'];
@@ -446,6 +462,7 @@ class UserController extends Controller
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.userId',$request->get('userId'))
+                        ->orderBy('claim_task_details.billDate','asc')
                         ->select(
                             'claim_task_details.billDate as CreatedDate',
                             'claims.code as Claim',
@@ -552,5 +569,19 @@ class UserController extends Controller
 
     public function getTimeNowServer(){
         return date('d-m-Y h:i:s');
+    }
+
+    public function getAllClaim()
+    {
+        $data = null;
+        try
+        {
+            $data = Claim::orderBy('code','desc')->get();
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return view('user.viewAllClaim')->with('AllClaim',$data);
     }
 }
