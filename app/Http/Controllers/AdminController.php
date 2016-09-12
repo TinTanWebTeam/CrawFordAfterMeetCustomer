@@ -760,7 +760,7 @@ class AdminController extends Controller
 
     public function saveClaim(Request $request, $claimId)
     {
-       // dd($request->all());
+        //dd($claimId);
         $result = null;
         $checkErrorClaimSame = null;
         if ($this->validatorAdmin($request->get('claim'), "createClaim")->fails()) {
@@ -787,12 +787,12 @@ class AdminController extends Controller
                 }
 
                 if ($lossDateFR > $receiveDateFR) {
-                    $result = array('Action' => 'Error1');
+                    $result = array('Action' =>'AddNew','Error'=>'LossDate>ReceiveDate');
                 } else if ($lossDateFR > $openDateFR) {
-                    $result = array('Action' => 'Error2');
+                    $result = array('Action' =>'AddNew','Error'=>'LossDate>OpenDate');
                 }
                 else if ($checkErrorClaimSame=="True") {
-                    $result = array('Action' => 'Error3');
+                    $result = array('Action' =>'AddNew','Error'=>'TheSameCodeClaim');
                 }
                 else {
                     //save new claim
@@ -860,12 +860,14 @@ class AdminController extends Controller
                         $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
                     }
                     $claim->save();
-                    //take code of final claim
-                    $code = Claim::orderBy('code', 'desc')->first()->code;
-                    $result = array('Action' => 'AddNew', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
+                    $result = array('Action' => 'AddNew', 'Claim' => $claim, 'Error' => 'Null');
                 }
             } else {
                 //update claim
+                $claim = Claim::where('id', $claimId)->first();
+                $countErrorOpenDate = 0;
+                $countErrorReceiveDate = 0;
+
                 $timeLossDateNow = Carbon::now();
                 $lossDateFR = $request->get("claim")['lossDate'] . " " . $timeLossDateNow->hour . ":" . $timeLossDateNow->minute . ":" . $timeLossDateNow->second;
 
@@ -873,112 +875,146 @@ class AdminController extends Controller
                 $receiveDateFR = $request->get("claim")['receiveDate'] . " " . $timeReceiveDateNow->hour . ":" . $timeReceiveDateNow->minute . ":" . $timeReceiveDateNow->second;
 
                 $openDateFR = $request->get("claim")['openDate'] . " " . "00" . ":" . "00" . ":" . "00";
-                $claim = Claim::where('id', $claimId)->first();
-                $claim->code = $request->get("claim")['code'];
-                $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
-                $claim->incident = $request->get("claim")['incident'];
-                $claim->accountCode = $request->get("claim")['accountCode'];
-                $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
-                $claim->insuredLastName = $request->get("claim")['insuredLastName'];
-                $claim->insuredAddress = $request->get("claim")['insuredAddress'];
-                $claim->insuredClaim = $request->get("claim")['insuredClaim'];
-                $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
-                $claim->lossDescCode = $request->get("claim")['lossDescCode'];
-                $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
-                $claim->sourceCode = $request->get("claim")['sourceCode'];
-                $claim->openDate = $openDateFR;
-                $claim->receiveDate = $receiveDateFR;
-                $claim->lossDate = $lossDateFR;
 
-                $timeFirstContactNow = Carbon::now();
-                if($request->get("claim")['firstContact']!=null)
+                //Check fix openDate
+                if($claim)
                 {
-                    $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                    $taskList = ClaimTaskDetail::where('claimId',$claim->id)->orderBy('billDate','desc')->get();
+                    if($taskList)
+                    {
+                        foreach($taskList as $item)
+                        {
+                            if($openDateFR>$item->billDate)
+                            {
+                                $countErrorOpenDate++;
+                            }
+                            if($receiveDateFR>$item->billDate)
+                            {
+                                $countErrorReceiveDate++;
+                            }
+                        }
+                    }
                 }
 
-                $timeProscriptionNow = Carbon::now();
-                if($request->get("claim")['proscription']!=null)
+                //Check
+                if ($lossDateFR > $receiveDateFR)
                 {
-                    $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                    $result = array('Action' =>'Update','Error'=>'LossDate>ReceiveDate');
+                }else if ($lossDateFR > $openDateFR)
+                {
+                    $result = array('Action' =>'Update','Error'=>'LossDate>OpenDate');
                 }
-
-                $timePolicyInceptionDateNow = Carbon::now();
-                if($request->get("claim")['policyInceptionDate']!=null)
+                else if($countErrorOpenDate>0)
                 {
-                    $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                    $result = array('Action' =>'Update','Error'=>'CantUpdateOpenDate');
                 }
-
-                $timePolicyExpiryDateNow = Carbon::now();
-                if($request->get("claim")['policyExpiryDate']!=null)
+                else if($countErrorReceiveDate>0)
                 {
-                    $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
-                }
-                $claim->insurerCode = $request->get("claim")['insurerCode'];
-                $claim->brokerCode = $request->get("claim")['brokerCode'];
-                $claim->branchCode = $request->get("claim")['branchCode'];
-                $claim->lossLocation = $request->get("claim")['lossLocation'];
-                $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
-//                $claim->lossDate = $request->get("claim")['lossDate'];
-//                $claim->receiveDate = $request->get("claim")['receiveDate'];
-//                $claim->openDate = $request->get("claim")['openDate'];
-                $claim->partnershipId = $request->get("claim")['partnershipId'];
-                $claim->adjusterCode = $request->get("claim")['adjusterCode'];
-                $claim->rate = $request->get("claim")['rate'];
-                $claim->taxable = $request->get("claim")['taxable'];
-                $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
-                $claim->updatedBy = Auth::user()->id;
-                $claim->privileged = $request->get("claim")['privileged'];
-                $claim->organization = $request->get("claim")['organization'];
-                $claim->operatedAs = $request->get("claim")['operatedAs'];
-                $claim->miscInfo = $request->get("claim")['miscInfo'];
-                $claim->largeLossClaim = $request->get("claim")['largeLossClaim'];
-                $claim->sirBreached = $request->get("claim")['sirBreached'];
-                $claim->claimAssignment = $request->get("claim")['claimAssignment'];
-                $claim->policy = $request->get("claim")['policy'];
-
-                $timePolicyInceptionDateNow = Carbon::now();
-                $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
-
-                $timePolicyExpiryDateNow = Carbon::now();
-                $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
-//                $claim->proscription = $request->get("claim")['proscription'];
-                if($request->get('claim')['closeDate']!=null)//insert close date when have value closeDate
-                {
-                    $checkDate=null;
-                    $claimDetail = ClaimTaskDetail::orderBy('billDate','desc')->first();
-                    if($claimDetail!=null)//check date
-                    {
-                        $checkDate = $claimDetail->billDate;
-                    }
-                    else
-                    {
-                        $checkDate = $claim->opendDate;
-                    }
-                    $now = Carbon::now();
-                    $closeDate = $request->get('claim')['closeDate']." ".Carbon::parse($now)->format('H:i:s');
-                    //Close claim
-                    if($closeDate > $checkDate)
-                    {
-                        $claim->closeDate =$closeDate;
-                        $claim->statusId = 3;
-                        $claim->save();
-                        //take code of final claim
-                        $code = Claim::orderBy('code', 'desc')->first()->code;
-                        $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
-                    }
-                    else
-                    {
-                        //Error
-                        $result = array('Action' => 'Update', 'Claim' => 'null', 'Result' => 2);//Error
-                    }
-
+                    $result = array('Action' =>'Update','Error'=>'CantUpdateReceiveDate');
                 }
                 else
                 {
-                    $claim->save();
-                    //take code of final claim
-                    $code = Claim::orderBy('code', 'desc')->first()->code;
-                    $result = array('Action' => 'Update', 'Claim' => $claim, 'Result' => 1, 'codeClaim' => $code);
+                    if($claim)
+                    {
+                        $claim->code = $request->get("claim")['code'];
+                        $claim->branchSeqNo = $request->get("claim")['branchSeqNo'];
+                        $claim->incident = $request->get("claim")['incident'];
+                        $claim->accountCode = $request->get("claim")['accountCode'];
+                        $claim->insuredFirstName = $request->get("claim")['insuredFirstName'];
+                        $claim->insuredLastName = $request->get("claim")['insuredLastName'];
+                        $claim->insuredAddress = $request->get("claim")['insuredAddress'];
+                        $claim->insuredClaim = $request->get("claim")['insuredClaim'];
+                        $claim->claimTypeCode = $request->get("claim")['claimTypeCode'];
+                        $claim->lossDescCode = $request->get("claim")['lossDescCode'];
+                        $claim->catastrophicLoss = $request->get("claim")['catastrophicLoss'];
+                        $claim->sourceCode = $request->get("claim")['sourceCode'];
+                        $claim->openDate = $openDateFR;
+                        $claim->receiveDate = $receiveDateFR;
+                        $claim->lossDate = $lossDateFR;
+
+                        $timeFirstContactNow = Carbon::now();
+                        if($request->get("claim")['firstContact']!=null)
+                        {
+                            $claim->firstContact = $request->get("claim")['firstContact'] . " " . $timeFirstContactNow->hour . ":" . $timeFirstContactNow->minute . ":" . $timeFirstContactNow->second;
+                        }
+
+                        $timeProscriptionNow = Carbon::now();
+                        if($request->get("claim")['proscription']!=null)
+                        {
+                            $claim->proscription = $request->get("claim")['proscription'] . " " . $timeProscriptionNow->hour . ":" . $timeProscriptionNow->minute . ":" . $timeProscriptionNow->second;
+                        }
+
+                        $timePolicyInceptionDateNow = Carbon::now();
+                        if($request->get("claim")['policyInceptionDate']!=null)
+                        {
+                            $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+                        }
+
+                        $timePolicyExpiryDateNow = Carbon::now();
+                        if($request->get("claim")['policyExpiryDate']!=null)
+                        {
+                            $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+                        }
+                        $claim->insurerCode = $request->get("claim")['insurerCode'];
+                        $claim->brokerCode = $request->get("claim")['brokerCode'];
+                        $claim->branchCode = $request->get("claim")['branchCode'];
+                        $claim->lossLocation = $request->get("claim")['lossLocation'];
+                        $claim->lineOfBusinessCode = $request->get("claim")['lineOfBusinessCode'];
+                        $claim->partnershipId = $request->get("claim")['partnershipId'];
+                        $claim->adjusterCode = $request->get("claim")['adjusterCode'];
+                        $claim->rate = $request->get("claim")['rate'];
+                        $claim->taxable = $request->get("claim")['taxable'];
+                        $claim->estimatedClaimValue = $request->get("claim")['estimatedClaimValue'];
+                        $claim->updatedBy = Auth::user()->id;
+                        $claim->privileged = $request->get("claim")['privileged'];
+                        $claim->organization = $request->get("claim")['organization'];
+                        $claim->operatedAs = $request->get("claim")['operatedAs'];
+                        $claim->miscInfo = $request->get("claim")['miscInfo'];
+                        $claim->largeLossClaim = $request->get("claim")['largeLossClaim'];
+                        $claim->sirBreached = $request->get("claim")['sirBreached'];
+                        $claim->claimAssignment = $request->get("claim")['claimAssignment'];
+                        $claim->policy = $request->get("claim")['policy'];
+
+                        $timePolicyInceptionDateNow = Carbon::now();
+                        $claim->policyInceptionDate = $request->get("claim")['policyInceptionDate'] . " " . $timePolicyInceptionDateNow->hour . ":" . $timePolicyInceptionDateNow->minute . ":" . $timePolicyInceptionDateNow->second;
+
+                        $timePolicyExpiryDateNow = Carbon::now();
+                        $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+                        if($request->get('claim')['closeDate']!=null)//insert close date when have value closeDate
+                        {
+                            $checkDate=null;
+                            $claimDetail = ClaimTaskDetail::orderBy('billDate','desc')->first();
+                            if($claimDetail!=null)//check date
+                            {
+                                $checkDate = $claimDetail->billDate;
+                            }
+                            else
+                            {
+                                $checkDate = $claim->opendDate;
+                            }
+                            $now = Carbon::now();
+                            $closeDate = $request->get('claim')['closeDate']." ".Carbon::parse($now)->format('H:i:s');
+                            //Close claim
+                            if($closeDate > $checkDate)
+                            {
+                                $claim->closeDate =$closeDate;
+                                $claim->statusId = 3;
+                                $claim->save();
+                                $result = array('Action' => 'Update', 'Claim' => $claim, 'Error' => 'Null');
+                            }
+                            else
+                            {
+                                //Error
+                                $result = array('Action' => 'Update', 'Claim' => 'Null', 'Error' => 'ErrorCloseDate');//Error
+                            }
+
+                        }
+                        else
+                        {
+                            $claim->save();
+                            $result = array('Action' => 'Update', 'Claim' => $claim, 'Error' => 'Null');
+                        }
+                    }
                 }
 
             }
@@ -3192,6 +3228,28 @@ class AdminController extends Controller
         {
             return $ex;
         }
+    }
+
+    public function getMaxCodeClaim()
+    {
+        $data = null;
+        try
+        {
+            $claim = Claim::orderBy('code','desc')->first();
+            if($claim!=null)
+            {
+                $data= ((int)$claim->code) + 1;
+            }
+            else
+            {
+                $data = 1000000;
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $data;
     }
 
 }

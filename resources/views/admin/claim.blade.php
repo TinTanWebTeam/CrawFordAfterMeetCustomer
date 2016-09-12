@@ -1,6 +1,6 @@
 <div class="row" style="background-color: white;padding-top: 20px;padding-bottom: 20px">
     <form class="form-claim" id="form_claim">
-        <input name="id" style="display: none" type="text" value="0">
+        <input name="id" id="id" style="display: none" type="text" value="0">
         <table style="width: 100%" id="table_claim">
             <tr>
                 <td style="width: 15%;">
@@ -1249,7 +1249,6 @@
                     //importDate : null,
                     //importCloseDate : null
                 },
-                codeClaim:$("input[name=code]").val(),
                 resetClaimViewObject : function(){
                     for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
@@ -1333,47 +1332,66 @@
                             {
                                 claimView.claimViewObject.privileged = 0;
                             }
-                            $.post(url+'saveClaim/'+ claimView.claimViewObject.id,{_token:_token,claim : claimView.claimViewObject},function (data) {
+                            $.post(url+'saveClaim/'+ $("input[name=id]").val(),{_token:_token,claim : claimView.claimViewObject},function (data) {
                                 if(data["Action"]==="AddNew")
                                 {
-                                    if(data["Result"]===1)
+                                    if(data["Error"]==="LossDate>ReceiveDate")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than received date");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else if(data["Error"]==="LossDate>OpenDate")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than or equal open date");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else if(data["Error"]==="TheSameCodeClaim")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Code claim is exist!!!");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else
                                     {
                                         $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new Claim Success");
                                         $("div[id=modal-confirm]").modal("show");
                                         claimView.cancel();
-                                        $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
+                                        claimView.getMaxClaimCode();
                                     }
                                 }
-                                else if(data["Action"]==="Update")
+                                else
                                 {
-                                    if(data["Result"]===1)
+                                    if(data["Error"]==="LossDate>ReceiveDate")
                                     {
-
-                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Update Claim Success");
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than received date");
                                         $("div[id=modal-confirm]").modal("show");
-                                        claimView.cancel();
-                                        $("input[name=code]").val(parseInt(data["codeClaim"]) + 1);
                                     }
-                                    else
+                                    else if(data["Error"]==="LossDate>OpenDate")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than or equal open date");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else if(data["Error"]==="ErrorCloseDate")
                                     {
                                         $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Close Date is not correct!!!");
                                         $("div[id=modal-confirm]").modal("show");
                                     }
-                                }
-                                else if(data["Action"]==="Error1")
-                                {
-                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than received date");
-                                    $("div[id=modal-confirm]").modal("show");
-                                }
-                                else if(data["Action"]==="Error2")
-                                {
-                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than open date");
-                                    $("div[id=modal-confirm]").modal("show");
-                                }
-                                else
-                                {
-                                    $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Code claim is exist!!!");
-                                    $("div[id=modal-confirm]").modal("show");
+                                    else if(data["Error"]==="CantUpdateOpenDate")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("This claim has already task and open date is not lager than bill date of task!!!Please check again!");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else if(data["Error"]==="CantUpdateReceiveDate")
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("This claim has already task and receive date is not lager than bill date of task!!!Please check again!");
+                                        $("div[id=modal-confirm]").modal("show");
+                                    }
+                                    else
+                                    {
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Update Claim Success");
+                                        $("div[id=modal-confirm]").modal("show");
+                                        claimView.cancel();
+                                        claimView.getMaxClaimCode();
+                                    }
                                 }
                             });
 
@@ -1616,6 +1634,12 @@
                                 }
                             })
                 },
+                getMaxClaimCode:function()
+                {
+                    $.get(url+"getMaxCodeClaim",{_token:_token},function(data){
+                        $("input[name=code]").val(data);
+                    })
+                },
                 cancel : function () {
                     for(var i = 0; i < Object.keys(claimView.claimViewObject).length;i++){
                         claimView.claimViewObject[Object.keys(claimView.claimViewObject)[i]] = null;
@@ -1627,42 +1651,65 @@
                     $("input[name=claimAssignment]").prop("checked",false);
                     $("input[name=taxable]").prop("checked",false);
                     $("input[name=privileged]").prop("checked",false);
+                    $("input[name=id]").val("0");
 
-                    $("input[name=receiveDate]").prop("readOnly",false);
-                    $("input[name=openDate]").prop("readOnly",false);
-                    $("input[name=lossDate]").prop("readOnly",false);
-                    $("input[name=proscription]").prop("readOnly",false);
-                    $("input[name=firstContact]").prop("readOnly",false);
-                    $("input[name=contact]").prop("readOnly",false);
+//                    $("input[name=receiveDate]").prop("readOnly",false);
+//                    $("input[name=openDate]").prop("readOnly",false);
+//                    $("input[name=lossDate]").prop("readOnly",false);
+//                    $("input[name=proscription]").prop("readOnly",false);
+//                    $("input[name=firstContact]").prop("readOnly",false);
+//                    $("input[name=contact]").prop("readOnly",false);
 
                     $("input[name=closeDate]").prop("readOnly",true).css("background-color","#EFE5E5");
+
+
                 },
                 fillClaimToForm : function (claimId) {
                     $("input[name=closeDate]").prop("readOnly",false).css("background-color","");
                     $("input[name=code]").prop("readOnly",true).css("background-color","#EFE5E5");
-                    $("input[name=contact]").prop("readOnly",true);
                     $("table[id=table_claim]").find("label[class=error]").hide();
                     $.get(url+"getClaimByCode/"+claimId,function (data) {
                         if(data.status === 201){
+                            $("input[name=id]").val(data.data.id);
                             for(var i = 0; i < Object.keys(data.data).length;i++){
-                                console.log(Object.keys(data.data)[i]);
-                                if(Object.keys(data.data)[i]==="rate"){
+                                var ob =Object.keys(data.data)[i];
+                                console.log(data.data[ob]);
+                                if(ob==="rate"){
                                     $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
                                 }
                                 else
                                 {
-                                    if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
-                                    {
-                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
-                                    }
-                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
-                                    {
-                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
-                                    }
-                                    else
-                                    {
-                                        $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
-                                    }
+
+                                      if(data.data[ob]!==null && data.data[ob]!=="0000-00-00 00:00:00")
+                                      {
+                                          if(ob==="receiveDate" || ob==="lossDate" || ob==="openDate" || ob==="closeDate"
+                                                  || ob==="policyInceptionDate" || ob==="policyExpiryDate" || ob==="firstContact"
+                                                  || ob==="proscription" || ob==="created_at" || ob==="updated_at")
+                                          {
+                                              $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                          }
+                                          else
+                                          {
+                                              $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                          }
+                                      }
+
+//                                    if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1969-12-31")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+//                                    }
                                 }
 
                             }
@@ -1745,31 +1792,52 @@
                     $("#modal-claim").modal("show");
                 },
                 fillClaim : function (inputElement,event) {
+                    $("input[name=closeDate]").prop("readOnly",false).css("background-color","");
+                    $("table[id=table_claim]").find("label[class=error]").hide();
                     if(event.keyCode === 13){
                         $.get(url+"getClaimByCode/"+$(inputElement).val(),function (data) {
                             if(data.status === 201){
-//                                console.log(result.data);
+                                $("input[name=code]").prop("readOnly",true).css("background-color","#EFE5E5");
+                                $("input[name=id]").val(data.data.id);
 //                                for(var i = 0; i < Object.keys(result.data).length;i++){
 //                                    $("#" + Object.keys(result.data)[i]).val(result.data[Object.keys(result.data)[i]]);
 //                                }
                                 for(var i = 0; i < Object.keys(data.data).length;i++){
+                                    var ob =Object.keys(data.data)[i];
                                     if(Object.keys(data.data)[i]==="rate"){
                                         $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
                                     }
                                     else
                                     {
-                                        if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+                                        if(data.data[ob]!==null && data.data[ob]!=="0000-00-00 00:00:00")
                                         {
-                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                            if(ob==="receiveDate" || ob==="lossDate" || ob==="openDate" || ob==="closeDate"
+                                                    || ob==="policyInceptionDate" || ob==="policyExpiryDate" || ob==="firstContact"
+                                                    || ob==="proscription" || ob==="created_at" || ob==="updated_at")
+                                            {
+                                                $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                            }
+                                            else
+                                            {
+                                                $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                            }
                                         }
-                                        else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
-                                        {
-                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
-                                        }
-                                        else
-                                        {
-                                            $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
-                                        }
+//                                        if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+//                                        {
+//                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                        }
+//                                        else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
+//                                        {
+//                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                        }
+//                                        else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1969-12-31")
+//                                        {
+//                                            $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                        }
+//                                        else
+//                                        {
+//                                            $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+//                                        }
                                     }
                                 }
                             }
@@ -2081,7 +2149,7 @@
         $("input[value=Cancel]").click(function (e) {
             e.preventDefault();
             claimView.cancel();
-            $("input[name=code]").val(claimView.codeClaim);
+            claimView.getMaxClaimCode();
         });
     });
                             //Text transform Insurer
