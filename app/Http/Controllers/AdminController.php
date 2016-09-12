@@ -2519,6 +2519,8 @@ class AdminController extends Controller
                                 ->first();
                             if($IBPending!=null)
                             {
+                                $IBPending->lockInvoiceNo =1;
+                                $IBPending->save();
                                 $invoiceTempNo = $IBPending->invoiceTempNo +1;
                             }
                             else

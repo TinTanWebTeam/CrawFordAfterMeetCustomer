@@ -1,4 +1,4 @@
-{{--Modal Notification--}}
+    {{--Modal Notification--}}
 <div class="modal fade" id="modalNotification">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -467,6 +467,8 @@
 
                 },
                 chooseClaimWhenUseEventEnterKey: function (e) {
+                    $("button[name=btnBill]").text("Bill Claim");
+                    $("input[name=ToDate]").val("").prop("readOnly",false);
                     trialFeeView.clearTable();
                     $("button[name=actionViewListIB]").prop("disabled",false);
                     if (e.keyCode === 13) {
@@ -474,7 +476,6 @@
                             _token: _token,
                             key: $("input[name=Claim]").val()
                         }, function (data) {
-                            console.log(data);
                             if (data === "Error") {
                                 $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Claim is not exist!");
                                 $("div[id=modalNotification]").modal("show");
@@ -690,7 +691,7 @@
                     var sum = 0;
                     for (var i = 0; i < trList.length; i++) {
                         if (i > 2 && i < 10) {
-                            sum += parseFloat($(trList[i]).find("td[id=" + $(element).parent().attr("id") + "]").children().val());
+                            sum += parseFloat($(trList[i]).find("td[id=" + $(element).parent().attr("id") + "]").children().val().replace(/,/g,""));
                         }
                     }
 
@@ -758,7 +759,7 @@
                         idBill:trialFeeView.idBillWhenUpdateBill,
                         billToCustomer: $("input[name=billTo]").val(),
                         coorInsurer:$("input[name=officer]").val(),
-                        Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text(),
+                        Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,""),
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
                         ToDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
@@ -1006,7 +1007,6 @@
                 {
                     $.post(url+"loadTaskDetailByDate",{_token:_token,key:$("input[name=Claim]").val(),fromDate:$("input[name=FromDate]").val()+" "+trialFeeView.timeFrom,toDate:$("input[name=ToDate]").val()},function(data)
                     {
-                        console.log(data);
                         if(data["listClaimTaskDetail"].length === 0)
                         {
                             trialFeeView.clearTable();
@@ -1059,6 +1059,8 @@
                                 //insert total into table total sd
                                 trialFeeView.loadDataToTableTotal();
                             }
+                            trialFeeView.formatInputCurrencyTableTotal();
+                            trialFeeView.formatInputCurrencyTableDataUser();
                         }
 
                     });
