@@ -96,7 +96,7 @@ class UserController extends Controller
             if ($request->get('key')) {
                 $claim = Claim::where('code', $request->get('key'))->first();
                 if ($claim) {
-                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', 2)->orderBy('billDate', 'desc')->first();
+                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', 2)->where('claimId',$claim->id)->orderBy('billDate', 'desc')->first();
                     if ($checkDateIBcompleteFB != null) {
                         $date = $checkDateIBcompleteFB->billDate;
                     } else {
@@ -214,7 +214,7 @@ class UserController extends Controller
                     } else {
                         try {
                             if ($request->get('idTask')) {
-                                $task = ClaimTaskDetail::where('id', $request->get('idTask'))->first();
+                                $task = ClaimTaskDetail::where('id', $request->get('idTask'))->where('claimId',$request->get('taskObject')['ClaimId'])->first();
                                 if ($task) {
                                     //check this task already bill
                                     if ($task->active == 1 && $task->invoiceMajorNo == null) {
@@ -273,6 +273,7 @@ class UserController extends Controller
 
     public function viewDetailTask(Request $request)
     {
+//        dd($request->all());
         $data = null;
         $professionalCode = null;
         $expenseCode = null;
