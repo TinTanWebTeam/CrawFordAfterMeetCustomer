@@ -232,7 +232,7 @@
                         }
                         $("span[id=start_date]").text(fromDate);
                         $("span[id=end_date]").text(toDate);
-                        $.get(url + "user/getTimeNowServer",function(tineNowServer){
+                        $.get(url + "user/getTimeNowServer", function (tineNowServer) {
                             $("span[id=printed_at]").text(tineNowServer);
                         });
                         var trSubmission = "";
@@ -243,23 +243,28 @@
                             var totalUnit = 0.0;
                             var totalAmount = 0;
                             for (var i = 0; i < data["ListData"].length; i++) {
-                                if(rowDate == data["ListData"][i]["CreatedDate"].substring(0, 10)){
+                                if (rowDate == data["ListData"][i]["CreatedDate"].substring(0, 10)) {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
                                     trSubmission += '<div style="width: 25%;display: inline-block">';
                                     trSubmission += '<div style="width: 50%;display: inline-block">';
-                                    if (data["ListData"][i]["CreatedDate"]) {
-                                        var receiveDate = new Date(data["ListData"][i]["CreatedDate"].substring(0, 10));
-                                        var dd = receiveDate.getDate();
-                                        var mm = receiveDate.getMonth() + 1; //January is 0!
+                                    if(i > 0 && data["ListData"][i]["CreatedDate"] != data["ListData"][i-1]["CreatedDate"])
+                                    {
+                                        trSubmission += '<div style="text-align: center;font-weight: 600"></div>';
+                                    }else{
+                                        if (data["ListData"][i]["CreatedDate"]) {
+                                            var receiveDate = new Date(data["ListData"][i]["CreatedDate"].substring(0, 10));
+                                            var dd = receiveDate.getDate();
+                                            var mm = receiveDate.getMonth() + 1; //January is 0!
 
-                                        var yyyy = receiveDate.getFullYear();
-                                        if (dd < 10) {
-                                            dd = '0' + dd;
+                                            var yyyy = receiveDate.getFullYear();
+                                            if (dd < 10) {
+                                                dd = '0' + dd;
+                                            }
+                                            if (mm < 10) {
+                                                mm = '0' + mm;
+                                            }
+                                            trSubmission += '<div style="text-align: center;font-weight: 600">' + dd + '-' + mm + '-' + yyyy + '</div>';
                                         }
-                                        if (mm < 10) {
-                                            mm = '0' + mm;
-                                        }
-                                        trSubmission += '<div style="text-align: center;">' + dd + '-' + mm + '-' + yyyy + '</div>';
                                     }
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 48%;display: inline-block">';
@@ -267,25 +272,30 @@
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 73%;display: inline-block">';
-                                    if(data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null){
+                                    if (data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null) {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
-                                    }else{
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">'+ data["ListData"][i]["Time"] +'</div></div>';
+                                    } else {
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">' + data["ListData"][i]["Time"] + '</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data["ListData"][i]["Unit"] +'</div></div>';
-                                    if(data["ListData"][i]["ExpenseCode"] == 'null' || data["ListData"][i]["ExpenseCode"] == null){
+                                    if(data["ListData"][i]["Unit"] == 'null' || data["ListData"][i]["Unit"] == null){
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
                                     }else{
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data["ListData"][i]["ExpenseCode"] +'</div></div>';
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + data["ListData"][i]["Unit"] + '</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
+                                    if (data["ListData"][i]["ExpenseCode"] == 'null' || data["ListData"][i]["ExpenseCode"] == null) {
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
+                                    } else {
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;text-align: center">' + data["ListData"][i]["ExpenseCode"] + '</div></div>';
+                                    }
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     subUnit += Number(data["ListData"][i]["Unit"]);
                                     subAmount += Number(data["ListData"][i]["ExpenseAmount"]);
                                     totalUnit += Number(data["ListData"][i]["Unit"]);
                                     totalAmount += Number(data["ListData"][i]["ExpenseAmount"]);
-                                }else{
+                                }
+                                else {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
                                     trSubmission += '<div style="width: 25%;display: inline-block">';
                                     trSubmission += '<div style="width: 50%;display: inline-block">';
@@ -299,11 +309,11 @@
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">' + subAmount.toLocaleString() + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<hr>';
-                                    rowDate = data["ListData"][i]["CreatedDate"];
+                                    rowDate = data["ListData"][i]["CreatedDate"].substring(0, 10);;
                                     subUnit = 0.0;
                                     subAmount = 0;
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
@@ -321,7 +331,7 @@
                                         if (mm < 10) {
                                             mm = '0' + mm;
                                         }
-                                        trSubmission += '<div style="text-align: center;">' + dd + '-' + mm + '-' + yyyy + '</div>';
+                                        trSubmission += '<div style="text-align: center;font-weight: 600">' + dd + '-' + mm + '-' + yyyy + '</div>';
                                     }
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 48%;display: inline-block">';
@@ -329,18 +339,22 @@
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<div style="width: 73%;display: inline-block">';
-                                    if(data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null){
+                                    if (data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null) {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
-                                    }else{
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">'+ data["ListData"][i]["Time"] +'</div></div>';
+                                    } else {
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center">' + data["ListData"][i]["Time"] + '</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ data["ListData"][i]["Unit"] +'</div></div>';
-                                    if(data["ListData"][i]["ExpenseCode"] == 'null' || data["ListData"][i]["ExpenseCode"] == null){
+                                    if(data["ListData"][i]["Unit"] == 'null' || data["ListData"][i]["Unit"] == null){
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
+                                    }else{
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + data["ListData"][i]["Unit"] + '</div></div>';
+                                    }
+                                    if (data["ListData"][i]["ExpenseCode"] == 'null' || data["ListData"][i]["ExpenseCode"] == null) {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px"></div></div>';
-                                    }else{
-                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px">'+ data["ListData"][i]["ExpenseCode"] +'</div></div>';
+                                    } else {
+                                        trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;text-align: center">' + data["ListData"][i]["ExpenseCode"] + '</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">'+ Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     subUnit += Number(data["ListData"][i]["Unit"]);
@@ -348,7 +362,7 @@
                                     totalUnit += Number(data["ListData"][i]["Unit"]);
                                     totalAmount += Number(data["ListData"][i]["ExpenseAmount"]);
                                 }
-                                if(i == (data["ListData"].length -1)){
+                                if (i == (data["ListData"].length - 1)) {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
                                     trSubmission += '<div style="width: 25%;display: inline-block">';
                                     trSubmission += '<div style="width: 50%;display: inline-block">';
@@ -362,7 +376,7 @@
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">Subtotal :</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;text-align: center;">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">'+ subAmount.toLocaleString() +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">' + subAmount.toLocaleString() + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     trSubmission += '<hr>';
@@ -379,7 +393,7 @@
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600;font-size: 16px;font-style:italic">Total All:</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;font-size: 16px;font-style:italic;text-align: center;">' + totalUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;;font-size: 16px;font-style:italic">'+ totalAmount.toLocaleString() +'</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;;font-size: 16px;font-style:italic">' + totalAmount.toLocaleString() + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                 }
