@@ -467,7 +467,7 @@
 
                 },
                 chooseClaimWhenUseEventEnterKey: function (e) {
-                    $("button[name=btnBill]").text("Bill Claim");
+                    $("button[name=btnBill]").text("Bill Claim").prop("disabled",false);
                     $("input[name=ToDate]").val("").prop("readOnly",false);
                     trialFeeView.clearTable();
                     $("button[name=actionViewListIB]").prop("disabled",false);
@@ -989,6 +989,7 @@
                 },
                 cancel:function()
                 {
+                    $("button[name=btnBill]").text("Bill Claim").prop("disabled",false);
 
                     trialFeeView.timeFrom = null;
                     trialFeeView.timeTo = null;

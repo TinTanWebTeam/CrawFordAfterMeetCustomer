@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Mockery\Exception;
+use PhpParser\Node\Expr\Array_;
 use Validator;
 
 class UserController extends Controller
@@ -450,7 +451,10 @@ class UserController extends Controller
 
     public function loadReport(Request $request)
     {
-        $data = null;
+        //dd($request->all());
+        $arrayData = null;
+        $sumTime =0;
+        $sumExpenseAmount =0;
         $fromDate = $request->get('fromDate')." "."00:00:00";
         $toDate = $request->get('toDate')." "."23:59:59";
         if ($request->get('allClaim') === 'True') {
@@ -472,11 +476,19 @@ class UserController extends Controller
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
                             'claim_task_details.invoiceMajorNo as Invoice'
-//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
-//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmountTotal'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as unitsTotal')
                         )
                         ->get();
-                    $data = $claimTask;
+                    $timeTotal = ClaimTaskDetail::where('userId',$request->get('userId'))->get();
+                    $collectTimeTotal = collect($timeTotal);
+                    if(count($claimTask)>0)
+                    {
+                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                    }
+                    $arrayData = array('ListData'=>$claimTask,'SumTime'=>$sumTime,'SumExpenseAmount'=>$sumExpenseAmount);
+
 
             }
             catch (Exception $ex) {
@@ -507,14 +519,21 @@ class UserController extends Controller
 //                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
                         )
                         ->get();
-                    $data = $claimTask;
+                    $timeTotal = ClaimTaskDetail::where('userId',$request->get('userId'))->where('claimId',$claim->id)->get();
+                    $collectTimeTotal = collect($timeTotal);
+                    if(count($claimTask)>0)
+                    {
+                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                    }
+                    $arrayData = array('ListData'=>$claimTask,'SumTime'=>$sumTime,'SumExpenseAmount'=>$sumExpenseAmount);
                 }
 
             } catch (Exception $ex) {
                 return $ex;
             }
         }
-        return $data;
+        return $arrayData;
 
     }
 
