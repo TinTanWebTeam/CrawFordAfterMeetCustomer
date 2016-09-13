@@ -19,7 +19,8 @@
 				<li><a href="javascript:;">Trial Fee</a></li>
 				<li><a href="javascript:;">Invoice</a></li>
                 <li><a href="javascript:;">Employee</a></li>
-                <li><a href="javascript:;">Report</a></li>
+                <li><a href="javascript:;">Report Claim</a></li>
+				<li><a href="javascript:;">Report Docket</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

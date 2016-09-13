@@ -137,7 +137,8 @@ class UserController extends Controller
                     'claim_task_details.expenseAmount as expenseAmount',
                     'claim_task_details.billDate as date',
                     'claim_task_details.invoiceMajorNo as invoiceMajorNo',
-                    'claim_task_details.invoiceDate as invoiceDate'
+                    'claim_task_details.invoiceDate as invoiceDate',
+                    'claim_task_details.invoiceTempNo as invoiceTempNo'
 
 
                 )
@@ -604,4 +605,30 @@ class UserController extends Controller
         }
         return view('user.viewAllClaim')->with('AllClaim',$data);
     }
+
+    public function deleteTask(Request $request)
+    {
+        $data = null;
+        try
+        {
+            $task = ClaimTaskDetail::where('id',$request->get('idTask'))
+                ->where('userId',Auth::user()->id)
+                ->where('invoiceMajorNo',null)
+                ->where('invoiceTempNo',null)
+                ->first();
+            if($task)
+            {
+                $task->delete();
+                $data = 1;
+
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $data;
+    }
+
+
 }

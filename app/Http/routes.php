@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('invoice','AdminController@getViewInvoice');
     Route::get('report','AdminController@getViewReport');
     Route::get('docket','AdminController@getViewDocket');
+    Route::get('reportTask','AdminController@reportTask');
     Route::get('getClaimByCode/{code}','AdminController@getClaimByCode');
     Route::get('getAllClaim','AdminController@getAllClaim');
     Route::get('getAllSourceCode','AdminController@getAllSourceCode');
@@ -80,6 +81,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('checkTheSameNameWhenCreateEmployee','AdminController@checkTheSameNameWhenCreateEmployee');
     Route::get('getAllInvoiceByClaimId/{claim_id}','AdminController@getAllInvoiceByClaimId');
     Route::get('getReportData/{invoice_major_no}/{bill_id}/{claim_id}','AdminController@getReportData');
+    Route::post('loadReportTask','AdminController@loadReportTask');
+    Route::get('getTimeNowServer','AdminController@getTimeNowServer');
 });
 
 /*
@@ -104,5 +107,5 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::post('loadClaimByEventEnterKeyWhenUserSeeClaim','UserController@loadClaimByEventEnterKeyWhenUserSeeClaim');
     Route::post('loadExpenseCodeByType','UserController@loadExpenseCodeByType');
     Route::post('loadReport','UserController@loadReport');
-
+    Route::post('deleteTask','UserController@deleteTask');
 });

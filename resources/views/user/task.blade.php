@@ -73,6 +73,35 @@
 </div>
 {{--End Model Show Confirm--}}
 
+{{--Model Delete--}}
+<div aria-hidden="true" class="modal fade" id="modalDelete" role="basic" style="display: none;" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                </button>
+                <h4 class="modal-title">
+                    Delete Task
+                </h4>
+            </div>
+            <div class="modal-body" id="modalContent">
+                Are you sure delete this task  ?
+            </div>
+            <div class="modal-footer">
+                <button class="btn dark btn-outline" data-dismiss="modal" name="modalClose" type="button">
+                    Close
+                </button>
+                <button class="btn green" name="Agree" type="button" onclick="taskView.confirmDelete()">
+                    Delete
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{{--End Model Delete--}}
+
 {{--Model Show Claim  --}}
 <div class="modal fade" id="modal-claim">
     <div class="modal-dialog modal-lg">
@@ -429,6 +458,7 @@
                 <th class="text-bold text-center" style="display:none">Expense Note</th>
                 <th class="text-bold text-center">InvoiceMajorNo</th>
                 <th class="text-bold text-center">InvoiceDate</th>
+                <th class="text-bold text-center">Modify</th>
             </tr>
             </thead>
             <tbody id="tbodyDocket">
@@ -481,6 +511,7 @@
                 RateDefault:$("input[name=ProfessionalServicesRate]").val().replace(/,/g,""),
                 checkDate:null,
                 TimeDefault:null,
+                idTaskDelete:null,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
                         if (taskView.taskObject.hasOwnProperty(propertyName)) {
@@ -996,8 +1027,34 @@
                         }
                     });
                     $("#modal-claim").modal("hide");
+                },
+                deleteTask:function(element)
+                {
+                    $("div[id=modalDelete]").modal("show");
+                    taskView.idTaskDelete = $(element).attr("id");
+                },
+                confirmDelete:function()
+                {
+                    $.post(url+"user/deleteTask",{_token:_token,idTask:taskView.idTaskDelete},function(data){
+                        if(data==="1")
+                        {
+                            $("div[id=modalDelete]").modal("hide");
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Delete Success");
+                            $("div[id=modalConfirm]").modal("show");
+                            $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                $("tbody[id=tbodyDocket]").empty().append(view);
+                            });
+                            taskView.idTaskDelete = null;
+                            taskView.cancel();
+                        }
+                        else
+                        {
+                            $("div[id=modalDelete]").modal("hide");
+                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Delete No Success");
+                            $("div[id=modalConfirm]").modal("show");
+                        }
+                    });
                 }
-
 
 
 

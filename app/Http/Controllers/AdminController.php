@@ -3052,5 +3052,100 @@ class AdminController extends Controller
         }
     }
 
+    public function reportTask()
+    {
+        return view('admin.reportTask');
+    }
+
+    public function loadReportTask(Request $request)
+    {
+        $arrayData = null;
+        $sumTime =0;
+        $sumExpenseAmount =0;
+        $fromDate = $request->get('fromDate')." "."00:00:00";
+        $toDate = $request->get('toDate')." "."23:59:59";
+        if ($request->get('allClaim') === 'True') {
+            try {
+
+                $claimTask = DB::table('claim_task_details')
+                    ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                    ->leftJoin('task_categories as cate1','claim_task_details.professionalServices','=','cate1.id')
+                    ->leftJoin('task_categories as cate2','claim_task_details.expense','=','cate2.id')
+                    ->where('claim_task_details.billDate', '>=', $fromDate)
+                    ->where('claim_task_details.billDate', '<=', $toDate)
+                    ->where('claim_task_details.userId',$request->get('userId'))
+                    ->orderBy('claim_task_details.billDate','asc')
+                    ->select(
+                        'claim_task_details.billDate as CreatedDate',
+                        'claims.code as Claim',
+                        'cate1.code as Time',
+                        'claim_task_details.professionalServicesTime as Unit',
+                        'cate2.code as ExpenseCode',
+                        'claim_task_details.expenseAmount as ExpenseAmount',
+                        'claim_task_details.invoiceMajorNo as Invoice'
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmountTotal'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as unitsTotal')
+                    )
+                    ->get();
+                $timeTotal = ClaimTaskDetail::where('userId',$request->get('userId'))->get();
+                $collectTimeTotal = collect($timeTotal);
+                if(count($claimTask)>0)
+                {
+                    $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                    $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                }
+                $arrayData = array('ListData'=>$claimTask,'SumTime'=>$sumTime,'SumExpenseAmount'=>$sumExpenseAmount);
+
+
+            }
+            catch (Exception $ex) {
+
+            }
+        } else // report only claim
+        {
+            try {
+                $claim = Claim::where('code', $request->get('claimCode'))->first();
+                if ($claim) {
+                    $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1','claim_task_details.professionalServices','=','cate1.id')
+                        ->leftJoin('task_categories as cate2','claim_task_details.expense','=','cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->where('claim_task_details.userId',$request->get('userId'))
+                        ->where('claim_task_details.claimId', $claim->id)
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
+                        )
+                        ->get();
+                    $timeTotal = ClaimTaskDetail::where('userId',$request->get('userId'))->where('claimId',$claim->id)->get();
+                    $collectTimeTotal = collect($timeTotal);
+                    if(count($claimTask)>0)
+                    {
+                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                    }
+                    $arrayData = array('ListData'=>$claimTask,'SumTime'=>$sumTime,'SumExpenseAmount'=>$sumExpenseAmount);
+                }
+
+            } catch (Exception $ex) {
+                return $ex;
+            }
+        }
+        return $arrayData;
+    }
+
+    public function getTimeNowServer(){
+        return date('d-m-Y h:i:s');
+    }
+
 
 }

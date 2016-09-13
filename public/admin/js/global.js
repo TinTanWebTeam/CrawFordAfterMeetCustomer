@@ -48,10 +48,18 @@ $(function() {
         }
     });
     Catogories.find("li").eq(5).click(function() {
-        if ($(this).find("a").text() === "Report") {
+        if ($(this).find("a").text() === "Report Claim") {
             setActiveMenu($(this));
             $.get(url + "report", function(viewReport) {
                 $("div#page_container").empty().append(viewReport);
+            });
+        }
+    });
+    Catogories.find("li").eq(6).click(function() {
+        if ($(this).find("a").text() === "Report Docket") {
+            setActiveMenu($(this));
+            $.get(url + "reportTask", function(viewReportTask) {
+                $("div#page_container").empty().append(viewReportTask);
             });
         }
     });
