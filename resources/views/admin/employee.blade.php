@@ -44,20 +44,8 @@
                         <th>Address</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @if($listUser !=null)
-                        @foreach($listUser as $item)
-                            <tr id="{{$item->id}}" onclick="employeeView.viewEmployeeDetailWhenChooseRowOfEventDoubleClick(this)" style="cursor: pointer">
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->firstName}}</td>
-                                <td>{{$item->lastName}}</td>
-                                <td>{{$item->sex}}</td>
-                                <td>{{$item->email}}</td>
-                                <td>{{$item->phone}}</td>
-                                <td>{{$item->address}}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    <tbody id="tbodyAllEmployee">
+
                     </tbody>
                 </table>
             </div>
@@ -623,11 +611,6 @@
                                     employeeView.ResetForm();
                                     String($("input[name=Hourly]").val()).replace(/,/g,"");
                                 }
-                                else if(data["Result"]===0)
-                                {
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This id or email has already exist!!!Please choose id or email other");
-                                    $("div[id=modalNotification]").modal("show");
-                                }
                                 else
                                 {
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Add New No Success");
@@ -665,8 +648,14 @@
                 firstToUpperCase:function(str){
                     return str.substr(0, 1).toUpperCase() + str.substr(1);
                 },
+                getAllEmployees:function(){
+                    $.get(url+"getAllEmployees",{_token:_token},function(view){
+                        $("tbody[id=tbodyAllEmployee]").empty().append(view);
+                    });
+                },
                 viewListEmployeeWhenDoubleClickOnInputName:function()
                 {
+                    employeeView.getAllEmployees();
                     $("div[id=modalListEmployee]").modal("show");
                 },
                 viewEmployeeDetailWhenChooseRowOfEventDoubleClick:function(element)
@@ -690,17 +679,35 @@
                         $("input[name=InactiveDetail]").removeAttr("readonly").css("background-color","");
                         for(var propertyName in data["Object"])
                         {
-                            if(employeeView.convertStringToDate(data["Object"][propertyName])==="NaN-aN-aN")
+                            if(data["Object"][propertyName]!==null)
                             {
-                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Object"][propertyName]);
-                            }
-                            else if(employeeView.convertStringToDate(data["Object"][propertyName])==="1970-01-01")
-                            {
-                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Object"][propertyName]);
-                            }
-                            else
-                            {
-                                $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(employeeView.convertStringToDate(data["Object"][propertyName]));
+                                if(propertyName==="birthDate" || propertyName==="bonusDate" || propertyName==="created_at" ||propertyName==="updated_at")
+                                {
+                                    if(propertyName==="created_at" ||propertyName==="updated_at") {
+                                        var date = new Date(data["Object"][propertyName].substring(0, 10));
+                                        var dd = date.getDate();
+                                        var mm = date.getMonth() + 1; //January is 0!
+
+                                        var yyyy = date.getFullYear();
+                                        if (dd < 10) {
+                                            dd = '0' + dd;
+                                        }
+                                        if (mm < 10) {
+                                            mm = '0' + mm;
+                                        }
+                                        $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(dd + '/' + mm + '/' + yyyy);
+                                    }
+
+                                    else
+                                    {
+                                        $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(employeeView.convertStringToDate(data["Object"][propertyName]));
+                                    }
+                                }
+                                else
+                                {
+                                    $("input[name="+employeeView.firstToUpperCase(propertyName)+"]").val(data["Object"][propertyName]);
+
+                                }
                             }
                         }
                         var address = data["Object"]["address"].split(";");
@@ -809,41 +816,80 @@
         {
 
         }
+                    //ID
         var typingTimer; //timer identifier
         var doneTypingInterval = 2000;  //time in ms, 3 second for example
         var $inputName = $("input[name=Name]");
-        var $inputEmail = $("input[name=Email]");
 
         //on keyup, start the countdown
         $inputName.on('keyup', function () {
             clearTimeout(typingTimer);
-            typingTimer = setTimeout(checkTheSameName, doneTypingInterval);
-        });
-        $inputEmail.on('keyup',function(){
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(checkTheSameEmail, doneTypingInterval);
+            typingTimer = setTimeout(getSearchNameOfEmployee, doneTypingInterval);
         });
         //on keydown, clear the countdown
         $inputName.on('keydown', function () {
             clearTimeout(typingTimer);
         });
-        $inputEmail.on('keydown',function(){
-            clearTimeout(typingTimer);
-        });
+
         //user is "finished typing," do something
-        function checkTheSameName () {
+        function getSearchNameOfEmployee () {
             $.ajax({
-                method: "post",
-                url: url + "checkTheSameNameWhenCreateEmployee",
+                method: "get",
+                url: url + "getSearchNameOfEmployee",
                 data:{
                     _token:_token,
-                    key:$inputName.val()
+                    Code:$inputName.val()
                 },
                 success: function(result) {
-                    if(result === "False"){
+                    console.log(result);
+                    if(result === "0"){
                         $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This name has already exists!!!Let's choose other name");
                         $("div[id=modalNotification]").modal("show");
                         $inputName.val("");
+                    }
+                    else
+                    {
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("You can used this id!!!");
+                        $("div[id=modalNotification]").modal("show");
+                    }
+                }
+            });
+        }
+
+                //Email
+        var typingTimer; //timer identifier
+        var doneTypingInterval = 2200;  //time in ms, 3 second for example
+        var $inputEmail = $("input[name=Email]");
+
+        //on keyup, start the countdown
+        $inputEmail.on('keyup', function () {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(getSearchEmailOfEmployee, doneTypingInterval);
+        });
+        //on keydown, clear the countdown
+        $inputEmail.on('keydown', function () {
+            clearTimeout(typingTimer);
+        });
+
+        //user is "finished typing," do something
+        function getSearchEmailOfEmployee () {
+            $.ajax({
+                method: "get",
+                url: url + "getSearchEmailOfEmployee",
+                data:{
+                    _token:_token,
+                    Code:$inputEmail.val()
+                },
+                success: function(result) {
+                    if(result === "0"){
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This email has already exists!!!Let's choose other email");
+                        $("div[id=modalNotification]").modal("show");
+                        $inputEmail.val("");
+                    }
+                    else
+                    {
+                        $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("You can used this email!!!");
+                        $("div[id=modalNotification]").modal("show");
                     }
                 }
             });

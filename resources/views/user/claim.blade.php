@@ -421,7 +421,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -432,7 +432,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="text" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
+                        <input type="date" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -586,24 +586,43 @@
                             {
                                 if(data.status === 201){
                                     for(var i = 0; i < Object.keys(data.data).length;i++){
-                                        console.log(Object.keys(data.data)[i]);
-                                        if(Object.keys(data.data)[i]==="rate"){
+                                        var ob =Object.keys(data.data)[i];
+                                        if(ob==="rate"){
                                             $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
                                         }
                                         else
                                         {
-                                            if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+
+                                            if(data.data[ob]!==null && data.data[ob]!=="0000-00-00 00:00:00")
                                             {
-                                                $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                                if(ob==="receiveDate" || ob==="lossDate" || ob==="openDate" || ob==="closeDate"
+                                                        || ob==="policyInceptionDate" || ob==="policyExpiryDate" || ob==="firstContact"
+                                                        || ob==="proscription" || ob==="created_at" || ob==="updated_at")
+                                                {
+                                                    $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+                                                }
+                                                else
+                                                {
+                                                    $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+                                                }
                                             }
-                                            else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
-                                            {
-                                                $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
-                                            }
-                                            else
-                                            {
-                                                $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
-                                            }
+
+//                                    if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="NaN-aN-aN")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1969-12-31")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else if(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]])==="1970-01-01")
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(data.data[Object.keys(data.data)[i]]);
+//                                    }
+//                                    else
+//                                    {
+//                                        $("#" + Object.keys(data.data)[i]).val(claimView.convertStringToDate(data.data[Object.keys(data.data)[i]]));
+//                                    }
                                         }
                                     }
                                     //custom sds

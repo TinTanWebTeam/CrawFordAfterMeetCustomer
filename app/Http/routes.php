@@ -46,6 +46,9 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getSearchAdjuster','AdminController@getSearchAdjuster');
     Route::get('getSearchBranch','AdminController@getSearchBranch');
     Route::get('getMaxCodeClaim','AdminController@getMaxCodeClaim');
+    Route::get('getAllEmployees','AdminController@getAllEmployees');
+    Route::get('getSearchNameOfEmployee','AdminController@getSearchNameOfEmployee');
+    Route::get('getSearchEmailOfEmployee','AdminController@getSearchEmailOfEmployee');
 
     Route::post('addNewAndUpdateEmployee','AdminController@addNewAndUpdateEmployee');
     Route::post('viewEmployeeDetailWhenChooseRowOfEventDoubleClick','AdminController@viewEmployeeDetailWhenChooseRowOfEventDoubleClick');

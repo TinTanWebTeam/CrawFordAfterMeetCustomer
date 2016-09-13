@@ -342,7 +342,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #E2D8D8" value="{{date_format(date_create($user->created_at),'Y-m-d')}}">
+                                <input type="text" name="Created_at" id="Created_at" readonly style="background-color: #E2D8D8" value="{{Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}">
                             </div>
                         </div>
                         <div class="row">
@@ -377,7 +377,7 @@
                                 <h5 style="text-align: right">Date :</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #E2D8D8" value="{{date_format(date_create($user->updated_at),'Y-m-d')}}">
+                                <input type="text" name="Updated_at" id="Updated_at" readonly style="background-color: #E2D8D8" value="{{Carbon\Carbon::parse($user->updated_at)->format('d-m-Y')}}">
                             </div>
                         </div>
                         <div class="row">

@@ -127,3 +127,6 @@ form#trialFee h5{
     display: block;
     box-sizing: border-box;
 }
+label.error{
+    color: #B52929;
+}
