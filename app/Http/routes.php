@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('saveAddNewUpdateBroker','AdminController@saveAddNewUpdateBroker');
 
     Route::post('loadClaimByEventEnterKey','AdminController@loadClaimByEventEnterKey');
-    Route::post('loadViewDocketDetail','AdminController@loadViewDocketDetail');
+    Route::post('loadViewDocketDetail/{sort_type}','AdminController@loadViewDocketDetail');
     Route::post('loadListTimeCode','AdminController@loadListTimeCode');
     Route::post('loadListExpenseCode','AdminController@loadListExpenseCode');
     Route::post('submitAddNewAndUpdateCategory','AdminController@submitAddNewAndUpdateCategory');

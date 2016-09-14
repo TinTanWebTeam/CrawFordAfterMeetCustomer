@@ -490,7 +490,10 @@
         <br>
 
         <div class="row">
-            <div class="col-sm-12" style="padding-right: 40px">
+            <div class="col-sm-6">
+                <h5 style="font-weight: 600">Sort By: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-warning" onclick="docketView.sortDocketTableByDate()">Date</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-warning" type="button" onclick="docketView.sortDocketTableByAdjuster()">Adjuster</button></h5>
+            </div>
+            <div class="col-sm-6" style="padding-right: 40px">
                 <button type="button" class="btn btn-danger pull-right" style="margin-left: 20px"
                         onclick="docketView.cancel()">Cancel
                 </button>
@@ -501,7 +504,7 @@
         </div>
         <br>
     </form>
-    <table style="background-color: #fff;width: 100%" class="table-claim-report-assist">
+    <table style="background-color: #fff;width: 100%" class="table-claim-report-assist" id="table_docket">
         <thead>
         <tr class="assist">
             <th colspan="10"><h4 class="text-center">Docket</h4></th>
@@ -564,6 +567,8 @@
 
                 },
                 timeFrom:null,
+                sortDate: 1,
+                claimData: null,
                 resetTaskObject: function () {
                     for (var propertyName in docketView.taskObject) {
                         if (docketView.taskObject.hasOwnProperty(propertyName)) {
@@ -588,7 +593,7 @@
                             _token: _token,
                             key: $("input[name=ClaimCode]").val()
                         }, function (data) {
-                            console.log(data);
+                            docketView.claimData = data;
                             if (data["Status"]==="Success") {
                                 var dateTimeFromDate = data["Date"].split(" ");
                                 docketView.timeFrom = dateTimeFromDate[1]
@@ -599,7 +604,7 @@
                                 $("input[name=LossLocation]").val(data["Claim"]["lossLocation"]);
                                 docketView.taskObject.ClaimId = data["Claim"]["id"];
                                 //Insert to table docket
-                                $.post(url + "loadViewDocketDetail", {
+                                $.post(url + "loadViewDocketDetail/0", {
                                     _token: _token,
                                     idClaim: data["Claim"]["id"]
                                 }, function (view) {
@@ -658,8 +663,6 @@
                               $("input[name=ProfessionalServicesTime]").prop("readOnly",false).css("background-color", "");
                               $("input[name=ExpenseAmount]").prop("readOnly", false).css("background-color", "");
                           }
-
-
                     });
                 },
                 automaticValue: function (A, B, C) {
@@ -954,7 +957,6 @@
                     $("textarea[name=taskCategory_modify_description]").val($("tbody[id=modal-time-table-body]").find("tr[id=" + $(element).attr("data-id") + "]").find("td:eq(2)").text());
                     $("div[id=modal-category-modify]").modal("show");
                 },
-
                 chooseUserWhenAssignmentTask:function(element)
                 {
                     $("input[name=UserId]").val($(element).find("td:eq(0)").text());
@@ -968,9 +970,34 @@
                 formatCurrencyExpense:function()
                 {
                     $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+                },
+                sortDocketTableByDate: function(){
+                    if(docketView.sortDate == 0){
+                        $.post(url + "loadViewDocketDetail/0", {
+                            _token: _token,
+                            idClaim: docketView.claimData["Claim"]["id"]
+                        }, function (view) {
+                            $("tbody[id=tbodyDocket]").empty().append(view);
+                        });
+                        docketView.sortDate = 1;
+                    }else{
+                        $.post(url + "loadViewDocketDetail/1", {
+                            _token: _token,
+                            idClaim: docketView.claimData["Claim"]["id"]
+                        }, function (view) {
+                            $("tbody[id=tbodyDocket]").empty().append(view);
+                        });
+                        docketView.sortDate = 0;
+                    }
+                },
+                sortDocketTableByAdjuster: function(){
+                    $.post(url + "loadViewDocketDetail/2", {
+                        _token: _token,
+                        idClaim: docketView.claimData["Claim"]["id"]
+                    }, function (view) {
+                        $("tbody[id=tbodyDocket]").empty().append(view);
+                    });
                 }
-
-
             }
         }
         else {

@@ -31,6 +31,8 @@
         </script>
 		<!-- jQuery -->
 		<script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
+		<!-- Lodash -->
+		<script src="{{ asset('libs/lodash.js') }}"></script>
 		<!-- Bootstrap JavaScript -->
 		<script src="{{ asset('libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 		<!-- DataTables JavaScript -->
