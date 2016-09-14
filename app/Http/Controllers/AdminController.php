@@ -581,6 +581,8 @@ class AdminController extends Controller
                                 )->get();
                             array_push($arrayData, $total);
                             array_push($arrayAll, $arrayData);
+                            //get total of bill
+                            array_push($arrayAll,$bill->total);
                         } else {
                             //IB Complete
                             array_push($arrayAll, "Complete");
@@ -728,6 +730,8 @@ class AdminController extends Controller
                                 )->get();
                             array_push($arrayData, $total);
                             array_push($arrayAll, $arrayData);
+                            //get total of bill
+                            array_push($arrayAll,$bill->total);
                         }
                     }
                 }
@@ -1076,6 +1080,7 @@ class AdminController extends Controller
 
     public function loadInvoiceByEventEnterKey(Request $request)
     {
+//        dd($request->all());
         $resultArray = [];
         try {
             $query1 = DB::table('invoices')
@@ -1084,6 +1089,7 @@ class AdminController extends Controller
                 ->join('task_categories', 'claim_task_details.professionalServices', '=', 'task_categories.id')
                 ->join('claims', 'claim_task_details.claimId', '=', 'claims.id')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo',$request->get('key'))
                 ->select(
                     'invoices.invoiceDay as invoiceDay',
                     'bills.billToId as billTo',
@@ -1093,7 +1099,7 @@ class AdminController extends Controller
                     'claims.adjusterCode as adjusterId',
                     'claims.insuredFirstName as insuredFirstName',
                     'claims.insuredLastName as insuredLastName',
-                    'claims.lossDate as lossDate',
+                    'claims.lossDescCode as lossDesc',
                     'claims.branchCode as branchId',
                     'claims.policy as policy'
                 )->get();
@@ -1102,6 +1108,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('professional_services', 'bills.id', '=', 'professional_services.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(professional_services.value) as professionalServices')
                 )->get();
@@ -1110,6 +1117,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('general_exps', 'bills.id', '=', 'general_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(general_exps.value) as generalExp')
                 )->get();
@@ -1119,6 +1127,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('comm_photo_exps', 'bills.id', '=', 'comm_photo_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(comm_photo_exps.value) as commPhotoExp')
                 )->get();
@@ -1128,6 +1137,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('consult_fees_exps', 'bills.id', '=', 'consult_fees_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(consult_fees_exps.value) as consultFeesExp')
                 )->get();
@@ -1137,6 +1147,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('travel_related_exps', 'bills.id', '=', 'travel_related_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(travel_related_exps.value) as travelRelatedExp')
                 )->get();
@@ -1146,6 +1157,7 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('gst_free_disbs', 'bills.id', '=', 'gst_free_disbs.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
                     DB::raw('SUM(gst_free_disbs.value) as gstFreeDisb')
                 )->get();
@@ -1155,8 +1167,9 @@ class AdminController extends Controller
                 ->Join('bills', 'invoices.idBill', '=', 'bills.id')
                 ->Join('disbursements', 'bills.id', '=', 'disbursements.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
-                    DB::raw('SUM(disbursements.value) as $disbursement')
+                    DB::raw('SUM(disbursements.value) as disbursement')
                 )->get();
             array_push($resultArray, $disbursement);
 
@@ -1802,12 +1815,16 @@ class AdminController extends Controller
         $result = DB::table('invoices')
             ->leftJoin('bills', 'bills.id', '=', 'invoices.idBill')
             ->leftJoin('claims', 'bills.claimId', '=', 'claims.id')
+            ->leftJoin('claim_task_details','bills.billId','=','claim_task_details.id')
+            ->leftJoin('statuses','claim_task_details.statusId','=','statuses.id')
             ->where('claims.code', '=', $claim_id)
             ->select(
                 'invoices.invoiceMajorNo as invoice_id',
+                'invoices.invoiceTempNo as invoice_temp',
                 'claims.code as claim_id',
                 'bills.id as bill_id',
-                'invoices.created_at as invoice_date'
+                'invoices.created_at as invoice_date',
+                'statuses.name as invoiceType'
             )->get();
         return [
             'status' => 'success',
@@ -2412,6 +2429,7 @@ class AdminController extends Controller
 
     public function Bill(Request $request)
     {
+
         //dd($request->all());
         $data = null;
         $invoiceTempNo = null;
@@ -2859,83 +2877,101 @@ class AdminController extends Controller
         } //End add new only bill
         else //Update bill from pending to complete
         {
-            //dd($request->all());
+
             $fromDate = $request->get('data')['FromDate'];
             //Update bill from pending to complete
             try {
                 $bill = Bill::where('id', $request->get('data')['idBill'])->first();
                 if ($bill) {
-                    //Update bill from pending to complete
-                    if ($request->get('data')['billStatus'] == 'complete') {
-                        //Update total
-                        $bill->total = $request->get('data')['Total'];
-                        $bill->save();
-                        //Update status = 2
-                        $task = ClaimTaskDetail::where('id', $bill->billId)
-                            ->where('statusId', 1)
-                            ->where('claimId', $request->get('data')['idClaim'])
-                            ->where('lockInvoiceNo', '!=', 1)
-                            ->first();
-                        if ($task != null) {
-                            //Update invoiceTempNo -> invoiceMajorNo
-                            $invoice = Invoice::where('idBill', $bill->id)->first();
-                            if ($invoice) {
-                                $changeNumber = substr($invoice->invoiceTempNo, 1, 4);
-                                $invoice->invoiceMajorNo = "2" . $changeNumber;
-                                $invoice->invoiceDay = $task->billDate;
-                                $invoice->save();
+                    //check bill has already bill complete???
+                    $taskBill = ClaimTaskDetail::where('id',$bill->billId)->where('claimId',$request->get('data')['idClaim'])->first();
+//                    dd($taskBill);
+                    if($taskBill)
+                    {
+                        //dd($taskBill->statusId);
+                        if($taskBill->statusId==1)
+                        {
+                            //Update bill from pending to complete
+                            if ($request->get('data')['billStatus'] == 'complete') {
+                                //Update total
+                                $bill->total = $request->get('data')['Total'];
+                                $bill->save();
+                                //Update status = 2
+                                $task = ClaimTaskDetail::where('id', $bill->billId)
+                                    ->where('statusId', 1)
+                                    ->where('claimId', $request->get('data')['idClaim'])
+                                    ->where('lockInvoiceNo', '!=', 1)
+                                    ->first();
+                                if ($task != null) {
+                                    //Update invoiceTempNo -> invoiceMajorNo
+                                    $invoice = Invoice::where('idBill', $bill->id)->first();
+                                    if ($invoice) {
+                                        $changeNumber = substr($invoice->invoiceTempNo, 1, 4);
+                                        $invoice->invoiceMajorNo = "2" . $changeNumber;
+                                        $invoice->invoiceDay = $task->billDate;
+                                        $invoice->save();
 
-                                $task->statusId = 2;
-                                $task->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                $task->save();
-                            }
-                            //update c�c c�ng vi?c c?a bill
-                            $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
-                                ->where('billDate', '>=', $fromDate)
-                                ->where('billDate', '<=', $task->billDate)
-                                ->where('claimId', $bill->claimId)
-                                ->where('active', 1)
-                                ->get();
-                            foreach ($listClaimTaskDetail as $taskDetail) {
-                                $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                $taskDetail->invoiceDate = $invoice->invoiceDay;
-                                $taskDetail->save();
-                                foreach ($request->get('data')['ArrayData'] as $item) {
-                                    $idUser = User::where('name', $item[0])->first()->id;
-                                    if ($idUser) {
-                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
-                                        if ($taskDetail->userId == $idUser) {
-                                            if ($checkRateDefault != $item[2]) {
-                                                $taskDetail->professionalServicesRateBillValue = $item[2];
-                                                $taskDetail->save();
+                                        $task->statusId = 2;
+                                        $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                        $task->save();
+                                    }
+                                    //update c�c c�ng vi?c c?a bill
+                                    $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
+                                        ->where('billDate', '>=', $fromDate)
+                                        ->where('billDate', '<=', $task->billDate)
+                                        ->where('claimId', $bill->claimId)
+                                        ->where('active', 1)
+                                        ->get();
+                                    foreach ($listClaimTaskDetail as $taskDetail) {
+                                        $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                        $taskDetail->invoiceDate = $invoice->invoiceDay;
+                                        $taskDetail->save();
+                                        foreach ($request->get('data')['ArrayData'] as $item) {
+                                            $idUser = User::where('name', $item[0])->first()->id;
+                                            if ($idUser) {
+                                                $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
+                                                if ($taskDetail->userId == $idUser) {
+                                                    if ($checkRateDefault != $item[2]) {
+                                                        $taskDetail->professionalServicesRateBillValue = $item[2];
+                                                        $taskDetail->save();
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                        //Update details of users
-                        foreach ($request->get('data')['ArrayData'] as $item) {
-                            $user = User::where('name', $item[0])->where('active', 1)->first();
-                            if ($user) {
-                                //Update rate of table professionalServices
-                                $professionalServices = ProfessionalService::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
-                                if ($professionalServices) {
-                                    $professionalServices->value = $item[4];
-                                    $professionalServices->rateChange = $item[2];
-                                    $professionalServices->save();
+                                //Update details of users
+                                foreach ($request->get('data')['ArrayData'] as $item) {
+                                    $user = User::where('name', $item[0])->where('active', 1)->first();
+                                    if ($user) {
+                                        //Update rate of table professionalServices
+                                        $professionalServices = ProfessionalService::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
+                                        if ($professionalServices) {
+                                            $professionalServices->value = $item[4];
+                                            $professionalServices->rateChange = $item[2];
+                                            $professionalServices->save();
+                                        }
+                                        //Update table total
+                                        $total = Total::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
+                                        if ($total) {
+                                            $total->value = $item[11];
+                                            $total->save();
+                                        }
+                                    }
                                 }
-                                //Update table total
-                                $total = Total::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
-                                if ($total) {
-                                    $total->value = $item[11];
-                                    $total->save();
-                                }
-                            }
-                        }
-                        $data = array('Action' => 'Update', 'Error' => 'null');
+                                $data = array('Action' => 'Update', 'Error' => 'null');
 
+                            }
+                        }
+                        else
+                        {
+                            //just only update total of bill when discount
+                            $bill->total = $request->get('data')['Total'];
+                            $bill->save();
+                            $data = array('Action' => 'Update', 'Error' => 'null');
+                        }
                     }
+
                 }
             } catch (Exception $ex) {
                 return $ex;
@@ -3232,6 +3268,7 @@ class AdminController extends Controller
     public function getTimeNowServer(){
         return date('d-m-Y h:i:s');
     }
+
 
 
 }

@@ -775,6 +775,16 @@
                         });
                         if ($("form[id=formClaim]").valid()) {
                             //validator time expesn
+                            if(String($("input[name=ProfessionalServicesCode]").val()).trim() !== "" && String($("textarea[name=ProfessionalServicesNote]").val()).trim() == ""){
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter description");
+                                $("div[id=modal-confirm]").modal("show");
+                                return;
+                            }
+                            if(String($("input[name=ExpenseCode]").val()).trim() !== "" && String($("textarea[name=ExpenseNote]").val()).trim() == ""){
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter description");
+                                $("div[id=modal-confirm]").modal("show");
+                                return;
+                            }
                             if($("input[name=ProfessionalServicesCode]").val() !=="")
                             {
                                 if($("input[name=ProfessionalServicesTime]").val() ==="")

@@ -125,7 +125,7 @@
                                 <h5 style="text-align: right">Claim #:</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Claim" id="Claim" ondblclick="getAllClaim()" onkeyup="getClaimAndInvoiceByClaimId(this)">
+                                <input type="text" name="Claim" id="Claim" onkeypress="invoiceView.getAllInvoiceByClaim(event)">
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                                 <h5 style="text-align: right">Loss Desc:</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="LossDate" id="LossDate" readonly style="background-color: #EAD8D8">
+                                <input type="text" name="LossDesc" id="LossDesc" readonly style="background-color: #EAD8D8">
                             </div>
                         </div>
                     </div>
@@ -695,6 +695,84 @@
                 invoiceObject: {
 
                 },
+                getAllInvoiceByClaim:function(e)
+                {
+                    if(e.keyCode===13)
+                    {
+                        var code = $("input[name=Claim]").val();
+                        $.get(url+"getAllInvoiceByClaimId/"+code,{_token:_token},function(data){
+                            if (data["data"].length > 0) {
+                                console.log(data["data"]);
+                                var row = "";
+                                $("tbody#table-invoice-body").empty();
+                                for (var i = 0; i < data["data"].length; i++) {
+                                    if(data["data"][i]["invoice_id"]!==null)
+                                    {
+                                        row += "<tr id= "+data["data"][i]["invoice_id"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                        row += "<td>" + data["data"][i]["invoice_id"] + "</td>";
+                                    }
+                                    else
+                                    {
+                                        row += "<tr id= "+data["data"][i]["invoice_temp"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                        row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
+                                    }
+
+
+                                    if (data["data"][i]["invoice_date"]) {
+                                        var receiveDate = new Date(data["data"][i]["invoice_date"].substring(0, 10));
+                                        var dd = receiveDate.getDate();
+                                        var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                        var yyyy = receiveDate.getFullYear();
+                                        if (dd < 10) {
+                                            dd = '0' + dd;
+                                        }
+                                        if (mm < 10) {
+                                            mm = '0' + mm;
+                                        }
+                                        row += "<td>" + dd + '-' + mm + '-' + yyyy + "</td>";
+                                    }
+
+                                        row += "<td>" + data["data"][i]["invoiceType"] + "</td>";
+
+                                        row += "<td>" + data["data"][i]["claim_id"] + "</td>";
+                                        row += "</tr>";
+                                }
+
+                                $("tbody#table-invoice-body").append(row);
+
+                            }
+                        });
+                    }
+
+                },
+                viewDetailInvoice: function (element) {
+                    $.post(url+"loadInvoiceByEventEnterKey",{_token:_token,key:$(element).attr("id")},function(data){
+                        console.log(data);
+                        //Informationn of claim
+                        $("input[name=Invoice]").val($(element).attr("id"));
+                        $("input[name=InvoiceDate]").val($(element).find("td:eq(1)").text());
+                        $("input[name=BillTo]").val(data[0][0]["billTo"]);
+                        $("input[name=BillType]").val(data[0][0]["typeInvoice"]);
+                        $("input[name=Organization]").val(data[0][0]["organization"]);
+                        $("input[name=LossDesc]").val(data[0][0]["lossDesc"]);
+                        $("input[name=AdjusterID]").val(data[0][0]["adjusterId"]);
+                        $("input[name=BranchID]").val(data[0][0]["branchId"]);
+                        $("input[name=InsuredName]").val(data[0][0]["insuredLastName"]);
+                        $("input[name=Policy]").val(data[0][0]["policy"]);
+                        $("input[name=CoClaim]").val();
+                        //Information of bill
+                        $("input[name=Professional]").val(data[1][0]["professionalServices"]);
+                        $("input[name=GeneralExp]").val(data[2][0]["generalExp"]);
+                        $("input[name=CommPhotoExp]").val(data[3][0]["commPhotoExp"]);
+                        $("input[name=ConsultFeesExp]").val(data[4][0]["consultFeesExp"]);
+                        $("input[name=TravelRelatedExp]").val(data[5][0]["travelRelatedExp"]);
+                        $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
+                        $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
+
+
+                    });
+                }
 
             };
         }

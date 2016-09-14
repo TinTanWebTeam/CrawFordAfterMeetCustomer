@@ -393,6 +393,17 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h4>Discount:</h4>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" name="discount" onkeyup="trialFeeView.discountBill(event)">
+            </div>
+            <div class="col-sm-2">
+                <h5 style="text-align: left">%</h5>
+            </div>
+        </div>
     </div>
 </div>
 <br>
@@ -551,6 +562,8 @@
                                         tbodyList.find("tr:eq(10)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "><input type='text' id='' name='' value="+trialFeeView.sumAllRow(data["listClaimTaskDetail"][i]["Time"]["Name"])+" readonly style='background-color: #EAE2E2'></td>");
                                         //insert total into table total
                                         trialFeeView.loadDataToTableTotal();
+                                        //$("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().prop("readOnly",false).css("background-color","");
+
                                     }
                                     trialFeeView.formatInputCurrencyTableTotal();
                                     trialFeeView.formatInputCurrencyTableDataUser();
@@ -614,20 +627,20 @@
                             tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[z] + "</td>").append("<td>" + arrSum[z] + "</td>")
                         }
                         if (z > 2 && z <= 10) {
-                            if ($("input[name=action]").val() === "0") {
-//                                if (z === 10) {
-//                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + data + "></td>");
-//                                    h++;
-//                                }
-                                //else {
+                            //if ($("input[name=action]").val() === "0") {
+                                if (z === 10) {
+                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent()' value=" + arrSum[h] + "></td>");
+                                }
+                                else {
                                     tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
                                     h++;
-                                //}
-                            }
-                            else {
-                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
-                                h++;
-                            }
+                                }
+                            //}
+//                            else {
+//                                alert(123);
+//                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
+//                                h++;
+//                            }
                         }
                     }
 
@@ -660,15 +673,8 @@
                             tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[z] + "</td>").append("<td>" + arrSum[z] + "</td>")
                         }
                         if (z > 2 && z <= 10) {
-                            if ($("input[name=action]").val() === "0") {
-//                                if (z === 10) {
-//                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + data + "></td>");
-//                                    h++;
-//                                }
-                                //else {
-                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
-                                h++;
-                                //}
+                            if (z === 10) {
+                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent()' value=" + arrSum[h] + "></td>");
                             }
                             else {
                                 tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
@@ -759,7 +765,7 @@
                         idBill:trialFeeView.idBillWhenUpdateBill,
                         billToCustomer: $("input[name=billTo]").val(),
                         coorInsurer:$("input[name=officer]").val(),
-                        Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,""),
+                        Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().replace(/,/g,""),
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
                         ToDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
@@ -803,6 +809,7 @@
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Bill claim success!!!");
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
+                                    $("input[name=discount]").val("");
                                 }
                             }
                             else //UPdate
@@ -825,6 +832,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                     trialFeeView.loadIBClaimConfirnm();
+                                    $("input[name=discount]").val("");
                                 }
                             }
                         })
@@ -925,12 +933,14 @@
                                 }
                             }
                             trialFeeView.loadDataToTableTotal();
+                            //load total
+                            $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[5]);
                             trialFeeView.formatInputCurrencyTableTotal();
                             trialFeeView.formatInputCurrencyTableDataUser();
                         }
                         else
                         {
-                            $("button[name=btnBill]").text("Update Bill").prop("disabled",true);
+                            $("button[name=btnBill]").text("Update Bill");
                             var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
                             var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");
                             //Pass date time in properties
@@ -996,6 +1006,8 @@
                             }
                             //insert total into table total
                             trialFeeView.loadDataToTableTotal();
+                            //load total
+                            $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[4]);
                             trialFeeView.formatInputCurrencyTableTotal();
                             trialFeeView.formatInputCurrencyTableDataUser();
                         }
@@ -1108,6 +1120,26 @@
                     {
                         $(tbodyTableTotal.find("tr")[k]).empty();
                     }
+                },
+                discountBill:function()
+                {
+                    var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
+                    if($("input[name=discount]").val() <=100) {
+                        var inputDiscount = $("input[name=discount]").val().replace("%", "");
+                        var discount = parseFloat(actualBill - (parseFloat((actualBill * inputDiscount) / 100)));
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(discount).formatCurrency({roundToDecimalPlace: 0});
+                    }
+                    else
+                    {
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(actualBill).formatCurrency({roundToDecimalPlace: 0});
+                    }
+                },
+                discountPrecent:function()
+                {
+                    var invoiceBill =  $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val();
+                    var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
+                    $("input[name=discount]").val(100 - Math.floor((invoiceBill*100)/actualBill));
+                    $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().formatCurrency({roundToDecimalPlace: 0});
                 }
 
             };

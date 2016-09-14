@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getReportData/{invoice_major_no}/{bill_id}/{claim_id}','AdminController@getReportData');
     Route::post('loadReportTask','AdminController@loadReportTask');
     Route::get('getTimeNowServer','AdminController@getTimeNowServer');
+    //Route::post('getAllInvoiceByClaim','AdminController@getAllInvoiceByClaim');
 });
 
 /*
