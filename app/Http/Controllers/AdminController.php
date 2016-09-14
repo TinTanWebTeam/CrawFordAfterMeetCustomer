@@ -2393,7 +2393,16 @@ class AdminController extends Controller
                                 $IBPending->save();
                                 $invoiceTempNo = $IBPending->invoiceTempNo + 1;
                             } else {
-                                $invoiceTempNo = 10000;
+                                $invoice = Invoice::orderBy('invoiceTempNo','desc')->first();
+                                if($invoice!=null)
+                                {
+                                    $invoiceTempNo = $invoice->invoiceTempNo +1;
+                                }
+                                else
+                                {
+                                    $invoiceTempNo = 10000;
+                                }
+
                             }
 
                         } else {
@@ -2530,9 +2539,17 @@ class AdminController extends Controller
                     else//Bill complete
                     {
                         //get invoiceMajorNo
-                        $invoiceNo = Invoice::orderBy('invoiceMajorNo', 'desc')->first();
-                        if ($invoiceNo) {
-                            $invoiceMajorNo = $invoiceNo->invoiceMajorNo + 1;
+                        $invoiceCount = Invoice::all();
+                        if (count($invoiceCount)>0) {
+                            $invoiceTemp = Invoice::orderBy('invoiceTempNo','desc')->first();
+                            if($invoiceTemp)
+                            {
+                                $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
+                            }
+                            else
+                            {
+                                $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                            }
                         } else {
                             $invoiceMajorNo = 20000;
                         }
@@ -2651,9 +2668,18 @@ class AdminController extends Controller
                 } //End Interim Bill
                 else //Add new final bill
                 {
-                    $invoiceNo = Invoice::orderBy('invoiceMajorNo', 'desc')->first();
-                    if ($invoiceNo) {
-                        $invoiceMajorNo = $invoiceNo->invoiceMajorNo + 1;
+                    //get invoiceMajorNo
+                    $invoiceCount = Invoice::all();
+                    if (count($invoiceCount)>0) {
+                        $invoiceTemp = Invoice::orderBy('invoiceTempNo','desc')->first();
+                        if($invoiceTemp)
+                        {
+                            $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
+                        }
+                        else
+                        {
+                            $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                        }
                     } else {
                         $invoiceMajorNo = 20000;
                     }

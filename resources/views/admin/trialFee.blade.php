@@ -874,8 +874,15 @@
                             trialFeeView.loadTableGL();
                             for (var a = 0; a < data[3].length; a++) {
                                 theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[3][a]["userName"] + "</th>");
-
-                                tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[3][a]["userName"] + ">"+data[3][a]["sumTimeCvChinh"]+"</td>");
+                                //check null sumtime
+                                if(data[3][a]["sumTimeCvChinh"]!==null)
+                                {
+                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[3][a]["userName"] + ">"+data[3][a]["sumTimeCvChinh"]+"</td>");
+                                }
+                                else
+                                {
+                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[3][a]["userName"] + "></td>");
+                                }
                                 tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
                                 tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[3][a]["userName"] + ">" + data[3][a]["rateType"] + "</td>");
                                 tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
@@ -937,8 +944,15 @@
                             trialFeeView.loadTableGL();
                             for (var a = 0; a < data[2].length; a++) {
                                 theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[2][a]["userName"] + "</th>");
+                                if(data[2][a]["sumTimeCvChinh"]!==null)
+                                {
+                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + ">"+data[2][a]["sumTimeCvChinh"]+"</td>");
 
-                                tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + ">"+data[2][a]["sumTimeCvChinh"]+"</td>");
+                                }
+                                else{
+                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + "></td>");
+
+                                }
                                 tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
                                 tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[2][a]["userName"] + ">" + data[2][a]["rateType"] + "</td>");
                                 tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
@@ -1023,7 +1037,14 @@
                                 //Insert data to thead of table
                                 theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "</th>");
                                 //Insert data to tbody of table
-                                tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"] + "</td>");
+                                if(data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"]!==null)
+                                {
+                                    tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["SumTimeCVChinh"] + "</td>");
+                                }
+                                else
+                                {
+                                    tbodyList.find("tr:eq(0)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "></td>");
+                                }
                                 tbodyList.find("tr:eq(1)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "><input type='text' id='' name='' value=" + data["listClaimTaskDetail"][i]["Time"]["Rate"] + " onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
                                 tbodyList.find("tr:eq(2)").append("<td id=" + data["listClaimTaskDetail"][i]["Time"]["Name"] + ">" + data["listClaimTaskDetail"][i]["Time"]["RateType"] + "</td>");
                                 // Time
