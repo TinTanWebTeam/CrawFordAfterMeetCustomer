@@ -148,8 +148,8 @@
                     <h5 style="font-weight: 600">Branch: All Branches</h5>
                 </div>
                 <div style="display: inline-block;width: 48%;box-sizing: border-box">
-                    <h5 style="font-weight: 600">Adjuster Code: {{ strtoupper(Auth::user()->name) }}</h5>
-                    <h5 style="font-weight: 600">Adjuster Name: {{ Auth::user()->firstName.' '.Auth::user()->lastName }}</h5>
+                    <h5 style="font-weight: 600">Adjuster Code: <span id="adjusterCode">{{ strtoupper(Auth::user()->name) }}</span></h5>
+                    <h5 style="font-weight: 600">Adjuster Name: <span id="adjusterName">{{ Auth::user()->firstName.' '.Auth::user()->lastName }}</span></h5>
                     <h5 style="font-weight: 600">Region Code: All Regions</h5>
                 </div>
             </div>
@@ -541,6 +541,9 @@
                     $("input[name=employee]").val($(element).parent().parent().find("td:eq(0)").text());
                     $("input[name=userId]").val($(element).attr("id"));
                     $("div[id=modal-adjuster]").modal("hide");
+                    $("span[id=adjusterCode]").text($(element).parent().parent().find("td:eq(0)").text());
+                    $("span[id=adjusterName]").text($(element).parent().parent().find("td:eq(2)").text() +" "+$(element).parent().parent().find("td:eq(3)").text());
+
                 }
             };
         }
