@@ -29,7 +29,7 @@
     <td></td>
 </tr>
 @foreach($claim_task_detail as $item)
-    <tr id="{{$item->idTask}}" style="cursor:pointer;font-size:16px;border-bottom: 1px solid rgba(0, 0, 0, 0.1)" onClick ='docketView.viewDetailTask(this)'>
+    <tr id="{{$item->idTask}}" style="font-size:16px;border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
         <td style="display:none">{{ $item->idUser }}</td>
         <td style="text-align: center;height: 25px;">{{ date_format(date_create($item->date),'d-m-Y') }}</td>
         <td style='text-align: center'>{{ strtoupper($item->adjuster) }}</td>
@@ -44,6 +44,18 @@
             <td style='text-align: center'>{{ date_format(date_create($item->invoiceDate),'d-m-Y') }}</td>
         @else
             <td style='text-align: center'></td>
+        @endif
+        {{--check delete--}}
+        @if($item->invoiceMajorNo!=null || $item->invoiceTempNo!=null)
+            <td style='text-align: center'>
+                <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-xs btn-danger" id="{{$item->idTask}}" onclick="docketView.deleteTask(this)" disabled><span class="glyphicon glyphicon-remove"></span></button>
+            </td>
+        @else
+            <td style='text-align: center'>
+                <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>
+                <button class="btn btn-xs btn-danger" id="{{$item->idTask}}" onclick="docketView.deleteTask(this)"><span class="glyphicon glyphicon-remove"></span></button>
+            </td>
         @endif
     </tr>
 @endforeach

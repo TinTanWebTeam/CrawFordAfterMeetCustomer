@@ -1235,7 +1235,8 @@ class AdminController extends Controller
                             'claim_task_details.expenseAmount as expenseAmount',
                             'claim_task_details.billDate as date',
                             'claim_task_details.invoiceMajorNo as invoiceMajorNo',
-                            'claim_task_details.invoiceDate as invoiceDate'
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
                         )
                         ->get();
                     return view('admin.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
@@ -1263,7 +1264,8 @@ class AdminController extends Controller
                             'claim_task_details.expenseAmount as expenseAmount',
                             'claim_task_details.billDate as date',
                             'claim_task_details.invoiceMajorNo as invoiceMajorNo',
-                            'claim_task_details.invoiceDate as invoiceDate'
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
                         )
                         ->get();
                     return view('admin.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
@@ -1291,7 +1293,8 @@ class AdminController extends Controller
                             'claim_task_details.expenseAmount as expenseAmount',
                             'claim_task_details.billDate as date',
                             'claim_task_details.invoiceMajorNo as invoiceMajorNo',
-                            'claim_task_details.invoiceDate as invoiceDate'
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
                         )
                         ->get();
                     return view('admin.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
@@ -3178,6 +3181,7 @@ class AdminController extends Controller
 
     public function loadReportTask(Request $request)
     {
+
         $arrayData = null;
         $sumTime =0;
         $sumExpenseAmount =0;
@@ -3265,6 +3269,30 @@ class AdminController extends Controller
     public function getTimeNowServer(){
         return date('d-m-Y h:i:s');
     }
+
+    public function deleteTask(Request $request)
+    {
+        $data = null;
+        try
+        {
+            $task = ClaimTaskDetail::where('id',$request->get('idTask'))
+                ->where('invoiceMajorNo',null)
+                ->where('invoiceTempNo',null)
+                ->first();
+            if($task)
+            {
+                $task->delete();
+                $data = 1;
+
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $data;
+    }
+
 
 
 

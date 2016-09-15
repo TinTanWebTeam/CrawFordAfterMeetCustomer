@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('loadReportTask','AdminController@loadReportTask');
     Route::get('getTimeNowServer','AdminController@getTimeNowServer');
     //Route::post('getAllInvoiceByClaim','AdminController@getAllInvoiceByClaim');
+    Route::post('deleteTask','AdminController@deleteTask');
 });
 
 /*
@@ -103,7 +104,7 @@ Route::group(['middleware' => ['auth','user'],'prefix' => 'user'],function (){
     Route::post('loadClaimByEventEnterKey','UserController@loadClaimByEventEnterKey');
     Route::post('assignmentTask','UserController@assignmentTask');
     Route::post('viewDetailTask','UserController@viewDetailTask');
-    Route::post('loadViewDocketDetail','UserController@loadViewDocketDetail');
+    Route::post('loadViewDocketDetail/{sort_type}','UserController@loadViewDocketDetail');
     Route::post('updateInformationOrChangePassword','UserController@updateInformationOrChangePassword');
     Route::post('loadClaimByEventEnterKeyWhenUserSeeClaim','UserController@loadClaimByEventEnterKeyWhenUserSeeClaim');
     Route::post('loadExpenseCodeByType','UserController@loadExpenseCodeByType');

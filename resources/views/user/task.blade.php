@@ -433,12 +433,18 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-sm-12" style="padding-right: 40px">
-                    <button  type="button" class="btn btn-sm btn-danger pull-right" onclick="taskView.cancel()">Cancel</button>
-                    <button type="button" class="btn btn-sm btn-success pull-right" name="actionAttackTask" onclick="taskView.assignmentTask()" style="margin-right: 10px">Add New</button>
+                <div class="col-sm-6">
+                    <h5 style="font-weight: 600">Sort By: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-warning" onclick="taskView.sortTaskTableByDate()">Date</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-warning" type="button" onclick="taskView.sortTaskTableByAdjuster()">Adjuster</button></h5>
+                </div>
+                <div class="col-sm-6" style="padding-right: 40px">
+                    <button type="button" class="btn btn-danger pull-right" style="margin-left: 20px"
+                            onclick="taskView.cancel()">Cancel
+                    </button>
+                    <button type="button" class="btn btn-success pull-right" onclick="taskView.assignmentTask()"
+                            name="actionAttackTask">Add New
+                    </button>
                 </div>
             </div>
-            <br>
         </form>
         <hr>
         <table style="background-color: #fff;width: 100%" class="table-claim-report-assist">
@@ -512,6 +518,7 @@
                 checkDate:null,
                 TimeDefault:null,
                 idTaskDelete:null,
+                sortDate: 1,
                 resetTaskObject: function () {
                     for (var propertyName in taskView.taskObject) {
                         if (taskView.taskObject.hasOwnProperty(propertyName)) {
@@ -551,6 +558,7 @@
                             }
                             else
                             {
+
                                 taskView.checkDate = data["Date"];
                                 var openDateFR = data["Claim"]["openDate"].split(" ");
                                 var fromDateFR = data["Date"].split(" ");
@@ -602,7 +610,7 @@
                                 $("input[name=lossLocation]").val(data["Claim"]["lossLocation"]);
                                 taskView.taskObject.ClaimId = data["Claim"]["id"];
                                 //Insert to table docket
-                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:data["Claim"]["id"]},function(view){
+                                $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:data["Claim"]["id"]},function(view){
                                     $("tbody[id=tbodyDocket]").empty().append(view);
                                 });
                             }
@@ -817,6 +825,18 @@
                                 $("div[id=modalConfirm]").modal("show");
                                 return;
                             }
+                            if(String($("input[name=ExpenseAmount]").val()).trim() !== "" && String($("input[name=ExpenseCode]").val()).trim() === "" )
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter code expense");
+                                $("div[id=modalConfirm]").modal("show");
+                                return;
+                            }
+                            if(String($("input[name=ProfessionalServicesTime]").val()).trim() !== "" && String($("input[name=ProfessionalServicesCode]").val()).trim() === "" )
+                            {
+                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("You must enter code time");
+                                $("div[id=modalConfirm]").modal("show");
+                                return;
+                            }
                             if($("input[name=ProfessionalServicesCode]").val() !=="")
                             {
                                 if($("input[name=ProfessionalServicesTime]").val() ==="")
@@ -1021,7 +1041,7 @@
                             $("input[name=lossLocation]").val(data["Claim"]["lossLocation"]);
                             taskView.taskObject.ClaimId = data["Claim"]["id"];
                             //Insert to table docket
-                            $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:data["Claim"]["id"]},function(view){
+                            $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:data["Claim"]["id"]},function(view){
                                 $("tbody[id=tbodyDocket]").empty().append(view);
                             });
                         }
@@ -1054,7 +1074,37 @@
                             $("div[id=modalConfirm]").modal("show");
                         }
                     });
+                },
+                sortTaskTableByDate:function()
+                {
+                    if(taskView.sortDate == 0){
+                        $.post(url + "user/loadViewDocketDetail/0", {
+                            _token: _token,
+                            idClaim: taskView.taskObject.ClaimId
+                        }, function (view) {
+                            $("tbody[id=tbodyDocket]").empty().append(view);
+                        });
+                        taskView.sortDate = 1;
+                    }else{
+                        $.post(url + "user/loadViewDocketDetail/1", {
+                            _token: _token,
+                            idClaim: taskView.taskObject.ClaimId
+                        }, function (view) {
+                            $("tbody[id=tbodyDocket]").empty().append(view);
+                        });
+                        taskView.sortDate = 0;
+                    }
+                },
+                sortTaskTableByAdjuster:function()
+                {
+                    $.post(url + "user/loadViewDocketDetail/2", {
+                        _token: _token,
+                        idClaim: taskView.taskObject.ClaimId
+                    }, function (view) {
+                        $("tbody[id=tbodyDocket]").empty().append(view);
+                    });
                 }
+
 
 
 

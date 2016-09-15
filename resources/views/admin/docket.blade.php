@@ -187,6 +187,35 @@
 </div>
 {{--End Model Model List Employee--}}
 
+{{--Model Delete--}}
+<div aria-hidden="true" class="modal fade" id="modalDelete" role="basic" style="display: none;" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                </button>
+                <h4 class="modal-title">
+                    Delete Task
+                </h4>
+            </div>
+            <div class="modal-body" id="modalContent">
+                Are you sure delete this task  ?
+            </div>
+            <div class="modal-footer">
+                <button class="btn dark btn-outline" data-dismiss="modal" name="modalClose" type="button">
+                    Close
+                </button>
+                <button class="btn green" name="Agree" type="button" onclick="docketView.confirmDelete()">
+                    Delete
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{{--End Model Delete--}}
+
 <div class="row">
     <form id="formClaim" style="background-color: #fff;width: 100%">
         <div class="row" style="padding: 20px;">
@@ -521,6 +550,7 @@
             <th class="text-bold text-center" style="display:none">Expense Note</th>
             <th class="text-bold text-center">InvoiceMajorNo</th>
             <th class="text-bold text-center">InvoiceDate</th>
+            <th class="text-bold text-center">Modify</th>
         </tr>
         </thead>
         <tbody id="tbodyDocket">
@@ -569,6 +599,7 @@
                 timeFrom:null,
                 sortDate: 1,
                 claimData: null,
+                idTaskDelete:null,
                 resetTaskObject: function () {
                     for (var propertyName in docketView.taskObject) {
                         if (docketView.taskObject.hasOwnProperty(propertyName)) {
@@ -712,7 +743,7 @@
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
                                 $("div[id=modal-confirm]").modal("show");
                                 docketView.cancelAfterAddNew();
-                                $.post(url + "loadViewDocketDetail", {
+                                $.post(url + "loadViewDocketDetail/0", {
                                     _token: _token,
                                     idClaim: docketView.taskObject.ClaimId
                                 }, function (view) {
@@ -733,6 +764,12 @@
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
                                 $("div[id=modal-confirm]").modal("show");
                                 docketView.cancelAfterAddNew();
+                                $.post(url + "loadViewDocketDetail/0", {
+                                    _token: _token,
+                                    idClaim: docketView.taskObject.ClaimId
+                                }, function (view) {
+                                    $("tbody[id=tbodyDocket]").empty().append(view);
+                                });
                             }
                             else if(data["Result"]==2)
                             {
@@ -782,6 +819,12 @@
                             }
                             if(String($("input[name=ExpenseCode]").val()).trim() !== "" && String($("textarea[name=ExpenseNote]").val()).trim() == ""){
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter description");
+                                $("div[id=modal-confirm]").modal("show");
+                                return;
+                            }
+                            if(String($("input[name=ExpenseAmount]").val()).trim() !== "" && String($("input[name=ExpenseCode]").val()).trim() === "" )
+                            {
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("You must enter code expense");
                                 $("div[id=modal-confirm]").modal("show");
                                 return;
                             }
@@ -1007,7 +1050,38 @@
                     }, function (view) {
                         $("tbody[id=tbodyDocket]").empty().append(view);
                     });
+                },
+                deleteTask:function(element)
+                {
+                    $("div[id=modalDelete]").modal("show");
+                    docketView.idTaskDelete = $(element).attr("id");
+                },
+                confirmDelete:function()
+                {
+                    $.post(url+"deleteTask",{_token:_token,idTask:docketView.idTaskDelete},function(data){
+                        if(data==="1")
+                        {
+                            $("div[id=modalDelete]").modal("hide");
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Delete Success");
+                            $("div[id=modal-confirm]").modal("show");
+                            $.post(url + "loadViewDocketDetail/0", {
+                                _token: _token,
+                                idClaim: docketView.taskObject.ClaimId
+                            }, function (view) {
+                                $("tbody[id=tbodyDocket]").empty().append(view);
+                            });
+                            docketView.idTaskDelete = null;
+                            docketView.cancelAfterAddNew();
+                        }
+                        else
+                        {
+                            $("div[id=modalDelete]").modal("hide");
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Delete No Success");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
+                    });
                 }
+
             }
         }
         else {

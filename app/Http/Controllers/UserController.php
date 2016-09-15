@@ -114,37 +114,96 @@ class UserController extends Controller
         return $result;
     }
 
-    public function loadViewDocketDetail(Request $request)
+    public function loadViewDocketDetail($sort_type,Request $request)
     {
-        if ($request->get('idClaim')) {
-            $claim_task_detail = DB::table('claim_task_details')
-                ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
-                ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
-                ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
-                ->where('claim_task_details.claimId', $request->get('idClaim'))
-                ->where('claim_task_details.professionalServices', '!=', 1)
-                ->where('claim_task_details.professionalServices', '!=', 2)
-                ->orderBy('claim_task_details.billDate', 'desc')
-                ->select(
-                    'claim_task_details.id as idTask',
-                    'claim_task_details.userId as idUser',
-                    'users.name as adjuster',
-                    'cate1.code as professionalServices',
-                    'cate2.code as expense',
-                    'claim_task_details.professionalServicesTime as professionalUnit',
-                    'claim_task_details.professionalServicesNote as professionalNote',
-                    'claim_task_details.expenseNote as expenseNote',
-                    'claim_task_details.expenseAmount as expenseAmount',
-                    'claim_task_details.billDate as date',
-                    'claim_task_details.invoiceMajorNo as invoiceMajorNo',
-                    'claim_task_details.invoiceDate as invoiceDate',
-                    'claim_task_details.invoiceTempNo as invoiceTempNo'
-
-
-                )
-                ->get();
-            //dd($claim_task_detail) demo
-            return view('user.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
+        switch ($sort_type){
+            case '0':
+                if ($request->get('idClaim')) {
+                    $claim_task_detail = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.claimId', $request->get('idClaim'))
+                        ->where('claim_task_details.professionalServices', '!=', 1)
+                        ->where('claim_task_details.professionalServices', '!=', 2)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.id as idTask',
+                            'claim_task_details.userId as idUser',
+                            'users.name as adjuster',
+                            'cate1.code as professionalServices',
+                            'cate2.code as expense',
+                            'claim_task_details.professionalServicesTime as professionalUnit',
+                            'claim_task_details.professionalServicesNote as professionalNote',
+                            'claim_task_details.expenseNote as expenseNote',
+                            'claim_task_details.expenseAmount as expenseAmount',
+                            'claim_task_details.billDate as date',
+                            'claim_task_details.invoiceMajorNo as invoiceMajorNo',
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
+                        )
+                        ->get();
+                    return view('user.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
+                }
+                break;
+            case '1':
+                if ($request->get('idClaim')) {
+                    $claim_task_detail = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.claimId', $request->get('idClaim'))
+                        ->where('claim_task_details.professionalServices', '!=', 1)
+                        ->where('claim_task_details.professionalServices', '!=', 2)
+                        ->orderBy('claim_task_details.billDate', 'desc')
+                        ->select(
+                            'claim_task_details.id as idTask',
+                            'claim_task_details.userId as idUser',
+                            'users.name as adjuster',
+                            'cate1.code as professionalServices',
+                            'cate2.code as expense',
+                            'claim_task_details.professionalServicesTime as professionalUnit',
+                            'claim_task_details.professionalServicesNote as professionalNote',
+                            'claim_task_details.expenseNote as expenseNote',
+                            'claim_task_details.expenseAmount as expenseAmount',
+                            'claim_task_details.billDate as date',
+                            'claim_task_details.invoiceMajorNo as invoiceMajorNo',
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
+                        )
+                        ->get();
+                    return view('user.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
+                }
+                break;
+            case '2':
+                if ($request->get('idClaim')) {
+                    $claim_task_detail = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.claimId', $request->get('idClaim'))
+                        ->where('claim_task_details.professionalServices', '!=', 1)
+                        ->where('claim_task_details.professionalServices', '!=', 2)
+                        ->orderBy('claim_task_details.userId', 'asc')
+                        ->select(
+                            'claim_task_details.id as idTask',
+                            'claim_task_details.userId as idUser',
+                            'users.name as adjuster',
+                            'cate1.code as professionalServices',
+                            'cate2.code as expense',
+                            'claim_task_details.professionalServicesTime as professionalUnit',
+                            'claim_task_details.professionalServicesNote as professionalNote',
+                            'claim_task_details.expenseNote as expenseNote',
+                            'claim_task_details.expenseAmount as expenseAmount',
+                            'claim_task_details.billDate as date',
+                            'claim_task_details.invoiceMajorNo as invoiceMajorNo',
+                            'claim_task_details.invoiceDate as invoiceDate',
+                            'claim_task_details.invoiceTempNo as invoiceTempNo'
+                        )
+                        ->get();
+                    return view('user.viewDocketDetail')->with('claim_task_detail', $claim_task_detail);
+                }
+                break;
         }
     }
 

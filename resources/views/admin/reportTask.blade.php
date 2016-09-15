@@ -1,3 +1,50 @@
+{{--Adjuster--}}
+<div class="modal fade" id="modal-adjuster">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    List Adjuster
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="table-adjuster">
+                        <thead>
+                        <tr>
+                            <th data-name="code">
+                                Code
+                            </th>
+                            <th data-name="email">
+                                Email
+                            </th>
+                            <th data-name="firstName">
+                                First Name
+                            </th>
+                            <th data-name="lastName">
+                                Last Name
+                            </th>
+                            <th data-name="Rate">
+                                Rate
+                            </th>
+                            <th class="text-center">
+                                Choose
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="modal-adjuster-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div style="background-color: white" class="row">
     <div class="col-sm-12">
         <table>
@@ -10,7 +57,7 @@
                     <input type="text" name="userId" value="{{Auth::user()->id}}" class="form-control" style="display: none">
                 </td>
                 <td>
-                    <h4 style="padding-left: 10px">To:</h4>
+                    <h4 style="padding-left: 20px">To:</h4>
                 </td>
                 <td>
                     <input type="date" name="toDate" value="" class="form-control">
@@ -25,7 +72,7 @@
                            onchange="reportTaskView.changeCheckBox(this)">
                 </td>
                 <td>
-                    <h4>Enter Claim:</h4>
+                    <h4 style="padding-left: 20px">Enter Claim:</h4>
                 </td>
                 <td>
                     <input type="text" name="chooseClaim" id="" class="form-control">
@@ -38,10 +85,11 @@
                 <td>
                     <input type="text" name="sumTimeUnit" readonly id="" class="form-control">
                 </td>
-                <td style="padding-left: 10px">
-                    <button type="button" name="submitReport" class="btn btn-success" onclick="reportTaskView.submitLoadReport()">
-                        Search
-                    </button>
+                <td>
+                    <h4 style="padding-left: 20px">Employee:</h4>
+                </td>
+                <td>
+                    <input type="text" name="employee"  id="employee" class="form-control" ondblclick="reportTaskView.showALLEmployee()">
                 </td>
             </tr>
             <tr>
@@ -50,6 +98,11 @@
                 </td>
                 <td>
                     <input type="text" name="sumExpenseAmount" readonly id="" class="form-control">
+                </td>
+                <td style="padding-left: 10px">
+                    <button type="button" name="submitReport" class="btn btn-success" onclick="reportTaskView.submitLoadReport()" style="margin-left: 10px">
+                        Search
+                    </button>
                 </td>
             </tr>
         </table>
@@ -461,6 +514,33 @@
                     else {
                         $("input[name=chooseClaim]").val("").prop("disabled", false);
                     }
+                },
+                showALLEmployee:function()
+                {
+                    $("div[id=modal-adjuster]").modal("show");
+                    $.get(url + 'getAllAdjuster',function (data) {
+                        var tr = "";
+                        for(var i = 0;i<data.length;i++){
+                            tr+= "<tr>";
+                            tr+="<td>"+data[i].name+"</td>";
+                            tr+="<td>"+data[i].email+"</td>";
+                            tr+="<td>"+data[i].firstName+"</td>";
+                            tr+="<td>"+data[i].lastName+"</td>";
+                            tr+="<td>"+data[i].rate+"</td>";
+                            tr+="<td class='text-center'><button class='btn btn-success' id="+data[i].id+" onclick='reportTaskView.chooseEmployee(this)'><span class='glyphicon glyphicon-check'></span></button></td>";
+                            tr+="</tr>";
+                        }
+                        $("#table-adjuster").DataTable().destroy();
+                        $("#modal-adjuster-table-body").empty().append(tr);
+                        $("#table-adjuster").DataTable();
+                    });
+                },
+                chooseEmployee:function(element)
+                {
+                    $("input[name=userId]").val("");
+                    $("input[name=employee]").val($(element).parent().parent().find("td:eq(0)").text());
+                    $("input[name=userId]").val($(element).attr("id"));
+                    $("div[id=modal-adjuster]").modal("hide");
                 }
             };
         }
