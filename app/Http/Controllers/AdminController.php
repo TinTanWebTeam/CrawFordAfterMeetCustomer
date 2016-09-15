@@ -28,12 +28,9 @@ use App\User;
 use Auth;
 use Carbon\Carbon;
 use Config;
-use DateTime;
 use DB;
 use Illuminate\Http\Request;
 use App\ExtendOfDamage;
-
-use App\Http\Requests;
 use Mockery\Exception;
 use Validator;
 
@@ -434,8 +431,8 @@ class AdminController extends Controller
         //Show bill have status all
         try {
             $bill = DB::table('claim_task_details')
-                ->Join('bills', 'claim_task_details.id', '=', 'bills.billId')
-                ->Join('statuses', 'claim_task_details.statusId', '=', 'statuses.id')
+                ->join('bills', 'claim_task_details.id', '=', 'bills.billId')
+                ->join('statuses', 'claim_task_details.statusId', '=', 'statuses.id')
                 ->where('claim_task_details.claimId', $request->get('idClaim'))
                 ->select(
                     'bills.id as idBill',
@@ -1105,8 +1102,8 @@ class AdminController extends Controller
                 )->get();
             array_push($resultArray, $query1);
             $professionalService = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('professional_services', 'bills.id', '=', 'professional_services.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('professional_services', 'bills.id', '=', 'professional_services.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1114,8 +1111,8 @@ class AdminController extends Controller
                 )->get();
             array_push($resultArray, $professionalService);
             $generalExp = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('general_exps', 'bills.id', '=', 'general_exps.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('general_exps', 'bills.id', '=', 'general_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1124,8 +1121,8 @@ class AdminController extends Controller
             array_push($resultArray, $generalExp);
 
             $commPhotoExp = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('comm_photo_exps', 'bills.id', '=', 'comm_photo_exps.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('comm_photo_exps', 'bills.id', '=', 'comm_photo_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1134,8 +1131,8 @@ class AdminController extends Controller
             array_push($resultArray, $commPhotoExp);
 
             $consultFeesExp = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('consult_fees_exps', 'bills.id', '=', 'consult_fees_exps.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('consult_fees_exps', 'bills.id', '=', 'consult_fees_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1144,8 +1141,8 @@ class AdminController extends Controller
             array_push($resultArray, $consultFeesExp);
 
             $travelRelatedExp = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('travel_related_exps', 'bills.id', '=', 'travel_related_exps.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('travel_related_exps', 'bills.id', '=', 'travel_related_exps.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1154,8 +1151,8 @@ class AdminController extends Controller
             array_push($resultArray, $travelRelatedExp);
 
             $gstFreeDisb = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('gst_free_disbs', 'bills.id', '=', 'gst_free_disbs.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('gst_free_disbs', 'bills.id', '=', 'gst_free_disbs.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
@@ -1164,8 +1161,8 @@ class AdminController extends Controller
             array_push($resultArray, $gstFreeDisb);
 
             $disbursement = DB::table('invoices')
-                ->Join('bills', 'invoices.idBill', '=', 'bills.id')
-                ->Join('disbursements', 'bills.id', '=', 'disbursements.billId')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('disbursements', 'bills.id', '=', 'disbursements.billId')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo', $request->get('key'))
                 ->select(
