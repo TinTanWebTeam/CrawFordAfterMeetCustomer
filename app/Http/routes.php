@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('saveAddNewUpdateBranchType','AdminController@saveAddNewUpdateBranchType');
     Route::post('saveAddNewUpdateInsurer','AdminController@saveAddNewUpdateInsurer');
     Route::post('saveAddNewUpdateBroker','AdminController@saveAddNewUpdateBroker');
-
+    
     Route::post('loadClaimByEventEnterKey','AdminController@loadClaimByEventEnterKey');
     Route::post('loadViewDocketDetail/{sort_type}','AdminController@loadViewDocketDetail');
     Route::post('loadListTimeCode','AdminController@loadListTimeCode');

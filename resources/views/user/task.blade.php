@@ -1,4 +1,4 @@
-{{--Model list task time  --}}
+{{--Model list task times  --}}
 <div class="modal fade" id="modalListTaskCaterogyTime" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

@@ -1,4 +1,4 @@
-    {{--Modal Notification--}}
+    {{--Modal Notifications--}}
 <div class="modal fade" id="modalNotification">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

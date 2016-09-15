@@ -401,7 +401,7 @@
 
                         }
                         $("#report_submission_content").empty().append(trSubmission);
-//                        <div style="width: 100%">
+//                        <sdiv style="width: 100%">
 //                                <div style="width: 25%;display: inline-block">
 //                                <div style="width: 50%;display: inline-block">
 //                                <div style="text-align: center;font-weight: 600;">Date</div>

@@ -1,4 +1,4 @@
-{{--Model Modify--}}
+{{--Model Modifys--}}
 <div class="modal fade" id="modal-category-modify">
     <div class="modal-dialog modal-md">
         <div class="modal-content">

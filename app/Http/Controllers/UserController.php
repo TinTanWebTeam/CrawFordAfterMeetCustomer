@@ -59,7 +59,7 @@ class UserController extends Controller
                     $arrayBlend = $item->value;
                 }
             }
-            //Address
+            //Addresss
             $arrayAddress = explode(";", $user->address);
             $address = $arrayAddress[0];
             $address1 = $arrayAddress[1];

@@ -44,4 +44,4 @@
        @endif
    </tr>
 @endforeach
-{{--demo--}}
+{{--demos--}}
