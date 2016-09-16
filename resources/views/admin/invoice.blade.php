@@ -411,6 +411,24 @@
     <br>
 </form>
 
+<div class="row">
+    <div class="col-sm-2">
+        <h5 style="padding-left: 70px">Exchange rate</h5>
+    </div>
+    <div class="col-sm-5">
+        <input type="text" name="exchangeRate" class="form-control" style="width: 40%" onchange="invoiceView.formatCurrencyExchangeRate()">
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-2">
+        <h5 style="padding-left: 70px">Choose date</h5>
+    </div>
+    <div class="col-sm-5">
+        <input type="date" name="dateExchange" class="form-control" style="width: 40%" onchange="invoiceView.fillDateToInvoice(this)">
+    </div>
+</div>
+<br>
 <div class="row" style="background-color: #fff">
     <div class="col-sm-12">
         <div class="row">
@@ -520,13 +538,13 @@
                         <h4 style="font-weight: 600">Professional Fees</h4>
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="professionFeeUSD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="professionFeeVND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
                 <div style="width: 1150px;">
@@ -534,13 +552,13 @@
                         <h4 style="font-weight: 600">Expenses</h4>
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="expenseUSD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="expenseVND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
                 <div style="width: 1150px;">
@@ -582,18 +600,20 @@
                         <h4 style="font-weight: 600">&nbsp;&nbsp;&nbsp;TOTAL PAYABLE</h4>
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="totalUSD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
                     <div style="width: 12%;display: inline-block">
-                        <h4 style="font-weight: 600;text-align: right;padding-right: 30px">$5,992.00</h4>
+                        <h4 id="totalVND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
                 <br>
                 <div style="width: 1150px;">
-                    <h4>Exchange rate of Vietcombank on <div style="display: inline-block;">15/8/2016</div> USD/VND: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22,260</h4>
+                    <h4>Exchange rate of Vietcombank on
+                        <div style="display: inline-block;" id="dateExchangeRate">15/8/2016</div> USD/VND: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="exchangeRateInvoice">22,260</span>
+                    </h4>
                     <h4>Payment term: within 30 days</h4>
                 </div>
                 <div style="width: 1150px;border: 1px solid black;margin-top: 200px;padding: 0 10px">
@@ -695,6 +715,13 @@
                 invoiceObject: {
 
                 },
+                convertStringToDate: function (date) {
+                    var currentDate = new Date(date);
+                    var datetime = ("0" + currentDate.getDate()).slice(-2) + "-"
+                            + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
+                            +currentDate.getFullYear() ;
+                    return datetime;
+                },
                 getAllInvoiceByClaim:function(e)
                 {
                     if(e.keyCode===13)
@@ -769,10 +796,42 @@
                         $("input[name=TravelRelatedExp]").val(data[5][0]["travelRelatedExp"]);
                         $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
                         $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
+                        invoiceView.formatCurrencyInput();
+                        //load report invoice
+                        $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
+                        $("h4[id=expenseVND]").text($("input[name=GeneralExp]").val());
 
 
                     });
+                },
+                formatCurrencyInput:function()
+                {
+                    $("input[name=Professional]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=GeneralExp]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=CommPhotoExp]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=ConsultFeesExp]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=TravelRelatedExp]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=GSTFreeDisb]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=Disbursements]").formatCurrency({roundToDecimalPlace:0});
+                },
+                formatCurrencyExchangeRate:function()
+                {
+                    $("input[name=exchangeRate]").formatCurrency({roundToDecimalPlace:0});
+                    $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
+                    //change VND->USD
+                    $("h4[id=professionFeeUSD]").text(parseInt(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
+                    $("h4[id=expenseUSD]").text(parseInt(($("input[name=GeneralExp]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
+                    //total
+                    $("h4[id=totalUSD]").text(parseInt((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1));
+                    $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+
+                },
+                fillDateToInvoice:function(element)
+                {
+
+                    $("div[id=dateExchangeRate]").text(invoiceView.convertStringToDate($(element).val()));
                 }
+
 
             };
         }

@@ -37,7 +37,11 @@
         <td style='text-align: center'>{{ $item->professionalUnit }}</td>
         <td style="display:none">{{ $item->professionalNote }}</td>
         <td style='text-align: center'>{{ $item->expense }}</td>
-        <td style='text-align: center'>{{ number_format($item->expenseAmount,0, ".", ",") }}</td>
+        @if($item->expenseAmount!=null)
+            <td style='text-align: center'>{{ number_format($item->expenseAmount,0, ".", ",") }}</td>
+        @else
+            <td style='text-align: center'></td>
+        @endif
         <td style="display:none">{{ $item->expenseNote }}</td>
         <td style='text-align: center'>{{ $item->invoiceMajorNo }}</td>
         @if($item->invoiceDate!=null)
