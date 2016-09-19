@@ -1412,10 +1412,14 @@ class AdminController extends Controller
                     $userTask = User::where('name', $request->get('taskObject')['UserId'])->first();
                     if ($userTask) {
                         if ($request->get('taskObject')['ProfessionalServices'] != null) {
-                            $idTime = TaskCategory::where('code', $request->get('taskObject')['ProfessionalServices'])->first()->id;
+                            $idTime = TaskCategory::where('code', $request->get('taskObject')['ProfessionalServices'])
+                                ->where('name','TimeCode')
+                                ->first()->id;
                         }
                         if ($request->get('taskObject')['Expense'] != null) {
-                            $idExpense = TaskCategory::where('code', $request->get('taskObject')['Expense'])->first()->id;
+                            $idExpense = TaskCategory::where('code', $request->get('taskObject')['Expense'])
+                                ->where('name','!=','TimeCode')
+                                ->first()->id;
                         }
                         $task = new ClaimTaskDetail();
                         $task->professionalServices = $idTime;
