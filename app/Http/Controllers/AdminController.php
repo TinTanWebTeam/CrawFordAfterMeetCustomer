@@ -1179,18 +1179,13 @@ class AdminController extends Controller
 
     public function loadClaimByEventEnterKey(Request $request)
     {
-//        $now = Carbon::now();
-//        dd($now->hour);
         $result = null;
         $date = null;
         try {
             if ($request->get('key')) {
                 $claim = Claim::where('code', $request->get('key'))->first();
                 if ($claim) {
-                    if ($claim->statusId == 3) {
-                        $result = array('Status' => 'claimClosed');
-                    } else {
-                        $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', 2)->where('claimId', $claim->id)->orderBy('billDate', 'desc')->first();
+                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', 2)->where('claimId', $claim->id)->orderBy('billDate', 'desc')->first();
                         if ($checkDateIBcompleteFB != null) {
                             $date = $checkDateIBcompleteFB->billDate;
                         } else {
@@ -1199,7 +1194,7 @@ class AdminController extends Controller
                         $a = explode(" ", $date);
                         $aFR = Carbon::parse($a[0])->format('d-m-Y') . " " . $a[1];
                         $result = array('Status' => 'Success', 'Claim' => $claim, 'Date' => $aFR);
-                    }
+
                 } else {
                     $result = array('Status' => 'notFoundClaim');
                 }
@@ -1400,12 +1395,18 @@ class AdminController extends Controller
         $a = explode(" ", $request->get('FromDate'));
         $fromDate = Carbon::parse($a[0])->format('Y-m-d') . " " . $a[1];
 
-        // dd($chooseDate,$request->get('FromDate'));
+        //get claim to check assignment task when claim closed
+        $claimClosed = Claim::where('id',$request->get('taskObject')['ClaimId'])->first();
         if ($chooseDate < $fromDate) {
             $result = array('Action' => 'ErrorDate');
         } else if ($chooseDate > $timeNow) {
             $result = array('Action' => 'ErrorDateNow');
-        } else {
+        }
+        else if($claimClosed->statusId===3)
+        {
+            $result = array('Action' => 'ErrorClaimClose');
+        }
+        else {
             if ($request->get('action') == 1) { // assignment task
                 try {
                     $userTask = User::where('name', $request->get('taskObject')['UserId'])->first();
@@ -2881,98 +2882,110 @@ class AdminController extends Controller
             $fromDate = $request->get('data')['FromDate'];
             //Update bill from pending to complete
             try {
-                $bill = Bill::where('id', $request->get('data')['idBill'])->first();
-                if ($bill) {
-                    //check bill has already bill complete???
-                    $taskBill = ClaimTaskDetail::where('id',$bill->billId)->where('claimId',$request->get('data')['idClaim'])->first();
-//                    dd($taskBill);
-                    if($taskBill)
+                //check close claim
+                $claimClose = Claim::where('id',$request->get('data')['idClaim'])->first();
+                if($claimClose)
+                {
+                    if($claimClose->statusId==3)
                     {
-                        //dd($taskBill->statusId);
-                        if($taskBill->statusId==1)
-                        {
-                            //Update bill from pending to complete
-                            if ($request->get('data')['billStatus'] == 'complete') {
-                                //Update total
-                                $bill->total = $request->get('data')['Total'];
-                                $bill->save();
-                                //Update status = 2
-                                $task = ClaimTaskDetail::where('id', $bill->billId)
-                                    ->where('statusId', 1)
-                                    ->where('claimId', $request->get('data')['idClaim'])
-                                    ->where('lockInvoiceNo', '!=', 1)
-                                    ->first();
-                                if ($task != null) {
-                                    //Update invoiceTempNo -> invoiceMajorNo
-                                    $invoice = Invoice::where('idBill', $bill->id)->first();
-                                    if ($invoice) {
-                                        $changeNumber = substr($invoice->invoiceTempNo, 1, 4);
-                                        $invoice->invoiceMajorNo = "2" . $changeNumber;
-                                        $invoice->invoiceDay = $task->billDate;
-                                        $invoice->save();
+                        $data = array('Action' => 'Update', 'Error' => 'ClaimClose');
+                    }
+                    else
+                    {
+                        $bill = Bill::where('id', $request->get('data')['idBill'])->first();
+                        if ($bill) {
+                            //check bill has already bill complete???
+                            $taskBill = ClaimTaskDetail::where('id',$bill->billId)->where('claimId',$request->get('data')['idClaim'])->first();
+//                          dd($taskBill);
+                            if($taskBill)
+                            {
+                                //dd($taskBill->statusId);
+                                if($taskBill->statusId==1)
+                                {
+                                    //Update bill from pending to complete
+                                    if ($request->get('data')['billStatus'] == 'complete') {
+                                        //Update total
+                                        $bill->total = $request->get('data')['Total'];
+                                        $bill->save();
+                                        //Update status = 2
+                                        $task = ClaimTaskDetail::where('id', $bill->billId)
+                                            ->where('statusId', 1)
+                                            ->where('claimId', $request->get('data')['idClaim'])
+                                            ->where('lockInvoiceNo', '!=', 1)
+                                            ->first();
+                                        if ($task != null) {
+                                            //Update invoiceTempNo -> invoiceMajorNo
+                                            $invoice = Invoice::where('idBill', $bill->id)->first();
+                                            if ($invoice) {
+                                                $changeNumber = substr($invoice->invoiceTempNo, 1, 4);
+                                                $invoice->invoiceMajorNo = "2" . $changeNumber;
+                                                $invoice->invoiceDay = $task->billDate;
+                                                $invoice->save();
 
-                                        $task->statusId = 2;
-                                        $task->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                        $task->save();
-                                    }
-                                    //update c�c c�ng vi?c c?a bill
-                                    $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
-                                        ->where('billDate', '>=', $fromDate)
-                                        ->where('billDate', '<=', $task->billDate)
-                                        ->where('claimId', $bill->claimId)
-                                        ->where('active', 1)
-                                        ->get();
-                                    foreach ($listClaimTaskDetail as $taskDetail) {
-                                        $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                        $taskDetail->invoiceDate = $invoice->invoiceDay;
-                                        $taskDetail->save();
-                                        foreach ($request->get('data')['ArrayData'] as $item) {
-                                            $idUser = User::where('name', $item[0])->first()->id;
-                                            if ($idUser) {
-                                                $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
-                                                if ($taskDetail->userId == $idUser) {
-                                                    if ($checkRateDefault != $item[2]) {
-                                                        $taskDetail->professionalServicesRateBillValue = $item[2];
-                                                        $taskDetail->save();
+                                                $task->statusId = 2;
+                                                $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                                $task->save();
+                                            }
+                                            //update c�c c�ng vi?c c?a bill
+                                            $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
+                                                ->where('billDate', '>=', $fromDate)
+                                                ->where('billDate', '<=', $task->billDate)
+                                                ->where('claimId', $bill->claimId)
+                                                ->where('active', 1)
+                                                ->get();
+                                            foreach ($listClaimTaskDetail as $taskDetail) {
+                                                $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                                $taskDetail->invoiceDate = $invoice->invoiceDay;
+                                                $taskDetail->save();
+                                                foreach ($request->get('data')['ArrayData'] as $item) {
+                                                    $idUser = User::where('name', $item[0])->first()->id;
+                                                    if ($idUser) {
+                                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
+                                                        if ($taskDetail->userId == $idUser) {
+                                                            if ($checkRateDefault != $item[2]) {
+                                                                $taskDetail->professionalServicesRateBillValue = $item[2];
+                                                                $taskDetail->save();
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                }
-                                //Update details of users
-                                foreach ($request->get('data')['ArrayData'] as $item) {
-                                    $user = User::where('name', $item[0])->where('active', 1)->first();
-                                    if ($user) {
-                                        //Update rate of table professionalServices
-                                        $professionalServices = ProfessionalService::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
-                                        if ($professionalServices) {
-                                            $professionalServices->value = $item[4];
-                                            $professionalServices->rateChange = $item[2];
-                                            $professionalServices->save();
+                                        //Update details of users
+                                        foreach ($request->get('data')['ArrayData'] as $item) {
+                                            $user = User::where('name', $item[0])->where('active', 1)->first();
+                                            if ($user) {
+                                                //Update rate of table professionalServices
+                                                $professionalServices = ProfessionalService::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
+                                                if ($professionalServices) {
+                                                    $professionalServices->value = $item[4];
+                                                    $professionalServices->rateChange = $item[2];
+                                                    $professionalServices->save();
+                                                }
+                                                //Update table total
+                                                $total = Total::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
+                                                if ($total) {
+                                                    $total->value = $item[11];
+                                                    $total->save();
+                                                }
+                                            }
                                         }
-                                        //Update table total
-                                        $total = Total::where('billId', $request->get('data')['idBill'])->where('userId', $user->id)->first();
-                                        if ($total) {
-                                            $total->value = $item[11];
-                                            $total->save();
-                                        }
-                                    }
-                                }
-                                $data = array('Action' => 'Update', 'Error' => 'null');
+                                        $data = array('Action' => 'Update', 'Error' => 'null');
 
+                                    }
+                                }
+                                else
+                                {
+                                    //just only update total of bill when discount
+                                    $bill->total = $request->get('data')['Total'];
+                                    $bill->save();
+                                    $data = array('Action' => 'Update', 'Error' => 'null');
+                                }
                             }
                         }
-                        else
-                        {
-                            //just only update total of bill when discount
-                            $bill->total = $request->get('data')['Total'];
-                            $bill->save();
-                            $data = array('Action' => 'Update', 'Error' => 'null');
-                        }
                     }
-
                 }
+
             } catch (Exception $ex) {
                 return $ex;
             }
@@ -3281,9 +3294,20 @@ class AdminController extends Controller
                 ->first();
             if($task)
             {
-                $task->delete();
-                $data = 1;
-
+                //check claim closed
+                $claimClose = Claim::where('id',$task->claimId)->first();
+                if($claimClose)
+                {
+                    if($claimClose->statusId===3)
+                    {
+                        $data = 0;
+                    }
+                    else
+                    {
+                        $task->delete();
+                        $data = 1;
+                    }
+                }
             }
         }
         catch(Exception $ex)

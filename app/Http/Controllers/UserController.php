@@ -217,7 +217,7 @@ class UserController extends Controller
         $checkClaimClose = Claim::where('id', $request->get('taskObject')['ClaimId'])->first();
         if ($checkClaimClose) {
             //dd(typeOf($checkClaimClose->statusId));
-            if ($checkClaimClose->statusId == "3") {
+            if ($checkClaimClose->statusId === 3) {
                 $result = array('Action' => 'ErrorCloseClaim');
             } else {
                 $now = Carbon::now();

@@ -248,6 +248,14 @@
                         <input type="date" id="ChooseDate" name="ChooseDate" value="" style="display: inline-block">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h5 style="display: inline-block" class="text-right">Status:</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <label id="statusClaim" style="padding-top: 7px"></label>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-8">
                 <div class="row">
@@ -626,6 +634,15 @@
                         }, function (data) {
                             docketView.claimData = data;
                             if (data["Status"]==="Success") {
+                                //load status claim
+                                if(data["Claim"]["statusId"]===3)
+                                {
+                                    $("label[id=statusClaim]").text("Close").css("color","red");
+                                }
+                                else
+                                {
+                                    $("label[id=statusClaim]").text("Open").css("color","blue");
+                                }
                                 var dateTimeFromDate = data["Date"].split(" ");
                                 docketView.timeFrom = dateTimeFromDate[1]
                                 $("input[name=fromDate]").val(dateTimeFromDate[0]);
@@ -642,14 +659,9 @@
                                     $("tbody[id=tbodyDocket]").empty().append(view);
                                 });
                             }
-                            else if(data["Status"]==="notFoundClaim")
-                            {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Claim is not found!!!");
-                                $("div[id=modal-confirm]").modal("show");
-                            }
                             else
                             {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Claim has already closed!!!");
+                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Claim is not found!!!");
                                 $("div[id=modal-confirm]").modal("show");
                             }
 
@@ -786,9 +798,14 @@
                             $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not smaller than from date!!!");
                             $("div[id=modal-confirm]").modal("show");
                         }
-                        else
+                        else if(data["Action"] === "ErrorDateNow")
                         {
                             $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not larger than from current date !!!");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
+                        else
+                        {
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This claim has closed! Can't assign task or update!");
                             $("div[id=modal-confirm]").modal("show");
                         }
                     });
@@ -905,6 +922,8 @@
                     docketView.cancelAfterAddNew();
                     $("input[name=ExpenseAmount]").val("").prop("readOnly",false).css("background-color","");
                     $("tbody[id=tbodyDocket]").empty();
+                    // reset label status
+                    $("label[id=statusClaim]").text("");
 
                 },
                 cancelAfterAddNew:function()

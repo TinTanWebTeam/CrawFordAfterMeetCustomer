@@ -226,6 +226,14 @@
                             <input type="text" id="openDate" name="openDate" value="" style="display: inline-block;width: 600px;background-color: #E2D8D8" readonly>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5 style="display: inline-block" class="text-right">Status: </h5>
+                        </div>
+                        <div class="col-sm-10">
+                            <label id="statusClaim" style="padding-top: 7px"></label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -558,7 +566,14 @@
                             }
                             else
                             {
-
+                                if(data["Claim"]["statusId"]===3)
+                                {
+                                    $("label[id=statusClaim]").text("Close").css("color","red");
+                                }
+                                else
+                                {
+                                    $("label[id=statusClaim]").text("Open").css("color","blue");
+                                }
                                 taskView.checkDate = data["Date"];
                                 var openDateFR = data["Claim"]["openDate"].split(" ");
                                 var fromDateFR = data["Date"].split(" ");
@@ -736,7 +751,7 @@
                             {
                                 $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
                                 $("div[id=modalConfirm]").modal("show");
-                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
                                     $("tbody[id=tbodyDocket]").empty().append(view);
                                 });
                                 taskView.cancel();
@@ -757,7 +772,7 @@
                             {
                                 $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
                                 $("div[id=modalConfirm]").modal("show");
-                                $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
                                     $("tbody[id=tbodyDocket]").empty().append(view);
                                 });
                                 taskView.cancel();
@@ -989,6 +1004,15 @@
                         }
                         else
                         {
+                            //check status close claim
+                            if(data["Claim"]["statusId"]===3)
+                            {
+                                $("label[id=statusClaim]").text("Close").css("color","red");
+                            }
+                            else
+                            {
+                                $("label[id=statusClaim]").text("Open").css("color","blue");
+                            }
                             taskView.checkDate = data["Date"];
                             var openDateFR = data["Claim"]["openDate"].split(" ");
                             var fromDateFR = data["Date"].split(" ");
@@ -1061,7 +1085,7 @@
                             $("div[id=modalDelete]").modal("hide");
                             $("div[id=modalConfirm]").find("div[id=modalContent]").text("Delete Success");
                             $("div[id=modalConfirm]").modal("show");
-                            $.post(url+"user/loadViewDocketDetail",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                            $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
                                 $("tbody[id=tbodyDocket]").empty().append(view);
                             });
                             taskView.idTaskDelete = null;

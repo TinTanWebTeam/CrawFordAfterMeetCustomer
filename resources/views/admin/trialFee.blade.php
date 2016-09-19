@@ -516,7 +516,8 @@
                                     var theadList = $("thead[id=theadTableListTaskDetail]");
                                     trialFeeView.clearTable();
                                     trialFeeView.loadTableGL();
-                                    for (var i = 0; i < data["listClaimTaskDetail"].length; i++) {
+                                    for (var i = 0; i < data["listClaimTaskDetail"].length; i++)
+                                    {
                                         //Insert data to thead of table
                                         theadList.find("tr:eq(1)").append("<th style='text-align: center'>" + data["listClaimTaskDetail"][i]["Time"]["Name"] + "</th>");
                                         //Insert data to tbody of table
@@ -819,10 +820,16 @@
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("ToDate is  not smaller than FromDate!!!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
-                                else if(data["Error"]=="InvoiceMajorNoSame")
+                                else if(data["Error"]==="InvoiceMajorNoSame")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoice has exist!!!");
+                                    $("div[id=modalNotification]").modal("show");
+                                }
+                                else if(data["Error"]==="ClaimClose")
+                                {
+                                    $("div[id=modalConfirm]").modal("hide");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This claim has closed!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                                 else
