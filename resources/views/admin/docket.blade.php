@@ -618,9 +618,9 @@
                 //sds
                 convertStringToDate: function (date) {
                     var currentDate = new Date(date);
-                    var datetime = currentDate.getFullYear() + "-"
+                    var datetime = ("0" + currentDate.getDate()).slice(-2) + "-"
                             + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
-                            + ("0" + currentDate.getDate()).slice(-2);
+                            + currentDate.getFullYear();
                     return datetime;
                 },
                 firstToUpperCase: function (str) {
@@ -644,11 +644,12 @@
                                     $("label[id=statusClaim]").text("Open").css("color","blue");
                                 }
                                 var dateTimeFromDate = data["Date"].split(" ");
-                                docketView.timeFrom = dateTimeFromDate[1]
+                                var dateTimeLossDate = data["Claim"]["lossDate"].split(" ");
+                                docketView.timeFrom = dateTimeFromDate[1];
                                 $("input[name=fromDate]").val(dateTimeFromDate[0]);
                                 $("input[name=ClaimId]").val(data["Claim"]["id"]);
                                 $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"] + " " + data["Claim"]["insuredLastName"]);
-                                $("input[name=LossDate]").val(data["Claim"]["lossDate"]);
+                                $("input[name=LossDate]").val(docketView.convertStringToDate(dateTimeLossDate[0]));
                                 $("input[name=LossLocation]").val(data["Claim"]["lossLocation"]);
                                 docketView.taskObject.ClaimId = data["Claim"]["id"];
                                 //Insert to table docket
