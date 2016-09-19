@@ -634,6 +634,8 @@
                 },
                 viewDetailTask:function(element)
                 {
+
+                    $("input[name=UserCode]").empty().val($(element).parent().parent().find("td:eq(2)").text()).css("text-transform","lowercase");
                     $("button[name=actionAttackTask]").text("Update");
                     $("input[name=Action]").val("0");
                     $.post(url+"user/viewDetailTask",{_token:_token,idDocket:$(element).attr("id")},function(data){

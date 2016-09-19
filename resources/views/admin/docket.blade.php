@@ -676,16 +676,19 @@
                     $.post(url + "viewDetailTask", {_token: _token, idDocket: $(element).attr("id")}, function (data) {
                         console.log(data);
                         //Binding data
-                        $("input[name=IdTask]").val(data["Task"]["id"]);
-                        $("#UserId").val($(element).find("td:eq(2)").text());
-                        $("#ExpenseCode").val(data["expenseCode"]);
-                        $("#ProfessionalServicesCode").val(data["professionalCode"]);
-                        $("#ExpenseCode").val(data["expenseCode"]);
+
                         for (var propertyName in data["Task"]) {
                             if (propertyName !== "userId") {
                                 $("#" + docketView.firstToUpperCase(propertyName)).val(data["Task"][propertyName]);
                             }
                         }
+                        $("input[name=IdTask]").val(data["Task"]["id"]);
+                        $("#UserId").val($(element).parent().parent().find("td:eq(2)").text()).css("text-transform","lowercase");
+                        $("#ExpenseCode").val(data["expenseCode"]);
+                        $("#ProfessionalServicesCode").val(data["professionalCode"]);
+                        $("#ProfessionalServices").val(data["professionalCode"]);
+                        $("#Expense").val(data["expenseCode"]);
+
                         $("input#ProfessionalServicesAmount").formatCurrency({roundToDecimalPlace:0});
                         $("input#ProfessionalServicesRate").formatCurrency({roundToDecimalPlace:0});
                         $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
