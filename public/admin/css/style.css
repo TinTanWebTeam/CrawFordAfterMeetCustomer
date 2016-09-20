@@ -124,7 +124,6 @@ form#trialFee h5{
 }
 .page{
     box-sizing: border-box;
-    margin-top: 10px;
     background-color: white;
     width: 1654px;
     height: 2339px;
@@ -582,8 +581,8 @@ form#trialFee h5{
 }
 
 .logo-img{
-    padding-top: 30px;
-    width: 350px;
+    padding-top: 0px;
+    width: 250px;
 }
 .claim-report{
     box-sizing: border-box;
