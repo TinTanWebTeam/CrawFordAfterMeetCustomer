@@ -3344,7 +3344,6 @@ class AdminController extends Controller
                 $invoice->nameBank = $request->get('bankName');
                 $invoice->exchangeRate = $request->get('exchangeRate');
                 $invoice->dateExchangeRate = $request->get('date')." ".Carbon::parse(Carbon::now())->format('H:i:s');
-                $invoice->addressBank = $request->get('addressBank');
                 $invoice->save();
                 $data = 1;
             }

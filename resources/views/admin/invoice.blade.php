@@ -419,15 +419,7 @@
         <input type="text" name="bankName" class="form-control" style="width: 40%" onchange="invoiceView.fillBankNameToReport(this)">
     </div>
 </div>
-<br>
-<div class="row">
-    <div class="col-sm-2">
-        <h5 style="padding-left: 70px">Address</h5>
-    </div>
-    <div class="col-sm-5">
-        <input type="text" name="bankAddress" class="form-control" style="width: 40%" onchange="invoiceView.fillBankAddressToReport(this)">
-    </div>
-</div>
+
 <br>
 <div class="row">
     <div class="col-sm-2">
@@ -636,7 +628,7 @@
                     <h4>Payment term: within 30 days</h4>
                 </div>
                 <div style="width: 1150px;border: 1px solid black;margin-top: 200px;padding: 0 10px">
-                    <h5>Payment may be made by Direct Credit or Telegraphic Transfer to our account at <span id="bankName"></span> <div style="display: inline-block;text-decoration: underline">within 30 days</div> as follows:</h5>
+                    <h5>Payment may be made by Direct Credit or Telegraphic Transfer to our account at Vietcombank <div style="display: inline-block;text-decoration: underline">within 30 days</div> as follows:</h5>
                     <div style="width: 100%">
                         <div style="width: 15%;display: inline-block">
                             <h5 style="margin-top: 0px;margin-bottom: 0px">Direct Banking</h5>
@@ -645,7 +637,7 @@
                             <h5 style="margin-top: 0px;margin-bottom: 0px">Bank name</h5>
                         </div>
                         <div style="width: 60%;display: inline-block">
-                            <h5 style="margin-top: 0px;margin-bottom: 0px" id="bankName"></h5>
+                            <h5 style="margin-top: 0px;margin-bottom: 0px">Vietcombank - Ben Thanh Branch</h5>
                         </div>
                     </div>
                     <div style="width: 100%">
@@ -656,7 +648,7 @@
 
                         </div>
                         <div style="width: 60%;display: inline-block">
-                            <h5 style="margin-top: 0px;margin-bottom: 0px" id="addressBank"></h5>
+                            <h5 style="margin-top: 0px;margin-bottom: 0px">69 Bui Thi Xuan, Pham Ngu Lao Ward, District 1, Ho Chi Minh City</h5>
                         </div>
                     </div>
                     <div style="width: 100%">
@@ -809,7 +801,6 @@
                         $("input[name=CoClaim]").val();
                         //load information bank and exchangeRate
                         $("input[name=bankName]").val(data[0][0]["nameBank"]);
-                        $("input[name=bankAddress]").val(data[0][0]["addressBank"]);
                         $("input[name=exchangeRate]").val(data[0][0]["exchangeRate"]).formatCurrency({roundToDecimalPlace:0});
                         if(data[0][0]["dateExchangeRate"]!==null)
                         {
@@ -850,11 +841,6 @@
                         if($("input[name=bankName]").val()!=="")
                         {
                             $("span[id=bankName]").text($("input[name=bankName]").val());
-                            $("h5[id=bankName]").text($("input[name=bankName]").val());
-                        }
-                        if($("input[name=bankAddress]").val()!=="")
-                        {
-                            $("h5[id=addressBank]").text($("input[name=bankAddress]").val());
                         }
                         if($("input[name=exchangeRate]").val()!=="")
                         {
@@ -925,10 +911,6 @@
                     $("span[id=bankName]").text($(element).val());
                     $("h5[id=bankName]").text($(element).val());
                 },
-                fillBankAddressToReport:function(element)
-                {
-                    $("h5[id=addressBank]").text($(element).val());
-                }
 
 
             };
@@ -939,7 +921,7 @@
     })
     function print_invoice_page() {
             //Save to serve information
-            $.post(url+"saveInformationOfInvoiceAfterInReport",{_token:_token,bankName:$("input[name=bankName]").val(),addressBank:$("input[name=bankAddress]").val(),exchangeRate:$("input[name=exchangeRate]").val().replace(/,/g,""),date:$("input[name=dateExchange]").val(),invoice:$("input[name=Invoice]").val()},function(data){
+            $.post(url+"saveInformationOfInvoiceAfterInReport",{_token:_token,bankName:$("input[name=bankName]").val(),exchangeRate:$("input[name=exchangeRate]").val().replace(/,/g,""),date:$("input[name=dateExchange]").val(),invoice:$("input[name=Invoice]").val()},function(data){
             });
             $("#invoice_print_page").show();
             $("#invoice_print_page").printThis({
