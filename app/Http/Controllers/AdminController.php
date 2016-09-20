@@ -330,7 +330,8 @@ class AdminController extends Controller
                             ->where('claim_task_details.claimId', '=', $claim->id)
                             ->where('claim_task_details.billDate', '>', $date)
                             ->groupBy('users.name')
-                            ->groupBy('claim_task_details.expense')
+//                            ->groupBy('claim_task_details.expense')
+                            ->groupBy('task_categories.name')
                             ->select(
                                 'users.name as Name',
                                 DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
