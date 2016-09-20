@@ -248,7 +248,15 @@
                                     row += "<td></td>";
                                 }
 
-                                row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + "</td>";
+                                if(data["ListData"][i]["ExpenseAmount"]!==null)
+                                {
+                                    row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + "</td>";
+
+                                }
+                                else
+                                {
+                                    row += "<td></td>";
+                                }
                                 if (data["ListData"][i]["Invoice"] !== null) {
                                     row += "<td>" + data["ListData"][i]["Invoice"] + "</td>";
 

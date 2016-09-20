@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('getTimeNowServer','AdminController@getTimeNowServer');
     //Route::post('getAllInvoiceByClaim','AdminController@getAllInvoiceByClaim');
     Route::post('deleteTask','AdminController@deleteTask');
+    Route::post('saveInformationOfInvoiceAfterInReport','AdminController@saveInformationOfInvoiceAfterInReport');
 });
 
 /*

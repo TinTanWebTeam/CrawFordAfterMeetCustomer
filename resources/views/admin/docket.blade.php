@@ -966,7 +966,9 @@
                 },
                 loadListExpense: function () {
                     $("div[id=modal-expense]").modal("show");
+                    $("select#selectTypeExpense").val($("select#selectTypeExpense option:eq(0)").val());
                     docketView.loadListExpenseByType($("select#selectTypeExpense option:eq(0)").val());
+
 
                 },
                 loadListExpenseByType:function(typeExpense)
@@ -1138,14 +1140,10 @@
                 $("div[id=modal-confirm]").modal("show");
                 $inputTime.val("");
                 $("input#ProfessionalServices").val("");
-            } else if (data === "2") {
-                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
-                $("div[id=modal-confirm]").modal("show");
-                $inputTime.val("");
-                $("input#ProfessionalServices").val("");
-            } else {
-                $inputTime.val(data[0]["code"]);
-                $("input#ProfessionalServices").val(data[0]["code"])
+            }
+            else {
+                $inputTime.val(data["code"]);
+                $("input#ProfessionalServices").val(data["code"])
             }
         });
     }
@@ -1177,14 +1175,10 @@
                 $("div[id=modal-confirm]").modal("show");
                 $inputExpense.val("");
                 $("input#Expense").val("");
-            } else if (data === "2") {
-                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Sorry!!!Not found this task!Please choose other one");
-                $("div[id=modal-confirm]").modal("show");
-                $inputExpense.val("");
-                $("input#Expense").val("");
-            } else {
-                $inputExpense.val(data[0]["code"]);
-                $("input#Expense").val(data[0]["code"]);
+            }
+             else {
+                $inputExpense.val(data["code"]);
+                $("input#Expense").val(data["code"]);
             }
         });
     }

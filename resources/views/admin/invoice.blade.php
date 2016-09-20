@@ -413,6 +413,24 @@
 
 <div class="row">
     <div class="col-sm-2">
+        <h5 style="padding-left: 70px">Bank name</h5>
+    </div>
+    <div class="col-sm-5">
+        <input type="text" name="bankName" class="form-control" style="width: 40%" onchange="invoiceView.fillBankNameToReport(this)">
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-2">
+        <h5 style="padding-left: 70px">Address</h5>
+    </div>
+    <div class="col-sm-5">
+        <input type="text" name="bankAddress" class="form-control" style="width: 40%" onchange="invoiceView.fillBankAddressToReport(this)">
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-2">
         <h5 style="padding-left: 70px">Exchange rate</h5>
     </div>
     <div class="col-sm-5">
@@ -453,13 +471,13 @@
                 <h3>FEE STATEMENT</h3>
             </div>
             <div style="width: 1150px;display: block">
-                <h4>No: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline-block;">7016</div></h4>
-                <h4>15 August, 2016</h4>
+                <h4>No: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline-block;" id="NoFee"></div></h4>
+                <h4 id="dateFee">15 August, 2016</h4>
             </div>
             <div style="width: 1150px;display: block;height: 84px">
                 <div style="width: 50%;display: inline-block;box-sizing: border-box">
                     <h4 style="font-weight: 600">GROUPAMA VIETNAM GENERAL INSURANCE</h4>
-                    <h4>Petronas Tower, 6th Floor, 235 Nguyen Van Cu,<br>Nguyen Cu Trinh Ward, District 1, Ho Chi Minh City</h4>
+                    <h4 id="lossLocationClaim"></h4>
                 </div>
                 <div style="width: 48%;display: inline-block;box-sizing: border-box">
                     <h4>Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mr. Nguyen Xuan Phuong</h4>
@@ -475,8 +493,8 @@
                     <h4 style="margin-bottom: 0px">Loss Description:</h4>
                 </div>
                 <div style="display: inline-block;width: 73%;box-sizing: border-box">
-                    <h4>An Phat Computing Trading and Service Co., Ltd</h4>
-                    <h4 style="margin-bottom: 0px">Water damage to electric machinery/equipment</h4>
+                    <h4 id="insuredClaim"></h4>
+                    <h4 id="lossDescClaim" style="margin-bottom: 0px"></h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
                     <h4>Your Claim No:</h4>
@@ -484,7 +502,7 @@
                 </div>
                 <div style="display: inline-block;width: 34%;box-sizing: border-box">
                     <h4 style="margin-top: 0px">Not advised</h4>
-                    <h4>PDAR1500085</h4>
+                    <h4 id="policyClaim"></h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
                     <h4 style="margin-top: 0px">VIA Ref:</h4>
@@ -492,7 +510,7 @@
                 </div>
                 <div style="display: inline-block;width: 25%;box-sizing: border-box">
                     <h4 style="margin-top: 0px">1001685</h4>
-                    <h4>22 September, 2015</h4>
+                    <h4 id="lossDateClaim"></h4>
                 </div>
             </div>
             <br>
@@ -566,13 +584,14 @@
                         <h4 style="font-weight: 600">TOTAL (Excluding VAT)</h4>
                     </div>
                     <div style="width: 12%;display: inline-block">
+                        <h4 id="total_ExcludingVAT_USD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
 
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
                     <div style="width: 12%;display: inline-block">
-
+                        <h4 id="total_ExcludingVAT_VND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
                 <div style="width: 1150px;">
@@ -580,13 +599,13 @@
                         <h4 style="font-weight: 600">VAT@10%</h4>
                     </div>
                     <div style="width: 12%;display: inline-block">
-
+                        <h4 id="total_Vat_USD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
                     <div style="width: 12%;display: inline-block">
-
+                        <h4 id="total_Vat_VND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
                 <br>
@@ -611,13 +630,13 @@
                 </div>
                 <br>
                 <div style="width: 1150px;">
-                    <h4>Exchange rate of Vietcombank on
+                    <h4>Exchange rate of <span id="bankName"></span>&nbsp;&nbsp;on
                         <div style="display: inline-block;" id="dateExchangeRate">15/8/2016</div> USD/VND: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="exchangeRateInvoice">22,260</span>
                     </h4>
                     <h4>Payment term: within 30 days</h4>
                 </div>
                 <div style="width: 1150px;border: 1px solid black;margin-top: 200px;padding: 0 10px">
-                    <h5>Payment may be made by Direct Credit or Telegraphic Transfer to our account at Vietcombank <div style="display: inline-block;text-decoration: underline">within 30 days</div> as follows:</h5>
+                    <h5>Payment may be made by Direct Credit or Telegraphic Transfer to our account at <span id="bankName"></span> <div style="display: inline-block;text-decoration: underline">within 30 days</div> as follows:</h5>
                     <div style="width: 100%">
                         <div style="width: 15%;display: inline-block">
                             <h5 style="margin-top: 0px;margin-bottom: 0px">Direct Banking</h5>
@@ -626,7 +645,7 @@
                             <h5 style="margin-top: 0px;margin-bottom: 0px">Bank name</h5>
                         </div>
                         <div style="width: 60%;display: inline-block">
-                            <h5 style="margin-top: 0px;margin-bottom: 0px">Vietcombank - Ben Thanh Branch</h5>
+                            <h5 style="margin-top: 0px;margin-bottom: 0px" id="bankName"></h5>
                         </div>
                     </div>
                     <div style="width: 100%">
@@ -637,7 +656,7 @@
 
                         </div>
                         <div style="width: 60%;display: inline-block">
-                            <h5 style="margin-top: 0px;margin-bottom: 0px">69 Bui Thi Xuan, Pham Ngu Lao Ward, District 1, Ho Chi Minh City</h5>
+                            <h5 style="margin-top: 0px;margin-bottom: 0px" id="addressBank"></h5>
                         </div>
                     </div>
                     <div style="width: 100%">
@@ -788,6 +807,19 @@
                         $("input[name=InsuredName]").val(data[0][0]["insuredLastName"]);
                         $("input[name=Policy]").val(data[0][0]["policy"]);
                         $("input[name=CoClaim]").val();
+                        //load information bank and exchangeRate
+                        $("input[name=bankName]").val(data[0][0]["nameBank"]);
+                        $("input[name=bankAddress]").val(data[0][0]["addressBank"]);
+                        $("input[name=exchangeRate]").val(data[0][0]["exchangeRate"]).formatCurrency({roundToDecimalPlace:0});
+                        if(data[0][0]["dateExchangeRate"]!==null)
+                        {
+                            var dateRate = data[0][0]["dateExchangeRate"].split(" ");
+                            $("input[name=dateExchange]").val(dateRate[0]);
+                        }
+                        else
+                        {
+                            $("input[name=dateExchange]").val("");
+                        }
                         //Information of bill
                         $("input[name=Professional]").val(data[1][0]["professionalServices"]);
                         $("input[name=GeneralExp]").val(data[2][0]["generalExp"]);
@@ -797,10 +829,54 @@
                         $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
                         $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
                         invoiceView.formatCurrencyInput();
+
+                        //load information of report
+                        $("div[id=NoFee]").text($(element).find("td:eq(0)").text());
+                        $("h4[id=dateFee]").text($(element).find("td:eq(1)").text());
+                        $("h4[id=insuredClaim]").text(data[0][0]["insuredFirstName"] +" "+ data[0][0]["insuredLastName"]);
+                        $("h4[id=lossDescClaim]").text(data[0][0]["descriptionLossDesc"]);
+                        $("h4[id=policyClaim]").text(data[0][0]["policy"]);
+                        $("h4[id=lossDateClaim]").text(invoiceView.convertStringToDate((data[0][0]["lossDate"].split(" "))[0]));
+                        $("h4[id=lossLocationClaim]").text(data[0][0]["lossLocation"]);
                         //load report invoice
                         $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
-                        $("h4[id=expenseVND]").text($("input[name=GeneralExp]").val());
+                        $("h4[id=expenseVND]").text((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,"")))).formatCurrency({roundToDecimalPlace:0});
+                        //load total excludingVAT VND
+                        $("h4[id=total_ExcludingVAT_VND]").text(Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,""))).formatCurrency({roundToDecimalPlace:0});
+                        //load total VAT VND
+                        $("h4[id=total_Vat_VND]").text(Math.round(Number($("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
 
+                        //USD when in report
+                        if($("input[name=bankName]").val()!=="")
+                        {
+                            $("span[id=bankName]").text($("input[name=bankName]").val());
+                            $("h5[id=bankName]").text($("input[name=bankName]").val());
+                        }
+                        if($("input[name=bankAddress]").val()!=="")
+                        {
+                            $("h5[id=addressBank]").text($("input[name=bankAddress]").val());
+                        }
+                        if($("input[name=exchangeRate]").val()!=="")
+                        {
+                            $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
+                            $("h4[id=professionFeeUSD]").text(parseInt(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
+                            $("h4[id=expenseUSD]").text(Math.round(parseInt($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
+                            $("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")));
+                            $("h4[id=total_Vat_USD]").text(Math.round(Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
+                            $("h4[id=totalUSD]").text(parseInt((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1));
+                            $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+
+                            //format USD $
+                            $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
+                            $("h4[id=expenseUSD]").text("$"+$("h4[id=expenseUSD]").text());
+                            $("h4[id=total_ExcludingVAT_USD]").text("$"+$("h4[id=total_ExcludingVAT_USD]").text());
+                            $("h4[id=total_Vat_USD]").text("$"+$("h4[id=total_Vat_USD]").text());
+                            $("h4[id=totalUSD]").text("$"+$("h4[id=totalUSD]").text());
+                        }
+                        if($("input[name=dateExchange]").val()!=="")
+                        {
+                            $("div[id=dateExchangeRate]").text(invoiceView.convertStringToDate($("input[name=dateExchange]").val()));
+                        }
 
                     });
                 },
@@ -816,20 +892,42 @@
                 },
                 formatCurrencyExchangeRate:function()
                 {
+                    var expense = ((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,""))));
                     $("input[name=exchangeRate]").formatCurrency({roundToDecimalPlace:0});
                     $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
                     //change VND->USD
                     $("h4[id=professionFeeUSD]").text(parseInt(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
-                    $("h4[id=expenseUSD]").text(parseInt(($("input[name=GeneralExp]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
+                    $("h4[id=expenseUSD]").text(Math.round(parseInt(String(expense))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
                     //total
                     $("h4[id=totalUSD]").text(parseInt((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1));
                     $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+                    //load total excluding VAT
+                    $("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")));
+                    //load total VAT
+                    $("h4[id=total_Vat_USD]").text(Math.round(Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
+
+                    //format USD $
+                    $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
+                    $("h4[id=expenseUSD]").text("$"+$("h4[id=expenseUSD]").text());
+                    $("h4[id=total_ExcludingVAT_USD]").text("$"+$("h4[id=total_ExcludingVAT_USD]").text());
+                    $("h4[id=total_Vat_USD]").text("$"+$("h4[id=total_Vat_USD]").text());
+                    $("h4[id=totalUSD]").text("$"+$("h4[id=totalUSD]").text());
+
 
                 },
                 fillDateToInvoice:function(element)
                 {
 
                     $("div[id=dateExchangeRate]").text(invoiceView.convertStringToDate($(element).val()));
+                },
+                fillBankNameToReport:function(element)
+                {
+                    $("span[id=bankName]").text($(element).val());
+                    $("h5[id=bankName]").text($(element).val());
+                },
+                fillBankAddressToReport:function(element)
+                {
+                    $("h5[id=addressBank]").text($(element).val());
                 }
 
 
@@ -840,17 +938,21 @@
         }
     })
     function print_invoice_page() {
-        $("#invoice_print_page").show();
-        $("#invoice_print_page").printThis({
-            debug: false,
-            importCSS: true,
-            importStyle: false,
-            loadCSS: "admin/css/style.css",
-            removeInline: false,
-            printDelay: 2000,
-            header: null,
-            formValues: true
-        });
+            //Save to serve information
+            $.post(url+"saveInformationOfInvoiceAfterInReport",{_token:_token,bankName:$("input[name=bankName]").val(),addressBank:$("input[name=bankAddress]").val(),exchangeRate:$("input[name=exchangeRate]").val().replace(/,/g,""),date:$("input[name=dateExchange]").val(),invoice:$("input[name=Invoice]").val()},function(data){
+            });
+            $("#invoice_print_page").show();
+            $("#invoice_print_page").printThis({
+                debug: false,
+                importCSS: true,
+                importStyle: false,
+                loadCSS: "admin/css/style.css",
+                removeInline: false,
+                printDelay: 2000,
+                header: null,
+                formValues: true
+            });
+
     }
     function show_invoice_page(){
         $("#invoice_print_page").toggle();

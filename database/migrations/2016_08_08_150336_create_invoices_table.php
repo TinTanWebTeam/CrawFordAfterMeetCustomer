@@ -19,6 +19,10 @@ class CreateInvoicesTable extends Migration
             $table->integer('invoiceMajorNo')->nullable();
             $table->integer('invoiceTempNo')->nullable();
             $table->string('corInsurer',500);//sdsd
+            $table->string('nameBank',500)->nullable();
+            $table->string('addressBank',500)->nullable();
+            $table->decimal('exchangeRate',18,0)->nullable();
+            $table->dateTime('dateExchangeRate')->nullable();
             $table->timestamps();
         });
     }

@@ -174,14 +174,32 @@
                                 else {
                                     row += "<td></td>";
                                 }
-                                row += "<td>" + data["ListData"][i]["Unit"] + "</td>";
+
+                                if(data["ListData"][i]["Unit"]!==null)
+                                {
+                                    row += "<td>" + data["ListData"][i]["Unit"] + "</td>";
+                                }
+                                else
+                                {
+                                    row += "<td></td>";
+                                }
+
                                 if (data["ListData"][i]["ExpenseCode"] !== null) {
                                     row += "<td style='text-align: center'>" + data["ListData"][i]["ExpenseCode"] + "</td>";
                                 }
                                 else {
                                     row += "<td></td>";
                                 }
-                                row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + "</td>";
+
+                                if(data["ListData"][i]["ExpenseAmount"]!==null)
+                                {
+                                    row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + "</td>";
+
+                                }
+                                else
+                                {
+                                    row += "<td></td>";
+                                }
                                 if (data["ListData"][i]["Invoice"] !== null) {
                                     row += "<td>" + data["ListData"][i]["Invoice"] + "</td>";
 

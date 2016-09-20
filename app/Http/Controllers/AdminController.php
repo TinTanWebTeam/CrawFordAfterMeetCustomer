@@ -935,6 +935,8 @@ class AdminController extends Controller
 
                         $timePolicyExpiryDateNow = Carbon::now();
                         $claim->policyExpiryDate = $request->get("claim")['policyExpiryDate'] . " " . $timePolicyExpiryDateNow->hour . ":" . $timePolicyExpiryDateNow->minute . ":" . $timePolicyExpiryDateNow->second;
+
+                        $claim->contact = $request->get("claim")['contact'];
                         if ($request->get('claim')['closeDate'] != null)//insert close date when have value closeDate
                         {
                             $checkDate = null;
@@ -1085,6 +1087,7 @@ class AdminController extends Controller
                 ->join('claim_task_details', 'bills.billId', '=', 'claim_task_details.id')
                 ->join('task_categories', 'claim_task_details.professionalServices', '=', 'task_categories.id')
                 ->join('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                ->join('type_of_damages','claims.lossDescCode','=','type_of_damages.code')
                 ->where('invoices.invoiceMajorNo', $request->get('key'))
                 ->orWhere('invoices.invoiceTempNo',$request->get('key'))
                 ->select(
@@ -1098,7 +1101,14 @@ class AdminController extends Controller
                     'claims.insuredLastName as insuredLastName',
                     'claims.lossDescCode as lossDesc',
                     'claims.branchCode as branchId',
-                    'claims.policy as policy'
+                    'claims.policy as policy',
+                    'claims.lossDate as lossDate',
+                    'type_of_damages.description as descriptionLossDesc',
+                    'claims.lossLocation as lossLocation',
+                    'invoices.nameBank as nameBank',
+                    'invoices.exchangeRate as exchangeRate',
+                    'invoices.dateExchangeRate as dateExchangeRate',
+                    'invoices.addressBank as addressBank'
                 )->get();
             array_push($resultArray, $query1);
             $professionalService = DB::table('invoices')
@@ -3003,13 +3013,14 @@ class AdminController extends Controller
     {
         try {
             $time = TaskCategory::where('name', 'TimeCode')
-                ->where('code', 'LIKE', '%' . $request->get('Code') . '%')->get();
-            if (count($time) == 0) {
-                return 0;
-            } else if (count($time) > 1) {
-                return 2;
-            } else if (count($time) == 1) {
+                ->where('code',$request->get('Code'))->first();
+            if($time)
+            {
                 return $time;
+            }
+            else
+            {
+                return 0;
             }
         } catch (Exception $ex) {
             return $ex;
@@ -3020,13 +3031,14 @@ class AdminController extends Controller
     {
         try {
             $expense = TaskCategory::where('name', '!=', 'TimeCode')->where('name', '!=', 'IB')->where('name', '!=', 'FB')
-                ->where('code', 'LIKE', '%' . $request->get('Code') . '%')->get();
-            if (count($expense) == 0) {
-                return 0;
-            } else if (count($expense) > 1) {
-                return 2;
-            } else if (count($expense) == 1) {
+                ->where('code',$request->get('Code'))->first();
+            if($expense)
+            {
                 return $expense;
+            }
+            else
+            {
+                return 0;
             }
         } catch (Exception $ex) {
             return $ex;
@@ -3312,6 +3324,33 @@ class AdminController extends Controller
                         $data = 1;
                     }
                 }
+            }
+        }
+        catch(Exception $ex)
+        {
+            return $ex;
+        }
+        return $data;
+    }
+
+    public function saveInformationOfInvoiceAfterInReport(Request $request)
+    {
+        $data =0;
+        try
+        {
+            $invoice = Invoice::where('invoiceMajorNo',$request->get('invoice'))->first();
+            if($invoice)
+            {
+                $invoice->nameBank = $request->get('bankName');
+                $invoice->exchangeRate = $request->get('exchangeRate');
+                $invoice->dateExchangeRate = $request->get('date')." ".Carbon::parse(Carbon::now())->format('H:i:s');
+                $invoice->addressBank = $request->get('addressBank');
+                $invoice->save();
+                $data = 1;
+            }
+            else
+            {
+                $data = 2;
             }
         }
         catch(Exception $ex)

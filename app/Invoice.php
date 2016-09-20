@@ -10,5 +10,12 @@ class Invoice extends Model
     protected $fillable = [
         'idBill',
         'invoiceDay',
+        'invoiceMajorNo',
+        'invoiceTempNo',
+        'corInsurer',
+        'nameBank',
+        'exchangeRate',
+        'dateExchangeRate',
+        'addressBank'
     ];
 }

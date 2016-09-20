@@ -606,18 +606,14 @@ class UserController extends Controller
         try
         {
             $time = TaskCategory::where('name','TimeCode')
-                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
-            if(count( $time)==0)
-            {
-                return 0;
-            }
-            else if(count($time)>1)
-            {
-                return 2;
-            }
-            else if(count($time)==1)
+                ->where('code',$request->get('Code'))->first();
+            if($time)
             {
                 return $time;
+            }
+            else
+            {
+                return 0;
             }
         }
         catch(Exception $ex)
@@ -631,18 +627,14 @@ class UserController extends Controller
         try
         {
             $expense = TaskCategory::where('name','!=','TimeCode')->where('name','!=','IB')->where('name','!=','FB')
-                ->where('code','LIKE','%'.$request->get('Code').'%')->get();
-            if(count( $expense)==0)
-            {
-                return 0;
-            }
-            else if(count($expense)>1)
-            {
-                return 2;
-            }
-            else if(count($expense)==1)
+                ->where('code',$request->get('Code'))->first();
+            if($expense)
             {
                 return $expense;
+            }
+            else
+            {
+                return 0;
             }
         }
         catch(Exception $ex)

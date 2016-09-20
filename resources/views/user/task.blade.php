@@ -959,6 +959,7 @@
                 },
                 showModelListTaskExpense:function()
                 {
+                    $("select#selectTypeExpense").val($("select#selectTypeExpense option:eq(0)").val());
                     taskView.loadExpenseCodeByType($("select#selectTypeExpense option:eq(0)").val());
                     $("div[id=modalListTaskCaterogyExpense]").modal("show");
                 },
@@ -1168,14 +1169,10 @@
                 $("div[id=modalConfirm]").modal("show");
                 $inputTime.val("");
                 $("input#ProfessionalServices").val("");
-            } else if (data === "2") {
-                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
-                $("div[id=modalConfirm]").modal("show");
-                $inputTime.val("");
-                $("input#ProfessionalServices").val("");
-            } else {
-                $inputTime.val(data[0]["code"]);
-                $("input#ProfessionalServices").val(data[0]["code"])
+            }
+            else {
+                $inputTime.val(data["code"]);
+                $("input#ProfessionalServices").val(data["code"]);
             }
         });
     }
@@ -1207,14 +1204,10 @@
                 $("div[id=modalConfirm]").modal("show");
                 $inputExpense.val("");
                 $("input#Expense").val("");
-            } else if (data === "2") {
-                $("div[id=modalConfirm]").find("div[class=modal-body]").empty().text("Sorry!!!Not found this task!Please choose other one");
-                $("div[id=modalConfirm]").modal("show");
-                $inputExpense.val("");
-                $("input#Expense").val("");
-            } else {
-                $inputExpense.val(data[0]["code"]);
-                $("input#Expense").val(data[0]["code"]);
+            }
+            else {
+                $inputExpense.val(data["code"]);
+                $("input#Expense").val(data["code"]);
             }
         });
     }
