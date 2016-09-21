@@ -468,11 +468,11 @@
             </div>
             <div style="width: 1150px;display: block;height: 84px">
                 <div style="width: 50%;display: inline-block;box-sizing: border-box">
-                    <h4 style="font-weight: 600">GROUPAMA VIETNAM GENERAL INSURANCE</h4>
-                    <h4 id="lossLocationClaim"></h4>
+                    <h4 style="font-weight: 600" id=nameCustomer></h4>
+                    <h4 id="addressCustomer"></h4>
                 </div>
                 <div style="width: 48%;display: inline-block;box-sizing: border-box">
-                    <h4>Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mr. Nguyen Xuan Phuong</h4>
+                    <h4>Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id=contactName></span></h4>
                 </div>
             </div>
             <br>
@@ -575,14 +575,14 @@
                     <div style="width: 60%;display: inline-block">
                         <h4 style="font-weight: 600">TOTAL (Excluding VAT)</h4>
                     </div>
-                    <div style="width: 12%;display: inline-block">
+                    <div style="width: 12%;display: inline-block;border-top: 2px solid">
                         <h4 id="total_ExcludingVAT_USD" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
 
                     </div>
                     <div style="width: 13%;display: inline-block">
 
                     </div>
-                    <div style="width: 12%;display: inline-block">
+                    <div style="width: 12%;display: inline-block;border-top: 2px solid">
                         <h4 id="total_ExcludingVAT_VND" style="font-weight: 600;text-align: right;padding-right: 30px"></h4>
                     </div>
                 </div>
@@ -822,13 +822,15 @@
                         invoiceView.formatCurrencyInput();
 
                         //load information of report
+                        $("span[id=contactName]").text(data[0][0]["contactName"]);
                         $("div[id=NoFee]").text($(element).find("td:eq(0)").text());
                         $("h4[id=dateFee]").text($(element).find("td:eq(1)").text());
                         $("h4[id=insuredClaim]").text(data[0][0]["insuredFirstName"] +" "+ data[0][0]["insuredLastName"]);
                         $("h4[id=lossDescClaim]").text(data[0][0]["descriptionLossDesc"]);
                         $("h4[id=policyClaim]").text(data[0][0]["policy"]);
                         $("h4[id=lossDateClaim]").text(invoiceView.convertStringToDate((data[0][0]["lossDate"].split(" "))[0]));
-                        $("h4[id=lossLocationClaim]").text(data[0][0]["lossLocation"]);
+                        $("h4[id=addressCustomer]").text(data[0][0]["addressCustomer"]);
+                        $("h4[id=nameCustomer]").text(data[0][0]["nameCustomer"]);
                         //load report invoice
                         $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
                         $("h4[id=expenseVND]").text((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,"")))).formatCurrency({roundToDecimalPlace:0});
@@ -845,12 +847,15 @@
                         if($("input[name=exchangeRate]").val()!=="")
                         {
                             $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
-                            $("h4[id=professionFeeUSD]").text(parseInt(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
-                            $("h4[id=expenseUSD]").text(Math.round(parseInt($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
-                            $("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")));
-                            $("h4[id=total_Vat_USD]").text(Math.round(Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
-                            $("h4[id=totalUSD]").text(parseInt((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1));
+                            $("h4[id=professionFeeUSD]").text(invoiceView.round((($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
+                            $("h4[id=expenseUSD]").text(invoiceView.round((Number($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
+
+                            $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,""))),2));
+                            $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")),2));
+
+                            $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1),2));
                             $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+
 
                             //format USD $
                             $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
@@ -876,21 +881,28 @@
                     $("input[name=GSTFreeDisb]").formatCurrency({roundToDecimalPlace:0});
                     $("input[name=Disbursements]").formatCurrency({roundToDecimalPlace:0});
                 },
+                round:function(value,decimals)
+                {
+                    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+                },
                 formatCurrencyExchangeRate:function()
                 {
                     var expense = ((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,""))));
                     $("input[name=exchangeRate]").formatCurrency({roundToDecimalPlace:0});
                     $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
                     //change VND->USD
-                    $("h4[id=professionFeeUSD]").text(parseInt(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
-                    $("h4[id=expenseUSD]").text(Math.round(parseInt(String(expense))/($("input[name=exchangeRate]").val().replace(/,/g,""))));
-                    //total
-                    $("h4[id=totalUSD]").text(parseInt((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1));
-                    $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+                    $("h4[id=professionFeeUSD]").text(invoiceView.round(parseFloat(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
+                    $("h4[id=expenseUSD]").text(invoiceView.round(parseFloat(String(expense))/($("input[name=exchangeRate]").val().replace(/,/g,"")),2));
+
                     //load total excluding VAT
-                    $("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")));
+                    $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")),2));
                     //load total VAT
-                    $("h4[id=total_Vat_USD]").text(Math.round(Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
+                    $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,""))),2));
+
+
+                    //total Payable
+                    $("h4[id=totalUSD]").text(Number($("h4[id=total_ExcludingVAT_USD]").text()) + Number($("h4[id=total_Vat_USD]").text()));
+                    $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
 
                     //format USD $
                     $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
@@ -898,8 +910,6 @@
                     $("h4[id=total_ExcludingVAT_USD]").text("$"+$("h4[id=total_ExcludingVAT_USD]").text());
                     $("h4[id=total_Vat_USD]").text("$"+$("h4[id=total_Vat_USD]").text());
                     $("h4[id=totalUSD]").text("$"+$("h4[id=totalUSD]").text());
-
-
                 },
                 fillDateToInvoice:function(element)
                 {

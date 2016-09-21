@@ -1029,7 +1029,7 @@
             });
             $("#closeDate").empty().append(function () {
                 if (result.claim.closeDate) {
-                    var openDate = new Date(result.claim.closeDate.substring(0, 10));
+                    var closeDate = new Date(result.claim.closeDate.substring(0, 10));
                     var dd = closeDate.getDate();
                     var mm = closeDate.getMonth() + 1; //January is 0!
 
@@ -1045,12 +1045,12 @@
                 return "";
             });
             $("#insuredContactedDate").empty().append(function () {
-                if (result.claim.receiveDate) {
-                    var openDate = new Date(result.claim.receiveDate.substring(0, 10));
-                    var dd = openDate.getDate();
-                    var mm = openDate.getMonth() + 1; //January is 0!
+                if (result.claim.insuredContactedDate) {
+                    var insuredContactedDate = new Date(result.claim.insuredContactedDate.substring(0, 10));
+                    var dd = insuredContactedDate.getDate();
+                    var mm = insuredContactedDate.getMonth() + 1; //January is 0!
 
-                    var yyyy = openDate.getFullYear();
+                    var yyyy = insuredContactedDate.getFullYear();
                     if (dd < 10) {
                         dd = '0' + dd;
                     }
@@ -1062,12 +1062,12 @@
                 return "";
             });
             $("#limitationDate").empty().append(function () {
-                if (result.claim.receiveDate) {
-                    var openDate = new Date(result.claim.receiveDate.substring(0, 10));
-                    var dd = openDate.getDate();
-                    var mm = openDate.getMonth() + 1; //January is 0!
+                if (result.claim.limitationDate) {
+                    var limitationDate = new Date(result.claim.limitationDate.substring(0, 10));
+                    var dd = limitationDate.getDate();
+                    var mm = limitationDate.getMonth() + 1; //January is 0!
 
-                    var yyyy = openDate.getFullYear();
+                    var yyyy = limitationDate.getFullYear();
                     if (dd < 10) {
                         dd = '0' + dd;
                     }
@@ -1079,12 +1079,12 @@
                 return "";
             });
             $("#policyInceptionDate").empty().append(function () {
-                if (result.claim.receiveDate) {
-                    var openDate = new Date(result.claim.receiveDate.substring(0, 10));
-                    var dd = openDate.getDate();
-                    var mm = openDate.getMonth() + 1; //January is 0!
+                if (result.claim.policyInceptionDate && result.claim.policyInceptionDate != "0000-00-00 00:00:00") {
+                    var policyInceptionDate = new Date(result.claim.policyInceptionDate.substring(0, 10));
+                    var dd = policyInceptionDate.getDate();
+                    var mm = policyInceptionDate.getMonth() + 1; //January is 0!
 
-                    var yyyy = openDate.getFullYear();
+                    var yyyy = policyInceptionDate.getFullYear();
                     if (dd < 10) {
                         dd = '0' + dd;
                     }
@@ -1160,7 +1160,16 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-unit'>";
-                row += "<span>"+result.docket[i].professionalServicesTime + "</span>";
+                if(result.docket[i].professionalServicesTime!== null)
+                {
+                    row += "<span>"+result.docket[i].professionalServicesTime + "</span>";
+
+                }
+                else
+                {
+                    row += "<span>0.00</span>";
+
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
                 if(!result.docket[i].expense){
@@ -1170,7 +1179,7 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-amount'>";
-                if(result.docket[i].expenseAmount == '0' || result.docket[i].expenseAmount == '0.00'){
+                if(result.docket[i].expenseAmount == '0' || result.docket[i].expenseAmount == '0.00' || result.docket[i].expenseAmount == null){
                     row += "<span></span>";
                 }else{
                     row += "<span>"+result.docket[i].expenseAmount + "</span>";
@@ -1178,13 +1187,14 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(result.docket[i].professionalServices !=null && result.docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNoteDes.trim() + ": " + result.docket[i].professionalServicesNote.trim() + "<br>" + result.docket[i].expenseNoteDes.trim() + ": " + result.docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + result.docket[i].professionalServicesNote.trim() + "<br>" + result.docket[i].expenseNote.trim() +"</span>";
                 }else if(result.docket[i].professionalServices !=null && result.docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNoteDes.trim() + ": " + result.docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].professionalServicesNote.trim() +"</span>";
                 }else if(result.docket[i].professionalServices == null && result.docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + result.docket[i].expenseNoteDes.trim() + ": " + result.docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].expenseNote.trim() +"</span>";
+                }else{
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
                 }
-                row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";

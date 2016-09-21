@@ -1086,6 +1086,7 @@ class AdminController extends Controller
         try {
             $query1 = DB::table('invoices')
                 ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('customers','bills.billToId','=','customers.code')
                 ->join('claim_task_details', 'bills.billId', '=', 'claim_task_details.id')
                 ->join('task_categories', 'claim_task_details.professionalServices', '=', 'task_categories.id')
                 ->join('claims', 'claim_task_details.claimId', '=', 'claims.id')
@@ -1105,12 +1106,15 @@ class AdminController extends Controller
                     'claims.branchCode as branchId',
                     'claims.policy as policy',
                     'claims.lossDate as lossDate',
+                    'claims.contact as contactName',
                     'type_of_damages.description as descriptionLossDesc',
                     'claims.lossLocation as lossLocation',
                     'invoices.nameBank as nameBank',
                     'invoices.exchangeRate as exchangeRate',
                     'invoices.dateExchangeRate as dateExchangeRate',
-                    'invoices.addressBank as addressBank'
+                    'invoices.addressBank as addressBank',
+                    'customers.fullName as nameCustomer',
+                    'customers.address as addressCustomer'
                 )->get();
             array_push($resultArray, $query1);
             $professionalService = DB::table('invoices')
@@ -1877,7 +1881,7 @@ class AdminController extends Controller
                 'ex.code as expense',
                 'users.name as adjusterCode'
             )->get();
-        $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice_major_no)->orderBy('created_at', 'asc')->get();
+        $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice_major_no)->where('userId','!=',3)->orderBy('created_at', 'asc')->get();
         $assit_array = [];
         foreach ($docket->groupBy('userId') as $key => $value) {
             $assit_detail = User::where('id', $key)->first();
