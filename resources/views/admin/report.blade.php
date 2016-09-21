@@ -993,6 +993,23 @@
             });
             $("#lossLocation").empty().append(result.claim.lossLocation);
             $("#lineOfBusinessCode").empty().append(result.claim.lineOfBusinessCode);
+            $("#lossDate").empty().append(function () {
+                if (result.claim.lossDate) {
+                    var lossDate = new Date(result.claim.lossDate.substring(0, 10));
+                    var dd = lossDate.getDate();
+                    var mm = lossDate.getMonth() + 1; //January is 0!
+
+                    var yyyy = lossDate.getFullYear();
+                    if (dd < 10) {
+                        dd = '0' + dd;
+                    }
+                    if (mm < 10) {
+                        mm = '0' + mm;
+                    }
+                    return dd + '-' + mm + '-' + yyyy;
+                }
+                return "";
+            });
             $("#receiveDate").empty().append(function () {
                 if (result.claim.receiveDate) {
                     var receiveDate = new Date(result.claim.receiveDate.substring(0, 10));
@@ -1127,6 +1144,9 @@
                 row += "<span>&nbsp;&nbsp;&nbsp;Hourly</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-date-added'>";
+                if(result.assit[i].assit.created_at){
+
+                }
                 var year = result.assit[i].assit.created_at.substring(0,4);
                 var month = result.assit[i].assit.created_at.substring(5,7);
                 var day = result.assit[i].assit.created_at.substring(8,10);
@@ -1141,10 +1161,22 @@
                 row = "";
                 row += "<div class='element' style='margin-bottom: 10px'>";
                 row += "<div class='dockets-content-header-date'>";
-                var year = result.docket[i].created_at.substring(0,4);
-                var month = result.docket[i].created_at.substring(5,7);
-                var day = result.docket[i].created_at.substring(8,10);
-                row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
+                if(result.docket[i].billDate){
+                    var billDate = new Date(result.docket[i].billDate.substring(0, 10));
+                    var dd = billDate.getDate();
+                    var mm = billDate.getMonth() + 1; //January is 0!
+
+                    var yyyy = billDate.getFullYear();
+                    if (dd < 10) {
+                        dd = '0' + dd;
+                    }
+                    if (mm < 10) {
+                        mm = '0' + mm;
+                    }
+                    row += "<span style='padding-right: 30px'>" + day + "-" + month + "-" + year + "</span>";
+                }else{
+                    row += "<span style='padding-right: 30px'></span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-branch-code'>";
                 row += "<span style='padding-right: 40px'>"+results.claim.branchCode.toUpperCase()+"</span>";

@@ -1873,7 +1873,7 @@ class AdminController extends Controller
                 'claim_task_details.expenseNote',
                 'ex.description as expenseNoteDes',
                 'claim_task_details.expenseAmount',
-                'claim_task_details.created_at',
+                'claim_task_details.billDate',
                 'claim_task_details.userId',
                 'claim_task_details.invoiceMajorNo',
                 'claim_task_details.invoiceDate',
