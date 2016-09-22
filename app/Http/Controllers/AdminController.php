@@ -2535,6 +2535,7 @@ class AdminController extends Controller
                         $claimTaskDetail->statusId = 1;
                         $claimTaskDetail->claimId = $request->get('data')['idClaim'];
                         $claimTaskDetail->invoiceTempNo = $invoiceTempNo;
+                        $claimTaskDetail->invoiceDate =$toDate;
                         $claimTaskDetail->userId = Auth::user()->id;
                         $claimTaskDetail->createdBy = Auth::user()->id;
                         $claimTaskDetail->save();
@@ -2661,6 +2662,7 @@ class AdminController extends Controller
                         $claimTaskDetail->active = 1;
                         $claimTaskDetail->statusId = 2;
                         $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
+                        $claimTaskDetail->invoiceDate = $toDate;
                         $claimTaskDetail->claimId = $request->get('data')['idClaim'];
                         $claimTaskDetail->userId = Auth::user()->id;
                         $claimTaskDetail->createdBy = Auth::user()->id;
@@ -2791,6 +2793,7 @@ class AdminController extends Controller
                     $claimTaskDetail->active = 1;
                     $claimTaskDetail->statusId = 2;
                     $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
+                    $claimTaskDetail->invoiceDate = $toDate;
                     $claimTaskDetail->claimId = $request->get('data')['idClaim'];
                     $claimTaskDetail->userId = Auth::user()->id;
                     $claimTaskDetail->createdBy = Auth::user()->id;

@@ -861,7 +861,7 @@
                     $("input[name=action]").val("0");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
-                        console.log(data);
+                        $("input[id=pending]").prop("disabled",true).prop("checked",false);
                         trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
@@ -1036,6 +1036,8 @@
                     trialFeeView.clearTable();
                     trialFeeView.codeCustomer = null;
                     $("tbody[id=tbodyTableBillByStatus]").empty();
+                    $("input[id=pending]").prop("disabled",false).prop("checked",true);
+
                 },
                 loadTaskDetailByDate:function()
                 {
