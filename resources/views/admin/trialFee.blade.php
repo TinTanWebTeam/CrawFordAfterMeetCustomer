@@ -630,7 +630,7 @@
                         if (z > 2 && z <= 10) {
                             //if ($("input[name=action]").val() === "0") {
                                 if (z === 10) {
-                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent()' value=" + arrSum[h] + "></td>");
+                                    tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent(this)' value=" + arrSum[h] + "></td>");
                                 }
                                 else {
                                     tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
@@ -675,7 +675,7 @@
                         }
                         if (z > 2 && z <= 10) {
                             if (z === 10) {
-                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent()' value=" + arrSum[h] + "></td>");
+                                tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent(this)' value=" + arrSum[h] + "></td>");
                             }
                             else {
                                 tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
@@ -686,27 +686,36 @@
 
                 },
                 sumTotalValueofInputOfTableListTaskDetail: function (element) {
+                    var rateDefault = $(element).attr("value");
+                    if(parseFloat($(element).val())<0)
+                    {
+                        $(element).val(rateDefault);
+                        $(element).formatCurrency({roundToDecimalPlace:0});
+                    }
+                    else
+                    {
+                        $(element).formatCurrency({roundToDecimalPlace:0});
+                        var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
 
-                    $(element).formatCurrency({roundToDecimalPlace:0});
-                    var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
+                        var rate = tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+$(element).parent().attr("id")+"]").children().val().replace(/,/g,"");
+                        var time = tbodyListTaskDetail.find("tr:eq(0)").find("td[id="+$(element).parent().attr("id")+"]").text();
 
-                    var rate = tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+$(element).parent().attr("id")+"]").children().val().replace(/,/g,"");
-                    var time = tbodyListTaskDetail.find("tr:eq(0)").find("td[id="+$(element).parent().attr("id")+"]").text();
-
-                    tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+$(element).parent().attr("id")+"]").children().val(rate * parseFloat(time));
-                    var trList = tbodyListTaskDetail.find("tr");
-                    var sum = 0;
-                    for (var i = 0; i < trList.length; i++) {
-                        if (i > 2 && i < 10) {
-                            sum += parseFloat($(trList[i]).find("td[id=" + $(element).parent().attr("id") + "]").children().val().replace(/,/g,""));
+                        tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+$(element).parent().attr("id")+"]").children().val(rate * parseFloat(time));
+                        var trList = tbodyListTaskDetail.find("tr");
+                        var sum = 0;
+                        for (var i = 0; i < trList.length; i++) {
+                            if (i > 2 && i < 10) {
+                                sum += parseFloat($(trList[i]).find("td[id=" + $(element).parent().attr("id") + "]").children().val().replace(/,/g,""));
+                            }
                         }
+
+                        tbodyListTaskDetail.find("tr:eq(10)").find("td[id=" + $(element).parent().attr("id") + "]").children().val(sum);
+                        trialFeeView.loadDataToTableTotal1(element);
+                        //Format currency
+                        trialFeeView.formatInputCurrencyTableTotal();
+                        trialFeeView.formatInputCurrencyTableDataUser();
                     }
 
-                    tbodyListTaskDetail.find("tr:eq(10)").find("td[id=" + $(element).parent().attr("id") + "]").children().val(sum);
-                    trialFeeView.loadDataToTableTotal1(element);
-                    //Format currency
-                    trialFeeView.formatInputCurrencyTableTotal();
-                    trialFeeView.formatInputCurrencyTableDataUser();
 
                 },
                 actionBillOfClaim: function () {
@@ -768,7 +777,7 @@
                         coorInsurer:$("input[name=officer]").val(),
                         Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().replace(/,/g,""),
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
-                        ToDate:$("input[name=ToDate]").val(),
+                        ToDate:$("input[name=ToDate]").val()+" "+trialFeeView.timeTo,
                         billType: $("input[name=bill-type]:checked").attr("id"),
                         billStatus:$("input[name=bill-status]:checked").attr("id"),
                         ArrayData: objectUserAll
@@ -832,6 +841,12 @@
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This claim has closed!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
+                                else if(data["Error"]==="CantClaimHaveTaskNotInvoiceTempNo")
+                                {
+                                    $("div[id=modalConfirm]").modal("hide");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Can't update this bill , because bill have already task not invoice!!!Please bill again!");
+                                    $("div[id=modalNotification]").modal("show");
+                                }
                                 else
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
@@ -861,6 +876,7 @@
                     $("input[name=action]").val("0");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
+                        console.log(data);
                         $("input[id=pending]").prop("disabled",true).prop("checked",false);
                         trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
@@ -1133,7 +1149,7 @@
                 discountBill:function()
                 {
                     var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
-                    if($("input[name=discount]").val() <=100) {
+                    if(parseFloat($("input[name=discount]").val()) <=100 && parseFloat($("input[name=discount]").val()) >0) {
                         var inputDiscount = $("input[name=discount]").val().replace("%", "");
                         var discount = parseFloat(actualBill - (parseFloat((actualBill * inputDiscount) / 100)));
                         $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(discount).formatCurrency({roundToDecimalPlace: 0});
@@ -1141,14 +1157,24 @@
                     else
                     {
                         $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(actualBill).formatCurrency({roundToDecimalPlace: 0});
+                        $("input[name=discount]").val("");
                     }
                 },
-                discountPrecent:function()
+                discountPrecent:function(element)
                 {
-                    var invoiceBill =  $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val();
-                    var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
-                    $("input[name=discount]").val(100 - Math.floor((invoiceBill*100)/actualBill));
-                    $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().formatCurrency({roundToDecimalPlace: 0});
+                    if(parseFloat($(element).val()) < 0)
+                    {
+                        $(element).val($(element).attr("value")).formatCurrency({roundToDecimalPlace: 0});
+                    }
+                    else
+                    {
+                        var invoiceBill =  $(element).val();
+                        var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
+                        $("input[name=discount]").val(100 - Math.floor((invoiceBill*100)/actualBill));
+                        $(element).formatCurrency({roundToDecimalPlace: 0});
+
+                    }
+
                 }
 
             };

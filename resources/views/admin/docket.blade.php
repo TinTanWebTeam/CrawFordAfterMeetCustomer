@@ -718,7 +718,14 @@
                 automaticInitialValueTimeOfInputUnit: function () {
                     if($("input[name=ProfessionalServicesTime]").val()==="")
                     {
-                        $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()));
+                        $("input[name=ProfessionalServicesTime]").val("");
+                        $("input[name=ProfessionalServicesAmount]").val("");
+                    }
+                    else if(parseFloat($("input[name=ProfessionalServicesTime]").val()) < 0 )
+                    {
+                        $("input[name=ProfessionalServicesTime]").val("");
+                        $("input[name=ProfessionalServicesAmount]").val("");
+
                     }
                     else{
                         var Rate = $("input[name=ProfessionalServicesRate]").val().replace(/,/g,"");
@@ -1047,7 +1054,15 @@
                 },
                 formatCurrencyExpense:function()
                 {
-                    $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+                    if(parseFloat( $("input#ExpenseAmount").val())<0)
+                    {
+                         $("input#ExpenseAmount").val("");
+                    }
+                    else
+                    {
+                        $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+
+                    }
                 },
                 sortDocketTableByDate: function(){
                     if(docketView.sortDate == 0){

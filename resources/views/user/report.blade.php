@@ -147,9 +147,9 @@
                         userId: userId
                     }, function (data) {
                         console.log(data);
+                        $("tbody#tbodyTableReport").empty();
                         if (data["ListData"].length > 0) {
                             var row = "";
-                            $("tbody#tbodyTableReport").empty();
                             for (var i = 0; i < data["ListData"].length; i++) {
                                 row += "<tr>";
                                 if (data["ListData"][i]["CreatedDate"]) {

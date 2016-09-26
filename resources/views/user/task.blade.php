@@ -688,6 +688,12 @@
                     if($("input[name=ProfessionalServicesTime]").val()==="")
                     {
                         $("input[name=ProfessionalServicesAmount]").empty().val(parseFloat($("input[name=ProfessionalServicesRate]").val()));
+                        $("input[name=ProfessionalServicesAmount]").val("");
+                    }
+                    else if(parseFloat($("input[name=ProfessionalServicesTime]").val()) <0)
+                    {
+                        $("input[name=ProfessionalServicesAmount]").val("");
+                        $("input[name=ProfessionalServicesTime]").val("");
                     }
                     else{
                         var Rate = $("input[name=ProfessionalServicesRate]").val().replace(/,/g,"");
@@ -981,7 +987,14 @@
                 },
                 formatCurrency1:function()
                 {
-                    $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+                    if(parseFloat($("input[name=ExpenseAmount]").val()) < 0 )
+                    {
+                        $("input[name=ExpenseAmount]").val("");
+                    }
+                    else
+                    {
+                        $("input#ExpenseAmount").formatCurrency({roundToDecimalPlace:0});
+                    }
                 },
                 getAllClaim:function()
                 {

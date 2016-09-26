@@ -2905,6 +2905,13 @@ class AdminController extends Controller
             $fromDate = $request->get('data')['FromDate'];
             //Update bill from pending to complete
             try {
+                //get list claim task
+                $listTask = ClaimTaskDetail::where('claimId',$request->get('data')['idClaim'])
+                                            ->where('billDate','>',$request->get('data')['FromDate'])
+                                            ->where('billDate','<',$request->get('data')['ToDate'])
+                                            ->where('invoiceTempNo',null)
+                                            ->where('active',0)
+                                            ->get();
                 //check close claim
                 $claimClose = Claim::where('id',$request->get('data')['idClaim'])->first();
                 if($claimClose)
@@ -2912,6 +2919,10 @@ class AdminController extends Controller
                     if($claimClose->statusId==3)
                     {
                         $data = array('Action' => 'Update', 'Error' => 'ClaimClose');
+                    }
+                    else if(count($listTask)>0)
+                    {
+                        $data = array('Action' => 'Update', 'Error' => 'CantClaimHaveTaskNotInvoiceTempNo');
                     }
                     else
                     {
