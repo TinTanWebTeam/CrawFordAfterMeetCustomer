@@ -877,8 +877,531 @@
     <div class="tab-pane fade" id="tab2">
         <div class="row" style="background-color: #fff;">
             <div class="col-sm-12" style="padding-top:20px;padding-bottom:20px">
-                <button class="pull-right">Export WIP To PDF</button>
+                <button class="pull-right" id="export_wip-pdf">Export WIP To PDF</button>
                 <button class="pull-right" style="margin-right: 20px">Export WIP To Excel</button>
+            </div>
+        </div>
+        <div class="row" style="background-color: #fff;">
+            <div class="report-wip">
+                <div class="page-wip" id="pageWip1">
+                    <div class="wip-title">
+                        <div class="wip-title-row-1">
+                            <div class="wip-title-row-1-left">
+                                <span>Work In Progress By Claim</span>
+                            </div>
+                            <div class="wip-title-row-1-right">
+                                <span>Printed: 20/07/2016 2:53:22 PM</span>
+                            </div>
+                        </div>
+                        <div class="wip-title-row-2">
+                            <div class="wip-title-row-2-left">
+                                <span>As Of: 20-jul-2016</span>
+                                <span>Branch: HC1A</span>
+                            </div>
+                            <div class="wip-title-row-2-right">
+                                <span>Region: %</span>
+                                <span>Wip Value Greater Than: 0.00</span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="wip-header-page-1">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-content-page-1">
+                        <div class="wip-content-element">
+                            <div class="wip-content-element-row">
+                                <div class="wip-content-open-date">
+                                    <span style="font-size:25px;font-weight:600;text-align:center;display:block">1000217</span>
+                                </div>
+                                <div class="wip-content-adjuster-name">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-insurer-name">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-insured-name">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-hours">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-rate">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-fee">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-expense-total">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-grand-total">
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="wip-content-element-row">
+                                <div class="wip-content-open-date">
+                                    <span style="display:block;text-align:center">05-Nov-2009</span>
+                                </div>
+                                <div class="wip-content-insurer-name">
+                                    <span>Bao Viet</span>
+                                </div>
+                                <div class="wip-content-insured-name">
+                                    <span>Quy Nhon Branch of Foodinco Invesrment and Import/</span>
+                                </div>
+                                <div class="wip-content-adjuster-name">
+                                    <span>Luu Thi Minh Hanh</span>
+                                </div>
+                                <div class="wip-content-hours">
+                                    <span style="display:block;text-align:center">6.8</span>
+                                </div>
+                                <div class="wip-content-rate">
+                                    <span style="display:block;text-align:center">150</span>
+                                </div>
+                                <div class="wip-content-fee">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                                <div class="wip-content-expense-total">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                                <div class="wip-content-grand-total">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                            </div>
+                            <div class="wip-content-element-row">
+                                <div class="wip-content-open-date">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-insurer-name">
+                                    <span></span>
+                                </div>
+                                <div class="wip-content-insured-name">
+                                    <span></span>
+                                </div>
+                                 <div class="wip-content-adjuster-name">
+                                    <span>Luu Thi Minh Hanh</span>
+                                </div>
+                                <div class="wip-content-hours">
+                                    <span style="display:block;text-align:center">6.8</span>
+                                </div>
+                                <div class="wip-content-rate">
+                                    <span style="display:block;text-align:center">150</span>
+                                </div>
+                                <div class="wip-content-fee">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                                <div class="wip-content-expense-total">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                                <div class="wip-content-grand-total">
+                                    <span style="display:block;text-align:center">2000</span>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="wip-footer-page-1">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip2">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>        
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip3">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>        
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip4">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip5">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip6">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip7">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip8">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip9">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip10">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip11">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
+                <div class="page-wip" id="pageWip12">
+                    <div class="wip-header-page-2">
+                        <div class="wip-header-open-date">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Opened</span>
+                        </div>
+                        <div class="wip-header-insurer-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insurer Name</span>
+                        </div>
+                        <div class="wip-header-insured-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Insured Name</span>
+                        </div>
+                        <div class="wip-header-adjuster-name">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Adjuster Name</span>
+                        </div>
+                        <div class="wip-header-hours">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Hours</span>
+                        </div>
+                        <div class="wip-header-rate">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Rate</span>
+                        </div>
+                        <div class="wip-header-fee">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Fee</span>
+                        </div>
+                        <div class="wip-header-expense-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Expense Total</span>
+                        </div>
+                        <div class="wip-header-grand-total">
+                            <span style="font-size: 20px;font-weight: 600;text-align: center;width: 100%;display: block">Grand Total</span>
+                        </div>
+                    </div>
+                    <div class="wip-footer-page-2">
+
+                    </div>
+                </div>
             </div>
         </div>
         <br>
@@ -912,6 +1435,19 @@
 
     $("#print_report").click(function (e) {
         $(".report").printThis({
+            debug: false,
+            importCSS: true,
+            importStyle: false,
+            loadCSS: "admin/css/style.css",
+            removeInline: false,
+            printDelay: 2000,
+            header: null,
+            formValues: true
+        });
+    });
+
+    $("#export_wip-pdf").click(function(e){
+        $(".report-wip").printThis({
             debug: false,
             importCSS: true,
             importStyle: false,

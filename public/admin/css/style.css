@@ -684,79 +684,11 @@ label.error{
 #docket-contain-page-6 .element {
     border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
-.wip-header{
-    padding-top: 30px;
-    width: 100%;
-    display: block;
-    box-sizing: border-box;
-}
-.wip-header-row-1{
-    padding-top: 5px;
-    border-top: 6px solid black;
-    height: 80px;
-    box-sizing: border-box;
-    width: 100%;
-    margin-bottom: 20px;
-}
-.wip-header-row-2{
-    padding-top: 10px;
-    height: 70px;
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    box-sizing: border-box;
-    width: 100%;
-}
-.wip-header-row-1-left{
-    box-sizing: border-box;
-    float: left;
-    display: inline-block;
-    padding-top: 10px;
-}
-.wip-header-row-1-left span{
-    font-size: 28px;
-    font-weight: 600;
-}
-.wip-header-row-1-right{
-    padding-top: 5px;
-    box-sizing: border-box;
-    float: right;
-    display: inline-block;
-}
-.wip-header-row-1-right span{
-    font-size: 16px;
-    font-style: italic;
-}
-.wip-header-row-2-left{
-    padding-left: 5%;
-    width: 50%;
-    box-sizing: border-box;
-    float: left;
-    display: inline-block;
-}
-.wip-header-row-2-right{
-    padding-left: 5%;
-    width: 50%;
-    box-sizing: border-box;
-    float: left;
-    display: inline-block;
-}
 .as-of{
     display: inline-block;
 }
 .branch{
     display: inline-block;
-}
-.wip-header-row-2-left-row-1{
-    
-}
-.wip-header-row-2-left-row-2{
-    
-}
-.wip-header-row-2-right-row-1{
-
-}
-.wip-header-row-2-right-row-2{
-    
 }
 [data-id=print_date]{
     display: inline-block;
@@ -837,4 +769,223 @@ label.error{
 }
 .fee-statement h3{
     text-decoration: underline;
+}
+/*
+ * Report wip style
+ */
+.report-wip{
+    box-sizing: border-box;
+    -webkit-transform-origin-x: 0;
+    -webkit-transform-origin-y: 0;
+    -webkit-transform: scale(0.500,0.500);
+    -moz-transform: scale(0.500,0.500);
+    -ms-transform: scale(0.500,0.500);
+    -o-transform: scale(0.500,0.500);
+    transform: scale(0.500,0.500);
+    width: 2339px;
+}
+.page-wip{
+    box-sizing: border-box;
+    width: 2339px;
+    height: 1654px;
+}
+.wip-title{
+    width: 100%;
+    height: 230px;
+}
+.wip-title-row-1{
+    height: 100px;
+    border-top: 3px solid black;
+    padding-top: 7px;
+    width: 100%;
+}
+.wip-title-row-1-left{
+    display: inline-block;
+    width: 50%;
+    float: left;
+}
+.wip-title-row-1-left span{
+    font-size: 35px;
+    font-weight:600;
+}
+.wip-title-row-1-right{
+    display: inline-block;
+    width: 50%;
+    float: right;
+    text-align: right;
+}
+.wip-title-row-1-right span{
+    font-size: 20px;
+    font-style: italic;
+}
+.wip-title-row-2{
+    display: block;
+    border-top: 1px solid black;
+    height: 100px;
+    background-color: #fffbe9;
+    border-bottom: 1px solid black;
+}
+.wip-title-row-2-left{
+    width: 50%;
+    float: left;
+}
+.wip-title-row-2-left span{
+    margin-top: 10px;
+    margin-left: 20%;
+    display: block;
+    font-weight: 600;
+    font-size: 25px;
+}
+.wip-title-row-2-right{
+    width: 50%;
+    float: right;
+}
+.wip-title-row-2-right span{
+    margin-top: 10px;
+    margin-left: 20%;
+    display: block;
+    font-weight: 600;
+    font-size: 25px;
+}
+.wip-header-page-1{
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+.wip-footer-page-1{
+    display: block;
+    width: 100%;
+    border-top: 1px solid black;
+}
+.wip-header-page-2{
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+.wip-header-open-date{
+    display: inline-block;
+    width: 10%;
+}
+.wip-header-adjuster-name{
+    display: inline-block;
+    width: 10%;
+}
+.wip-header-insurer-name{
+    display: inline-block;
+    width: 18%;
+}
+.wip-header-insured-name{
+    display: inline-block;
+    width: 20%;
+}
+.wip-header-hours{
+    display: inline-block;
+    width: 8%;
+}
+.wip-header-rate{
+    display: inline-block;
+    width: 8%;
+}
+.wip-header-fee{
+    display: inline-block;
+    width: 8%;
+}
+.wip-header-expense-total{
+    display: inline-block;
+    width: 8%;
+}
+.wip-header-grand-total{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-page-1{
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.wip-content-element{
+    width: 100%;
+    display: block;
+    border-top: 1px solid black;
+}
+.wip-content-element-row{
+    margin-bottom: 5px;
+    width: 100%;
+    display: block;
+}
+.wip-content-open-date{
+    display: inline-block;
+    width: 10%;
+}
+.wip-content-open-date span{
+    display: block;
+    font-size: 16px;
+}
+.wip-content-adjuster-name{
+    display: inline-block;
+    width: 10%;
+}
+.wip-content-adjuster-name span{
+    padding-left: 40px;
+    display: block;
+    font-size: 16px;
+}
+.wip-content-insurer-name{
+    display: inline-block;
+    width: 18%;
+}
+.wip-content-insurer-name span{
+    padding-left: 30px;
+    display: block;
+    font-size: 16px;
+}
+.wip-content-insured-name{
+    display: inline-block;
+    width: 20%;
+}
+.wip-content-insured-name span{
+    padding-left: 20px;
+    display: block;
+    font-size: 16px;
+}
+.wip-content-hours{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-hours span{
+    display: block;
+    font-size: 16px;
+}
+.wip-content-rate{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-rate span{
+    display: block;
+    font-size: 16px;
+}
+.wip-content-fee{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-fee span{
+    padding-left: 10px;
+    display: block;
+    font-size: 16px;
+}
+.wip-content-expense-total{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-expense-total span{
+    display: block;
+    font-size: 16px;
+}
+.wip-content-grand-total{
+    display: inline-block;
+    width: 8%;
+}
+.wip-content-grand-total span{
+    padding-left: 10px;
+    display: block;
+    font-size: 16px;
 }
