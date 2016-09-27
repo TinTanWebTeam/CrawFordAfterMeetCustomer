@@ -2317,4 +2317,5 @@
         }
         // console.log('load complete insert discount');
     }
+    
 </script>
