@@ -1856,6 +1856,7 @@ class AdminController extends Controller
     public function getReportData($invoice_major_no, $bill_id, $claim_code)
     {
         $claim = Claim::where('code', $claim_code)->first();
+        $insurer = Customer::where('code',$claim->insurerCode)->first();
         $branch = Branch::where('code', $claim->branchCode)->first();
         $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
         $extendOfDamage = ExtendOfDamage::where('code', $claim->lossDescCode)->first();
@@ -1904,7 +1905,7 @@ class AdminController extends Controller
                 'assignmentTypeCode' => $claim->assignmentTypeCode,
                 'accountCode' => $claim->accountCode,
                 'accountPolicyId' => $claim->accountPolicyId,
-                'insuredName' => $claim->insuredName,
+                'insuredName' => $insurer->fullName,
                 'insuredClaim' => $claim->insuredClaim,
                 'tradingAs' => $claim->tradingAs,
                 'claimTypeCode' => $claim->claimTypeCode,
@@ -1937,7 +1938,6 @@ class AdminController extends Controller
                 'adjusterCode' => $claim->adjusterCode,
                 'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
                 'rate' => $claim->rate,
-                'taxable' => $claim->taxable,
                 'taxable' => $claim->taxable
             ],
             'bill' => [

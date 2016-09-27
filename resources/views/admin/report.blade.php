@@ -1987,7 +1987,6 @@
             load_page_4();
         }
     }
-
     function load_page_4() {
         if(continue_id + 1 == data_docket.length){
             // console.log('load complete insert discount');
