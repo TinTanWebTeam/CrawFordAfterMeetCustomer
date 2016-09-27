@@ -57,7 +57,8 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>Invoice Id</th>
+                            <th>Invoice Major No</th>
+                            <th>Invoice Temp No</th>
                             <th>Claim Id</th>
                             <th>Invoice Date</th>
                             <th>Choose</th>
@@ -1464,9 +1465,15 @@
             if (result.status == "success") {
                 var row = "";
                 for (var i = 0; i < result.data.length; i++) {
-                    var tr = "<tr>";
-                    tr += "<td>" + result.data[i].invoice_id + "</td>";
-                    tr += "<td>" + result.data[i].claim_id + "</td>";
+                    var tr = "<tr id='" + result.data[i].invoice_id + "'>";
+                    if(result.data[i].invoice_major == null){
+                        tr += "<td></td>";
+                        tr += "<td>" + result.data[i].invoice_temp + "</td>";
+                    }else{
+                        tr += "<td>" + result.data[i].invoice_major + "</td>";
+                        tr += "<td></td>";
+                    }
+                    tr += "<td>" + result.data[i].claim_id+  "</td>";
                     tr += "<td>" + result.data[i].invoice_date + "</td>";
                     tr += "<td><button class='btn btn-xs btn-success' onclick='getReportData(\"" + result.data[i].invoice_id + "\",\"" + result.data[i].bill_id + "\",\"" + result.data[i].claim_id + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
                     tr += "</tr>";
@@ -1486,7 +1493,11 @@
     var continue_id = 0;
     var results = null;
     function getReportData(invoice_id, bill_id, claim_id) {
-        $("#invoice_id").val(invoice_id);
+        if($("tr[id="+invoice_id+"]").find("td").first().html() == ""){
+            $("#invoice_id").val($("tr[id="+invoice_id+"]").find("td").eq(1).html());
+        }else{
+            $("#invoice_id").val($("tr[id="+invoice_id+"]").find("td").eq(0).html());
+        }
         $("#modal-invoice-report").modal("hide");
         $.get(url + 'getReportData/' + invoice_id + '/' + bill_id + '/' + claim_id, function (result) {
             results = result;
@@ -1765,7 +1776,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
+                if(result.docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = result.docket[i].invoiceDate.substring(0,4);
@@ -1868,7 +1883,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                if(data_docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = data_docket[i].invoiceDate.substring(0,4);
@@ -1969,7 +1988,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                if(data_docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = data_docket[i].invoiceDate.substring(0,4);
@@ -2069,7 +2092,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                if(data_docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = data_docket[i].invoiceDate.substring(0,4);
@@ -2168,7 +2195,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                if(data_docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = data_docket[i].invoiceDate.substring(0,4);
@@ -2264,7 +2295,11 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                if(data_docket[i].invoiceMajorNo == null){
+                    row += "<span style='padding-left: 30px'></span>";
+                }else{
+                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 var year = data_docket[i].invoiceDate.substring(0,4);
