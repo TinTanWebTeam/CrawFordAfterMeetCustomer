@@ -235,15 +235,17 @@ class UserController extends Controller
                         try {
                             if($request->get('taskObject')['ProfessionalServices']!=null)
                             {
-                                $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])
-                                    ->where('name','TimeCode')
-                                    ->first()->id;
+//                                $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])
+//                                    ->where('name','TimeCode')
+//                                    ->first()->id;
+                                $idTime = $request->get('taskObject')['ProfessionalServices'];
                             }
                             if($request->get('taskObject')['Expense']!=null)
                             {
-                                $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])
-                                    ->where('name','!=','TimeCode')
-                                    ->first()->id;
+//                                $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])
+//                                    ->where('name','!=','TimeCode')
+//                                    ->first()->id;
+                                $idExpense = $request->get('taskObject')['Expense'];
                             }
                             $task = new ClaimTaskDetail();
 
@@ -291,11 +293,15 @@ class UserController extends Controller
                                     } else {
                                         if($request->get('taskObject')['ProfessionalServices']!= null)
                                         {
-                                            $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                                            //$idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
+                                            $idTime = $request->get('taskObject')['ProfessionalServices'];
+
                                         }
                                         if($request->get('taskObject')['Expense']!=null)
                                         {
-                                            $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                                            //$idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
+                                            $idExpense = $request->get('taskObject')['Expense'];
+
                                         }
                                         $task->professionalServices = $idTime;
                                         $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];

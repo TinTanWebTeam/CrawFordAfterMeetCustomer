@@ -777,7 +777,7 @@
                         coorInsurer:$("input[name=officer]").val(),
                         Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().replace(/,/g,""),
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
-                        ToDate:$("input[name=ToDate]").val()+" "+trialFeeView.timeTo,
+                        ToDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
                         billStatus:$("input[name=bill-status]:checked").attr("id"),
                         ArrayData: objectUserAll
@@ -839,12 +839,6 @@
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This claim has closed!");
-                                    $("div[id=modalNotification]").modal("show");
-                                }
-                                else if(data["Error"]==="CantClaimHaveTaskNotInvoiceTempNo")
-                                {
-                                    $("div[id=modalConfirm]").modal("hide");
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Can't update this bill , because bill have already task not invoice!!!Please bill again!");
                                     $("div[id=modalNotification]").modal("show");
                                 }
                                 else

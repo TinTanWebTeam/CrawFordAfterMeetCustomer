@@ -312,7 +312,7 @@
                                     <input type="text" id="ProfessionalServices" name="ProfessionalServices"
                                            style="width: auto;display: none">
                                     <input type="text" id="ProfessionalServicesCode" name="ProfessionalServicesCode"
-                                           style="width: auto;text-transform: uppercase"  ondblclick="docketView.loadListProfessionalService()" >
+                                           style="width: auto;text-transform: uppercase"  ondblclick="docketView.loadListProfessionalService()" data-id="">
                                 </div>
                             </div>
                             <div class="row">
@@ -335,7 +335,7 @@
                                     <h5 style="text-align:right">Code:</h5>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" name="Expense" id="Expense" style="width: auto;display: none;">
+                                    <input type="text" name="Expense" id="Expense" style="width: auto;display: none;" data-id="">
                                     <input type="text"  name="ExpenseCode" id="ExpenseCode" style="width: auto;text-transform: uppercase"
                                            ondblclick="docketView.loadListExpense()">
                                 </div>
@@ -670,11 +670,14 @@
                     }
                 },
                 viewDetailTask: function (element) {
+                    //alert(docketView.convertStringToDate2($(element).parent().parent().find("td:eq(1)").text()));
                     //Setup form and action
                     $("button[name=actionAssignmentTask]").text("Update");
                     $("input[name=Action]").val("0");
                     $.post(url + "viewDetailTask", {_token: _token, idDocket: $(element).attr("id")}, function (data) {
                         console.log(data);
+                        var billDate = data["Task"]["billDate"].split(" ");
+                        $("input[name=ChooseDate]").val(billDate[0]);
                         //Binding data
 
                         for (var propertyName in data["Task"]) {
@@ -925,14 +928,14 @@
                 },
                 cancel: function () {
                     docketView.openDateClaim = null;
-                    $("form[id=formClaim]").find("input").val("");
+                    //$("form[id=formClaim]").find("input").val("");
                     $("input[name=ChooseDate]").val("");
                     $("button[name=actionAssignmentTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
                     $("input[name=ProfessionalServicesRate]").val("");
                     docketView.cancelAfterAddNew();
                     $("input[name=ExpenseAmount]").val("").prop("readOnly",false).css("background-color","");
-                    $("tbody[id=tbodyDocket]").empty();
+                    //$("tbody[id=tbodyDocket]").empty();
                     // reset label status
                     $("label[id=statusClaim]").text("");
 
@@ -990,13 +993,13 @@
                 },
 
                 chooseTaskTimeCode: function (element) {
-                        $("input[name=ProfessionalServices]").val($(element).find("td:eq(0)").html());
-                        $("input[name=ProfessionalServicesCode]").val($(element).find("td:eq(0)").html());
-                        $("div[id=modal-time]").modal("hide");
+                    $("input[name=ProfessionalServices]").val($(element).attr("id"));
+                    $("input[name=ProfessionalServicesCode]").val($(element).find("td:eq(0)").html());
+                    $("div[id=modal-time]").modal("hide");
                 },
                 chooseTaskExpenseCode:function(element)
                 {
-                    $("input[name=Expense]").val($(element).find("td:eq(0)").html());
+                    $("input[name=Expense]").val($(element).attr("id"));
                     $("input[name=ExpenseCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modal-expense]").modal("hide");
                 },
@@ -1158,7 +1161,7 @@
             }
             else {
                 $inputTime.val(data["code"]);
-                $("input#ProfessionalServices").val(data["code"])
+                $("input#ProfessionalServices").val(data["id"])
             }
         });
     }
@@ -1193,7 +1196,7 @@
             }
              else {
                 $inputExpense.val(data["code"]);
-                $("input#Expense").val(data["code"]);
+                $("input#Expense").val(data["id"]);
             }
         });
     }

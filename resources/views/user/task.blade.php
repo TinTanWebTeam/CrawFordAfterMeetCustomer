@@ -959,7 +959,7 @@
                 },
                 chooseTaskTimeWhenUseEventDoubleClick:function(element)
                 {
-                    $("input[name=ProfessionalServices]").val($(element).find("td:eq(0)").html());
+                    $("input[name=ProfessionalServices]").val($(element).attr("id"));
                     $("input[name=ProfessionalServicesCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modalListTaskCaterogyTime]").modal("hide");
                 },
@@ -971,7 +971,7 @@
                 },
                 chooseTaskExpenseWhenUseEventDoubleClick:function(element)
                 {
-                    $("input[name=Expense]").val($(element).find("td:eq(0)").html());
+                    $("input[name=Expense]").val($(element).attr("id"));
                     $("input[name=ExpenseCode]").val($(element).find("td:eq(0)").html());
                     $("div[id=modalListTaskCaterogyExpense]").modal("hide");
                 },
@@ -1185,7 +1185,7 @@
             }
             else {
                 $inputTime.val(data["code"]);
-                $("input#ProfessionalServices").val(data["code"]);
+                $("input#ProfessionalServices").val(data["id"]);
             }
         });
     }
@@ -1220,7 +1220,7 @@
             }
             else {
                 $inputExpense.val(data["code"]);
-                $("input#Expense").val(data["code"]);
+                $("input#Expense").val(data["id"]);
             }
         });
     }
