@@ -295,12 +295,12 @@ class AdminController extends Controller
                             ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
                             ->leftJoin('rate_details', 'claim_task_details.userId', '=', 'rate_details.userId')
                             ->leftJoin('rate_types', 'rate_details.rateTypeId', '=', 'rate_types.id')
+                            ->where('claim_task_details.invoiceMajorNo','=',null)
                             ->where('claim_task_details.professionalServices', '!=', 1)
                             ->where('claim_task_details.professionalServices', '!=', 2)
                             ->where('claim_task_details.claimId', '=', $claim->id)
-                            ->where('claim_task_details.billDate', '>', $date)
-                            ->orWhere('claim_task_details.invoiceMajorNo',null)
                             ->where('claim_task_details.statusId',0)
+                            ->where('claim_task_details.claimId', $claim->id)
                             ->groupBy('users.name')
                             ->select(
                                 'users.name as userName',
@@ -322,16 +322,14 @@ class AdminController extends Controller
                             ];
                             array_push($arrayListTime, $array);
                         }
-
                         $listExpense = DB::table('claim_task_details')
                             ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
                             ->leftJoin('task_categories', 'claim_task_details.expense', '=', 'task_categories.id')
+                            ->where('claim_task_details.invoiceMajorNo','=',null)
                             ->where('claim_task_details.professionalServices', '!=', 1)
                             ->where('claim_task_details.professionalServices', '!=', 2)
                             ->where('claim_task_details.expense', '!=', 0)
                             ->where('claim_task_details.claimId', '=', $claim->id)
-                            ->where('claim_task_details.billDate', '>', $date)
-                            ->orWhere('claim_task_details.invoiceMajorNo',null)
                             ->where('claim_task_details.statusId',0)
                             ->groupBy('users.name')
 //                            ->groupBy('claim_task_details.expense')
@@ -1058,7 +1056,6 @@ class AdminController extends Controller
 
     public function loadTaskDetailByDate(Request $request)
     {
-        $created_at = null;
         $result = null;
         $claim = null;
         $billToId = null;
@@ -1072,26 +1069,15 @@ class AdminController extends Controller
             if ($request->get('key') != null) {
                 $claim = Claim::where('code', $request->get('key'))->first();
                 if ($claim) {
-                    //get IB complete
-                    $pending = ClaimTaskDetail::where('statusId',2)->orderBy('billDate','desc')->first();
-                    if($pending){
-                        $created_at = $pending->created_at;
-                    }
-                    else
-                    {
-                        $created_at = $claim->openDate;
-                    }
                     //load data
                     $listTime = DB::table('claim_task_details')
                         ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
                         ->leftJoin('rate_details', 'claim_task_details.userId', '=', 'rate_details.userId')
                         ->leftJoin('rate_types', 'rate_details.rateTypeId', '=', 'rate_types.id')
+                        ->where('claim_task_details.invoiceMajorNo',null)
                         ->where('claim_task_details.professionalServices', '!=', 1)
                         ->where('claim_task_details.professionalServices', '!=', 2)
                         ->where('claim_task_details.claimId', '=', $claim->id)
-                        //->where('claim_task_details.billDate', '>', $fromDate)
-                        //->orWhere('claim_task_details.invoiceMajorNo',null)
-                        ->where('claim_task_details.created_at', '>', $created_at)
                         ->where('claim_task_details.billDate', '<', $toDate)
                         ->where('claim_task_details.statusId',0)
                         ->groupBy('users.name')
@@ -1120,13 +1106,11 @@ class AdminController extends Controller
                     $listExpense = DB::table('claim_task_details')
                         ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
                         ->leftJoin('task_categories', 'claim_task_details.expense', '=', 'task_categories.id')
+                        ->where('claim_task_details.invoiceMajorNo',null)
                         ->where('claim_task_details.professionalServices', '!=', 1)
                         ->where('claim_task_details.professionalServices', '!=', 2)
                         ->where('claim_task_details.expense', '!=', 0)
                         ->where('claim_task_details.claimId', '=', $claim->id)
-                        //->where('claim_task_details.billDate', '>', $fromDate)
-                        //->orWhere('claim_task_details.invoiceMajorNo',null)
-                        ->where('claim_task_details.created_at', '>', $created_at)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.statusId',0)
                         ->groupBy('users.name')
@@ -1931,7 +1915,8 @@ class AdminController extends Controller
             ->leftJoin('statuses','claim_task_details.statusId','=','statuses.id')
             ->where('claims.code', '=', $claim_id)
             ->select(
-                'invoices.invoiceMajorNo as invoice_id',
+                'invoices.id as invoice_id',
+                'invoices.invoiceMajorNo as invoice_major',
                 'invoices.invoiceTempNo as invoice_temp',
                 'claims.code as claim_id',
                 'bills.id as bill_id',
@@ -1944,35 +1929,65 @@ class AdminController extends Controller
         ];
     }
 
-    public function getReportData($invoice_major_no, $bill_id, $claim_code)
+    public function getReportData($invoice_id, $bill_id, $claim_code)
     {
         $claim = Claim::where('code', $claim_code)->first();
+        $insurer = Customer::where('code',$claim->insurerCode)->first();
         $branch = Branch::where('code', $claim->branchCode)->first();
         $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
-        $extendOfDamage = ExtendOfDamage::where('code', $claim->lossDescCode)->first();
+        $typeOfDamage = TypeOfDamage::where('code',$claim->lossDescCode)->first();
         $adjuster = User::where('name', $claim->adjusterCode)->first();
         $sourceCode = SourceCustomer::where('code', $claim->sourceCode)->first();
-        $docket_backup = DB::table('claim_task_details')
-            ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
-            ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
-            ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
-            ->where('claim_task_details.invoiceMajorNo', '=', $invoice_major_no)
-            ->select(
-                'claim_task_details.professionalServicesNote',
-                'pro.description as professionalServicesNoteDes',
-                'claim_task_details.professionalServicesTime',
-                'claim_task_details.expenseNote',
-                'ex.description as expenseNoteDes',
-                'claim_task_details.expenseAmount',
-                'claim_task_details.billDate',
-                'claim_task_details.userId',
-                'claim_task_details.invoiceMajorNo',
-                'claim_task_details.invoiceDate',
-                'pro.code as professionalServices',
-                'ex.code as expense',
-                'users.name as adjusterCode'
-            )->get();
-        $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice_major_no)->where('userId','!=',3)->orderBy('created_at', 'asc')->get();
+        $invoice = Invoice::where('id',$invoice_id)->first();
+        $docket_backup = null;
+        $docket = null;
+        if($invoice->invoiceMajorNo){
+            $docket_backup = DB::table('claim_task_details')
+                ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
+                ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
+                ->where('claim_task_details.invoiceMajorNo', '=', $invoice->invoiceMajorNo)
+                ->select(
+                    'claim_task_details.professionalServicesNote',
+                    'pro.description as professionalServicesNoteDes',
+                    'claim_task_details.professionalServicesTime',
+                    'claim_task_details.expenseNote',
+                    'ex.description as expenseNoteDes',
+                    'claim_task_details.expenseAmount',
+                    'claim_task_details.billDate',
+                    'claim_task_details.userId',
+                    'claim_task_details.invoiceMajorNo',
+                    'claim_task_details.invoiceDate',
+                    'pro.code as professionalServices',
+                    'ex.code as expense',
+                    'users.name as adjusterCode'
+                )->get();
+            $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice->invoiceMajorNo)
+                ->where('userId','!=',23)->orderBy('created_at', 'asc')->get();
+        }else{
+            $docket_backup = DB::table('claim_task_details')
+                ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
+                ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
+                ->where('claim_task_details.invoiceTempNo', '=', $invoice->invoiceTempNo)
+                ->select(
+                    'claim_task_details.professionalServicesNote',
+                    'pro.description as professionalServicesNoteDes',
+                    'claim_task_details.professionalServicesTime',
+                    'claim_task_details.expenseNote',
+                    'ex.description as expenseNoteDes',
+                    'claim_task_details.expenseAmount',
+                    'claim_task_details.billDate',
+                    'claim_task_details.userId',
+                    'claim_task_details.invoiceMajorNo',
+                    'claim_task_details.invoiceDate',
+                    'pro.code as professionalServices',
+                    'ex.code as expense',
+                    'users.name as adjusterCode'
+                )->get();
+            $docket = ClaimTaskDetail::where('invoiceTempNo', $invoice->invoiceTempNo)
+                ->where('userId','!=',23)->orderBy('created_at', 'asc')->get();
+        }
         $assit_array = [];
         foreach ($docket->groupBy('userId') as $key => $value) {
             $assit_detail = User::where('id', $key)->first();
@@ -1995,13 +2010,13 @@ class AdminController extends Controller
                 'assignmentTypeCode' => $claim->assignmentTypeCode,
                 'accountCode' => $claim->accountCode,
                 'accountPolicyId' => $claim->accountPolicyId,
-                'insuredName' => $claim->insuredName,
+                'insuredName' => $insurer->fullName,
                 'insuredClaim' => $claim->insuredClaim,
                 'tradingAs' => $claim->tradingAs,
                 'claimTypeCode' => $claim->claimTypeCode,
                 'claimTypeCodeDetail' => $insuranceDetail->name,
                 'lossDescCode' => $claim->lossDescCode,
-                'lossDescCodeDetail' => $extendOfDamage == null ? '' : $extendOfDamage->name,
+                'lossDescCodeDetail' => $typeOfDamage->name,
                 'catastrophicLoss' => $claim->catastrophicLoss,
                 'sourceCode' => $claim->sourceCode,
                 'sourceCodeDetail' => $sourceCode->name,
@@ -2028,7 +2043,6 @@ class AdminController extends Controller
                 'adjusterCode' => $claim->adjusterCode,
                 'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
                 'rate' => $claim->rate,
-                'taxable' => $claim->taxable,
                 'taxable' => $claim->taxable
             ],
             'bill' => [
@@ -2708,29 +2722,47 @@ class AdminController extends Controller
                         $invoice->corInsurer = $request->get('data')['coorInsurer'];
                         $invoice->save();
                         //Add new rate change
-                        $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
-                            ->where('claimId', $request->get('data')['idClaim'])
+                        $listClaimTaskDetail = ClaimTaskDetail::where('claimId', $request->get('data')['idClaim'])
+//                            ->where('created_at','>',$created_atCP)
                             ->where('billDate', '>=', $fromDate)
-//                            ->orWhere('invoiceTempNo',null)
-                            ->orwhere('created_at','>',$created_atCP)
                             ->where('billDate', '<=', $claimTaskDetail->billDate)
                             ->where('lockInvoiceNo',0)
-                            ->get();
-                        foreach ($listClaimTaskDetail as $taskDetail) {
-                            //update active
-                            $taskDetail->active = 1;
-                            //update invoiceMajorNo
-                            $taskDetail->invoiceTempNo = $invoiceTempNo;
-                            $taskDetail->save();
-                            //Update rate change
-                            foreach ($request->get('data')['ArrayData'] as $item) {
-                                $idUser = User::where('name', $item[0])->first()->id;
-                                if ($idUser) {
-                                    $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;
-                                    if ($taskDetail->userId == $idUser) {
-                                        if ($checkRateDefault != $item[2]) {
-                                            $taskDetail->professionalServicesRateBillValue = $item[2];
-                                            $taskDetail->save();
+                            ->where('statusId', 0)
+                            ->get()
+                            ->toArray();
+                        $listClaimTaskDetailV2 =  ClaimTaskDetail::where('claimId', $request->get('data')['idClaim'])
+                            ->where('billDate', '<=', $fromDate)
+                            ->where('invoiceMajorNo',null)
+                            ->where('billDate', '<=', $claimTaskDetail->billDate)
+                            ->where('lockInvoiceNo',0)
+                            ->where('statusId', 0)
+                            ->get()
+                            ->toArray();
+                        if($listClaimTaskDetailV2!=null)
+                        {
+                            foreach($listClaimTaskDetailV2 as $item){
+                                array_push($listClaimTaskDetail,$item);
+                            }
+                        }
+                        foreach ($listClaimTaskDetail as  $taskDetail) {
+                            $task = ClaimTaskDetail::where('id',$taskDetail["id"])->first();
+                            if($task)
+                            {
+                                //update active
+                                $task->active = 1;
+                                //update invoiceMajorNo
+                                $task->invoiceTempNo = $invoiceTempNo;
+                                $task->save();
+                                //Update rate change
+                                foreach ($request->get('data')['ArrayData'] as $item) {
+                                    $idUser = User::where('name', $item[0])->first()->id;
+                                    if ($idUser) {
+                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;
+                                        if ($task->userId == $idUser) {
+                                            if ($checkRateDefault != $item[2]) {
+                                                $task->professionalServicesRateBillValue = $item[2];
+                                                $task->save();
+                                            }
                                         }
                                     }
                                 }
@@ -2841,24 +2873,40 @@ class AdminController extends Controller
                         //insert all row of table claimtaskdetail after have invoice
                         $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
                             ->where('billDate', '>=', $fromDate)
-                            ->orWhere('invoiceMajorNo',null)
                             ->where('billDate', '<=', $claimTaskDetail->billDate)
                             ->where('claimId', $request->get('data')['idClaim'])
-                            ->get();
+                            ->get()->toArray();
+                        $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
+                            ->where('billDate', '<=', $fromDate)
+                            ->where('invoiceMajorNo',null)
+                            ->where('billDate', '<=', $claimTaskDetail->billDate)
+                            ->where('claimId', $request->get('data')['idClaim'])
+                            ->get()->toArray();
+                        if($listClaimTaskDetailV2!=null)
+                        {
+                            foreach($listClaimTaskDetailV2 as $item)
+                            {
+                                array_push($listClaimTaskDetailV2,$item);
+                            }
+                        }
                         foreach ($listClaimTaskDetail as $taskDetail) {
-                            $taskDetail->active = 1;
-                            $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
-                            $taskDetail->invoiceDate = $invoice->invoiceDay;
-                            $taskDetail->save();
-                            //c?p nh?t rate thay ??i
-                            foreach ($request->get('data')['ArrayData'] as $item) {
-                                $idUser = User::where('name', $item[0])->first()->id;
-                                if ($idUser) {
-                                    $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
-                                    if ($taskDetail->userId == $idUser) {
-                                        if ($checkRateDefault != $item[2]) {
-                                            $taskDetail->professionalServicesRateBillValue = $item[2];
-                                            $taskDetail->save();
+                            $task = ClaimTaskDetail::where('id',$taskDetail["id"])->first();
+                            if($task)
+                            {
+                                $task->active = 1;
+                                $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                $task->invoiceDate = $invoice->invoiceDay;
+                                $task->save();
+                                //c?p nh?t rate thay ??i
+                                foreach ($request->get('data')['ArrayData'] as $item) {
+                                    $idUser = User::where('name', $item[0])->first()->id;
+                                    if ($idUser) {
+                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
+                                        if ($task->userId == $idUser) {
+                                            if ($checkRateDefault != $item[2]) {
+                                                $task->professionalServicesRateBillValue = $item[2];
+                                                $task->save();
+                                            }
                                         }
                                     }
                                 }
@@ -2975,24 +3023,41 @@ class AdminController extends Controller
                     //Update detail task of user
                     $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
                         ->where('billDate', '>=', $fromDate)
-                        ->orWhere('invoiceMajorNo',null)
                         ->where('billDate', '<=', $claimTaskDetail->billDate)
                         ->where('claimId', $request->get('data')['idClaim'])
-                        ->get();
+                        ->get()->toArray();
+                    $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
+                        ->where('billDate', '<=', $fromDate)
+                        ->where('invoiceMajorNo',null)
+                        ->where('billDate', '<=', $claimTaskDetail->billDate)
+                        ->where('claimId', $request->get('data')['idClaim'])
+                        ->get()->toArray();
+                    if($listClaimTaskDetailV2!=null)
+                    {
+                        foreach($listClaimTaskDetailV2 as $item)
+                        {
+                            array_push($listClaimTaskDetail,$item);
+                        }
+                    }
                     foreach ($listClaimTaskDetail as $taskDetail) {
-                        $taskDetail->active = 1;
-                        $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
-                        $taskDetail->invoiceDate = $invoice->invoiceDay;
-                        $taskDetail->save();
-                        //c?p nh?t rate value change
-                        foreach ($request->get('data')['ArrayData'] as $item) {
-                            $idUser = User::where('name', $item[0])->first()->id;
-                            if ($idUser) {
-                                $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//l?y ra rate m?c ??nh
-                                if ($taskDetail->userId == $idUser) {
-                                    if ($checkRateDefault != $item[2]) {
-                                        $taskDetail->professionalServicesRateBillValue = $item[2];
-                                        $taskDetail->save();
+                        $task = ClaimTaskDetail::where('id',$taskDetail["id"])->first();
+                        if($task)
+                        {
+                            $task->active = 1;
+                            $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                            $task->invoiceDate = $invoice->invoiceDay;
+                            $task->save();
+
+                            //c?p nh?t rate value change
+                            foreach ($request->get('data')['ArrayData'] as $item) {
+                                $idUser = User::where('name', $item[0])->first()->id;
+                                if ($idUser) {
+                                    $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//l?y ra rate m?c ??nh
+                                    if ($task->userId == $idUser) {
+                                        if ($checkRateDefault != $item[2]) {
+                                            $task->professionalServicesRateBillValue = $item[2];
+                                            $task->save();
+                                        }
                                     }
                                 }
                             }
@@ -3058,21 +3123,37 @@ class AdminController extends Controller
                                                 ->where('claimId', $bill->claimId)
                                                 ->where('active', 1)
                                                 ->where('billDate', '>=', $fromDate)
-                                                ->orWhere('invoiceTempNo','!=',null)
                                                 ->where('billDate', '<=', $task->billDate)
-                                                ->get();
+                                                ->get()->toArray();
+                                            $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
+                                                ->where('claimId', $bill->claimId)
+                                                ->where('active', 1)
+                                                ->where('billDate', '<=', $fromDate)
+                                                ->where('invoiceMajorNo',null)
+                                                ->where('billDate', '<=', $task->billDate)
+                                                ->get()->toArray();
+                                            if($listClaimTaskDetailV2!=null)
+                                            {
+                                                foreach($listClaimTaskDetailV2 as $item){
+                                                    array_push($listClaimTaskDetail,$item);
+                                                }
+                                            }
                                             foreach ($listClaimTaskDetail as $taskDetail) {
-                                                $taskDetail->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                                $taskDetail->invoiceDate = $invoice->invoiceDay;
-                                                $taskDetail->save();
-                                                foreach ($request->get('data')['ArrayData'] as $item) {
-                                                    $idUser = User::where('name', $item[0])->first()->id;
-                                                    if ($idUser) {
-                                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
-                                                        if ($taskDetail->userId == $idUser) {
-                                                            if ($checkRateDefault != $item[2]) {
-                                                                $taskDetail->professionalServicesRateBillValue = $item[2];
-                                                                $taskDetail->save();
+                                                $task = ClaimTaskDetail::where('id',$taskDetail["id"])->first();
+                                                if($task)
+                                                {
+                                                    $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                                    $task->invoiceDate = $invoice->invoiceDay;
+                                                    $task->save();
+                                                    foreach ($request->get('data')['ArrayData'] as $item) {
+                                                        $idUser = User::where('name', $item[0])->first()->id;
+                                                        if ($idUser) {
+                                                            $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//check rate default vs rate change
+                                                            if ($task->userId == $idUser) {
+                                                                if ($checkRateDefault != $item[2]) {
+                                                                    $task->professionalServicesRateBillValue = $item[2];
+                                                                    $task->save();
+                                                                }
                                                             }
                                                         }
                                                     }

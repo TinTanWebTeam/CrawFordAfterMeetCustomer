@@ -393,7 +393,8 @@
                 <table class="table table-hover" id="table-invoice">
                 	<thead>
                 		<tr>
-                			<th>Invoice Id</th>
+                			<th>MajorNo</th>
+                            <th>TempNo</th>
                             <th>Invoice Date</th>
                             <th>Invoice Type</th>
                             <th>Claim Id</th>
@@ -744,16 +745,25 @@
                                 var row = "";
                                 $("tbody#table-invoice-body").empty();
                                 for (var i = 0; i < data["data"].length; i++) {
-                                    if(data["data"][i]["invoice_id"]!==null)
+                                    if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]===null)
                                     {
-                                        row += "<tr id= "+data["data"][i]["invoice_id"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
-                                        row += "<td>" + data["data"][i]["invoice_id"] + "</td>";
+                                        row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                        row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
+                                        row += "<td></td>";
                                     }
-                                    else
+                                    if(data["data"][i]["invoice_temp"]!==null && data["data"][i]["invoice_major"]===null)
                                     {
                                         row += "<tr id= "+data["data"][i]["invoice_temp"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                        row += "<td></td>";
                                         row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
                                     }
+                                    if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]!==null)
+                                    {
+                                        row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                        row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
+                                        row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
+                                    }
+
 
 
                                     if (data["data"][i]["invoice_date"]) {
@@ -824,7 +834,7 @@
                         //load information of report
                         $("span[id=contactName]").text(data[0][0]["contactName"]);
                         $("div[id=NoFee]").text($(element).find("td:eq(0)").text());
-                        $("h4[id=dateFee]").text($(element).find("td:eq(1)").text());
+                        $("h4[id=dateFee]").text($(element).find("td:eq(2)").text());
                         $("h4[id=insuredClaim]").text(data[0][0]["insuredFirstName"] +" "+ data[0][0]["insuredLastName"]);
                         $("h4[id=lossDescClaim]").text(data[0][0]["descriptionLossDesc"]);
                         $("h4[id=policyClaim]").text(data[0][0]["policy"]);
