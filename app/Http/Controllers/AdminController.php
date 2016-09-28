@@ -1064,7 +1064,7 @@ class AdminController extends Controller
         $a = explode(" ", $request->get('fromDate'));
         $fromDate = Carbon::parse($a[0])->format('Y-m-d') . " " . $a[1];
         //$date = Carbon::now();
-        $toDate = $request->get('toDate') . " " . "23:59:59";
+        $toDate = $request->get('toDate') . " " . Carbon::parse(Carbon::now())->format("H:i:s");
         try {
             if ($request->get('key') != null) {
                 $claim = Claim::where('code', $request->get('key'))->first();
