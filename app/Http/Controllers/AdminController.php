@@ -2778,7 +2778,7 @@ class AdminController extends Controller
                         $invoiceCount = Invoice::all();
                         if (count($invoiceCount)>0) {
                             $invoiceTemp = Invoice::orderBy('invoiceTempNo','desc')->first();
-                            $invoiceMajor = Invoice::oreder('invoiceMajorNo','desc')->first();
+                            $invoiceMajor = Invoice::orderBy('invoiceMajorNo','desc')->first();
                             if($invoiceTemp !=null && $invoiceMajor==null)
                             {
                                 $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
@@ -2943,7 +2943,7 @@ class AdminController extends Controller
                         }
                         else
                         {
-
+                            
                         }
                     } else {
                         $invoiceMajorNo = 20000;
