@@ -1918,7 +1918,7 @@ class AdminController extends Controller
                 'invoices.invoiceTempNo as invoice_temp',
                 'claims.code as claim_id',
                 'bills.id as bill_id',
-                'invoices.created_at as invoice_date',
+                'invoices.invoiceDay as invoice_date',
                 'statuses.name as invoiceType'
             )->get();
         return [
