@@ -250,7 +250,8 @@
                 <table class="table table-bordered" id="tableBillByStatus">
                     <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>Invoice Major No</th>
+                        <th>Invoice Temp No</th>
                         <th>Customer</th>
                         <th>Status</th>
                         <th>Type</th>

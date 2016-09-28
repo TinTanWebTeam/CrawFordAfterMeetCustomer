@@ -435,9 +435,12 @@ class AdminController extends Controller
         try {
             $bill = DB::table('claim_task_details')
                 ->join('bills', 'claim_task_details.id', '=', 'bills.billId')
+                ->join('invoices','bills.id','=','invoice.idBill')
                 ->join('statuses', 'claim_task_details.statusId', '=', 'statuses.id')
                 ->where('claim_task_details.claimId', $request->get('idClaim'))
                 ->select(
+                    'invoices.invoiceMajorNo as majorNo',
+                    'invoices.invoiceTempNo as tempNo',
                     'bills.id as idBill',
                     'bills.billToId as customer',
                     'statuses.name as status',
