@@ -529,7 +529,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-adjuster-code{
-    width: 9%;
+    width: 14%;
     display: inline-block;
 }
 .dockets-content-header-code{
@@ -549,7 +549,7 @@ form#trialFee h5{
     display: inline-block;
 }
 .dockets-content-header-note{
-    width: 40%;
+    width: 35%;
     display: inline-block;
 }
 .dockets-content-header-invoice-major-no{
