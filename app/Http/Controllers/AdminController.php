@@ -1945,6 +1945,7 @@ class AdminController extends Controller
                 ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
                 ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
                 ->where('claim_task_details.invoiceMajorNo', '=', $invoice->invoiceMajorNo)
+                ->orderBy('claim_task_details.billDate','asc')
                 ->select(
                     'claim_task_details.professionalServicesNote',
                     'pro.description as professionalServicesNoteDes',
@@ -1968,6 +1969,7 @@ class AdminController extends Controller
                 ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
                 ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
                 ->where('claim_task_details.invoiceTempNo', '=', $invoice->invoiceTempNo)
+                ->orderBy('claim_task_details.billDate','asc')
                 ->select(
                     'claim_task_details.professionalServicesNote',
                     'pro.description as professionalServicesNoteDes',
@@ -2050,7 +2052,9 @@ class AdminController extends Controller
             ],
             'assit' => $assit_array,
             'docket' => $docket_backup,
-            'print_date' => date('d-m-Y H:i:s')
+            'print_date' => date('d-m-Y H:i:s'),
+            'sum_unit' => collect($docket_backup)->sum('professionalServicesTime'),
+            'sum_expense' => collect($docket_backup)->sum('expenseAmount')
         ];
     }
 

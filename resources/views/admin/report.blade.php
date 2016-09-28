@@ -1756,7 +1756,6 @@
                 else
                 {
                     row += "<span>0.0</span>";
-
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
@@ -1775,13 +1774,13 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(result.docket[i].professionalServices !=null && result.docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + result.docket[i].professionalServicesNote.trim() + "<br>" + result.docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + result.docket[i].professionalServicesNote.trim()[0].toUpperCase() + result.docket[i].professionalServicesNote.trim().slice(1) + "<br>" + result.docket[i].expenseNote.trim()[0].toUpperCase() + result.docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(result.docket[i].professionalServices !=null && result.docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].professionalServicesNote.trim()[0].toUpperCase() + result.docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(result.docket[i].professionalServices == null && result.docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].expenseNote.trim()[0].toUpperCase() + result.docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ result.docket[i].professionalServicesNote + " " + result.docket[i].expenseNote +"</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
@@ -1815,6 +1814,40 @@
     function load_page_2(){
         if(continue_id + 1 == data_docket.length){
             // console.log('load complete insert discount');
+            var row = "";
+            row += "<div class='element' style='margin-bottom: 10px'>";
+            row += "<div class='dockets-content-header-date'>";
+            row += "<span style='padding-right: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-branch-code'>";
+            row += "<span style='padding-right: 40px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-adjuster-code'>";
+            row += "<span style='padding-right: 30px;font-weight:600'>Total</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-code'>";
+            row += "<span style='padding-right: 20px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-unit'>";
+            row += "<span style='font-weight:600'>" + Number(results['sum_unit']).toFixed(2) + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-code'>";
+            row += "<span></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-amount'>";
+            row += "<span style='font-weight:600'>" + String(results['sum_expense']).toLocaleString() + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-note'>";
+            row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-major-no'>";
+            row += "<span style='padding-left: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-date'>";
+            row += "<span style='padding-left: 35px'></span>";
+            row += "</div>";
+            row += "</div>";
+            $("#docket-contain-page-1").append(row);
             // console.log(data_docket);
             $("#page_2").remove();
             $("#page_3").remove();
@@ -1887,11 +1920,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(data_docket[i].professionalServices !=null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim() + "<br>" + data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) + "<br>" + data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices !=null && data_docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices == null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
                     row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 }
@@ -1926,6 +1959,40 @@
     function load_page_3() {
         if(continue_id + 1 == data_docket.length){
             // console.log('load complete insert discount');
+            var row = "";
+            row += "<div class='element' style='margin-bottom: 10px'>";
+            row += "<div class='dockets-content-header-date'>";
+            row += "<span style='padding-right: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-branch-code'>";
+            row += "<span style='padding-right: 40px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-adjuster-code'>";
+            row += "<span style='padding-right: 30px;font-weight:600'>Total</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-code'>";
+            row += "<span style='padding-right: 20px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-unit'>";
+            row += "<span style='font-weight:600'>" + Number(results['sum_unit']).toFixed(2) + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-code'>";
+            row += "<span></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-amount'>";
+            row += "<span style='font-weight:600'>" + String(results['sum_expense']).toLocaleString() + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-note'>";
+            row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-major-no'>";
+            row += "<span style='padding-left: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-date'>";
+            row += "<span style='padding-left: 35px'></span>";
+            row += "</div>";
+            row += "</div>";
+            $("#docket-contain-page-2").append(row);
             // console.log(data_docket);
             $("#page_3").remove();
             $("#page_4").remove();
@@ -1997,11 +2064,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(data_docket[i].professionalServices !=null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim() + "<br>" + data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) + "<br>" + data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices !=null && data_docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices == null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
                     row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 }
@@ -2036,6 +2103,40 @@
     function load_page_4() {
         if(continue_id + 1 == data_docket.length){
             // console.log('load complete insert discount');
+            var row = "";
+            row += "<div class='element' style='margin-bottom: 10px'>";
+            row += "<div class='dockets-content-header-date'>";
+            row += "<span style='padding-right: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-branch-code'>";
+            row += "<span style='padding-right: 40px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-adjuster-code'>";
+            row += "<span style='padding-right: 30px;font-weight:600'>Total</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-code'>";
+            row += "<span style='padding-right: 20px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-unit'>";
+            row += "<span style='font-weight:600'>" + Number(results['sum_unit']).toFixed(2) + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-code'>";
+            row += "<span></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-amount'>";
+            row += "<span style='font-weight:600'>" + String(results['sum_expense']).toLocaleString() + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-note'>";
+            row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-major-no'>";
+            row += "<span style='padding-left: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-date'>";
+            row += "<span style='padding-left: 35px'></span>";
+            row += "</div>";
+            row += "</div>";
+            $("#docket-contain-page-3").append(row);
             // console.log(data_docket);
             $("#page_4").remove();
             $("#page_5").remove();
@@ -2106,11 +2207,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(data_docket[i].professionalServices !=null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim() + "<br>" + data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) + "<br>" + data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices !=null && data_docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices == null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
                     row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 }
@@ -2145,6 +2246,40 @@
     function load_page_5() {
         if(continue_id + 1 == data_docket.length){
             // console.log('load complete insert discount');
+            var row = "";
+            row += "<div class='element' style='margin-bottom: 10px'>";
+            row += "<div class='dockets-content-header-date'>";
+            row += "<span style='padding-right: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-branch-code'>";
+            row += "<span style='padding-right: 40px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-adjuster-code'>";
+            row += "<span style='padding-right: 30px;font-weight:600'>Total</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-code'>";
+            row += "<span style='padding-right: 20px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-unit'>";
+            row += "<span style='font-weight:600'>" + Number(results['sum_unit']).toFixed(2) + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-code'>";
+            row += "<span></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-amount'>";
+            row += "<span style='font-weight:600'>" + String(results['sum_expense']).toLocaleString() + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-note'>";
+            row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-major-no'>";
+            row += "<span style='padding-left: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-date'>";
+            row += "<span style='padding-left: 35px'></span>";
+            row += "</div>";
+            row += "</div>";
+            $("#docket-contain-page-4").append(row);
             // console.log(data_docket);
             $("#page_5").remove();
             $("#page_6").remove();
@@ -2214,11 +2349,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(data_docket[i].professionalServices !=null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim() + "<br>" + data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) + "<br>" + data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices !=null && data_docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices == null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
                     row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 }
@@ -2252,6 +2387,40 @@
     }
     function load_page_6() {
         if(continue_id + 1 == data_docket.length){
+            var row = "";
+            row += "<div class='element' style='margin-bottom: 10px'>";
+            row += "<div class='dockets-content-header-date'>";
+            row += "<span style='padding-right: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-branch-code'>";
+            row += "<span style='padding-right: 40px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-adjuster-code'>";
+            row += "<span style='padding-right: 30px;font-weight:600'>Total</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-code'>";
+            row += "<span style='padding-right: 20px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-unit'>";
+            row += "<span style='font-weight:600'>" + Number(results['sum_unit']).toFixed(2) + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-code'>";
+            row += "<span></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-expense-amount'>";
+            row += "<span style='font-weight:600'>" + String(results['sum_expense']).toLocaleString() + "</span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-note'>";
+            row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-major-no'>";
+            row += "<span style='padding-left: 30px'></span>";
+            row += "</div>";
+            row += "<div class='dockets-content-header-invoice-date'>";
+            row += "<span style='padding-left: 35px'></span>";
+            row += "</div>";
+            row += "</div>";
+            $("#docket-contain-page-5").append(row);
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
@@ -2319,11 +2488,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
                 if(data_docket[i].professionalServices !=null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim() + "<br>" + data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>" + data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) + "<br>" + data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices !=null && data_docket[i].expense == null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote.trim()[0].toUpperCase() + data_docket[i].professionalServicesNote.trim().slice(1) +"</span>";
                 }else if(data_docket[i].professionalServices == null && data_docket[i].expense != null){
-                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim() +"</span>";
+                    row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].expenseNote.trim()[0].toUpperCase() + data_docket[i].expenseNote.trim().slice(1) +"</span>";
                 }else{
                     row += "<span style='float: left;padding-left: 30px;font-size: 18px;text-align: left'>"+ data_docket[i].professionalServicesNote + " " + data_docket[i].expenseNote +"</span>";
                 }
