@@ -2778,13 +2778,18 @@ class AdminController extends Controller
                         $invoiceCount = Invoice::all();
                         if (count($invoiceCount)>0) {
                             $invoiceTemp = Invoice::orderBy('invoiceTempNo','desc')->first();
-                            if($invoiceTemp)
+                            $invoiceMajor = Invoice::oreder('invoiceMajorNo','desc')->first();
+                            if($invoiceTemp !=null && $invoiceMajor==null)
                             {
                                 $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
                             }
-                            else
+                            else if($invoiceMajor!=null)
                             {
                                 $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                            }
+                            else
+                            {
+
                             }
                         } else {
                             $invoiceMajorNo = 20000;
@@ -2926,13 +2931,18 @@ class AdminController extends Controller
                     $invoiceCount = Invoice::all();
                     if (count($invoiceCount)>0) {
                         $invoiceTemp = Invoice::orderBy('invoiceTempNo','desc')->first();
-                        if($invoiceTemp)
+                        $invoiceMajor = Invoice::orderBy('invoiceMajorNo','desc')->first();
+                        if($invoiceTemp!=null && $invoiceMajor == null)
                         {
                             $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
                         }
-                        else
+                        else if($invoiceMajor!=null)
                         {
                             $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                        }
+                        else
+                        {
+
                         }
                     } else {
                         $invoiceMajorNo = 20000;
