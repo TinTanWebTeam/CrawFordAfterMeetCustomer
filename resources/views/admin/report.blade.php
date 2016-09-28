@@ -25,9 +25,6 @@
                                 Loss Location
                             </th>
                             <th>
-                                Receive Date
-                            </th>
-                            <th>
                                 Open Date
                             </th>
                             <th>
@@ -1406,7 +1403,6 @@
             </div>
         </div>
         <br>
-        
     </div>
 </div>
 
@@ -1422,9 +1418,21 @@
                 tr += "<td>" + listClaim[i]["code"] + "</td>";
                 tr += "<td>" + listClaim[i]["insuredLastName"] + "</td>";
                 tr += "<td>" + listClaim[i]["lossLocation"] + "</td>";
-                tr += "<td>" + listClaim[i]["receiveDate"] + "</td>";
-                tr += "<td>" + listClaim[i]["openDate"] + "</td>";
-                tr += "<td>" + listClaim[i]["adjusterCode"] + "</td>";
+                if(listClaim[i]["openDate"]){
+                    var openDate = new Date(listClaim[i]["openDate"].substring(0, 10));
+                    var dd = openDate.getDate();
+                    var mm = openDate.getMonth() + 1; //January is 0!
+
+                    var yyyy = openDate.getFullYear();
+                    if (dd < 10) {
+                        dd = '0' + dd;
+                    }
+                    if (mm < 10) {
+                        mm = '0' + mm;
+                    }
+                     tr += "<td>" + dd + "/" + mm + "/" + yyyy + "</td>";
+                }
+                tr += "<td>" + String(listClaim[i]["adjusterCode"]).toUpperCase() + "</td>";
                 tr += "<td><button class='btn btn-xs btn-success' onclick='fillClaimToInput(\"" + listClaim[i]["code"] + "\")'><span class='glyphicon glyphicon-ok'></span></button></td>";
                 tr += "</tr>";
                 row += tr;
@@ -1467,11 +1475,11 @@
                 for (var i = 0; i < result.data.length; i++) {
                     var tr = "<tr id='" + result.data[i].invoice_id + "'>";
                     if(result.data[i].invoice_major == null){
-                        tr += "<td></td>";
+                        tr += "<td>Not Available</td>";
                         tr += "<td>" + result.data[i].invoice_temp + "</td>";
                     }else{
                         tr += "<td>" + result.data[i].invoice_major + "</td>";
-                        tr += "<td></td>";
+                        tr += "<td>Not Available</td>";
                     }
                     tr += "<td>" + result.data[i].claim_id+  "</td>";
                     tr += "<td>" + result.data[i].invoice_date + "</td>";
@@ -1493,7 +1501,7 @@
     var continue_id = 0;
     var results = null;
     function getReportData(invoice_id, bill_id, claim_id) {
-        if($("tr[id="+invoice_id+"]").find("td").first().html() == ""){
+        if($("tr[id="+invoice_id+"]").find("td").first().html() == "Not Available"){
             $("#invoice_id").val($("tr[id="+invoice_id+"]").find("td").eq(1).html());
         }else{
             $("#invoice_id").val($("tr[id="+invoice_id+"]").find("td").eq(0).html());
@@ -1783,10 +1791,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = result.docket[i].invoiceDate.substring(0,4);
-                var month = result.docket[i].invoiceDate.substring(5,7);
-                var day = result.docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(result.docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = result.docket[i].invoiceDate.substring(0,4);
+                    var month = result.docket[i].invoiceDate.substring(5,7);
+                    var day = result.docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-1").append(row);
@@ -1890,10 +1902,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = data_docket[i].invoiceDate.substring(0,4);
-                var month = data_docket[i].invoiceDate.substring(5,7);
-                var day = data_docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(data_docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = data_docket[i].invoiceDate.substring(0,4);
+                    var month = data_docket[i].invoiceDate.substring(5,7);
+                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-2").append(row);
@@ -1995,10 +2011,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = data_docket[i].invoiceDate.substring(0,4);
-                var month = data_docket[i].invoiceDate.substring(5,7);
-                var day = data_docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(data_docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = data_docket[i].invoiceDate.substring(0,4);
+                    var month = data_docket[i].invoiceDate.substring(5,7);
+                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-3").append(row);
@@ -2099,10 +2119,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = data_docket[i].invoiceDate.substring(0,4);
-                var month = data_docket[i].invoiceDate.substring(5,7);
-                var day = data_docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(data_docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = data_docket[i].invoiceDate.substring(0,4);
+                    var month = data_docket[i].invoiceDate.substring(5,7);
+                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-4").append(row);
@@ -2202,10 +2226,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = data_docket[i].invoiceDate.substring(0,4);
-                var month = data_docket[i].invoiceDate.substring(5,7);
-                var day = data_docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(data_docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = data_docket[i].invoiceDate.substring(0,4);
+                    var month = data_docket[i].invoiceDate.substring(5,7);
+                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-5").append(row);
@@ -2302,10 +2330,14 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                var year = data_docket[i].invoiceDate.substring(0,4);
-                var month = data_docket[i].invoiceDate.substring(5,7);
-                var day = data_docket[i].invoiceDate.substring(8,10);
-                row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                if(data_docket[i].invoiceDate == null){
+                    row += "<span style='padding-left: 35px'></span>";
+                }else{
+                    var year = data_docket[i].invoiceDate.substring(0,4);
+                    var month = data_docket[i].invoiceDate.substring(5,7);
+                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
+                }
                 row += "</div>";
                 row += "</div>";
                 $("#docket-contain-page-6").append(row);
