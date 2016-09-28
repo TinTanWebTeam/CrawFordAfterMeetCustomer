@@ -1673,7 +1673,7 @@
             $("#partnershipId").empty().append(result.claim.partnershipId);
             $("#adjusterCode").empty().append(String(result.claim.adjusterCode).toUpperCase());
             $("#adjusterName").empty().append(String(result.claim.adjusterCodeDetail).toUpperCase());
-            $("#rate").empty().append(result.claim.rate);
+            $("#rate").empty().append(Number(result.claim.rate).toLocaleString());
             $("#feeType").empty().append("Hourly");
             $("#taxable").empty().append("True");
             $("#estimatedClaimValue").empty().append(result.claim.estimatedClaimValue);
@@ -1690,10 +1690,10 @@
                 row += "<span>" + String(result.assit[i].assit.firstName + " " + result.assit[i].assit.lastName).toUpperCase() + "</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-adjuster-time'>";
-                row += "<span>"+result.assit[i].time+"</span>";
+                row += "<span>"+ Number(result.assit[i].time).toFixed(2) +"</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-rate'>";
-                row += "<span>"+Number(result.assit[i].rate).toLocaleString()+"</span>";
+                row += "<span>"+ Number(result.assit[i].rate).toLocaleString()+"</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-fee-type'>";
                 row += "<span>&nbsp;&nbsp;&nbsp;Hourly</span>";
@@ -1711,6 +1711,7 @@
             }
             $("#assit-contain-page-1").empty().append(row);
             data_docket = result.docket;
+            $("#docket-contain-page-1").empty();
             for(var i = 0;i < result.docket.length;i++){
                 continue_id = i;
                 row = "";
@@ -1822,6 +1823,7 @@
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
+            $("#docket-contain-page-2").empty();
             for(var i = continue_index;i < data_docket.length;i++){
                 continue_id = i;
                 row = "";
@@ -1931,6 +1933,7 @@
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
+            $("#docket-contain-page-3").empty();
             for(var i = continue_index;i < data_docket.length;i++){
                 continue_id = i;
                 row = "";
@@ -2039,6 +2042,7 @@
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
+            $("#docket-contain-page-4").empty();
             for(var i = continue_index;i < data_docket.length;i++){
                 continue_id = i;
                 row = "";
@@ -2146,6 +2150,7 @@
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
+            $("#docket-contain-page-5").empty();
             for(var i = continue_index;i < data_docket.length;i++){
                 continue_id = i;
                 row = "";
@@ -2250,6 +2255,7 @@
             $("#page_6").remove();
         }else{
             var continue_index = continue_id + 1;
+            $("#docket-contain-page-6").empty();
             for(var i = continue_index;i < data_docket.length;i++){
                 continue_id = i;
                 row = "";
