@@ -234,7 +234,7 @@
                             <h5>Policy #:</h5>
                         </td>
                         <td>
-                            <input type="text" style="width: 70%;background-color: #F3EDED" id="policy" name="policy" readonly>
+                            <input type="text" style="width: 70%" id="policy" name="policy">
                         </td>
                     </tr>
                     <tr>
@@ -731,6 +731,7 @@
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
+                    $("button[name=modalAgree]").prop("disabled",true);
                     //get array object user
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
                     var theadList = $("thead[id=theadTableListTaskDetail]");
@@ -776,6 +777,7 @@
                         idBill:trialFeeView.idBillWhenUpdateBill,
                         billToCustomer: $("input[name=billTo]").val(),
                         coorInsurer:$("input[name=officer]").val(),
+                        policy:$("input[name=policy]").val(),
                         Total: $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().replace(/,/g,""),
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
                         ToDate:$("input[name=ToDate]").val(),
@@ -801,18 +803,21 @@
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("ToDate is  not smaller than FromDate!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else if (data["Error"] === "ToDate>TimeNow")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("ToDate is  not lager than date now!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else if(data["Error"]==="InvoiceMajorNoSame")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoice has exist!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else
                                 {
@@ -821,6 +826,7 @@
                                     $("div[id=modalNotification]").modal("show");
                                     trialFeeView.cancel();
                                     $("input[name=discount]").val("");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                             }
                             else //UPdate
@@ -829,18 +835,21 @@
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("ToDate is  not smaller than FromDate!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else if(data["Error"]==="InvoiceMajorNoSame")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoice has exist!!!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else if(data["Error"]==="ClaimClose")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This claim has closed!");
                                     $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                                 else
                                 {
@@ -850,6 +859,7 @@
                                     trialFeeView.cancel();
                                     trialFeeView.loadIBClaimConfirnm();
                                     $("input[name=discount]").val("");
+                                    $("button[name=modalAgree]").prop("disabled",false);
                                 }
                             }
                         })
@@ -878,6 +888,8 @@
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
                         if(data[0]==="Pending")//nếu bill này đang là bill pending
                         {
+                            $("input[name=officer]").val(data[5]);
+                            $("input[name=policy]").val(data[6]);
                             //if pending at status lock is disabled button update
                             if(data[1]==="Lock")
                             {
@@ -958,6 +970,8 @@
                         }
                         else
                         {
+                            $("input[name=officer]").val(data[5]);
+                            $("input[name=policy]").val(data[6]);
                             $("button[name=btnBill]").text("Update Bill");
                             var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
                             var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");

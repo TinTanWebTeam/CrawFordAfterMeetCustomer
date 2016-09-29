@@ -435,7 +435,7 @@ class AdminController extends Controller
         try {
             $bill = DB::table('claim_task_details')
                 ->join('bills', 'claim_task_details.id', '=', 'bills.billId')
-                ->join('invoices','bills.id','=','invoice.idBill')
+                ->join('invoices','bills.id','=','invoices.idBill')
                 ->join('statuses', 'claim_task_details.statusId', '=', 'statuses.id')
                 ->where('claim_task_details.claimId', $request->get('idClaim'))
                 ->select(
@@ -616,6 +616,9 @@ class AdminController extends Controller
                             array_push($arrayAll, $arrayData);
                             //get total of bill
                             array_push($arrayAll,$bill->total);
+                            //get coorInsurer
+                            array_push($arrayAll,$bill->claimOfficer);
+                            array_push($arrayAll,$bill->policyNumber);
                         } else {
                             //IB Complete
                             array_push($arrayAll, "Complete");
@@ -799,6 +802,10 @@ class AdminController extends Controller
                             array_push($arrayAll, $arrayData);
                             //get total of bill
                             array_push($arrayAll,$bill->total);
+                            //get coorInsurer
+                            array_push($arrayAll,$bill->claimOfficer);
+                            array_push($arrayAll,$bill->policyNumber);
+
 
                         }
                     }
@@ -1938,6 +1945,7 @@ class AdminController extends Controller
         $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
         $typeOfDamage = TypeOfDamage::where('code',$claim->lossDescCode)->first();
         $adjuster = User::where('name', $claim->adjusterCode)->first();
+        $rate = RateDetail::where('userId',$adjuster->id)->first();
         $sourceCode = SourceCustomer::where('code', $claim->sourceCode)->first();
         $invoice = Invoice::where('id',$invoice_id)->first();
         $docket_backup = null;
@@ -1959,6 +1967,7 @@ class AdminController extends Controller
                     'claim_task_details.billDate',
                     'claim_task_details.userId',
                     'claim_task_details.invoiceMajorNo',
+                    'claim_task_details.invoiceTempNo',
                     'claim_task_details.invoiceDate',
                     'pro.code as professionalServices',
                     'ex.code as expense',
@@ -1983,6 +1992,7 @@ class AdminController extends Controller
                     'claim_task_details.billDate',
                     'claim_task_details.userId',
                     'claim_task_details.invoiceMajorNo',
+                    'claim_task_details.invoiceTempNo',
                     'claim_task_details.invoiceDate',
                     'pro.code as professionalServices',
                     'ex.code as expense',
@@ -2013,7 +2023,7 @@ class AdminController extends Controller
                 'assignmentTypeCode' => $claim->assignmentTypeCode,
                 'accountCode' => $claim->accountCode,
                 'accountPolicyId' => $claim->accountPolicyId,
-                'insuredName' => $insurer->fullName,
+                'insuredName' => $claim->insuredLastName.' '.$claim->insuredLastName,
                 'insuredClaim' => $claim->insuredClaim,
                 'tradingAs' => $claim->tradingAs,
                 'claimTypeCode' => $claim->claimTypeCode,
@@ -2023,7 +2033,7 @@ class AdminController extends Controller
                 'catastrophicLoss' => $claim->catastrophicLoss,
                 'sourceCode' => $claim->sourceCode,
                 'sourceCodeDetail' => $sourceCode->name,
-                'insurerCode' => $claim->insurerCode,
+                'insurerCode' => $claim->insurerCode.' - '.$insurer->fullName,
                 'branchCode' => $claim->branchCode,
                 'branchCodeDetail' => $branch->name,
                 'branchTypeCode' => $claim->branchTypeCode,
@@ -2045,13 +2055,13 @@ class AdminController extends Controller
                 'partnershipId' => $claim->partnershipId,
                 'adjusterCode' => $claim->adjusterCode,
                 'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
-                'rate' => $claim->rate,
+                'rate' => $rate->value,
                 'taxable' => $claim->taxable
             ],
             'bill' => [
                 'billToId' => $bill->billToId,
                 'claimOfficer' => $bill->claimOfficer,
-                'policyNumber' => $bill->policyNumber
+                'policyNumber' => $claim->policy
             ],
             'assit' => $assit_array,
             'docket' => $docket_backup,
@@ -2588,14 +2598,7 @@ class AdminController extends Controller
                             ->where('claimId', $request->get('data')['idClaim'])
                             ->orderBy('billDate', 'desc')
                             ->first();
-                        $created_atCP = null;
                         if ($billCompleteFinalBill == null) {
-                            $claim = Claim::where('id',$request->get('data')['idClaim'])->first();
-                            if($claim)
-                            {
-                                $created_atCP = $claim->openDate;
-                            }
-                            //New
                             //Find bill pending not lockeInvoiceNo
                             $IBPending = ClaimTaskDetail::where('statusId', 1)
                                 ->where('claimId', $request->get('data')['idClaim'])
@@ -2607,22 +2610,26 @@ class AdminController extends Controller
                                 $IBPending->save();
                                 $invoiceTempNo = $IBPending->invoiceTempNo + 1;
                             } else {
-                                $invoice = Invoice::orderBy('invoiceTempNo','desc')->first();
-                                if($invoice!=null)
+                                $majorNo = Invoice::orderBy('invoiceMajorNo','desc')->first();
+                                $tempNo = Invoice::orderBy('invoiceTempNo','desc')->first();
+                                if($tempNo!=null && $majorNo==null)
                                 {
-//                                    dd($invoice->invoiceTempNo);
-                                    $invoiceTempNo = $invoice->invoiceTempNo +1;
+                                    $invoiceTempNo = $tempNo->invoiceTempNo +1;
+                                }
+                                else if($majorNo==null && $tempNo==null)
+                                {
+                                    $invoiceTempNo = 10000;
                                 }
                                 else
                                 {
-                                    $invoiceTempNo = 10000;
+                                    //$invoiceTempNo = 10000;
+                                    $invoiceTempNo =  ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
                                 }
 
                             }
 
                         }
                         else {
-                            $created_atCP = $billCompleteFinalBill->created_at;
                             //Find bill pending not lockeInvoiceNo
                             $IBPending = ClaimTaskDetail::where('statusId', 1)
                                 ->where('claimId', $request->get('data')['idClaim'])
@@ -2632,7 +2639,22 @@ class AdminController extends Controller
                                 ->first();
                             if ($IBPending == null) {
                                 //$invoiceTempNo = 10000;
-                                $invoiceTempNo = ((int)("1" . substr($billCompleteFinalBill->invoiceMajorNo, 1, 4))) + 1;
+                                //$invoiceTempNo = ((int)("1" . substr($billCompleteFinalBill->invoiceMajorNo, 1, 4))) + 1;
+                                $majorNo = Invoice::orderBy('invoiceMajorNo','desc')->first();
+                                $tempNo = Invoice::orderBy('invoiceTempNo','desc')->first();
+                                if($tempNo!=null && $majorNo==null)
+                                {
+                                    $invoiceTempNo = $tempNo->invoiceTempNo +1;
+                                }
+                                else if($majorNo==null && $tempNo==null)
+                                {
+                                    $invoiceTempNo = 10000;
+                                }
+                                else
+                                {
+                                    //$invoiceTempNo = 10000;
+                                    $invoiceTempNo =  ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
+                                }
                             } else {
                                 $IBPending->lockInvoiceNo = 1;
                                 $IBPending->save();
@@ -2663,6 +2685,10 @@ class AdminController extends Controller
                         $bill->claimId = $request->get('data')['idClaim'];
                         $bill->billId = $claimTaskDetail->id;
                         $bill->total = $request->get('data')['Total'];
+                        $bill->createdBy = Auth::user()->id;
+                        $bill->updatedBy = Auth::user()->id;
+                        $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                        $bill->policyNumber = $request->get('data')['policy'];
                         $bill->save();
                         //Add new details
                         foreach ($request->get('data')['ArrayData'] as $item) {
@@ -2818,6 +2844,10 @@ class AdminController extends Controller
                         $bill->claimId = $request->get('data')['idClaim'];
                         $bill->billId = $claimTaskDetail->id;
                         $bill->total = $request->get('data')['Total'];
+                        $bill->createdBy = Auth::user()->id;
+                        $bill->updatedBy = Auth::user()->id;
+                        $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                        $bill->policyNumber = $request->get('data')['policy'];
                         $bill->save();
                         //Add new invoice
                         $invoice = new Invoice();
@@ -2973,6 +3003,8 @@ class AdminController extends Controller
                     $bill->total = $request->get('data')['Total'];
                     $bill->createdBy = Auth::user()->id;
                     $bill->updatedBy = Auth::user()->id;
+                    $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                    $bill->policyNumber = $request->get('data')['policy'];
                     $bill->save();
                     //Add new details
                     foreach ($request->get('data')['ArrayData'] as $item) {
@@ -3114,6 +3146,8 @@ class AdminController extends Controller
                                     if ($request->get('data')['billStatus'] == 'complete') {
                                         //Update total
                                         $bill->total = $request->get('data')['Total'];
+                                        $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                                        $bill->policyNumber = $request->get('data')['policy'];
                                         $bill->save();
                                         //Update status = 2
                                         $task = ClaimTaskDetail::where('id', $bill->billId)
