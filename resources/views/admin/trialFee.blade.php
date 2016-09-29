@@ -970,6 +970,7 @@
                         }
                         else
                         {
+
                             $("input[name=officer]").val(data[5]);
                             $("input[name=policy]").val(data[6]);
                             $("button[name=btnBill]").text("Update Bill");
