@@ -932,7 +932,7 @@
                     $("input[name=ChooseDate]").val("");
                     $("button[name=actionAssignmentTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
-                    $("input[name=ProfessionalServicesRate]").val("");
+                    //$("input[name=ProfessionalServicesRate]").val("");
                     docketView.cancelAfterAddNew();
                     $("input[name=ExpenseAmount]").val("").prop("readOnly",false).css("background-color","");
                     //$("tbody[id=tbodyDocket]").empty();
