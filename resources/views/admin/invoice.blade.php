@@ -461,7 +461,7 @@
                 <img src="{{ asset('img/logo.jpg') }}" alt="invoice logo" class="invoice-logo-img">
             </div>
             <div class="fee-statement">
-                <h3>FEE STATEMENT</h3>
+                <h2>FEE STATEMENT</h2>
             </div>
             <div style="width: 1150px;display: block">
                 <h4>No: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline-block;" id="NoFee"></div></h4>
