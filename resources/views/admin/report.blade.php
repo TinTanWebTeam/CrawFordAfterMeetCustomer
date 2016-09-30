@@ -1795,12 +1795,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(result.docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = result.docket[i].invoiceDate.substring(0,4);
-                    var month = result.docket[i].invoiceDate.substring(5,7);
-                    var day = result.docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";
@@ -1941,12 +1941,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(data_docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = data_docket[i].invoiceDate.substring(0,4);
-                    var month = data_docket[i].invoiceDate.substring(5,7);
-                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";
@@ -2085,12 +2085,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(data_docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = data_docket[i].invoiceDate.substring(0,4);
-                    var month = data_docket[i].invoiceDate.substring(5,7);
-                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";
@@ -2228,12 +2228,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(data_docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = data_docket[i].invoiceDate.substring(0,4);
-                    var month = data_docket[i].invoiceDate.substring(5,7);
-                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";
@@ -2370,12 +2370,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(data_docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = data_docket[i].invoiceDate.substring(0,4);
-                    var month = data_docket[i].invoiceDate.substring(5,7);
-                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";
@@ -2509,12 +2509,12 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
-                if(data_docket[i].invoiceDate == null){
+                if(results['invoice_date'] == null){
                     row += "<span style='padding-left: 35px'></span>";
                 }else{
-                    var year = data_docket[i].invoiceDate.substring(0,4);
-                    var month = data_docket[i].invoiceDate.substring(5,7);
-                    var day = data_docket[i].invoiceDate.substring(8,10);
+                    var year = results['invoice_date'].substring(0,4);
+                    var month = results['invoice_date'].substring(5,7);
+                    var day = results['invoice_date'].substring(8,10);
                     row += "<span style='padding-left: 35px'>" + day + "-" + month + "-" + year + "</span>";
                 }
                 row += "</div>";

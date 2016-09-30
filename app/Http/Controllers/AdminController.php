@@ -2067,7 +2067,8 @@ class AdminController extends Controller
             'docket' => $docket_backup,
             'print_date' => date('d-m-Y H:i:s'),
             'sum_unit' => collect($docket_backup)->sum('professionalServicesTime'),
-            'sum_expense' => collect($docket_backup)->sum('expenseAmount')
+            'sum_expense' => collect($docket_backup)->sum('expenseAmount'),
+            'invoice_date' => $invoice->invoiceDay
         ];
     }
 
