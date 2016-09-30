@@ -163,7 +163,7 @@
                         <h5 class="text-right">Received:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="receiveDate" name="receiveDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="receiveDate" name="receiveDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -179,7 +179,7 @@
                         <h5 class="text-right">Opened:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="openDate" name="openDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="openDate" name="openDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -195,7 +195,7 @@
                         <h5 class="text-right">Closed:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="closeDate" name="closeDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -302,7 +302,7 @@
                         <h5 class="text-right">First Contact:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="firstContact" name="firstContact" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="firstContact" name="firstContact" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -354,7 +354,7 @@
                         <h5 class="text-right">Loss Date:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="lossDate" name="lossDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="lossDate" name="lossDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -389,7 +389,7 @@
                         <h5 class="text-right">Proscription:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="proscription" name="proscription" style="background-color: #EFE5E5" readonly>
+                        <input type="text" id="proscription" name="proscription" style="background-color: #EFE5E5" readonly>
                     </div>
                 </td>
             </tr>
@@ -421,7 +421,7 @@
                         <h5 class="text-right">Policy Inception:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="policyInceptionDate" name="policyInceptionDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -432,7 +432,7 @@
                         <h5 class="text-right">Policy Expiry:</h5>
                     </div>
                     <div style="display: inline-block;width: 58%">
-                        <input type="date" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
+                        <input type="text" id="policyExpiryDate" name="policyExpiryDate" readonly style="background-color: #EFE5E5">
                     </div>
                 </td>
             </tr>
@@ -571,9 +571,9 @@
                 },
                 convertStringToDate: function (date) {
                     var currentDate = new Date(date);
-                    var datetime = currentDate.getFullYear() + "-"
+                    var datetime = ("0" + currentDate.getDate()).slice(-2) + "-"
                             + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-"
-                            + ("0" + currentDate.getDate()).slice(-2);
+                            + currentDate.getFullYear();
                     return datetime;
                 },
                 loadClaimByEventEnterKey:function()

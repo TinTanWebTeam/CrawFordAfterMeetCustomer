@@ -2620,6 +2620,18 @@ class AdminController extends Controller
                                 {
                                     $invoiceTempNo = 10000;
                                 }
+                                else if($majorNo!=null && $tempNo!=null)
+                                {
+                                    $major = (int)substr($majorNo->invoiceMajorNo, 1, 4);
+                                    $temp = (int)substr($tempNo->invoiceTempNo, 1, 4);
+                                    if($major > $temp)
+                                    {
+                                        $invoiceTempNo =  ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
+                                    }
+                                    else{
+                                        $invoiceTempNo =  ((int)("1" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
+                                    }
+                                }
                                 else
                                 {
                                     //$invoiceTempNo = 10000;
@@ -2642,6 +2654,7 @@ class AdminController extends Controller
                                 //$invoiceTempNo = ((int)("1" . substr($billCompleteFinalBill->invoiceMajorNo, 1, 4))) + 1;
                                 $majorNo = Invoice::orderBy('invoiceMajorNo','desc')->first();
                                 $tempNo = Invoice::orderBy('invoiceTempNo','desc')->first();
+
                                 if($tempNo!=null && $majorNo==null)
                                 {
                                     $invoiceTempNo = $tempNo->invoiceTempNo +1;
@@ -2649,6 +2662,18 @@ class AdminController extends Controller
                                 else if($majorNo==null && $tempNo==null)
                                 {
                                     $invoiceTempNo = 10000;
+                                }
+                                else if($majorNo!=null && $tempNo!=null)
+                                {
+                                    $major = (int)substr($majorNo->invoiceMajorNo, 1, 4);
+                                    $temp = (int)substr($tempNo->invoiceTempNo, 1, 4);
+                                    if($major > $temp)
+                                    {
+                                        $invoiceTempNo =  ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
+                                    }
+                                    else{
+                                        $invoiceTempNo =  ((int)("1" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
+                                    }
                                 }
                                 else
                                 {
@@ -2812,14 +2837,21 @@ class AdminController extends Controller
                             {
                                 $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
                             }
-                            else if($invoiceMajor!=null)
+                            else if($invoiceMajor!=null && $invoiceTemp!=null)
                             {
-                                $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                                $major = (int)substr($invoiceMajor->invoiceMajorNo, 1, 4);
+                                $temp = (int)substr($invoiceTemp->invoiceTempNo, 1, 4);
+                                if($major > $temp)
+                                {
+                                    $invoiceMajorNo =  ((int)("1" . substr($invoiceMajor->invoiceMajorNo, 1, 4))) + 1;
+                                }
+                                else{
+                                    $invoiceMajorNo =  ((int)("1" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
+                                }
                             }
                             else
                             {
- 
-
+                                $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
                             }
                         } else {
                             $invoiceMajorNo = 20000;
@@ -2970,14 +3002,23 @@ class AdminController extends Controller
                         {
                             $invoiceMajorNo = ((int)("2" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
                         }
-                        else if($invoiceMajor!=null)
+                        else if($invoiceMajor!=null && $invoiceTemp!=null)
                         {
-                            $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
+                            $major = (int)substr($invoiceMajor->invoiceMajorNo, 1, 4);
+                            $temp = (int)substr($invoiceTemp->invoiceTempNo, 1, 4);
+                            if($major > $temp)
+                            {
+                                $invoiceMajorNo =  ((int)("1" . substr($invoiceMajor->invoiceMajorNo, 1, 4))) + 1;
+                            }
+                            else{
+                                $invoiceMajorNo =  ((int)("1" . substr($invoiceTemp->invoiceTempNo, 1, 4))) + 1;
+                            }
                         }
                         else
                         {
-                            
+                            $invoiceMajorNo = ((int)Invoice::orderBy('invoiceMajorNo','desc')->first()->invoiceMajorNo) +1;
                         }
+
                     } else {
                         $invoiceMajorNo = 20000;
                     }
