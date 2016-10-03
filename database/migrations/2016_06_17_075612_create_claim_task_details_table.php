@@ -52,6 +52,8 @@ class CreateClaimTaskDetailsTable extends Migration
 
             $table->integer('invoiceTempNo')->nullable();
             $table->boolean('lockInvoiceNo')->default(0);
+            $table->integer('invoiceTempNoBeforeOverRide')->nullable();
+
 
             $table->timestamps();
         });

@@ -29,6 +29,12 @@ class ClaimTaskDetail extends Model
         'statusId',
         'userId',
         'createdBy',
-        'updatedBy'
+        'updatedBy',
+        'billDate',
+        'invoiceMajorNo',
+        'invoiceDate',
+        'invoiceTempNo',
+        'lockInvoiceNo',
+        'invoiceTempNoBeforeOverRide'
     ];
 }
