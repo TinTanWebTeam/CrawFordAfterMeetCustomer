@@ -857,13 +857,13 @@
                         if($("input[name=exchangeRate]").val()!=="")
                         {
                             $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
-                            $("h4[id=professionFeeUSD]").text(invoiceView.round((($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
-                            $("h4[id=expenseUSD]").text(invoiceView.round((Number($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
+                            $("h4[id=professionFeeUSD]").text(invoiceView.round((($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2)).formatCurrency();
+                            $("h4[id=expenseUSD]").text(invoiceView.round((Number($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2)).formatCurrency();
 
-                            $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,""))),2));
-                            $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")),2));
+                            $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,""))),2)).formatCurrency();
+                            $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")),2)).formatCurrency();
 
-                            $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1),2));
+                            $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1),2)).formatCurrency();
                             $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
 
 
@@ -907,17 +907,17 @@
                         $("input[name=exchangeRate]").formatCurrency({roundToDecimalPlace:0});
                         $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
                         //change VND->USD
-                        $("h4[id=professionFeeUSD]").text(invoiceView.round(parseFloat(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2));
-                        $("h4[id=expenseUSD]").text(invoiceView.round(parseFloat(String(expense))/($("input[name=exchangeRate]").val().replace(/,/g,"")),2));
+                        $("h4[id=professionFeeUSD]").text(invoiceView.round(parseFloat(($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2)).formatCurrency();
+                        $("h4[id=expenseUSD]").text(invoiceView.round(parseFloat(String(expense))/($("input[name=exchangeRate]").val().replace(/,/g,"")),2)).formatCurrency();
 
                         //load total excluding VAT
-                        $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")),2));
+                        $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round(Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")),2)).formatCurrency();
                         //load total VAT
-                        $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,""))),2));
+                        $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,""))),2)).formatCurrency();
 
 
                         //total Payable
-                        $("h4[id=totalUSD]").text(invoiceView.round((Number($("h4[id=total_ExcludingVAT_USD]").text()) + Number($("h4[id=total_Vat_USD]").text())),2));
+                        $("h4[id=totalUSD]").text(invoiceView.round((Number($("h4[id=total_ExcludingVAT_USD]").text()) + Number($("h4[id=total_Vat_USD]").text())),2)).formatCurrency();
                         $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
 
                         $("h4[id=professionFeeUSD]").text(Number($("h4[id=professionFeeUSD]").text()).toLocaleString());
