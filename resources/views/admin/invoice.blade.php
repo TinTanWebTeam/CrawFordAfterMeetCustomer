@@ -863,7 +863,7 @@
                             $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,""))),2)).formatCurrency();
                             $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")),2)).formatCurrency();
 
-                            $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text()) + Number($("h4[id=expenseUSD]").text()))*1.1),2)).formatCurrency();
+                            $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")))*1.1),2)).formatCurrency();
                             $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
 
 
@@ -917,14 +917,14 @@
 
 
                         //total Payable
-                        $("h4[id=totalUSD]").text(invoiceView.round((Number($("h4[id=total_ExcludingVAT_USD]").text()) + Number($("h4[id=total_Vat_USD]").text())),2)).formatCurrency();
+                        $("h4[id=totalUSD]").text((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) + Number($("h4[id=total_Vat_USD]").text().replace(/,/g,"")))).formatCurrency();
                         $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
 
-                        $("h4[id=professionFeeUSD]").text(Number($("h4[id=professionFeeUSD]").text()).toLocaleString());
-                        $("h4[id=expenseUSD]").text(Number($("h4[id=expenseUSD]").text()).toLocaleString());
-                        $("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=total_ExcludingVAT_USD]").text()).toLocaleString());
-                        $("h4[id=total_Vat_USD]").text(Number($("h4[id=total_Vat_USD]").text()).toLocaleString());
-                        $("h4[id=totalUSD]").text(Number($("h4[id=totalUSD]").text()).toLocaleString());
+                        //$("h4[id=professionFeeUSD]").text(Number($("h4[id=professionFeeUSD]").text()).toLocaleString());
+                        //$("h4[id=expenseUSD]").text(Number($("h4[id=expenseUSD]").text()).toLocaleString());
+                        //$("h4[id=total_ExcludingVAT_USD]").text(Number($("h4[id=total_ExcludingVAT_USD]").text()).toLocaleString());
+                        //$("h4[id=total_Vat_USD]").text(Number($("h4[id=total_Vat_USD]").text()).toLocaleString());
+                        //$("h4[id=totalUSD]").text(Number($("h4[id=totalUSD]").text()).toLocaleString());
                         //format USD $
                         $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
                         $("h4[id=expenseUSD]").text("$"+$("h4[id=expenseUSD]").text());
