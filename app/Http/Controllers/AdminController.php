@@ -2012,7 +2012,7 @@ class AdminController extends Controller
                 'assignmentTypeCode' => $claim->assignmentTypeCode,
                 'accountCode' => $claim->accountCode,
                 'accountPolicyId' => $claim->accountPolicyId,
-                'insuredName' => $claim->insuredLastName . ' ' . $claim->insuredLastName,
+                'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
                 'insuredClaim' => $claim->insuredClaim,
                 'tradingAs' => $claim->tradingAs,
                 'claimTypeCode' => $claim->claimTypeCode,
