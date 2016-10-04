@@ -1789,7 +1789,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(result.docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceTempNo+"</span>";
+                    if(result.docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
                 }
@@ -1935,7 +1939,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(data_docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'></span>";
+                    if(data_docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
                 }
@@ -2079,7 +2087,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(data_docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'></span>";
+                    if(data_docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
                 }
@@ -2222,7 +2234,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(data_docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'></span>";
+                    if(data_docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
                 }
@@ -2329,12 +2345,10 @@
                 if(data_docket[i].professionalServicesTime !== null)
                 {
                     row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
-
                 }
                 else
                 {
                     row += "<span>0.0</span>";
-
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
@@ -2364,7 +2378,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(data_docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'></span>";
+                    if(data_docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
                 }
@@ -2468,12 +2486,10 @@
                 if(data_docket[i].professionalServicesTime !== null)
                 {
                     row += "<span>"+data_docket[i].professionalServicesTime + "</span>";
-
                 }
                 else
                 {
                     row += "<span>0.0</span>";
-
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-expense-code'>";
@@ -2503,7 +2519,11 @@
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
                 if(data_docket[i].invoiceMajorNo == null){
-                    row += "<span style='padding-left: 30px'></span>";
+                    if(data_docket[i].invoiceTempNo !== null){
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                    }else{
+                        row += "<span style='padding-left: 30px'></span>";    
+                    }
                 }else{
                     row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
                 }
