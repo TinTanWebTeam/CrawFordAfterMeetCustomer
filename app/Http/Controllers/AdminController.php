@@ -1280,7 +1280,9 @@ class AdminController extends Controller
                     }
                     $a = explode(" ", $date);
                     $aFR = Carbon::parse($a[0])->format('d-m-Y') . " " . $a[1];
-                    $result = array('Status' => 'Success', 'Claim' => $claim, 'Date' => $aFR);
+                    $codeTotal = ClaimTaskDetail::where('claimId', $claim->id)->where('expense','<>',null)->get()->sum('professionalServicesTime');
+                    $expenseTotal = ClaimTaskDetail::where('claimId', $claim->id)->where('expense','<>',null)->get()->sum('expenseAmount');
+                    $result = array('Status' => 'Success', 'Claim' => $claim, 'Date' => $aFR,'codeTotal'=>$codeTotal,'expenseTotal'=>$expenseTotal);
 
                 } else {
                     $result = array('Status' => 'notFoundClaim');

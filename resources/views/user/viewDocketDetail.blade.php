@@ -13,7 +13,7 @@
        <td></td>
    </tr>
 @foreach($claim_task_detail as $item)
-   <tr id="{{$item->idTask}}" style="font-size:16px;border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
+   <tr id="{{$item->idTask}}" style="font-size:13px;border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
        <td style="display:none">{{ $item->idUser }}</td>
        <td style="text-align: center;height: 25px;">{{ date_format(date_create($item->date),'d-m-Y') }}</td>
        <td style='text-align: center'>{{ strtoupper($item->adjuster) }}</td>
@@ -26,7 +26,11 @@
        @else
            <td style='text-align: center'></td>
        @endif
-       <td style="display:none">{{ $item->expenseNote }}</td>
+       @if($item->professionalNote == null)
+            <td>{{ $item->expenseNote }}</td>
+       @else
+            <td>{{ $item->professionalNote }}<br>{{ $item->expenseNote }}</td>
+       @endif 
        <td style='text-align: center'>{{ $item->invoiceMajorNo }}</td>
        {{--check onvoice Date--}}
        @if($item->invoiceDate!=null)

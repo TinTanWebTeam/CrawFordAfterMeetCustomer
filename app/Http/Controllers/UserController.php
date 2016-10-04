@@ -103,7 +103,9 @@ class UserController extends Controller
                     } else {
                         $date = $claim->openDate;
                     }
-                    $result = array('Claim' => $claim, 'Date' => $date);
+                    $codeTotal = ClaimTaskDetail::where('claimId', $claim->id)->where('expense','<>',null)->get()->sum('professionalServicesTime');
+                    $expenseTotal = ClaimTaskDetail::where('claimId', $claim->id)->where('expense','<>',null)->get()->sum('expenseAmount');
+                    $result = array('Claim' => $claim, 'Date' => $date,'codeTotal'=>$codeTotal,'expenseTotal'=>$expenseTotal);
                 } else {
                     $result = array('Claim' => "null", 'Date' => $date);
                 }

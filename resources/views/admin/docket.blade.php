@@ -294,6 +294,28 @@
                                style="display: inline-block;background-color: #E6D8D8" readonly>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 style="display: inline-block" class="text-right">Code: </h5>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" id="codeTotal" name="codeTotal" value="" style="display: inline-block;background-color: #E6D8D8" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 style="display: inline-block" class="text-right">Expense: </h5>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" id="expenseTotal" name="expenseTotal" value="" style="display: inline-block;background-color: #E6D8D8" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
@@ -555,7 +577,7 @@
             <th class="text-bold text-center" style="display:none">Description</th>
             <th class="text-bold text-center">Expense Code</th>
             <th class="text-bold text-center">Expense Amount</th>
-            <th class="text-bold text-center" style="display:none">Expense Note</th>
+            <th class="text-bold text-center">Note</th>
             <th class="text-bold text-center">InvoiceMajorNo</th>
             <th class="text-bold text-center">InvoiceDate</th>
             <th class="text-bold text-center">Modify</th>
@@ -651,6 +673,8 @@
                                 $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"] + " " + data["Claim"]["insuredLastName"]);
                                 $("input[name=LossDate]").val(docketView.convertStringToDate(dateTimeLossDate[0]));
                                 $("input[name=LossLocation]").val(data["Claim"]["lossLocation"]);
+                                $("input[name=codeTotal]").val(data["codeTotal"]).formatCurrency({roundToDecimalPlace:2});
+                                $("input[name=expenseTotal]").val(data["expenseTotal"]).formatCurrency({roundToDecimalPlace:0});
                                 docketView.taskObject.ClaimId = data["Claim"]["id"];
                                 //Insert to table docket
                                 $.post(url + "loadViewDocketDetail/0", {
