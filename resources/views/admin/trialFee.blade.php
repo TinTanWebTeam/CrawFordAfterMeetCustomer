@@ -484,6 +484,7 @@
                     trialFeeView.clearTable();
                     $("button[name=actionViewListIB]").prop("disabled",false);
                     if (e.keyCode === 13) {
+                        $("input[name=idClaim]").val("");
                         $.post(url + "chooseClaimWhenUseEventEnter", {
                             _token: _token,
                             key: $("input[name=Claim]").val()
@@ -881,7 +882,7 @@
                     $("input[name=action]").val("0");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
-                        console.log(data);
+
                         $("input[id=pending]").prop("disabled",true).prop("checked",false);
                         trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
@@ -1048,6 +1049,7 @@
                 },
                 cancel:function()
                 {
+
                     $("button[name=btnBill]").text("Bill Claim").prop("disabled",false);
 
                     trialFeeView.timeFrom = null;
@@ -1063,6 +1065,7 @@
                     trialFeeView.codeCustomer = null;
                     $("tbody[id=tbodyTableBillByStatus]").empty();
                     $("input[id=pending]").prop("disabled",false).prop("checked",true);
+                    $("input[name=idClaim]").val("");
 
                 },
                 loadTaskDetailByDate:function()
