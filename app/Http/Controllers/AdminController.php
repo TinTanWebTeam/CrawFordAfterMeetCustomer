@@ -2001,13 +2001,13 @@ class AdminController extends Controller
         $assit_array = [];
         foreach ($docket->groupBy('userId') as $key => $value) {
             $assit_detail = User::where('id', $key)->first();
-            $rate = RateDetail::where('userId', $assit_detail->id)->first();
+            $rateDetail = RateDetail::where('userId', $assit_detail->id)->first();
             $sum = collect($value)->sum('professionalServicesTime');
             array_push($assit_array, [
                 'assit' => $assit_detail,
                 'time' => $sum,
                 'branch' => $branch->code,
-                'rate' => $rate->value
+                'rate' => $rateDetail->value
             ]);
         }
 
