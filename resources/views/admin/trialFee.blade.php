@@ -889,8 +889,8 @@
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
                         if(data[0]==="Pending")//nếu bill này đang là bill pending
                         {
-                            $("input[name=officer]").val(data[5]);
-                            $("input[name=policy]").val(data[6]);
+                            $("input[name=officer]").val(data[6]);
+                            $("input[name=policy]").val(data[7]);
                             //if pending at status lock is disabled button update
                             if(data[1]==="Lock")
                             {
@@ -972,8 +972,8 @@
                         else
                         {
 
-                            $("input[name=officer]").val(data[5]);
-                            $("input[name=policy]").val(data[6]);
+                            $("input[name=officer]").val(data[6]);
+                            $("input[name=policy]").val(data[7]);
                             $("button[name=btnBill]").text("Update Bill");
                             var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
                             var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");

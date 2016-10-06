@@ -352,7 +352,7 @@
                         <h5 style="text-align: right">Claim Total Tax</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" name="Claim Total Tax" id="Claim Total Tax" readonly style="background-color: #EAD8D8">
+                        <input type="text" name="claimTotalTax" id="claimTotalTax" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
                 <div class="row">
@@ -360,7 +360,7 @@
                         <h5 style="text-align: right">Claim Total Fee</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" name="ClaimTotalFee" id="ClaimTotalFee" readonly style="background-color: #EAD8D8">
+                        <input type="text" name="claimTotalFee" id="claimTotalFee" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
                 <div class="row">
@@ -368,7 +368,7 @@
                         <h5 style="text-align: right">Your Subtotal</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" name="YourSubtotal" id="YourSubtotal" readonly style="background-color: #EAD8D8">
+                        <input type="text" name="yourSubtotal" id="yourSubtotal" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
                 <div class="row">
@@ -822,6 +822,7 @@
                             $("input[name=dateExchange]").val("");
                         }
                         //Information of bill
+                        var ClaimTotalFee = parseFloat(data[2][0]["generalExp"]) + parseFloat(data[3][0]["commPhotoExp"]) + parseFloat(data[4][0]["consultFeesExp"]) + parseFloat(data[5][0]["travelRelatedExp"]) + parseFloat(data[6][0]["gstFreeDisb"]) + parseFloat(data[7][0]["disbursement"]);
                         $("input[name=Professional]").val(data[1][0]["professionalServices"]);
                         $("input[name=GeneralExp]").val(data[2][0]["generalExp"]);
                         $("input[name=CommPhotoExp]").val(data[3][0]["commPhotoExp"]);
@@ -829,7 +830,11 @@
                         $("input[name=TravelRelatedExp]").val(data[5][0]["travelRelatedExp"]);
                         $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
                         $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
+                        $("input[name=claimTotalFee]").val(ClaimTotalFee);
+                        $("input[name=yourSubtotal]").val(parseFloat(data[1][0]["professionalServices"]) + ClaimTotalFee);
                         invoiceView.formatCurrencyInput();
+                        $("input[name=claimTotalTax]").val($("input[name=Professional]").val());
+
 
                         //load information of report
                         $("h4[id=viaRef]").text($("input[name=Invoice]").val());
@@ -891,6 +896,9 @@
                     $("input[name=TravelRelatedExp]").formatCurrency({roundToDecimalPlace:0});
                     $("input[name=GSTFreeDisb]").formatCurrency({roundToDecimalPlace:0});
                     $("input[name=Disbursements]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=claimTotalFee]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=yourSubtotal]").formatCurrency({roundToDecimalPlace:0});
+
                 },
                 round:function(value,decimals)
                 {
