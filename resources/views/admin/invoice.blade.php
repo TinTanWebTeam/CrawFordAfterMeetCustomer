@@ -502,7 +502,7 @@
                     <h4>Loss date:</h4>
                 </div>
                 <div style="display: inline-block;width: 25%;box-sizing: border-box">
-                    <h4 style="margin-top: 0px">1001685</h4>
+                    <h4 style="margin-top: 0px" id="viaRef"></h4>
                     <h4 id="lossDateClaim"></h4>
                 </div>
             </div>
@@ -832,8 +832,9 @@
                         invoiceView.formatCurrencyInput();
 
                         //load information of report
+                        $("h4[id=viaRef]").text($("input[name=Invoice]").val());
                         $("span[id=contactName]").text(data[0][0]["contactName"]);
-                        $("div[id=NoFee]").text($(element).find("td:eq(0)").text());
+                        $("div[id=NoFee]").text($("input[name=Invoice]").val());
                         $("h4[id=dateFee]").text($(element).find("td:eq(2)").text());
                         $("h4[id=insuredClaim]").text(data[0][0]["insuredFirstName"] +" "+ data[0][0]["insuredLastName"]);
                         $("h4[id=lossDescClaim]").text(data[0][0]["descriptionLossDesc"]);

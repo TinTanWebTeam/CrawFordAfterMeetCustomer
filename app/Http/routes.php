@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('viewDetailEmployeeWhenUseEvenEnter','AdminController@viewDetailEmployeeWhenUseEvenEnter');
     Route::post('chooseClaimWhenUseEventEnter','AdminController@chooseClaimWhenUseEventEnter');
     Route::post('showInformationOfCustomer','AdminController@showInformationOfCustomer');
-    Route::post('Bill','AdminController@Bill');
+    Route::post('Bill','AdminController@BillV2');
     Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
     Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
     Route::post('saveClaim/{claimId}','AdminController@saveClaim');

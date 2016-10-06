@@ -713,8 +713,8 @@
                         $("#UserId").val($(element).parent().parent().find("td:eq(2)").text()).css("text-transform","lowercase");
                         $("#ExpenseCode").val(data["expenseCode"]);
                         $("#ProfessionalServicesCode").val(data["professionalCode"]);
-                        $("#ProfessionalServices").val(data["professionalCode"]);
-                        $("#Expense").val(data["expenseCode"]);
+                        $("#ProfessionalServices").val(data["Task"]["professionalServices"]);
+                        $("#Expense").val(data["Task"]["expense"]);
 
                         $("input#ProfessionalServicesAmount").formatCurrency({roundToDecimalPlace:0});
                         $("input#ProfessionalServicesRate").formatCurrency({roundToDecimalPlace:0});
@@ -1125,7 +1125,7 @@
                 },
                 confirmDelete:function()
                 {
-                    $.post(url+"deleteTask",{_token:_token,idTask:docketView.idTaskDelete},function(data){
+                    $.post(url+"deleteTask",{_token:_token,idTask:docketView.idTaskDelete,date:$("input[name=fromDate]").val() +" "+docketView.timeFrom},function(data){
                         if(data==="1")
                         {
                             $("div[id=modalDelete]").modal("hide");

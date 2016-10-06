@@ -55,10 +55,17 @@
         @endif
         {{--check delete--}}
         @if($item->invoiceMajorNo!=null || $item->invoiceTempNo!=null)
-            <td style='text-align: center'>
-                <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>
-                <button class="btn btn-xs btn-danger" id="{{$item->idTask}}" onclick="docketView.deleteTask(this)" disabled><span class="glyphicon glyphicon-remove"></span></button>
-            </td>
+            @if($item->statusId==1)
+                <td style='text-align: center'>
+                    <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>
+                    <button class="btn btn-xs btn-danger" id="{{$item->idTask}}" onclick="docketView.deleteTask(this)"><span class="glyphicon glyphicon-remove"></span></button>
+                </td>
+            @else
+                <td style='text-align: center'>
+                    <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>
+                    <button class="btn btn-xs btn-danger" id="{{$item->idTask}}" onclick="docketView.deleteTask(this)" disabled><span class="glyphicon glyphicon-remove"></span></button>
+                </td>
+            @endif
         @else
             <td style='text-align: center'>
                 <button class="btn btn-xs btn-success" id="{{$item->idTask}}" onclick="docketView.viewDetailTask(this)"><span class="glyphicon glyphicon-ok"></span></button>

@@ -813,10 +813,10 @@
                                     $("div[id=modalNotification]").modal("show");
                                     $("button[name=modalAgree]").prop("disabled",false);
                                 }
-                                else if(data["Error"]==="InvoiceMajorNoSame")
+                                else if(data["Error"]==="DeleteBill")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This invoice has exist!!!");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("You must delete bill before pending !!!");
                                     $("div[id=modalNotification]").modal("show");
                                     $("button[name=modalAgree]").prop("disabled",false);
                                 }

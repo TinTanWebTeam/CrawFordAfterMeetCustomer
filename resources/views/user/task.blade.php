@@ -676,8 +676,8 @@
                         $("#IdTask").val($(element).attr("id"));
                         $("#ProfessionalServicesCode").val(data["professionalCode"]);
                         $("#ExpenseCode").val(data["expenseCode"]);
-                        $("#ProfessionalServices").val(data["professionalCode"]);
-                        $("#Expense").val(data["expenseCode"]);
+                        $("#ProfessionalServices").val(data["Task"]["professionalServices"]);
+                        $("#Expense").val(data["Task"]["expense"]);
                         if(data["ErrorUser"]==="True")
                         {
                             $("button[name=actionAttackTask]").hide();
