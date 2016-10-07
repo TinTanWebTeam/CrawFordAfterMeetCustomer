@@ -3428,7 +3428,6 @@ class AdminController extends Controller
 
     public function loadReportTask(Request $request)
     {
-
         $arrayData = null;
         $sumTime = 0;
         $sumExpenseAmount = 0;
@@ -3436,36 +3435,60 @@ class AdminController extends Controller
         $toDate = $request->get('toDate') . " " . "23:59:59";
         if ($request->get('allClaim') === 'True') {
             try {
-
-                $claimTask = DB::table('claim_task_details')
-                    ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
-                    ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
-                    ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
-                    ->where('claim_task_details.billDate', '>=', $fromDate)
-                    ->where('claim_task_details.billDate', '<=', $toDate)
-                    ->where('claim_task_details.userId', $request->get('userId'))
-                    ->orderBy('claim_task_details.billDate', 'asc')
-                    ->select(
-                        'claim_task_details.billDate as CreatedDate',
-                        'claims.code as Claim',
-                        'cate1.code as Time',
-                        'claim_task_details.professionalServicesTime as Unit',
-                        'cate2.code as ExpenseCode',
-                        'claim_task_details.expenseAmount as ExpenseAmount',
-                        'claim_task_details.invoiceMajorNo as Invoice'
-//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmountTotal'),
-//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as unitsTotal')
-                    )
-                    ->get();
-                $timeTotal = ClaimTaskDetail::where('userId', $request->get('userId'))->get();
-                $collectTimeTotal = collect($timeTotal);
-                if (count($claimTask) > 0) {
-                    $sumTime = $collectTimeTotal->sum('professionalServicesTime');
-                    $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                if($request->get('userCode') == ""){
+                    $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+                        )
+                        ->get();
+                    $timeTotal = ClaimTaskDetail::all();
+                    $collectTimeTotal = collect($timeTotal);
+                    if (count($claimTask) > 0) {
+                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                    }
+                    $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
+                }else{
+                    $user = User::where('name',$request->get('userCode'))->first();
+                    $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->where('claim_task_details.userId', $user->id)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+                        )
+                        ->get();
+                    $timeTotal = ClaimTaskDetail::where('userId', $user->id)->get();
+                    $collectTimeTotal = collect($timeTotal);
+                    if (count($claimTask) > 0) {
+                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                    }
+                    $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
                 }
-                $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
-
-
+                
             } catch (Exception $ex) {
 
             }
@@ -3474,13 +3497,13 @@ class AdminController extends Controller
             try {
                 $claim = Claim::where('code', $request->get('claimCode'))->first();
                 if ($claim) {
-                    $claimTask = DB::table('claim_task_details')
+                    if($request->get('userCode') == ""){
+                        $claimTask = DB::table('claim_task_details')
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
-                        ->where('claim_task_details.userId', $request->get('userId'))
                         ->where('claim_task_details.claimId', $claim->id)
                         ->select(
                             'claim_task_details.billDate as CreatedDate',
@@ -3494,13 +3517,100 @@ class AdminController extends Controller
 //                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
                         )
                         ->get();
-                    $timeTotal = ClaimTaskDetail::where('userId', $request->get('userId'))->where('claimId', $claim->id)->get();
-                    $collectTimeTotal = collect($timeTotal);
-                    if (count($claimTask) > 0) {
-                        $sumTime = $collectTimeTotal->sum('professionalServicesTime');
-                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        $timeTotal = ClaimTaskDetail::where('claimId', $claim->id)->get();
+                        $collectTimeTotal = collect($timeTotal);
+                        if (count($claimTask) > 0) {
+                            $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                            $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        }
+                        $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
+                    }else{
+                        $user = User::where('name',$request->get('userCode'))->first();
+                        $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->where('claim_task_details.userId', $user->id)
+                        ->where('claim_task_details.claimId', $claim->id)
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
+                        )
+                        ->get();
+                        $timeTotal = ClaimTaskDetail::where('userId', $user->id)->where('claimId', $claim->id)->get();
+                        $collectTimeTotal = collect($timeTotal);
+                        if (count($claimTask) > 0) {
+                            $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                            $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        }
+                        $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
+                    }      
+                }else{
+                    if($request->get('userCode') == ""){
+                        $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
+                        )
+                        ->get();
+                        $timeTotal = ClaimTaskDetail::all();
+                        $collectTimeTotal = collect($timeTotal);
+                        if (count($claimTask) > 0) {
+                            $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                            $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        }
+                        $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);        
+                    }else{
+                        $user = User::where('name',$request->get('userCode'))->first();
+                        $claimTask = DB::table('claim_task_details')
+                        ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                        ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
+                        ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->where('claim_task_details.billDate', '>=', $fromDate)
+                        ->where('claim_task_details.billDate', '<=', $toDate)
+                        ->where('claim_task_details.userId', $user->id)
+                        ->select(
+                            'claim_task_details.billDate as CreatedDate',
+                            'claims.code as Claim',
+                            'cate1.code as Time',
+                            'claim_task_details.professionalServicesTime as Unit',
+                            'cate2.code as ExpenseCode',
+                            'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.invoiceMajorNo as Invoice'
+//                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
+//                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
+                        )
+                        ->get();
+                        $timeTotal = ClaimTaskDetail::where('userId', $request->get('userId'))->get();
+                        dd($timeTotal);
+                        $collectTimeTotal = collect($timeTotal);
+                        if (count($claimTask) > 0) {
+                            $sumTime = $collectTimeTotal->sum('professionalServicesTime');
+                            $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        }
+                        $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
                     }
-                    $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
                 }
 
             } catch (Exception $ex) {

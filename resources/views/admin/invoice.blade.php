@@ -741,7 +741,6 @@
                         var code = $("input[name=Claim]").val();
                         $.get(url+"getAllInvoiceByClaimId/"+code,{_token:_token},function(data){
                             if (data["data"].length > 0) {
-                                console.log(data["data"]);
                                 var row = "";
                                 $("tbody#table-invoice-body").empty();
                                 for (var i = 0; i < data["data"].length; i++) {
@@ -796,7 +795,6 @@
                 },
                 viewDetailInvoice: function (element) {
                     $.post(url+"loadInvoiceByEventEnterKey",{_token:_token,key:$(element).attr("id")},function(data){
-                        console.log(data);
                         //Informationn of claim
                         $("input[name=Invoice]").val($(element).attr("id"));
                         $("input[name=InvoiceDate]").val($(element).find("td:eq(1)").text());
@@ -837,7 +835,7 @@
 
 
                         //load information of report
-                        $("h4[id=viaRef]").text($("input[name=Invoice]").val());
+                        $("h4[id=viaRef]").text($("input[id=Claim]").val());
                         $("span[id=contactName]").text(data[0][0]["contactName"]);
                         $("div[id=NoFee]").text($("input[name=Invoice]").val());
                         $("h4[id=dateFee]").text($(element).find("td:eq(2)").text());

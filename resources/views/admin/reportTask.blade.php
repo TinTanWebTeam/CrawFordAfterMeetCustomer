@@ -80,16 +80,27 @@
             </tr>
             <tr>
                 <td>
-                    <h4>Time Unit</h4>
+                    <h4>All Employee:</h4>
                 </td>
                 <td>
-                    <input type="text" name="sumTimeUnit" readonly id="" class="form-control">
+                    <input type="checkbox" value="" name="chooseAllEmployee" style="width: 20px"
+                           onchange="reportTaskView.changeCheckBox(this)">
                 </td>
                 <td>
                     <h4 style="padding-left: 20px">Employee:</h4>
                 </td>
                 <td>
-                    <input type="text" name="employee"  id="employee" class="form-control" ondblclick="reportTaskView.showALLEmployee()">
+                    <input type="text" name="chooseEmployee"  id="chooseEmployee" class="form-control" ondblclick="reportTaskView.showALLEmployee()">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Time Unit</h4>
+                </td>
+                <td>
+                    <input type="text" name="sumTimeUnit" readonly id="" class="form-control">
+                </td>
+                <td style="padding-left: 10px">
                 </td>
             </tr>
             <tr>
@@ -195,14 +206,14 @@
     $(function () {
         if (typeof(reportTaskView) === "undefined") {
             reportTaskView = {
-                loadReport: function (fromDate, toDate, claimCode, allClaim, userId) {
+                loadReport: function (fromDate, toDate, claimCode, allClaim, userCode) {
                     $.post(url + "loadReportTask", {
                         _token: _token,
                         fromDate: fromDate,
                         toDate: toDate,
                         claimCode: claimCode,
                         allClaim: allClaim,
-                        userId: userId
+                        userCode: userCode
                     }, function (data) {
                         if (data["ListData"].length > 0) {
                             var row = "";
@@ -476,29 +487,10 @@
 
                         }
                         $("#report_submission_content").empty().append(trSubmission);
-//                        <div style="width: 100%">
-//                                <div style="width: 25%;display: inline-block">
-//                                <div style="width: 50%;display: inline-block">
-//                                <div style="text-align: center;font-weight: 600;">Date</div>
-//                                </div>
-//
-//                                <div style="text-align: center;font-weight: 600;">Claim #</div>
-//                        </div>
-//                        </div>
-//                        <div style="width: 33%;display: inline-block">
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
-//                                </div>
-//                                <div style="width: 7%;display: inline-block"></div>
-//                                <div style="width: 33%;display: inline-block">
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Code</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time<br>Units</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Code</div></div>
-//                                <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense<br>Amount</div></div>
-//                                </div>
-//                                </div>
+                        if(userCode == ""){
+                            $("span[id=adjusterCode]").html("All Adjusters");
+                            $("span[id=adjusterName]").html("All Adjusters");
+                        }
                     });
                 },
                 submitLoadReport: function () {
@@ -506,22 +498,33 @@
                     var fromDate = $("input[name=fromDate]").val();
                     var toDate = $("input[name=toDate]").val();
                     var claimCode = $("input[name=chooseClaim]").val();
-                    var userId = $("input[name=userId]").val();
+                    var userCode = $("input[name=chooseEmployee]").val();
                     if ($("input[name=chooseAllClaim]").prop("checked")) {
                         allClaim = "True";
                     }
                     else {
                         allClaim = "False";
                     }
-                    reportTaskView.loadReport(fromDate, toDate, claimCode, allClaim, userId);
+                    reportTaskView.loadReport(fromDate, toDate, claimCode, allClaim, userCode);
                 },
                 changeCheckBox: function (element) {
-                    if ($(element).is(":checked")) {
-                        $("input[name=chooseClaim]").val("").prop("disabled", true);
+                    if($(element).attr('name') == 'chooseAllClaim'){
+                        if ($(element).is(":checked")) {
+                            $("input[name=chooseClaim]").val("").prop("disabled", true);
+                        }
+                        else {
+                            $("input[name=chooseClaim]").val("").prop("disabled", false);
+                        }      
                     }
-                    else {
-                        $("input[name=chooseClaim]").val("").prop("disabled", false);
+                    if($(element).attr('name') == 'chooseAllEmployee'){
+                        if ($(element).is(":checked")) {
+                            $("input[name=chooseEmployee]").val("").prop("disabled", true);
+                        }
+                        else {
+                            $("input[name=chooseEmployee]").val("").prop("disabled", false);
+                        } 
                     }
+                    
                 },
                 showALLEmployee:function()
                 {
@@ -538,20 +541,22 @@
                             tr+="<td class='text-center'><button class='btn btn-success' id="+data[i].id+" onclick='reportTaskView.chooseEmployee(this)'><span class='glyphicon glyphicon-check'></span></button></td>";
                             tr+="</tr>";
                         }
+                        $("#modal-adjuster-table-body").empty();
+                        $("#table-adjuster").DataTable().clear().draw();
                         $("#table-adjuster").DataTable().destroy();
-                        $("#modal-adjuster-table-body").empty().append(tr);
+                        $("#modal-adjuster-table-body").empty();
+                        $("#modal-adjuster-table-body").append(tr);
                         $("#table-adjuster").DataTable();
                     });
                 },
                 chooseEmployee:function(element)
                 {
                     $("input[name=userId]").val("");
-                    $("input[name=employee]").val($(element).parent().parent().find("td:eq(0)").text());
+                    $("input[name=chooseEmployee]").val($(element).parent().parent().find("td:eq(0)").text());
                     $("input[name=userId]").val($(element).attr("id"));
                     $("div[id=modal-adjuster]").modal("hide");
-                    $("span[id=adjusterCode]").text($(element).parent().parent().find("td:eq(0)").text());
+                    $("span[id=adjusterCode]").text(String($(element).parent().parent().find("td:eq(0)").text()).toUpperCase());
                     $("span[id=adjusterName]").text($(element).parent().parent().find("td:eq(2)").text() +" "+$(element).parent().parent().find("td:eq(3)").text());
-
                 }
             };
         }
