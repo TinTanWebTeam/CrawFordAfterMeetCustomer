@@ -486,7 +486,6 @@
                     trialFeeView.clearTable();
                     $("button[name=actionViewListIB]").prop("disabled",false);
                     if (e.keyCode === 13) {
-                        $("input[name=idClaim]").val("");
                         $.post(url + "chooseClaimWhenUseEventEnter", {
                             _token: _token,
                             key: $("input[name=Claim]").val()
@@ -499,7 +498,7 @@
                                 var arrayTimeCheck = data["check"].split(" ");
                                 trialFeeView.timeFrom = arrayTimeCheck[1];//save time to variable temp to bill
                                 $("input[name=FromDate]").val(arrayTimeCheck[0]);
-                                $("input[name=idClaim]").val(data["Claim"]["id"]);
+                                $("input[name=idClaim]").val("").val(data["Claim"]["id"]);
                                 $("input[name=insured]").val(data["Claim"]["insuredFirstName"]+" "+data["Claim"]["insuredLastName"]);
                                 $("input[name=claimTypeCode]").val(data["Claim"]["claimTypeCode"]);
                                 $("input[name=branch]").val(data["Claim"]["branchCode"]);
