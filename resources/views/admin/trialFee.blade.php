@@ -479,6 +479,8 @@
 
                 },
                 chooseClaimWhenUseEventEnterKey: function (e) {
+                    $("input[id=pending]").prop("disabled",false).prop("checked",true);
+                    $("input[name=action]").val("1");
                     $("button[name=btnBill]").text("Bill Claim").prop("disabled",false);
                     $("input[name=ToDate]").val("").prop("readOnly",false);
                     trialFeeView.clearTable();
@@ -1066,6 +1068,7 @@
                     $("tbody[id=tbodyTableBillByStatus]").empty();
                     $("input[id=pending]").prop("disabled",false).prop("checked",true);
                     $("input[name=idClaim]").val("");
+                    $("input[name=action]").val("1");
 
                 },
                 loadTaskDetailByDate:function()
