@@ -1539,7 +1539,11 @@
             $("#sourceCode").empty().append(result.claim.sourceCode + " - " + result.claim.sourceCodeDetail);
             $("#insurerCode").empty().append(result.claim.insurerCode);
             $("#brockerCode").empty().append(result.claim.brockerCode);
-            $("#branchCode").empty().append(result.claim.branchCode + " - " + result.claim.branchCodeDetail);
+            if(result.claim.branchCode != ''){
+                $("#branchCode").empty().append(result.claim.branchCode + " - " + result.claim.branchCodeDetail);
+            }else{
+                $("#branchCode").empty().append('');
+            }
             $("#destroyedDate").empty().append(function () {
                 if (result.claim.destroyedDate) {
                     var destroyedDate = new Date(result.claim.destroyedDate.substring(0, 10));

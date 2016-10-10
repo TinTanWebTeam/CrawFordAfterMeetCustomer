@@ -2008,7 +2008,7 @@ class AdminController extends Controller
                     array_push($assit_array, [
                         'assit' => $assit_detail,
                         'time' => $sum,
-                        'branch' => $branch->code,
+                        'branch' => $branch == null ? '' : $branch->code,
                         'rate' => $rateDetail->value
                     ]);
                 }
@@ -2034,7 +2034,7 @@ class AdminController extends Controller
                         'sourceCodeDetail' => $sourceCode->name,
                         'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
                         'branchCode' => $claim->branchCode,
-                        'branchCodeDetail' => $branch->name,
+                        'branchCodeDetail' => $branch == null ? '': $branch->name,
                         'branchTypeCode' => $claim->branchTypeCode,
                         'destroyedDate' => $claim->destroyedDate,
                         'lossLocation' => $claim->lossLocation,
@@ -2113,7 +2113,7 @@ class AdminController extends Controller
                     array_push($assit_array, [
                         'assit' => $assit_detail,
                         'time' => $sum,
-                        'branch' => $branch->code,
+                        'branch' => $branch == null ? '': $branch->code,
                         'rate' => $rateDetail->value
                     ]);
                 }
@@ -2137,7 +2137,7 @@ class AdminController extends Controller
                         'sourceCodeDetail' => $sourceCode->name,
                         'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
                         'branchCode' => $claim->branchCode,
-                        'branchCodeDetail' => $branch->name,
+                        'branchCodeDetail' => $branch == null ? '': $branch->name ,
                         'branchTypeCode' => $claim->branchTypeCode,
                         'destroyedDate' => $claim->destroyedDate,
                         'lossLocation' => $claim->lossLocation,
