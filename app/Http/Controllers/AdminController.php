@@ -1937,136 +1937,244 @@ class AdminController extends Controller
     public function getReportData($invoice_id, $bill_id, $claim_code)
     {
         $claim = Claim::where('code', $claim_code)->first();
-        $insurer = Customer::where('code', $claim->insurerCode)->first();
-        $branch = Branch::where('code', $claim->branchCode)->first();
-        $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
-        $typeOfDamage = TypeOfDamage::where('code', $claim->lossDescCode)->first();
-        $adjuster = User::where('name', $claim->adjusterCode)->first();
-        $rate = RateDetail::where('userId', $adjuster->id)->first();
-        $sourceCode = SourceCustomer::where('code', $claim->sourceCode)->first();
-        $invoice = Invoice::where('id', $invoice_id)->first();
-        $docket_backup = null;
-        $docket = null;
-        if ($invoice->invoiceMajorNo) {
-            $docket_backup = DB::table('claim_task_details')
-                ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
-                ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
-                ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
-                ->where('claim_task_details.invoiceMajorNo', '=', $invoice->invoiceMajorNo)
-                ->orderBy('claim_task_details.billDate', 'asc')
-                ->select(
-                    'claim_task_details.professionalServicesNote',
-                    'pro.description as professionalServicesNoteDes',
-                    'claim_task_details.professionalServicesTime',
-                    'claim_task_details.expenseNote',
-                    'ex.description as expenseNoteDes',
-                    'claim_task_details.expenseAmount',
-                    'claim_task_details.billDate',
-                    'claim_task_details.userId',
-                    'claim_task_details.invoiceMajorNo',
-                    'claim_task_details.invoiceTempNo',
-                    'claim_task_details.invoiceDate',
-                    'pro.code as professionalServices',
-                    'ex.code as expense',
-                    'users.name as adjusterCode'
-                )->get();
-            $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice->invoiceMajorNo)
-                ->where('userId', '!=', 23)->orderBy('created_at', 'asc')->get();
-        } else {
-            $docket_backup = DB::table('claim_task_details')
-                ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
-                ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
-                ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
-                ->where('claim_task_details.invoiceTempNo', '=', $invoice->invoiceTempNo)
-                ->orderBy('claim_task_details.billDate', 'asc')
-                ->select(
-                    'claim_task_details.professionalServicesNote',
-                    'pro.description as professionalServicesNoteDes',
-                    'claim_task_details.professionalServicesTime',
-                    'claim_task_details.expenseNote',
-                    'ex.description as expenseNoteDes',
-                    'claim_task_details.expenseAmount',
-                    'claim_task_details.billDate',
-                    'claim_task_details.userId',
-                    'claim_task_details.invoiceMajorNo',
-                    'claim_task_details.invoiceTempNo',
-                    'claim_task_details.invoiceDate',
-                    'pro.code as professionalServices',
-                    'ex.code as expense',
-                    'users.name as adjusterCode'
-                )->get();
-            $docket = ClaimTaskDetail::where('invoiceTempNo', $invoice->invoiceTempNo)
-                ->where('userId', '!=', 23)->orderBy('created_at', 'asc')->get();
-        }
-        $assit_array = [];
-        foreach ($docket->groupBy('userId') as $key => $value) {
-            $assit_detail = User::where('id', $key)->first();
-            $rateDetail = RateDetail::where('userId', $assit_detail->id)->first();
-            $sum = collect($value)->sum('professionalServicesTime');
-            array_push($assit_array, [
-                'assit' => $assit_detail,
-                'time' => $sum,
-                'branch' => $branch->code,
-                'rate' => $rateDetail->value
-            ]);
-        }
+        if($claim){
+            if($invoice_id != '0'){
+                $insurer = Customer::where('code', $claim->insurerCode)->first();
+                $branch = Branch::where('code', $claim->branchCode)->first();
+                $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
+                $typeOfDamage = TypeOfDamage::where('code', $claim->lossDescCode)->first();
+                $adjuster = User::where('name', $claim->adjusterCode)->first();
+                $rate = RateDetail::where('userId', $adjuster->id)->first();
+                $sourceCode = SourceCustomer::where('code', $claim->sourceCode)->first();
+                $invoice = Invoice::where('id', $invoice_id)->first();
+                $docket_backup = null;
+                $docket = null;
+                if ($invoice->invoiceMajorNo) {
+                    $docket_backup = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
+                        ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
+                        ->where('claim_task_details.invoiceMajorNo', '=', $invoice->invoiceMajorNo)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.professionalServicesNote',
+                            'pro.description as professionalServicesNoteDes',
+                            'claim_task_details.professionalServicesTime',
+                            'claim_task_details.expenseNote',
+                            'ex.description as expenseNoteDes',
+                            'claim_task_details.expenseAmount',
+                            'claim_task_details.billDate',
+                            'claim_task_details.userId',
+                            'claim_task_details.invoiceMajorNo',
+                            'claim_task_details.invoiceTempNo',
+                            'claim_task_details.invoiceDate',
+                            'pro.code as professionalServices',
+                            'ex.code as expense',
+                            'users.name as adjusterCode'
+                        )->get();
+                    $docket = ClaimTaskDetail::where('invoiceMajorNo', $invoice->invoiceMajorNo)
+                        ->where('userId', '!=', 23)->orderBy('created_at', 'asc')->get();
+                } else {
+                    $docket_backup = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
+                        ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
+                        ->where('claim_task_details.invoiceTempNo', '=', $invoice->invoiceTempNo)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.professionalServicesNote',
+                            'pro.description as professionalServicesNoteDes',
+                            'claim_task_details.professionalServicesTime',
+                            'claim_task_details.expenseNote',
+                            'ex.description as expenseNoteDes',
+                            'claim_task_details.expenseAmount',
+                            'claim_task_details.billDate',
+                            'claim_task_details.userId',
+                            'claim_task_details.invoiceMajorNo',
+                            'claim_task_details.invoiceTempNo',
+                            'claim_task_details.invoiceDate',
+                            'pro.code as professionalServices',
+                            'ex.code as expense',
+                            'users.name as adjusterCode'
+                        )->get();
+                    $docket = ClaimTaskDetail::where('invoiceTempNo', $invoice->invoiceTempNo)
+                        ->where('userId', '!=', 23)->orderBy('created_at', 'asc')->get();
+                }
+                $assit_array = [];
+                foreach ($docket->groupBy('userId') as $key => $value) {
+                    $assit_detail = User::where('id', $key)->first();
+                    $rateDetail = RateDetail::where('userId', $assit_detail->id)->first();
+                    $sum = collect($value)->sum('professionalServicesTime');
+                    array_push($assit_array, [
+                        'assit' => $assit_detail,
+                        'time' => $sum,
+                        'branch' => $branch->code,
+                        'rate' => $rateDetail->value
+                    ]);
+                }
 
-        $bill = Bill::where('id', $bill_id)->first();
-        return [
-            'claim' => [
-                'ourFile' => $claim->code,
-                'branchSeqNo' => $claim->branchSeqNo,
-                'incident' => $claim->incident,
-                'assignmentTypeCode' => $claim->assignmentTypeCode,
-                'accountCode' => $claim->accountCode,
-                'accountPolicyId' => $claim->accountPolicyId,
-                'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
-                'insuredClaim' => $claim->insuredClaim,
-                'tradingAs' => $claim->tradingAs,
-                'claimTypeCode' => $claim->claimTypeCode,
-                'claimTypeCodeDetail' => $insuranceDetail->name,
-                'lossDescCode' => $claim->lossDescCode,
-                'lossDescCodeDetail' => $typeOfDamage->name,
-                'catastrophicLoss' => $claim->catastrophicLoss,
-                'sourceCode' => $claim->sourceCode,
-                'sourceCodeDetail' => $sourceCode->name,
-                'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
-                'branchCode' => $claim->branchCode,
-                'branchCodeDetail' => $branch->name,
-                'branchTypeCode' => $claim->branchTypeCode,
-                'destroyedDate' => $claim->destroyedDate,
-                'lossLocation' => $claim->lossLocation,
-                'lineOfBusinessCode' => $claim->lineOfBusinessCode,
-                'lossDate' => $claim->lossDate,
-                'firstContact' => $claim->firstContact,
-                'receiveDate' => $claim->receiveDate,
-                'openDate' => $claim->openDate,
-                'closeDate' => $claim->closeDate,
-                'insuredContactedDate' => $claim->insuredContactedDate,
-                'limitationDate' => $claim->limitationDate,
-                'policyInceptionDate' => $claim->policyInceptionDate,
-                'policyExpiryDate' => $claim->policyExpiryDate,
-                'disabilityCode' => $claim->disabilityCode,
-                'outComeCode' => $claim->outComeCode,
-                'lastChange' => $claim->lastChange,
-                'partnershipId' => $claim->partnershipId,
-                'adjusterCode' => $claim->adjusterCode,
-                'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
-                'rate' => $rate->value,
-                'taxable' => $claim->taxable
-            ],
-            'bill' => [
-                'billToId' => $bill->billToId,
-                'claimOfficer' => $bill->claimOfficer,
-                'policyNumber' => $claim->policy
-            ],
-            'assit' => $assit_array,
-            'docket' => $docket_backup,
-            'print_date' => date('d-m-Y H:i:s'),
-            'sum_unit' => collect($docket_backup)->sum('professionalServicesTime'),
-            'sum_expense' => collect($docket_backup)->sum('expenseAmount'),
-            'invoice_date' => $invoice->invoiceDay
-        ];
+                $bill = Bill::where('id', $bill_id)->first();
+                return [
+                    'claim' => [
+                        'ourFile' => $claim->code,
+                        'branchSeqNo' => $claim->branchSeqNo,
+                        'incident' => $claim->incident,
+                        'assignmentTypeCode' => $claim->assignmentTypeCode,
+                        'accountCode' => $claim->accountCode,
+                        'accountPolicyId' => $claim->accountPolicyId,
+                        'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
+                        'insuredClaim' => $claim->insuredClaim,
+                        'tradingAs' => $claim->tradingAs,
+                        'claimTypeCode' => $claim->claimTypeCode,
+                        'claimTypeCodeDetail' => $insuranceDetail->name,
+                        'lossDescCode' => $claim->lossDescCode,
+                        'lossDescCodeDetail' => $typeOfDamage->name,
+                        'catastrophicLoss' => $claim->catastrophicLoss,
+                        'sourceCode' => $claim->sourceCode,
+                        'sourceCodeDetail' => $sourceCode->name,
+                        'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
+                        'branchCode' => $claim->branchCode,
+                        'branchCodeDetail' => $branch->name,
+                        'branchTypeCode' => $claim->branchTypeCode,
+                        'destroyedDate' => $claim->destroyedDate,
+                        'lossLocation' => $claim->lossLocation,
+                        'lineOfBusinessCode' => $claim->lineOfBusinessCode,
+                        'lossDate' => $claim->lossDate,
+                        'firstContact' => $claim->firstContact,
+                        'receiveDate' => $claim->receiveDate,
+                        'openDate' => $claim->openDate,
+                        'closeDate' => $claim->closeDate,
+                        'insuredContactedDate' => $claim->insuredContactedDate,
+                        'limitationDate' => $claim->limitationDate,
+                        'policyInceptionDate' => $claim->policyInceptionDate,
+                        'policyExpiryDate' => $claim->policyExpiryDate,
+                        'disabilityCode' => $claim->disabilityCode,
+                        'outComeCode' => $claim->outComeCode,
+                        'lastChange' => $claim->lastChange,
+                        'partnershipId' => $claim->partnershipId,
+                        'adjusterCode' => $claim->adjusterCode,
+                        'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
+                        'rate' => $rate->value,
+                        'taxable' => $claim->taxable
+                    ],
+                    'bill' => [
+                        'billToId' => $bill->billToId,
+                        'claimOfficer' => $bill->claimOfficer,
+                        'policyNumber' => $bill->policyNumber
+                    ],
+                    'assit' => $assit_array,
+                    'docket' => $docket_backup,
+                    'print_date' => date('d-m-Y H:i:s'),
+                    'sum_unit' => collect($docket_backup)->sum('professionalServicesTime'),
+                    'sum_expense' => collect($docket_backup)->sum('expenseAmount'),
+                    'invoice_date' => $invoice->invoiceDay
+                ];
+            }
+            else{
+                $insurer = Customer::where('code', $claim->insurerCode)->first();
+                $branch = Branch::where('code', $claim->branchCode)->first();
+                $insuranceDetail = InsuranceDetail::where('code', $claim->claimTypeCode)->first();
+                $typeOfDamage = TypeOfDamage::where('code', $claim->lossDescCode)->first();
+                $adjuster = User::where('name', $claim->adjusterCode)->first();
+                $rate = RateDetail::where('userId', $adjuster->id)->first();
+                $sourceCode = SourceCustomer::where('code', $claim->sourceCode)->first();
+                $invoice = Invoice::where('id', $invoice_id)->first();
+                $docket_backup = null;
+                $docket = null;
+                $docket_backup = DB::table('claim_task_details')
+                        ->leftJoin('users', 'claim_task_details.userId', '=', 'users.id')
+                        ->leftJoin('task_categories as pro', 'claim_task_details.professionalServices', '=', 'pro.id')
+                        ->leftJoin('task_categories as ex', 'claim_task_details.expense', '=', 'ex.id')
+                        ->where('claim_task_details.claimId',$claim->id)
+                        ->orderBy('claim_task_details.billDate', 'asc')
+                        ->select(
+                            'claim_task_details.professionalServicesNote',
+                            'pro.description as professionalServicesNoteDes',
+                            'claim_task_details.professionalServicesTime',
+                            'claim_task_details.expenseNote',
+                            'ex.description as expenseNoteDes',
+                            'claim_task_details.expenseAmount',
+                            'claim_task_details.billDate',
+                            'claim_task_details.userId',
+                            'claim_task_details.invoiceMajorNo',
+                            'claim_task_details.invoiceTempNo',
+                            'claim_task_details.invoiceDate',
+                            'pro.code as professionalServices',
+                            'ex.code as expense',
+                            'users.name as adjusterCode'
+                        )->get();
+                $docket = ClaimTaskDetail::where('claimId', $claim->id)
+                    ->where('userId', '!=', 23)->orderBy('created_at', 'asc')->get();
+                $assit_array = [];
+                foreach ($docket->groupBy('userId') as $key => $value) {
+                    $assit_detail = User::where('id', $key)->first();
+                    $rateDetail = RateDetail::where('userId', $assit_detail->id)->first();
+                    $sum = collect($value)->sum('professionalServicesTime');
+                    array_push($assit_array, [
+                        'assit' => $assit_detail,
+                        'time' => $sum,
+                        'branch' => $branch->code,
+                        'rate' => $rateDetail->value
+                    ]);
+                }
+                return [
+                    'claim' => [
+                        'ourFile' => $claim->code,
+                        'branchSeqNo' => $claim->branchSeqNo,
+                        'incident' => $claim->incident,
+                        'assignmentTypeCode' => $claim->assignmentTypeCode,
+                        'accountCode' => $claim->accountCode,
+                        'accountPolicyId' => $claim->accountPolicyId,
+                        'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
+                        'insuredClaim' => $claim->insuredClaim,
+                        'tradingAs' => $claim->tradingAs,
+                        'claimTypeCode' => $claim->claimTypeCode,
+                        'claimTypeCodeDetail' => $insuranceDetail->name,
+                        'lossDescCode' => $claim->lossDescCode,
+                        'lossDescCodeDetail' => $typeOfDamage->name,
+                        'catastrophicLoss' => $claim->catastrophicLoss,
+                        'sourceCode' => $claim->sourceCode,
+                        'sourceCodeDetail' => $sourceCode->name,
+                        'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
+                        'branchCode' => $claim->branchCode,
+                        'branchCodeDetail' => $branch->name,
+                        'branchTypeCode' => $claim->branchTypeCode,
+                        'destroyedDate' => $claim->destroyedDate,
+                        'lossLocation' => $claim->lossLocation,
+                        'lineOfBusinessCode' => $claim->lineOfBusinessCode,
+                        'lossDate' => $claim->lossDate,
+                        'firstContact' => $claim->firstContact,
+                        'receiveDate' => $claim->receiveDate,
+                        'openDate' => $claim->openDate,
+                        'closeDate' => $claim->closeDate,
+                        'insuredContactedDate' => $claim->insuredContactedDate,
+                        'limitationDate' => $claim->limitationDate,
+                        'policyInceptionDate' => $claim->policyInceptionDate,
+                        'policyExpiryDate' => $claim->policyExpiryDate,
+                        'disabilityCode' => $claim->disabilityCode,
+                        'outComeCode' => $claim->outComeCode,
+                        'lastChange' => $claim->lastChange,
+                        'partnershipId' => $claim->partnershipId,
+                        'adjusterCode' => $claim->adjusterCode,
+                        'adjusterCodeDetail' => $adjuster->firstName . ' ' . $adjuster->lastName,
+                        'rate' => $rate->value,
+                        'taxable' => $claim->taxable
+                    ],
+                    'bill' => [
+                        'billToId' => '',
+                        'claimOfficer' => '',
+                        'policyNumber' => ''
+                    ],
+                    'assit' => $assit_array,
+                    'docket' => $docket_backup,
+                    'print_date' => date('d-m-Y H:i:s'),
+                    'sum_unit' => collect($docket_backup)->sum('professionalServicesTime'),
+                    'sum_expense' => collect($docket_backup)->sum('expenseAmount'),
+                    'invoice_date' => null
+                ];
+            }
+        }
+        
     }
 
     public function actionBillOfClaimViewTrialFee(Request $request)

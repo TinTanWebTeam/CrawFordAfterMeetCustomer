@@ -84,7 +84,10 @@
                 <br>
                 Invoice ID: <input type="text" name="invoice_id" id="invoice_id">
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-3">
+                <button onclick="viewAllDocketByClaimCode()" style="margin-top: 15px">Views All</button>
+            </div>
+            <div class="col-sm-6">
                 <button class="pull-right" id="print_report">Print Report</button>
             </div>
         </div>
@@ -1501,6 +1504,10 @@
         $("#claim_id").val(code);
         $("#modal-claim").modal("hide");
     }
+
+    function viewAllDocketByClaimCode() {
+        getReportData(0,0,$("input[name=claim_id]").val());
+    }
     var data_docket = [];
     var continue_id = 0;
     var results = null;
@@ -1788,15 +1795,20 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(result.docket[i].invoiceMajorNo == null){
-                    if(result.docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceTempNo+"</span>";
+                if(result.invoice_date != null){
+                    if(result.docket[i].invoiceMajorNo == null){
+                        if(result.docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
+                        row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
                     }
                 }else{
-                    row += "<span style='padding-left: 30px'>"+result.docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
+                
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
                 if(results['invoice_date'] == null){
@@ -1938,14 +1950,18 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(data_docket[i].invoiceMajorNo == null){
-                    if(data_docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                if(results.invoice_date != null){
+                    if(data_docket[i].invoiceMajorNo == null){
+                        if(data_docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
-                    }
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    } 
                 }else{
-                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
@@ -2086,14 +2102,18 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(data_docket[i].invoiceMajorNo == null){
-                    if(data_docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                if(results.invoice_date != null){
+                    if(data_docket[i].invoiceMajorNo == null){
+                        if(data_docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
-                    }
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    } 
                 }else{
-                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
@@ -2233,14 +2253,18 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(data_docket[i].invoiceMajorNo == null){
-                    if(data_docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                if(results.invoice_date != null){
+                    if(data_docket[i].invoiceMajorNo == null){
+                        if(data_docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
-                    }
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    } 
                 }else{
-                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
@@ -2377,14 +2401,18 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(data_docket[i].invoiceMajorNo == null){
-                    if(data_docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                if(results.invoice_date != null){
+                    if(data_docket[i].invoiceMajorNo == null){
+                        if(data_docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
-                    }
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    } 
                 }else{
-                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
@@ -2518,14 +2546,18 @@
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-major-no'>";
-                if(data_docket[i].invoiceMajorNo == null){
-                    if(data_docket[i].invoiceTempNo !== null){
-                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                if(results.invoice_date != null){
+                    if(data_docket[i].invoiceMajorNo == null){
+                        if(data_docket[i].invoiceTempNo !== null){
+                            row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceTempNo+"</span>";
+                        }else{
+                            row += "<span style='padding-left: 30px'></span>";    
+                        }
                     }else{
-                        row += "<span style='padding-left: 30px'></span>";    
-                    }
+                        row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    } 
                 }else{
-                    row += "<span style='padding-left: 30px'>"+data_docket[i].invoiceMajorNo+"</span>";
+                    row += "<span style='padding-left: 30px'></span>";    
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-invoice-date'>";
