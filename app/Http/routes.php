@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     //Route::post('getAllInvoiceByClaim','AdminController@getAllInvoiceByClaim');
     Route::post('deleteTask','AdminController@deleteTask');
     Route::post('saveInformationOfInvoiceAfterInReport','AdminController@saveInformationOfInvoiceAfterInReport');
+    Route::post('viewDetailInvoiceByInvoice','AdminController@viewDetailInvoiceByInvoice');
 });
 
 /*

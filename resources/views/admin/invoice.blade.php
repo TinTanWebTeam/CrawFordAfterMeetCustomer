@@ -12,7 +12,7 @@
                                     <h5 style="text-align: right">Invoice #</h5>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" name="Invoice" id="Invoice" readonly style="background-color: #EAD8D8">
+                                    <input type="text" name="Invoice" id="Invoice" onkeypress="invoiceView.viewDetailInvoiceByInvoice(event)">
                                 </div>
                             </div>
                         </div>
@@ -734,62 +734,71 @@
                             +currentDate.getFullYear() ;
                     return datetime;
                 },
+                submitServergetAllInvoiceByClaim:function(claim)
+                {
+                    $.get(url+"getAllInvoiceByClaimId/"+claim,{_token:_token},function(data){
+                        if (data["data"].length > 0) {
+                            //$("form[class=form-invoice]").find("input").val("");
+                            $("input[name=Claim]").val(claim);
+                            var row = "";
+                            $("tbody#table-invoice-body").empty();
+                            for (var i = 0; i < data["data"].length; i++) {
+                                if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]===null)
+                                {
+                                    row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                    row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
+                                    row += "<td></td>";
+                                }
+                                if(data["data"][i]["invoice_temp"]!==null && data["data"][i]["invoice_major"]===null)
+                                {
+                                    row += "<tr id= "+data["data"][i]["invoice_temp"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                    row += "<td></td>";
+                                    row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
+                                }
+                                if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]!==null)
+                                {
+                                    row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
+                                    row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
+                                    row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
+                                }
+
+
+
+                                if (data["data"][i]["invoice_date"]) {
+                                    var receiveDate = new Date(data["data"][i]["invoice_date"].substring(0, 10));
+                                    var dd = receiveDate.getDate();
+                                    var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                    var yyyy = receiveDate.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    row += "<td>" + dd + '-' + mm + '-' + yyyy + "</td>";
+                                }
+
+                                row += "<td>" + data["data"][i]["invoiceType"] + "</td>";
+
+                                row += "<td>" + data["data"][i]["claim_id"] + "</td>";
+                                row += "</tr>";
+                            }
+
+                            $("tbody#table-invoice-body").append(row);
+
+                        }
+                    });
+                },
                 getAllInvoiceByClaim:function(e)
                 {
                     if(e.keyCode===13)
                     {
                         var code = $("input[name=Claim]").val();
-                        $.get(url+"getAllInvoiceByClaimId/"+code,{_token:_token},function(data){
-                            if (data["data"].length > 0) {
-                                var row = "";
-                                $("tbody#table-invoice-body").empty();
-                                for (var i = 0; i < data["data"].length; i++) {
-                                    if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]===null)
-                                    {
-                                        row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
-                                        row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
-                                        row += "<td></td>";
-                                    }
-                                    if(data["data"][i]["invoice_temp"]!==null && data["data"][i]["invoice_major"]===null)
-                                    {
-                                        row += "<tr id= "+data["data"][i]["invoice_temp"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
-                                        row += "<td></td>";
-                                        row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
-                                    }
-                                    if(data["data"][i]["invoice_major"]!==null && data["data"][i]["invoice_temp"]!==null)
-                                    {
-                                        row += "<tr id= "+data["data"][i]["invoice_major"]+" onclick='invoiceView.viewDetailInvoice(this)' style='cursor: pointer'>";
-                                        row += "<td>" + data["data"][i]["invoice_major"] + "</td>";
-                                        row += "<td>" + data["data"][i]["invoice_temp"] + "</td>";
-                                    }
-
-
-
-                                    if (data["data"][i]["invoice_date"]) {
-                                        var receiveDate = new Date(data["data"][i]["invoice_date"].substring(0, 10));
-                                        var dd = receiveDate.getDate();
-                                        var mm = receiveDate.getMonth() + 1; //January is 0!
-
-                                        var yyyy = receiveDate.getFullYear();
-                                        if (dd < 10) {
-                                            dd = '0' + dd;
-                                        }
-                                        if (mm < 10) {
-                                            mm = '0' + mm;
-                                        }
-                                        row += "<td>" + dd + '-' + mm + '-' + yyyy + "</td>";
-                                    }
-
-                                        row += "<td>" + data["data"][i]["invoiceType"] + "</td>";
-
-                                        row += "<td>" + data["data"][i]["claim_id"] + "</td>";
-                                        row += "</tr>";
-                                }
-
-                                $("tbody#table-invoice-body").append(row);
-
-                            }
-                        });
+                        $("form[class=form-invoice]").find("input").val("");
+                        $("tbody#table-invoice-body").empty();
+                        $("input[name=Claim]").val(code);
+                        invoiceView.submitServergetAllInvoiceByClaim(code);
                     }
 
                 },
@@ -797,7 +806,7 @@
                     $.post(url+"loadInvoiceByEventEnterKey",{_token:_token,key:$(element).attr("id")},function(data){
                         //Informationn of claim
                         $("input[name=Invoice]").val($(element).attr("id"));
-                        $("input[name=InvoiceDate]").val($(element).find("td:eq(1)").text());
+                        $("input[name=InvoiceDate]").val($(element).find("td:eq(2)").text());
                         $("input[name=BillTo]").val(data[0][0]["billTo"]);
                         $("input[name=BillType]").val(data[0][0]["typeInvoice"]);
                         $("input[name=Organization]").val(data[0][0]["organization"]);
@@ -854,6 +863,15 @@
                         $("h4[id=total_Vat_VND]").text(Math.round(Number($("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
 
                         //USD when in report
+                        $("span[id=bankName]").text("");
+                        $("div[id=dateExchangeRate]").text("");
+                        $("span[id=exchangeRateInvoice]").text("");
+                        $("h4[id=professionFeeUSD]").text("");
+                        $("h4[id=expenseUSD]").text("");
+                        $("h4[id=total_ExcludingVAT_USD]").text("");
+                        $("h4[id=total_Vat_USD]").text("");
+                        $("h4[id=totalUSD]").text("");
+
                         if($("input[name=bankName]").val()!=="")
                         {
                             $("span[id=bankName]").text($("input[name=bankName]").val());
@@ -884,6 +902,141 @@
                         }
 
                     });
+                },
+                viewDetailInvoiceByInvoice: function(e) {
+                    if(e.keyCode===13)
+                    {
+                        var invoice = $("input[name=Invoice]").val();
+                        $.post(url+"viewDetailInvoiceByInvoice",{_token:_token,key:invoice},function(data){
+                            //Informationn of claim
+                            $("input[name=Claim]").val(data[0][0]["claimCode"]);
+                            invoiceView.submitServergetAllInvoiceByClaim($("input[name=Claim]").val());
+
+                            $("input[name=Invoice]").val(invoice);
+
+                            var receiveDate = new Date(data[0][0]["invoiceDay"].substring(0, 10));
+                            var dd = receiveDate.getDate();
+                            var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                            var yyyy = receiveDate.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+                            $("input[name=InvoiceDate]").val(dd + '-' + mm + '-' + yyyy);
+
+
+                            $("input[name=BillTo]").val(data[0][0]["billTo"]);
+                            $("input[name=BillType]").val(data[0][0]["typeInvoice"]);
+                            $("input[name=Organization]").val(data[0][0]["organization"]);
+                            $("input[name=LossDesc]").val(data[0][0]["lossDesc"]);
+                            $("input[name=AdjusterID]").val(data[0][0]["adjusterId"]);
+                            $("input[name=BranchID]").val(data[0][0]["branchId"]);
+                            $("input[name=InsuredName]").val(data[0][0]["insuredLastName"]);
+                            $("input[name=Policy]").val(data[0][0]["policy"]);
+                            $("input[name=CoClaim]").val();
+                            //load information bank and exchangeRate
+                            $("input[name=bankName]").val(data[0][0]["nameBank"]);
+                            $("input[name=exchangeRate]").val(data[0][0]["exchangeRate"]).formatCurrency({roundToDecimalPlace:0});
+                            if(data[0][0]["dateExchangeRate"]!==null)
+                            {
+                                var dateRate = data[0][0]["dateExchangeRate"].split(" ");
+                                $("input[name=dateExchange]").val(dateRate[0]);
+                            }
+                            else
+                            {
+                                $("input[name=dateExchange]").val("");
+                            }
+                            //Information of bill
+                            var ClaimTotalFee = parseFloat(data[2][0]["generalExp"]) + parseFloat(data[3][0]["commPhotoExp"]) + parseFloat(data[4][0]["consultFeesExp"]) + parseFloat(data[5][0]["travelRelatedExp"]) + parseFloat(data[6][0]["gstFreeDisb"]) + parseFloat(data[7][0]["disbursement"]);
+                            $("input[name=Professional]").val(data[1][0]["professionalServices"]);
+                            $("input[name=GeneralExp]").val(data[2][0]["generalExp"]);
+                            $("input[name=CommPhotoExp]").val(data[3][0]["commPhotoExp"]);
+                            $("input[name=ConsultFeesExp]").val(data[4][0]["consultFeesExp"]);
+                            $("input[name=TravelRelatedExp]").val(data[5][0]["travelRelatedExp"]);
+                            $("input[name=GSTFreeDisb]").val(data[6][0]["gstFreeDisb"]);
+                            $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
+                            $("input[name=claimTotalFee]").val(ClaimTotalFee);
+                            $("input[name=yourSubtotal]").val(parseFloat(data[1][0]["professionalServices"]) + ClaimTotalFee);
+                            invoiceView.formatCurrencyInput();
+                            $("input[name=claimTotalTax]").val($("input[name=Professional]").val());
+
+
+                            //load information of report
+                            $("h4[id=viaRef]").text($("input[id=Claim]").val());
+                            $("span[id=contactName]").text(data[0][0]["contactName"]);
+                            $("div[id=NoFee]").text($("input[name=Invoice]").val());
+
+                            var receiveDate = new Date(data[0][0]["invoiceDay"].substring(0, 10));
+                            var dd = receiveDate.getDate();
+                            var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                            var yyyy = receiveDate.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+                            $("h4[id=dateFee]").text(dd + '-' + mm + '-' + yyyy);
+
+
+                            $("h4[id=insuredClaim]").text(data[0][0]["insuredFirstName"] +" "+ data[0][0]["insuredLastName"]);
+                            $("h4[id=lossDescClaim]").text(data[0][0]["descriptionLossDesc"]);
+                            $("h4[id=policyClaim]").text(data[0][0]["policy"]);
+                            $("h4[id=lossDateClaim]").text(invoiceView.convertStringToDate((data[0][0]["lossDate"].split(" "))[0]));
+                            $("h4[id=addressCustomer]").text(data[0][0]["addressCustomer"]);
+                            $("h4[id=nameCustomer]").text(data[0][0]["nameCustomer"]);
+                            //load report invoice
+                            $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
+                            $("h4[id=expenseVND]").text((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,"")))).formatCurrency({roundToDecimalPlace:0});
+                            //load total excludingVAT VND
+                            $("h4[id=total_ExcludingVAT_VND]").text(Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,""))).formatCurrency({roundToDecimalPlace:0});
+                            //load total VAT VND
+                            $("h4[id=total_Vat_VND]").text(Math.round(Number($("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
+
+                            //USD when in report
+                            $("span[id=bankName]").text("");
+                            $("div[id=dateExchangeRate]").text("");
+                            $("span[id=exchangeRateInvoice]").text("");
+                            $("h4[id=professionFeeUSD]").text("");
+                            $("h4[id=expenseUSD]").text("");
+                            $("h4[id=total_ExcludingVAT_USD]").text("");
+                            $("h4[id=total_Vat_USD]").text("");
+                            $("h4[id=totalUSD]").text("");
+                            
+                            if($("input[name=bankName]").val()!=="")
+                            {
+                                $("span[id=bankName]").text($("input[name=bankName]").val());
+                            }
+                            if($("input[name=exchangeRate]").val()!=="")
+                            {
+                                $("span[id=exchangeRateInvoice]").text($("input[name=exchangeRate]").val());
+                                $("h4[id=professionFeeUSD]").text(invoiceView.round((($("input[name=Professional]").val().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2)).formatCurrency();
+                                $("h4[id=expenseUSD]").text(invoiceView.round((Number($("h4[id=expenseVND]").text().replace(/,/g,""))/($("input[name=exchangeRate]").val().replace(/,/g,""))),2)).formatCurrency();
+
+                                $("h4[id=total_ExcludingVAT_USD]").text(invoiceView.round((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,""))),2)).formatCurrency();
+                                $("h4[id=total_Vat_USD]").text(invoiceView.round(((Number($("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_USD]").text().replace(/,/g,"")),2)).formatCurrency();
+
+                                $("h4[id=totalUSD]").text(invoiceView.round(((Number($("h4[id=professionFeeUSD]").text().replace(/,/g,"")) + Number($("h4[id=expenseUSD]").text().replace(/,/g,"")))*1.1),2)).formatCurrency();
+                                $("h4[id=totalVND]").text(parseInt((Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,"")))*1.1)).formatCurrency({roundToDecimalPlace:0});
+
+
+                                //format USD $
+                                $("h4[id=professionFeeUSD]").text("$"+$("h4[id=professionFeeUSD]").text());
+                                $("h4[id=expenseUSD]").text("$"+$("h4[id=expenseUSD]").text());
+                                $("h4[id=total_ExcludingVAT_USD]").text("$"+$("h4[id=total_ExcludingVAT_USD]").text());
+                                $("h4[id=total_Vat_USD]").text("$"+$("h4[id=total_Vat_USD]").text());
+                                $("h4[id=totalUSD]").text("$"+$("h4[id=totalUSD]").text());
+                            }
+                            if($("input[name=dateExchange]").val()!=="")
+                            {
+                                $("div[id=dateExchangeRate]").text(invoiceView.convertStringToDate($("input[name=dateExchange]").val()));
+                            }
+                        });
+                    }
                 },
                 formatCurrencyInput:function()
                 {

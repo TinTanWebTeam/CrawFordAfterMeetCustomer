@@ -3808,7 +3808,9 @@ class AdminController extends Controller
     {
         $data = 0;
         try {
-            $invoice = Invoice::where('invoiceMajorNo', $request->get('invoice'))->first();
+            $invoice = Invoice::where('invoiceMajorNo', $request->get('invoice'))
+                ->orWhere('invoiceTempNo', $request->get('invoice'))
+                ->first();
             if ($invoice) {
                 $invoice->nameBank = $request->get('bankName');
                 $invoice->exchangeRate = $request->get('exchangeRate');
@@ -4393,6 +4395,119 @@ class AdminController extends Controller
 
         }
         return $data;
+    }
+
+    public function viewDetailInvoiceByInvoice(Request $request)
+    {
+        $resultArray = [];
+        try {
+            $query1 = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('customers', 'bills.billToId', '=', 'customers.code')
+                ->join('claim_task_details', 'bills.billId', '=', 'claim_task_details.id')
+                ->join('task_categories', 'claim_task_details.professionalServices', '=', 'task_categories.id')
+                ->join('claims', 'claim_task_details.claimId', '=', 'claims.id')
+                ->join('type_of_damages', 'claims.lossDescCode', '=', 'type_of_damages.code')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    'invoices.invoiceDay as invoiceDay',
+                    'bills.billToId as billTo',
+                    'task_categories.code as typeInvoice',
+                    'claims.code as Claim',
+                    'claims.organization as organization',
+                    'claims.adjusterCode as adjusterId',
+                    'claims.insuredFirstName as insuredFirstName',
+                    'claims.insuredLastName as insuredLastName',
+                    'claims.lossDescCode as lossDesc',
+                    'claims.branchCode as branchId',
+                    'bills.policyNumber as policy',
+                    'claims.lossDate as lossDate',
+                    'bills.claimOfficer as contactName',
+                    'type_of_damages.description as descriptionLossDesc',
+                    'claims.lossLocation as lossLocation',
+                    'claims.code as claimCode',
+                    'invoices.nameBank as nameBank',
+                    'invoices.exchangeRate as exchangeRate',
+                    'invoices.dateExchangeRate as dateExchangeRate',
+                    'invoices.addressBank as addressBank',
+                    'customers.fullName as nameCustomer',
+                    'customers.address as addressCustomer'
+                )->get();
+            array_push($resultArray, $query1);
+            $professionalService = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('professional_services', 'bills.id', '=', 'professional_services.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(professional_services.value) as professionalServices')
+                )->get();
+            array_push($resultArray, $professionalService);
+            $generalExp = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('general_exps', 'bills.id', '=', 'general_exps.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(general_exps.value) as generalExp')
+                )->get();
+            array_push($resultArray, $generalExp);
+
+            $commPhotoExp = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('comm_photo_exps', 'bills.id', '=', 'comm_photo_exps.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(comm_photo_exps.value) as commPhotoExp')
+                )->get();
+            array_push($resultArray, $commPhotoExp);
+
+            $consultFeesExp = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('consult_fees_exps', 'bills.id', '=', 'consult_fees_exps.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(consult_fees_exps.value) as consultFeesExp')
+                )->get();
+            array_push($resultArray, $consultFeesExp);
+
+            $travelRelatedExp = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('travel_related_exps', 'bills.id', '=', 'travel_related_exps.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(travel_related_exps.value) as travelRelatedExp')
+                )->get();
+            array_push($resultArray, $travelRelatedExp);
+
+            $gstFreeDisb = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('gst_free_disbs', 'bills.id', '=', 'gst_free_disbs.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(gst_free_disbs.value) as gstFreeDisb')
+                )->get();
+            array_push($resultArray, $gstFreeDisb);
+
+            $disbursement = DB::table('invoices')
+                ->join('bills', 'invoices.idBill', '=', 'bills.id')
+                ->join('disbursements', 'bills.id', '=', 'disbursements.billId')
+                ->where('invoices.invoiceMajorNo', $request->get('key'))
+                ->orWhere('invoices.invoiceTempNo', $request->get('key'))
+                ->select(
+                    DB::raw('SUM(disbursements.value) as disbursement')
+                )->get();
+            array_push($resultArray, $disbursement);
+
+        } catch (Exception $ex) {
+            return $ex;
+        }
+        return $resultArray;
     }
 
     //demo
