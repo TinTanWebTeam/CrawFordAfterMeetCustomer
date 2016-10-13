@@ -211,7 +211,7 @@
                                 row += "</tr>";
                             }
 
-                            $("tbody#tbodyTableReport").append(row);
+                            $("tbody#tbodyTableReport").empty().append(row);
                             $("table[id=tableReport]").DataTable();
                         }
                         //sum textbox
