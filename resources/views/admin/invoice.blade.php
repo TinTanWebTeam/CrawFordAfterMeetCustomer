@@ -1,4 +1,51 @@
-{{--Model List Invoice--}}
+{{--Model List Claim have invoice--}}
+<div class="modal fade" id="modal-claim">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Claim List
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="claim-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                Insured Name
+                            </th>
+                            <th>
+                                Insurer Code
+                            </th>
+                            <th>
+                                Receive Date
+                            </th>
+                            <th>
+                                Open Date
+                            </th>
+                            <th>
+                                Adjuster
+                            </th>
+                            <th class="text-center">
+                                Choose
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="claim-talbe-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <form action="" class="form-invoice">
     <div class="row" style="background-color: white">
@@ -125,7 +172,7 @@
                                 <h5 style="text-align: right">Claim #:</h5>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" name="Claim" id="Claim" onkeypress="invoiceView.getAllInvoiceByClaim(event)">
+                                <input type="text" name="Claim" id="Claim" onkeypress="invoiceView.getAllInvoiceByClaim(event)" ondblclick="invoiceView.searchClaimByDoubleClick()">
                             </div>
                         </div>
                     </div>
@@ -720,6 +767,7 @@
 <br>
 <br>
 <br>
+
 <script>
     $(function () {
         if (typeof(invoiceView) === "undefined") {
@@ -1006,7 +1054,7 @@
                             $("h4[id=total_ExcludingVAT_USD]").text("");
                             $("h4[id=total_Vat_USD]").text("");
                             $("h4[id=totalUSD]").text("");
-                            
+
                             if($("input[name=bankName]").val()!=="")
                             {
                                 $("span[id=bankName]").text($("input[name=bankName]").val());
@@ -1104,6 +1152,58 @@
                     $("span[id=bankName]").text($(element).val());
                     $("h5[id=bankName]").text($(element).val());
                 },
+                searchClaimByDoubleClick : function () {
+                    $.post(url + 'getClaimHaveInvoiceOfTabInvoice',{_token:_token},function (listClaim) {
+                        var row = "";
+                        for (var i = 0; i < listClaim.length; i++) {
+                            var tr = "<tr>";
+                            tr += "<td>" + listClaim[i]["code"] + "</td>";
+                            tr += "<td>"+ listClaim[i]["insuredLastName"] + "</td>";
+                            tr += "<td>"+ listClaim[i]["insurerCode"] + "</td>";
+                            if (listClaim[i]["receiveDate"]) {
+                                var receiveDate = new Date(listClaim[i]["receiveDate"].substring(0, 10));
+                                var dd = receiveDate.getDate();
+                                var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = receiveDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            if (listClaim[i]["openDate"]) {
+                                var openDate = new Date(listClaim[i]["openDate"].substring(0, 10));
+                                var dd = openDate.getDate();
+                                var mm = openDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = openDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            tr += "<td>"+ String(listClaim[i]["adjusterCode"]).toUpperCase() + "</td>";
+                            tr += "<td class='text-center'><button class='btn btn-xs btn-success' onclick='invoiceView.fillClaimToForm(this)'><span class='glyphicon glyphicon-ok'></span></button></td>";
+                            tr += "</tr>";
+                            row += tr;
+                        }
+                        $("#claim-talbe-body").empty().append(row);
+                        $("#claim-table").DataTable();
+                    });
+                    $("#modal-claim").modal("show");
+                },
+                fillClaimToForm:function(element){
+                    $("form[class=form-invoice]").find("input").val("");
+                    invoiceView.submitServergetAllInvoiceByClaim($(element).parent().parent().find("td:eq(0)").text());
+                    $("input[name=Claim]").val($(element).parent().parent().find("td:eq(0)").text());
+                    $("#modal-claim").modal("hide");
+                }
 
 
             };

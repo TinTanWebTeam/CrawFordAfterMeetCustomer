@@ -2679,19 +2679,28 @@ class AdminController extends Controller
         $invoiceTempNo = null;
         $majorNo = Invoice::orderBy('invoiceMajorNo', 'desc')->first();
         $tempNo = Invoice::orderBy('invoiceTempNo', 'desc')->first();
-        if ($majorNo == null && $tempNo == null) {
+        if ($majorNo == null && $tempNo == null)
+        {
             $invoiceTempNo = 10000;
-        } else if ($majorNo != null && $tempNo != null) {
+        }
+        else if ($majorNo != null && $tempNo != null)
+        {
             $major = (int)substr($majorNo->invoiceMajorNo, 1, 4);
             $temp = (int)substr($tempNo->invoiceTempNo, 1, 4);
-            if ($major > $temp) {
+            if ($major > $temp)
+            {
                 $invoiceTempNo = ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
-            } else {
+            } else
+            {
                 $invoiceTempNo = ((int)("1" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
             }
-        } else if ($majorNo != null && $tempNo == null) {
+        }
+        else if ($majorNo != null && $tempNo == null)
+        {
             $invoiceTempNo = ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
-        } else {
+        }
+        else
+        {
             $invoiceTempNo = $tempNo->invoiceTempNo + 1;
         }
         return $invoiceTempNo;
@@ -4508,6 +4517,23 @@ class AdminController extends Controller
             return $ex;
         }
         return $resultArray;
+    }
+
+    public function getClaimHaveInvoiceOfTabInvoice()
+    {
+        $query = null;
+        $query = DB::table('claims')
+                    ->join('bills','bills.claimId','=','claims.id')
+                    ->groupBy('claims.id')
+                    ->select(
+                        'claims.code as code',
+                        'claims.insuredLastName as insuredLastName',
+                        'claims.insurerCode as insurerCode',
+                        'claims.receiveDate as receiveDate',
+                        'claims.openDate as openDate',
+                        'claims.adjusterCode as adjusterCode'
+                    )->get();
+        return $query;
     }
 
     //demo
