@@ -3567,14 +3567,15 @@ class AdminController extends Controller
                             'claim_task_details.professionalServicesTime as Unit',
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.professionalServicesTime as professionalServicesTime',
                             'claim_task_details.invoiceMajorNo as Invoice'
                         )
                         ->get();
-                    $timeTotal = ClaimTaskDetail::all();
-                    $collectTimeTotal = collect($timeTotal);
+                    //$timeTotal = ClaimTaskDetail::all();
                     if (count($claimTask) > 0) {
+                        $collectTimeTotal = collect($claimTask);
                         $sumTime = $collectTimeTotal->sum('professionalServicesTime');
-                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        $sumExpenseAmount = $collectTimeTotal->sum('ExpenseAmount');
                     }
                     $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
                 }else{
@@ -3594,14 +3595,15 @@ class AdminController extends Controller
                             'claim_task_details.professionalServicesTime as Unit',
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
+                            'claim_task_details.professionalServicesTime as professionalServicesTime',
                             'claim_task_details.invoiceMajorNo as Invoice'
                         )
                         ->get();
-                    $timeTotal = ClaimTaskDetail::where('userId', $user->id)->get();
-                    $collectTimeTotal = collect($timeTotal);
+                    //$timeTotal = ClaimTaskDetail::where('userId', $user->id)->get();
                     if (count($claimTask) > 0) {
+                        $collectTimeTotal = collect($claimTask);
                         $sumTime = $collectTimeTotal->sum('professionalServicesTime');
-                        $sumExpenseAmount = $collectTimeTotal->sum('expenseAmount');
+                        $sumExpenseAmount = $collectTimeTotal->sum('ExpenseAmount');
                     }
                     $arrayData = array('ListData' => $claimTask, 'SumTime' => $sumTime, 'SumExpenseAmount' => $sumExpenseAmount);
                 }
