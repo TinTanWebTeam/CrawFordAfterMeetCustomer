@@ -210,7 +210,7 @@
 
                                 row += "</tr>";
                             }
-
+                            $("table[id=tableReport]").DataTable().destroy();
                             $("tbody#tbodyTableReport").empty().append(row);
                             $("table[id=tableReport]").DataTable();
                         }
