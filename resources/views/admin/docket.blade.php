@@ -622,13 +622,13 @@
         <tr style="border-bottom: 1px solid black;margin-bottom:20px">
             <th class="text-bold text-center" style="display: none">IdUser</th>
             <th class="text-bold text-center">Date</th>
-            <th class="text-bold text-center">Adjuster Name</th>
+            <th class="text-bold text-center">Adjuster<br>Name</th>
             <th class="text-bold text-center">Code</th>
             <th class="text-bold text-center">Time</th>
             <th class="text-bold text-center" style="display:none">Description</th>
-            <th class="text-bold text-center">Expense Code</th>
-            <th class="text-bold text-center">Expense Amount</th>
-            <th class="text-bold text-center">Note</th>
+            <th class="text-bold text-center">Expense<br>Code</th>
+            <th class="text-bold text-center">Expense<br>Amount</th>
+            <th class="text-bold text-center" style="width: 30%">Note</th>
             <th class="text-bold text-center">InvoiceMajorNo</th>
             <th class="text-bold text-center">InvoiceDate</th>
             <th class="text-bold text-center">Modify</th>
