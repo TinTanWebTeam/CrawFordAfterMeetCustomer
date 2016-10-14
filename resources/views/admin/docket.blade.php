@@ -216,6 +216,56 @@
 </div>
 {{--End Model Delete--}}
 
+{{--Model Claim--}}
+<div class="modal fade" id="modal-claim">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    Claim List
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="claim-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                Code
+                            </th>
+                            <th>
+                                Insured Name
+                            </th>
+                            <th>
+                                Insurer Code
+                            </th>
+                            <th>
+                                Receive Date
+                            </th>
+                            <th>
+                                Open Date
+                            </th>
+                            <th>
+                                Adjuster
+                            </th>
+                            <th class="text-center">
+                                Choose
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="claim-talbe-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{--End Model Claim--}}
+
 <div class="row">
     <form id="formClaim" style="background-color: #fff;width: 100%">
         <div class="row" style="padding: 20px;">
@@ -229,7 +279,8 @@
                         <input type="text" id="ClaimId" name="ClaimId" value="" style="display:none">
                         <input type="text" id="IdTask" name="IdTask" value="" style="display:none">
                         <input type="text" id="ClaimCode" name="ClaimCode" value="" style="display: inline-block"
-                               onkeypress="docketView.loadClaimByEventEnterKey(event)">
+                               onkeypress="docketView.loadClaimByEventEnterKey(event)"
+                               ondblclick="docketView.loadClaimByEventDoubleClick()">
                     </div>
                 </div>
                 <div class="row">
@@ -554,7 +605,7 @@
             </div>
             <div class="col-sm-6" style="padding-right: 40px">
                 <button type="button" class="btn btn-danger pull-right" style="margin-left: 20px"
-                        onclick="docketView.cancel()">Cancel
+                        onclick="docketView.ActionCancelOfButton()">Cancel
                 </button>
                 <button type="button" class="btn btn-success pull-right" onclick="docketView.assignmentTask()"
                         name="actionAssignmentTask">Save
@@ -648,49 +699,56 @@
                 firstToUpperCase: function (str) {
                     return str.substr(0, 1).toUpperCase() + str.substr(1);
                 },
-                loadClaimByEventEnterKey: function (e) {
-                    if (e.keyCode === 13) {
-                        $.post(url + "loadClaimByEventEnterKey", {
-                            _token: _token,
-                            key: $("input[name=ClaimCode]").val()
-                        }, function (data) {
-                            docketView.claimData = data;
-                            if (data["Status"]==="Success") {
-                                //load status claim
-                                if(data["Claim"]["statusId"]===3)
-                                {
-                                    $("label[id=statusClaim]").text("Close").css("color","red");
-                                }
-                                else
-                                {
-                                    $("label[id=statusClaim]").text("Open").css("color","blue");
-                                }
-                                var dateTimeFromDate = data["Date"].split(" ");
-                                var dateTimeLossDate = data["Claim"]["lossDate"].split(" ");
-                                docketView.timeFrom = dateTimeFromDate[1];
-                                $("input[name=fromDate]").val(dateTimeFromDate[0]);
-                                $("input[name=ClaimId]").val(data["Claim"]["id"]);
-                                $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"] + " " + data["Claim"]["insuredLastName"]);
-                                $("input[name=LossDate]").val(docketView.convertStringToDate(dateTimeLossDate[0]));
-                                $("input[name=LossLocation]").val(data["Claim"]["lossLocation"]);
-                                $("input[name=codeTotal]").val(data["codeTotal"]).formatCurrency({roundToDecimalPlace:2});
-                                $("input[name=expenseTotal]").val(data["expenseTotal"]).formatCurrency({roundToDecimalPlace:0});
-                                docketView.taskObject.ClaimId = data["Claim"]["id"];
-                                //Insert to table docket
-                                $.post(url + "loadViewDocketDetail/0", {
-                                    _token: _token,
-                                    idClaim: data["Claim"]["id"]
-                                }, function (view) {
-                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                });
+                getInformationOfClaim:function(code){
+                    $.post(url + "loadClaimByEventEnterKey", {
+                        _token: _token,
+                        key: code
+                    }, function (data) {
+                        docketView.claimData = data;
+                        if (data["Status"]==="Success") {
+                            //Reset information claim befor
+                            docketView.resetInformationClaim();
+                            //Reset information task of user before
+                            docketView.resetInformationTask();
+                            //load status claim
+                            if(data["Claim"]["statusId"]===3)
+                            {
+                                $("label[id=statusClaim]").text("Close").css("color","red");
                             }
                             else
                             {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Claim is not found!!!");
-                                $("div[id=modal-confirm]").modal("show");
+                                $("label[id=statusClaim]").text("Open").css("color","blue");
                             }
+                            var dateTimeFromDate = data["Date"].split(" ");
+                            var dateTimeLossDate = data["Claim"]["lossDate"].split(" ");
+                            docketView.timeFrom = dateTimeFromDate[1];
+                            $("input[name=fromDate]").val(dateTimeFromDate[0]);
+                            $("input[name=ClaimId]").val(data["Claim"]["id"]);
+                            $("input[name=InsuredName]").val(data["Claim"]["insuredFirstName"] + " " + data["Claim"]["insuredLastName"]);
+                            $("input[name=LossDate]").val(docketView.convertStringToDate(dateTimeLossDate[0]));
+                            $("input[name=LossLocation]").val(data["Claim"]["lossLocation"]);
+                            $("input[name=codeTotal]").val(data["codeTotal"]).formatCurrency({roundToDecimalPlace:2});
+                            $("input[name=expenseTotal]").val(data["expenseTotal"]).formatCurrency({roundToDecimalPlace:0});
+                            docketView.taskObject.ClaimId = data["Claim"]["id"];
+                            //Insert to table docket
+                            $.post(url + "loadViewDocketDetail/0", {
+                                _token: _token,
+                                idClaim: data["Claim"]["id"]
+                            }, function (view) {
+                                $("tbody[id=tbodyDocket]").empty().append(view);
+                            });
+                        }
+                        else
+                        {
+                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Claim is not found!!!");
+                            $("div[id=modal-confirm]").modal("show");
+                        }
 
-                        });
+                    });
+                },
+                loadClaimByEventEnterKey: function (e) {
+                    if (e.keyCode === 13) {
+                        docketView.getInformationOfClaim($("input[name=ClaimCode]").val());
                     }
                 },
                 viewDetailTask: function (element) {
@@ -792,7 +850,7 @@
                             if (data["Result"] === 1) {
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
                                 $("div[id=modal-confirm]").modal("show");
-                                docketView.cancelAfterAddNew();
+                                docketView.resetInformationTask();
                                 $.post(url + "loadViewDocketDetail/0", {
                                     _token: _token,
                                     idClaim: docketView.taskObject.ClaimId
@@ -813,7 +871,7 @@
                             if (data["Result"] === 1) {
                                 $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
                                 $("div[id=modal-confirm]").modal("show");
-                                docketView.cancelAfterAddNew();
+                                docketView.resetInformationTask();
                                 $.post(url + "loadViewDocketDetail/0", {
                                     _token: _token,
                                     idClaim: docketView.taskObject.ClaimId
@@ -950,21 +1008,16 @@
                         }
                     }
                 },
-                cancel: function () {
+                ActionCancelOfButton: function () {
                     docketView.openDateClaim = null;
-                    //$("form[id=formClaim]").find("input").val("");
                     $("input[name=ChooseDate]").val("");
                     $("button[name=actionAssignmentTask]").text("Add New").prop("disabled",false);
                     $("input[name=Action]").val("1");
-                    //$("input[name=ProfessionalServicesRate]").val("");
-                    docketView.cancelAfterAddNew();
-                    $("input[name=ExpenseAmount]").val("").prop("readOnly",false).css("background-color","");
-                    //$("tbody[id=tbodyDocket]").empty();
-                    // reset label status
-                    $("label[id=statusClaim]").text("");
-
+                    docketView.resetInformationTask();
+                    $("input[name=ProfessionalServicesRate]").val("");
+                    $("input[name=UserId]").val("");
                 },
-                cancelAfterAddNew:function()
+                resetInformationTask:function()
                 {
                     $("input[name=ChooseDate]").val("");
                     //Time
@@ -987,6 +1040,21 @@
                     $("input[name=ExpenseAmount]").val("");
                     //Billable value time
                     $("input[name=ExpenseAmountBillValue]").val("");
+                },
+                resetInformationClaim:function()
+                {
+                    $("input[name=Action]").val("1");
+                    $("input[name=ClaimId]").val("");
+                    $("input[name=IdTask]").val("");
+                    $("input[name=InsuredName]").val("");
+                    $("input[name=LossDate]").val("");
+                    $("input[name=LossLocation]").val("");
+                    $("input[name=fromDate]").val("");
+                    $("input[name=codeTotal]").val("");
+                    $("input[name=expenseTotal]").val("");
+                    $("label[id=statusClaim]").text("");
+                    $("input[name=UserId]").val("");
+                    $("input[name=ProfessionalServicesRate]").val("");
                 },
                 loadListProfessionalService: function () {
                     $.post(url + "loadListTimeCode", {_token: _token}, function (view) {
@@ -1138,7 +1206,7 @@
                                 $("tbody[id=tbodyDocket]").empty().append(view);
                             });
                             docketView.idTaskDelete = null;
-                            docketView.cancelAfterAddNew();
+                            docketView.resetInformationTask();
                         }
                         else
                         {
@@ -1147,6 +1215,59 @@
                             $("div[id=modal-confirm]").modal("show");
                         }
                     });
+                },
+                loadClaimByEventDoubleClick:function()
+                {
+                    $.get(url + 'getAllClaim',function (listClaim) {
+                        var row = "";
+                        for (var i = 0; i < listClaim.length; i++) {
+                            var tr = "<tr>";
+                            tr += "<td>" + listClaim[i]["code"] + "</td>";
+                            tr += "<td>"+ listClaim[i]["insuredLastName"] + "</td>";
+                            tr += "<td>"+ listClaim[i]["insurerCode"] + "</td>";
+                            if (listClaim[i]["receiveDate"]) {
+                                var receiveDate = new Date(listClaim[i]["receiveDate"].substring(0, 10));
+                                var dd = receiveDate.getDate();
+                                var mm = receiveDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = receiveDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            if (listClaim[i]["openDate"]) {
+                                var openDate = new Date(listClaim[i]["openDate"].substring(0, 10));
+                                var dd = openDate.getDate();
+                                var mm = openDate.getMonth() + 1; //January is 0!
+
+                                var yyyy = openDate.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd;
+                                }
+                                if (mm < 10) {
+                                    mm = '0' + mm;
+                                }
+                                tr += "<td>"+ dd + '-' + mm + '-' + yyyy + "</td>";
+                            }
+                            tr += "<td>"+ String(listClaim[i]["adjusterCode"]).toUpperCase() + "</td>";
+                            tr += "<td class='text-center'><button class='btn btn-xs btn-success' onclick='docketView.fillClaimToForm(this)'><span class='glyphicon glyphicon-ok'></span></button></td>";
+                            tr += "</tr>";
+                            row += tr;
+                        }
+                        $("#claim-talbe-body").empty().append(row);
+                        $("#claim-table").DataTable();
+                    });
+                    $("#modal-claim").modal("show");
+                },
+                fillClaimToForm:function(element)
+                {
+                    docketView.getInformationOfClaim($(element).parent().parent().find("td:eq(0)").text());
+                    $("input[name=ClaimCode]").val($(element).parent().parent().find("td:eq(0)").text());
+                    $("#modal-claim").modal("hide");
                 }
 
             }
