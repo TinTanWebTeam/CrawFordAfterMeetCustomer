@@ -1413,6 +1413,10 @@
 <br>
 <br>
 <script>
+    Number.prototype.format = function(n, x) {
+        var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$1,');
+    };
     $("#claim_id").on("dblclick", function (e) {
         $.get(url + 'getAllClaim', function (listClaim) {
             var row = "";
@@ -1688,7 +1692,7 @@
             $("#partnershipId").empty().append(result.claim.partnershipId);
             $("#adjusterCode").empty().append(String(result.claim.adjusterCode).toUpperCase());
             $("#adjusterName").empty().append(String(result.claim.adjusterCodeDetail).toUpperCase());
-            $("#rate").empty().append(Number(result.claim.rate).toLocaleString());
+            $("#rate").empty().append(Number(result.claim.rate).format(0));
             $("#feeType").empty().append("Hourly");
             $("#taxable").empty().append("True");
             $("#estimatedClaimValue").empty().append(result.claim.estimatedClaimValue);
@@ -1708,7 +1712,7 @@
                 row += "<span>"+ Number(result.assit[i].time).toFixed(2) +"</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-rate'>";
-                row += "<span>"+ Number(result.assit[i].rate).toLocaleString()+"</span>";
+                row += "<span>"+ Number(result.assit[i].rate).format(0)+"</span>";
                 row += "</div>";
                 row += "<div class='assists-content-header-fee-type'>";
                 row += "<span>&nbsp;&nbsp;&nbsp;Hourly</span>";
@@ -1784,7 +1788,7 @@
                 if(result.docket[i].expenseAmount == '0' || result.docket[i].expenseAmount == '0.00' || result.docket[i].expenseAmount == null){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(result.docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(result.docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
@@ -1859,7 +1863,7 @@
             row += "<span></span>";
             row += "</div>";
             row += "<div class='dockets-content-header-expense-amount'>";
-            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).toLocaleString() + "</span>";
+            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).format(0) + "</span>";
             row += "</div>";
             row += "<div class='dockets-content-header-note'>";
             row += "<span style='float: left;padding-left: 30px;text-align: left'></span>";
@@ -1939,7 +1943,7 @@
                 if(data_docket[i].expenseAmount == '0' || data_docket[i].expenseAmount == '0.00'){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(data_docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(data_docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
@@ -2012,7 +2016,7 @@
             row += "<span></span>";
             row += "</div>";
             row += "<div class='dockets-content-header-expense-amount'>";
-            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).toLocaleString() + "</span>";
+            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).format(0) + "</span>";
             row += "</div>";
             row += "<div class='dockets-content-header-note'>";
             row += "<span style='float: left;padding-left: 30px;text-align: left'></span>";
@@ -2091,7 +2095,7 @@
                 if(data_docket[i].expenseAmount == '0' || data_docket[i].expenseAmount == '0.00'){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(data_docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(data_docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
@@ -2164,7 +2168,7 @@
             row += "<span></span>";
             row += "</div>";
             row += "<div class='dockets-content-header-expense-amount'>";
-            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).toLocaleString() + "</span>";
+            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).format(0) + "</span>";
             row += "</div>";
             row += "<div class='dockets-content-header-note'>";
             row += "<span style='float: left;padding-left: 30px;text-align: left'></span>";
@@ -2242,7 +2246,7 @@
                 if(data_docket[i].expenseAmount == '0' || data_docket[i].expenseAmount == '0.00'){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(data_docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(data_docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
@@ -2315,7 +2319,7 @@
             row += "<span></span>";
             row += "</div>";
             row += "<div class='dockets-content-header-expense-amount'>";
-            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).toLocaleString() + "</span>";
+            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).format(0) + "</span>";
             row += "</div>";
             row += "<div class='dockets-content-header-note'>";
             row += "<span style='float: left;padding-left: 30px;text-align: left'></span>";
@@ -2390,7 +2394,7 @@
                 if(data_docket[i].expenseAmount == '0' || data_docket[i].expenseAmount == '0.00'){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(data_docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(data_docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
@@ -2462,7 +2466,7 @@
             row += "<span></span>";
             row += "</div>";
             row += "<div class='dockets-content-header-expense-amount'>";
-            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).toLocaleString() + "</span>";
+            row += "<span style='font-weight:600;font-size:23px'>" + Number(results['sum_expense']).format(0) + "</span>";
             row += "</div>";
             row += "<div class='dockets-content-header-note'>";
             row += "<span style='float: left;padding-left: 30px;text-align: left'></span>";
@@ -2535,7 +2539,7 @@
                 if(data_docket[i].expenseAmount == '0' || data_docket[i].expenseAmount == '0.00'){
                     row += "<span></span>";
                 }else{
-                    row += "<span>"+Number(data_docket[i].expenseAmount).toLocaleString() + "</span>";
+                    row += "<span>"+Number(data_docket[i].expenseAmount).format(0) + "</span>";
                 }
                 row += "</div>";
                 row += "<div class='dockets-content-header-note'>";
