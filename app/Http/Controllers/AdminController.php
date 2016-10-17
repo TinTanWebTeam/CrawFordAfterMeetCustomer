@@ -4871,6 +4871,7 @@ class AdminController extends Controller
                                 $bill->updatedBy = Auth::user()->id;
                                 $bill->claimOfficer = $request->get('data')['coorInsurer'];
                                 $bill->policyNumber = $request->get('data')['policy'];
+                                $bill->percentage = $request->get('data')['discount'];
                                 $bill->save();
                                 //Add new details
                                 foreach ($request->get('data')['ArrayData'] as $item) {
@@ -5020,6 +5021,7 @@ class AdminController extends Controller
                                 $bill->updatedBy = Auth::user()->id;
                                 $bill->claimOfficer = $request->get('data')['coorInsurer'];
                                 $bill->policyNumber = $request->get('data')['policy'];
+                                $bill->percentage = $request->get('data')['discount'];
                                 $bill->save();
                                 //Add new invoice
                                 $invoice = new Invoice();
@@ -5167,6 +5169,7 @@ class AdminController extends Controller
                         $bill->updatedBy = Auth::user()->id;
                         $bill->claimOfficer = $request->get('data')['coorInsurer'];
                         $bill->policyNumber = $request->get('data')['policy'];
+                        $bill->percentage = $request->get('data')['discount'];
                         $bill->save();
                         //Add new details
                         foreach ($request->get('data')['ArrayData'] as $item) {
@@ -5290,6 +5293,7 @@ class AdminController extends Controller
                     $bill->total = $request->get('data')['Total'];
                     $bill->claimOfficer = $request->get('data')['coorInsurer'];
                     $bill->policyNumber = $request->get('data')['policy'];
+                    $bill->percentage = $request->get('discount');
                     $bill->save();
                     //Update status = 2
                     $task = ClaimTaskDetail::where('id', $bill->billId)
@@ -5377,6 +5381,7 @@ class AdminController extends Controller
                     $bill->total = $request->get('data')['Total'];
                     $bill->claimOfficer = $request->get('data')['coorInsurer'];
                     $bill->policyNumber = $request->get('data')['policy'];
+                    $bill->percentage = $request->get('discount');
                     $bill->save();
                     //Update status = 2
                     $task = ClaimTaskDetail::where('id', $bill->billId)
@@ -5462,6 +5467,10 @@ class AdminController extends Controller
             }
             else//update bill complete // IB Complete -> Final and close claim
             {
+
+                $bill->total = $request->get('data')['Total'];
+                $bill->percentage = $request->get('discount');
+                $bill->save();
                 $taskStatus->professionalServicesNote = 'Final Billing';
                 $taskStatus->save();
                 //Close claim
