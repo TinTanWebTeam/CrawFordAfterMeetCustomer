@@ -308,7 +308,7 @@
                         Bill Claim
                     </button>
                     <button type="button" class="btn btn-default pull-right" onclick="trialFeeView.actionDiscountBill()"
-                            name="">
+                            name="" style="display: none">
                         Discount Bill
                     </button>
                 </div>
@@ -771,6 +771,11 @@
                     {
                         billStatus = $("input[name=bill-status]:checked").attr("id");
                     }
+                    var discount = null;
+                    if($("input[name=discount]").val()!=="")
+                    {
+                        discount = $("input[name=discount]").val();
+                    }
                     $("button[name=modalAgree]").prop("disabled",true);
                     //get array object user
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
@@ -825,6 +830,7 @@
                         ToDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
                         billStatus:billStatus,
+                        discount:discount,
                         ArrayData: objectUserAll
                     };
                     if(objectUserAll==="null")
@@ -892,6 +898,14 @@
                                     $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This claim has closed!");
                                     $("div[id=modalNotification]").modal("show");
                                     $("button[name=modalAgree]").prop("disabled",false);
+                                }
+                                else if(data["Error"]==="nullDiscount")
+                                {
+                                    $("div[id=modalConfirm]").modal("hide");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Discount success!");
+                                    $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
+                                    $("input[name=discount]").val("");
                                 }
                                 else
                                 {
