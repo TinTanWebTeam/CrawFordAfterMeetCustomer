@@ -3727,6 +3727,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->orderBy('claim_task_details.billDate', 'asc')
@@ -3738,7 +3739,8 @@ class AdminController extends Controller
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
                             'claim_task_details.professionalServicesTime as professionalServicesTime',
-                            'claim_task_details.invoiceMajorNo as Invoice'
+                            'claim_task_details.invoiceMajorNo as Invoice',
+                            'users.name as adjuster'
                         )
                         ->get();
                     //$timeTotal = ClaimTaskDetail::all();
@@ -3754,6 +3756,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.userId', $user->id)
@@ -3766,7 +3769,8 @@ class AdminController extends Controller
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
                             'claim_task_details.professionalServicesTime as professionalServicesTime',
-                            'claim_task_details.invoiceMajorNo as Invoice'
+                            'claim_task_details.invoiceMajorNo as Invoice',
+                            'users.name as adjuster'
                         )
                         ->get();
                     //$timeTotal = ClaimTaskDetail::where('userId', $user->id)->get();
@@ -3791,6 +3795,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.claimId', $claim->id)
@@ -3801,7 +3806,8 @@ class AdminController extends Controller
                             'claim_task_details.professionalServicesTime as Unit',
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
-                            'claim_task_details.invoiceMajorNo as Invoice'
+                            'claim_task_details.invoiceMajorNo as Invoice',
+                            'users.name as adjuster'
 //                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
 //                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
                         )
@@ -3819,6 +3825,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.userId', $user->id)
@@ -3830,7 +3837,8 @@ class AdminController extends Controller
                             'claim_task_details.professionalServicesTime as Unit',
                             'cate2.code as ExpenseCode',
                             'claim_task_details.expenseAmount as ExpenseAmount',
-                            'claim_task_details.invoiceMajorNo as Invoice'
+                            'claim_task_details.invoiceMajorNo as Invoice',
+                            'users.name as adjuster'
 //                            DB::raw('SUM(claim_task_details.expenseAmount) as expenseAmount'),
 //                            DB::raw('SUM(claim_task_details.professionalServicesTime) as units')
                         )
@@ -3849,6 +3857,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->select(
@@ -3876,6 +3885,7 @@ class AdminController extends Controller
                         ->leftJoin('claims', 'claim_task_details.claimId', '=', 'claims.id')
                         ->leftJoin('task_categories as cate1', 'claim_task_details.professionalServices', '=', 'cate1.id')
                         ->leftJoin('task_categories as cate2', 'claim_task_details.expense', '=', 'cate2.id')
+                        ->leftJoin('users','claim_task_details.userId','=','users.id')
                         ->where('claim_task_details.billDate', '>=', $fromDate)
                         ->where('claim_task_details.billDate', '<=', $toDate)
                         ->where('claim_task_details.userId', $user->id)

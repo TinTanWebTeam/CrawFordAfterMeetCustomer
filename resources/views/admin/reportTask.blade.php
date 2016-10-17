@@ -168,19 +168,22 @@
             <br>
             <div class="submission-content">
                 <div style="width: 100%;margin-bottom: 5px">
-                    <div style="width: 25%;display: inline-block"></div>
-                    <div style="width: 73%;display: inline-block"><div style="text-align: center;font-size: 14px;font-weight: 600;border: 2px solid black">Billable</div></div>
+                    <div style="width: 40%;display: inline-block"></div>
+                    <div style="width: 58%;display: inline-block"><div style="text-align: center;font-size: 14px;font-weight: 600;border: 2px solid black">Billable</div></div>
                 </div>
                 <div style="width: 100%">
-                    <div style="width: 25%;display: inline-block">
-                        <div style="width: 50%;display: inline-block">
+                    <div style="width: 40%;display: inline-block">
+                        <div style="width: 33%;display: inline-block">
                             <div style="text-align: center;font-weight: 600;">Date</div>
                         </div>
-                        <div style="width: 48%;display: inline-block">
+                        <div style="width: 30%;display: inline-block">
                             <div style="text-align: center;font-weight: 600;">Claim #</div>
                         </div>
+                        <div style="width: 35%;display: inline-block">
+                            <div style="text-align: center;font-weight: 600;">Adjsuter</div>
+                        </div>
                     </div>
-                    <div style="width: 73%;display: inline-block">
+                    <div style="width: 58%;display: inline-block">
                         <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time Code</div></div>
                         <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Time Units</div></div>
                         <div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600;">Expense Code</div></div>
@@ -337,8 +340,8 @@
                             for (var i = 0; i < data["ListData"].length; i++) {
                                 if (rowDate == data["ListData"][i]["CreatedDate"].substring(0, 10)) {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
-                                    trSubmission += '<div style="width: 25%;display: inline-block">';
-                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="width: 40%;display: inline-block">';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
                                     if(i > 0 && data["ListData"][i]["CreatedDate"] != data["ListData"][i-1]["CreatedDate"])
                                     {
                                         trSubmission += '<div style="text-align: center;font-weight: 600"></div>';
@@ -359,11 +362,14 @@
                                         }
                                     }
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="width: 30%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;">' + data["ListData"][i]["Claim"] + '</div>';
                                     trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 35%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;padding-left:10px">' + String(data["ListData"][i]["adjuster"]).toUpperCase() + '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 58%;display: inline-block">';
                                     if (data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null) {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
                                     } else {
@@ -389,15 +395,18 @@
                                 }
                                 else {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
-                                    trSubmission += '<div style="width: 25%;display: inline-block">';
-                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="width: 40%;display: inline-block">';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="width: 30%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 35%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;font-weight: 600;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 58%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600">Subtotal :</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
@@ -409,8 +418,8 @@
                                     subUnit = 0.0;
                                     subAmount = 0;
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
-                                    trSubmission += '<div style="width: 25%;display: inline-block">';
-                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="width: 40%;display: inline-block">';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
                                     if (data["ListData"][i]["CreatedDate"]) {
                                         var receiveDate = new Date(data["ListData"][i]["CreatedDate"].substring(0, 10));
                                         var dd = receiveDate.getDate();
@@ -426,11 +435,14 @@
                                         trSubmission += '<div style="text-align: center;font-weight: 600">' + dd + '-' + mm + '-' + yyyy + '</div>';
                                     }
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="width: 30%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;">' + data["ListData"][i]["Claim"] + '</div>';
                                     trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 35%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;padding-left:10px">' + String(data["ListData"][i]["adjuster"]).toUpperCase() + '</div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 58%;display: inline-block">';
                                     if (data["ListData"][i]["Time"] == 'null' || data["ListData"][i]["Time"] == null) {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center"></div></div>';
                                     } else {
@@ -456,15 +468,18 @@
                                 }
                                 if (i == (data["ListData"].length - 1)) {
                                     trSubmission += '<div style="width: 100%;margin-top: 10px">';
-                                    trSubmission += '<div style="width: 25%;display: inline-block">';
-                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="width: 40%;display: inline-block">';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="width: 30%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 35%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;font-weight: 600;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 58%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center;font-weight: 600">Subtotal :</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;text-align: center;">' + subUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
@@ -473,15 +488,18 @@
                                     trSubmission += '</div>';
                                     trSubmission += '<hr>';
                                     trSubmission += '<div style="width: 100%;margin-top: 30px">';
-                                    trSubmission += '<div style="width: 25%;display: inline-block">';
-                                    trSubmission += '<div style="width: 50%;display: inline-block">';
+                                    trSubmission += '<div style="width: 40%;display: inline-block">';
+                                    trSubmission += '<div style="width: 33%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 48%;display: inline-block">';
+                                    trSubmission += '<div style="width: 30%;display: inline-block">';
                                     trSubmission += '<div style="text-align: center;"></div>';
                                     trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 35%;display: inline-block">';
+                                    trSubmission += '<div style="text-align: center;font-weight: 600;"></div>';
                                     trSubmission += '</div>';
-                                    trSubmission += '<div style="width: 73%;display: inline-block">';
+                                    trSubmission += '</div>';
+                                    trSubmission += '<div style="width: 58%;display: inline-block">';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 5px;text-align: center;font-weight: 600;font-size: 16px;font-style:italic">Total All:</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="font-weight: 600;font-size: 16px;font-style:italic;text-align: center;">' + totalUnit.toFixed(1) + '</div></div>';
                                     trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center"></div></div>';
