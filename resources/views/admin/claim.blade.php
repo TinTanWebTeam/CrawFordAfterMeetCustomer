@@ -1367,7 +1367,7 @@
                                     }
                                     else if(data["Error"]==="LossDate>OpenDate")
                                     {
-                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than or equal open date");
+                                        $("div[id=modal-confirm]").find($("div[class=modal-body]")).find("h4").text("Loss date is not lager than open date");
                                         $("div[id=modal-confirm]").modal("show");
                                     }
                                     else if(data["Error"]==="ErrorCloseDate")

@@ -1,3 +1,32 @@
+{{--Model Discount--}}
+<div aria-hidden="true" class="modal fade" id="modalDiscount" role="basic" style="display: none;" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+                </button>
+                <h4 class="modal-title">
+                    Discount Bill
+                </h4>
+            </div>
+            <div class="modal-body" id="modalContent">
+                Are you sure Discount this bill  ?
+            </div>
+            <div class="modal-footer">
+                <button class="btn dark btn-outline" data-dismiss="modal" name="modalClose" type="button">
+                    Close
+                </button>
+                <button class="btn green" name="Agree" type="button" onclick="trialFeeView.confirmDiscount()">
+                    Discount
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{{--End Model Discount--}}
+
     {{--Modal Notifications--}}
 <div class="modal fade" id="modalNotification">
     <div class="modal-dialog modal-lg">
@@ -269,14 +298,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button type="button" class="btn btn-danger pull-right" onclick="trialFeeView.cancel()"
+                    <button type="button" class="btn btn-default pull-right" onclick="trialFeeView.cancel()"
                             name="cancel"
                             style="margin-right: 15px;margin-left: 15px">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-success pull-right" onclick="trialFeeView.actionBillOfClaim()"
-                            name="btnBill">
+                    <button type="button" class="btn btn-default pull-right" onclick="trialFeeView.actionBillOfClaim()"
+                            name="btnBill" style="margin-left: 15px">
                         Bill Claim
+                    </button>
+                    <button type="button" class="btn btn-default pull-right" onclick="trialFeeView.actionDiscountBill()"
+                            name="">
+                        Discount Bill
                     </button>
                 </div>
             </div>
@@ -733,6 +766,11 @@
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
+                    var billStatus = "Null";
+                    if($("input[name=bill-status]").is(":checked"))
+                    {
+                        billStatus = $("input[name=bill-status]:checked").attr("id");
+                    }
                     $("button[name=modalAgree]").prop("disabled",true);
                     //get array object user
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
@@ -774,6 +812,8 @@
                         }
                         objectUserAll = objectUserAll1;
                     }
+
+
                     var arrayBill = {
                         idClaim: $("input[name=idClaim]").val(),
                         idBill:trialFeeView.idBillWhenUpdateBill,
@@ -784,7 +824,7 @@
                         FromDate:$("input[name=FromDate]").val() +" "+trialFeeView.timeFrom,
                         ToDate:$("input[name=ToDate]").val(),
                         billType: $("input[name=bill-type]:checked").attr("id"),
-                        billStatus:$("input[name=bill-status]:checked").attr("id"),
+                        billStatus:billStatus,
                         ArrayData: objectUserAll
                     };
                     if(objectUserAll==="null")
@@ -817,7 +857,7 @@
                                 else if(data["Error"]==="DeleteBill")
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
-                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("You must delete bill before pending !!!");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("This list task has been billed, please delete bill before bill new!");
                                     $("div[id=modalNotification]").modal("show");
                                     $("button[name=modalAgree]").prop("disabled",false);
                                 }
@@ -1190,6 +1230,36 @@
 
                     }
 
+                },
+                actionDiscountBill:function()
+                {
+                    $("div[id=modalDiscount]").modal("show");
+                },
+                confirmDiscount:function()
+                {
+                    $("div[id=modalDiscount]").modal("hide");
+                    $.post(url+"discountBill",{
+                        _token:_token,idBill:trialFeeView.idBillWhenUpdateBill,
+                        discount:$("input[name=discount]").val(),
+                        totalDiscount:$("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val().replace(/,/g,"")
+                    },function(data){
+                        if(data["Error"] === "null")
+                        {
+                            $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Discount claim success!!!");
+                            $("div[id=modalNotification]").modal("show");
+                            $("input[name=discount]").val("");
+                        }
+                        else if(data["Error"] ==="claimClose")
+                        {
+                            $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Discount claim no success!!!This claim has closed! ");
+                            $("div[id=modalNotification]").modal("show");
+                        }
+                        else
+                        {
+                            $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("Discount claim no success!!!You must choose just only bill of  this claim! ");
+                            $("div[id=modalNotification]").modal("show");
+                        }
+                    });
                 }
 
             };

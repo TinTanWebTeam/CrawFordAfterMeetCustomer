@@ -692,6 +692,7 @@
                                 $("input[name=ExpenseAmount]").prop("readOnly",true).css("background-color","#E2D8D8");
                                 $("button[name=actionAttackTask]").prop("disabled",true);
                             }
+
                             else
                             {
                                 $("input[name=ProfessionalServicesTime]").prop("readOnly",false).css("background-color","");
@@ -776,71 +777,78 @@
                     taskView.taskObject.ProfessionalServicesRate = String(taskView.taskObject.ProfessionalServicesRate).replace(/,/g,"");
                     taskView.taskObject.ExpenseAmount = $("input#ExpenseAmount").val().replace(/,/g,"");
                     $.post(url+"user/assignmentTask",{_token:_token,action:$("input[name=Action]").val(),idTask:$("input[name=IdTask]").val(),taskObject:taskView.taskObject,fromDate:$("input[name=fromDate]").val() +" "+taskView.TimeDefault,toDate:$("input[name=ChooseDate]").val()},function(data){
-                        console.log(data);
                         if(data["Action"]==="AddNew")
                         {
-                            if(data["Result"]===1)
+                            switch (data["Result"])
                             {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
-                                $("div[id=modalConfirm]").modal("show");
-                                $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
-                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                });
-                                taskView.cancel();
-                            }
-                            else if(data["Result"]===0)
-                            {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                $("div[id=modalConfirm]").modal("show");
-                            }
-                            else{
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New No Success");
-                                $("div[id=modalConfirm]").modal("show");
+                                case "ErrorDate":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorDateNow":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorCloseClaim":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorCodeO2":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't assign this code!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "Success":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Add New Success");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                        $("tbody[id=tbodyDocket]").empty().append(view);
+                                    });
+                                    taskView.cancel();
+                                    break;
                             }
                         }
-                        else if(data["Action"]==="Update")
+                        else
                         {
-                            if(data["Result"]===1)
+                            switch (data["Result"])
                             {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
-                                $("div[id=modalConfirm]").modal("show");
-                                $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
-                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                });
-                                taskView.cancel();
+                                case "ErrorDate":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorDateNow":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorCloseClaim":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "HasBillPending":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has billed pending!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "HasBillComplete":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has billed complete!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "UpdateOtherUser":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update task of other user!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "ErrorCodeO2":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update this code!");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    break;
+                                case "Success":
+                                    $("div[id=modalConfirm]").find("div[id=modalContent]").text("Update Success");
+                                    $("div[id=modalConfirm]").modal("show");
+                                    $.post(url+"user/loadViewDocketDetail/0",{_token:_token,idClaim:taskView.taskObject.ClaimId},function(view){
+                                        $("tbody[id=tbodyDocket]").empty().append(view);
+                                    });
+                                    taskView.cancel();
+                                    break;
                             }
-                            else if(data["Result"]===0)
-                            {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("Can't update task of user other");
-                                $("div[id=modalConfirm]").modal("show");
-                            }
-                            else if(data["Result"]===2)
-                            {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
-                                $("div[id=modalConfirm]").modal("show");
-                            }
-                            else
-                            {
-                                $("div[id=modalConfirm]").find("div[id=modalContent]").text("This task has already bill, please choose task other");
-                                $("div[id=modalConfirm]").modal("show");
-                            }
-
                         }
-                        else if(data["Action"]==="ErrorDate")
-                        {
-                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not smaller than from date!!!");
-                            $("div[id=modalConfirm]").modal("show");
-                        }
-                        else if(data["Action"]==="ErrorCloseClaim")
-                        {
-                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("This claim has closed, can't assignment task");
-                            $("div[id=modalConfirm]").modal("show");
-                        }
-                        else{
-                            $("div[id=modalConfirm]").find("div[id=modalContent]").text("Choose date is not lager than current date!!!");
-                            $("div[id=modalConfirm]").modal("show");
-                        }
-
                     });
                 },
                 assignmentTask:function()

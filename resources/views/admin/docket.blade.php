@@ -846,64 +846,92 @@
                         ChooseDate: $("input[name=ChooseDate]").val(),
                         FromDate: $("input[name=fromDate]").val() +" "+docketView.timeFrom
                     }, function (data) {
+                        console.log(data);
                         if (data["Action"] === "AddNew") {
-                            if (data["Result"] === 1) {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New Success");
-                                $("div[id=modal-confirm]").modal("show");
-                                docketView.resetInformationTask();
-                                $.post(url + "loadViewDocketDetail/0", {
-                                    _token: _token,
-                                    idClaim: docketView.taskObject.ClaimId
-                                }, function (view) {
-                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                });
+                            switch (data["Result"]) {
+                                case "ErrorDate":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date is not correct");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "ErrorDateNow":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date is not larger time now");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "ErrorClaimClose":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This claim has closed");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "ReOpenSuccess":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new and reopen claim success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    docketView.resetInformationTask();
+                                    $("label[id=statusClaim]").text(data["Status"]).css("color","blue");
+                                    $.post(url + "loadViewDocketDetail/0", {
+                                        _token: _token,
+                                        idClaim: docketView.taskObject.ClaimId
+                                    }, function (view) {
+                                        $("tbody[id=tbodyDocket]").empty().append(view);
+                                    });
+                                    break;
+                                case "ErrorCodeO2":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Can't assign this code");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "Success":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add new success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    docketView.resetInformationTask();
+                                    $.post(url + "loadViewDocketDetail/0", {
+                                        _token: _token,
+                                        idClaim: docketView.taskObject.ClaimId
+                                    }, function (view) {
+                                        $("tbody[id=tbodyDocket]").empty().append(view);
+                                    });
+                                    break;
                             }
-                            else if (data["Result"] === 2) {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
-                                $("div[id=modal-confirm]").modal("show");
-                            }
-                            else {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Add New No Success");
-                                $("div[id=modal-confirm]").modal("show");
-                            }
-                        }
-                        else if (data["Action"] === "Update") {
-                            if (data["Result"] === 1) {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update Success");
-                                $("div[id=modal-confirm]").modal("show");
-                                docketView.resetInformationTask();
-                                $.post(url + "loadViewDocketDetail/0", {
-                                    _token: _token,
-                                    idClaim: docketView.taskObject.ClaimId
-                                }, function (view) {
-                                    $("tbody[id=tbodyDocket]").empty().append(view);
-                                });
-                            }
-                            else if(data["Result"]==2)
-                            {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
-                                $("div[id=modal-confirm]").modal("show");
-                            }
-                            else {
-                                $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This task already bill,can't update task!!!");
-                                $("div[id=modal-confirm]").modal("show");
-                            }
-                        }
-                        else if(data["Action"] === "ErrorDate")
-                        {
-                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not smaller than from date!!!");
-                            $("div[id=modal-confirm]").modal("show");
-                        }
-                        else if(data["Action"] === "ErrorDateNow")
-                        {
-                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Choose date is not larger than from current date !!!");
-                            $("div[id=modal-confirm]").modal("show");
                         }
                         else
                         {
-                            $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This claim has closed! Can't assign task or update!");
-                            $("div[id=modal-confirm]").modal("show");
+                            switch(data["Result"])
+                            {
+                                case "ErrorDate":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date is not correct");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "ErrorDateNow":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Date is not larger time now");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "ErrorClaimClose":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("This claim has closed");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "invoiceMajorNo":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Can't update this task");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "invoiceTempNo":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Can't update this task");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "codeO2":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Can't update this code");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    break;
+                                case "Success":
+                                    $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Update success");
+                                    $("div[id=modal-confirm]").modal("show");
+                                    docketView.resetInformationTask();
+                                    $.post(url + "loadViewDocketDetail/0", {
+                                        _token: _token,
+                                        idClaim: docketView.taskObject.ClaimId
+                                    }, function (view) {
+                                        $("tbody[id=tbodyDocket]").empty().append(view);
+                                    });
+                                    break;
+                            }
                         }
+
                     });
 
                 },
@@ -1258,6 +1286,7 @@
                             tr += "</tr>";
                             row += tr;
                         }
+                        $("#claim-table").DataTable().destroy();
                         $("#claim-talbe-body").empty().append(row);
                         $("#claim-table").DataTable();
                     });

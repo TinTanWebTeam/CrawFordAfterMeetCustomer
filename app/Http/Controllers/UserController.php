@@ -28,7 +28,12 @@ class UserController extends Controller
 
     public function task()
     {
-        $listTask = TaskCategory::where('active', 1)->where('code', '!=', 'IB')->where('code', '!=', 'FB')->where('name', 'TimeCode')->get();
+        $listTask = TaskCategory::where('active', 1)
+            ->where('code', '!=', 'IB')
+            ->where('code', '!=', 'FB')
+            ->where('code', '!=', 'O2')
+            ->where('name', 'TimeCode')
+            ->get();
         $rate = RateDetail::where('userId', Auth::user()->id)
             ->where('active', 1)
             ->where('rateTypeId', 2)
@@ -211,135 +216,148 @@ class UserController extends Controller
 
     public function assignmentTask(Request $request)
     {
-        //dd($request->all());
-        $result = null;
+        $action = $request->get('action');
+
         $idTime = 0;
+        $professionalServicesTime = null;
+        $professionalServicesAmount = null;
+        $professionalServicesNote = null;
+
         $idExpense = 0;
-        //check claim close
+        $expenseAmount = null;
+        $expenseNote = null;
+
+        $result = null;
+
+        $now = Carbon::now();
+        $timeNow = Carbon::parse($now)->format('Y-m-d H:i:s');
+        $a = explode(" ", $request->get('fromDate'));
+        $fromDate = Carbon::parse($a[0])->format('Y-m-d') . " " . $a[1];
+
+        $toDate = $request->get('toDate') . " " . Carbon::parse($now)->format('H:i:s');
+
+        //check null and set value time
+        if ($request->get('taskObject')['ProfessionalServices'] != null) {
+            $idTime = $request->get('taskObject')['ProfessionalServices'];
+        }
+        if($request->get('taskObject')['ProfessionalServicesNote'] != null)
+        {
+            $professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
+        }
+        if ($request->get('taskObject')['ProfessionalServicesTime'] != null) {
+            $professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
+        }
+        if ($request->get('taskObject')['ProfessionalServicesAmount'] != null) {
+            $professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
+        }
+        //check null and set value expense
+        if ($request->get('taskObject')['Expense'] != null) {
+            $idExpense = $request->get('taskObject')['Expense'];
+        }
+        if($request->get('taskObject')['ExpenseNote'] != null)
+        {
+            $expenseNote = $request->get('taskObject')['ExpenseNote'];
+        }
+        if ($request->get('taskObject')['ExpenseAmount'] != null) {
+            $expenseAmount = $request->get('taskObject')['ExpenseAmount'];
+        }
+
+        //get claim to check assignment task when claim closed
         $checkClaimClose = Claim::where('id', $request->get('taskObject')['ClaimId'])->first();
-        if ($checkClaimClose) {
-            //dd(typeOf($checkClaimClose->statusId));
-            if ($checkClaimClose->statusId === 3) {
-                $result = array('Action' => 'ErrorCloseClaim');
-            } else {
-                $now = Carbon::now();
-                $timeNow = Carbon::parse($now)->format('Y-m-d H:i:s');
-                $a = explode(" ", $request->get('fromDate'));
-                $fromDate = Carbon::parse($a[0])->format('Y-m-d') . " " . $a[1];
 
-                $toDate = $request->get('toDate') . " " . Carbon::parse($now)->format('H:i:s');
-                if ($toDate < $fromDate) {
-                    $result = array('Action' => 'ErrorDate');
-                } else if ($toDate > $timeNow) {
-                    $result = array('Action' => 'ErrorDateNow');
-                } else {
-                    if ($request->get('action') == 1) {
-                        try {
-                            if($request->get('taskObject')['ProfessionalServices']!=null)
-                            {
-//                                $idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])
-//                                    ->where('name','TimeCode')
-//                                    ->first()->id;
-                                $idTime = $request->get('taskObject')['ProfessionalServices'];
-                            }
-                            if($request->get('taskObject')['Expense']!=null)
-                            {
-//                                $idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])
-//                                    ->where('name','!=','TimeCode')
-//                                    ->first()->id;
-                                $idExpense = $request->get('taskObject')['Expense'];
-                            }
-                            $task = new ClaimTaskDetail();
-
-                            $task->professionalServices = $idTime;
-                            $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-                            if($request->get('taskObject')['ProfessionalServicesTime']!=null)
-                            {
-                                $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                            }
-                            $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                            if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
-                            {
-                                $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-                            }
-
-                            $task->expense = $idExpense;
-                            $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                            if($request->get('taskObject')['ExpenseAmount']!=null)
-                            {
-                                $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-
-                            }
-                            $task->claimId = $request->get('taskObject')['ClaimId'];
-                            $task->userId = $request->get('taskObject')['UserId'];
-                            $task->createdBy = $request->get('taskObject')['UserId'];
-                            $task->updatedBy = $request->get('taskObject')['UserId'];
-                            $task->billDate = $toDate;
-                            $task->save();
-                            $result = array('Action' => 'AddNew', 'Result' => 1);
-                        } catch (Exception $ex) {
-                            return $ex;
-                        }
-                    } else {
-                        try {
-                            if ($request->get('idTask')) {
-                                $task = ClaimTaskDetail::where('id', $request->get('idTask'))->where('claimId',$request->get('taskObject')['ClaimId'])->first();
-                                if ($task) {
-                                    //check this task already bill
-                                    if ($task->active == 1 && $task->invoiceMajorNo == null) {
-                                        $result = array('Action' => 'Update', 'Result' => 2);//can't fix task has already bill Pending
-                                    } else if ($task->invoiceMajorNo != null) {
-                                        $result = array('Action' => 'Update', 'Result' => 3);//can't fix task has already bill pending complete or final bill
-                                    } else if ($task->userId != Auth::user()->id) {
-                                        $result = array('Action' => 'Update', 'Result' => 0);//can't fix task of user other
-                                    } else {
-                                        if($request->get('taskObject')['ProfessionalServices']!= null)
-                                        {
-                                            //$idTime = TaskCategory::where('code',$request->get('taskObject')['ProfessionalServices'])->first()->id;
-                                            $idTime = $request->get('taskObject')['ProfessionalServices'];
-
-                                        }
-                                        if($request->get('taskObject')['Expense']!=null)
-                                        {
-                                            //$idExpense =  TaskCategory::where('code',$request->get('taskObject')['Expense'])->first()->id;
-                                            $idExpense = $request->get('taskObject')['Expense'];
-
-                                        }
-                                        $task->professionalServices = $idTime;
-                                        $task->professionalServicesNote = $request->get('taskObject')['ProfessionalServicesNote'];
-                                        if($request->get('taskObject')['ProfessionalServicesTime']!=null)
-                                        {
-                                            $task->professionalServicesTime = $request->get('taskObject')['ProfessionalServicesTime'];
-                                        }
-                                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
-                                        if($request->get('taskObject')['ProfessionalServicesAmount']!=null)
-                                        {
-                                            $task->professionalServicesAmount = $request->get('taskObject')['ProfessionalServicesAmount'];
-                                        }
-
-                                        $task->expense = $idExpense;
-                                        $task->expenseNote = $request->get('taskObject')['ExpenseNote'];
-                                        if($request->get('taskObject')['ExpenseAmount']!=null)
-                                        {
-                                            $task->expenseAmount = $request->get('taskObject')['ExpenseAmount'];
-                                        }
-
-                                        $task->billDate = $toDate;
-                                        $task->updatedBy = $request->get('taskObject')['UserId'];
-                                        $task->save();
-                                        $result = array('Action' => 'Update', 'Result' => 1);
-                                    }
-
-                                }
-                            }
-                        } catch (Exception $ex) {
-                            return $ex;
-                        }
+        //Process.....
+        switch($action)
+        {
+            case 1://Add new task
+                //Check condition
+                if($toDate < $fromDate)
+                {
+                    $result = array('Action' => 'AddNew', 'Result'=> 'ErrorDate');
+                }
+                else if($toDate > $timeNow)
+                {
+                    $result = array('Action' => 'AddNew', 'Result'=> 'ErrorDateNow');
+                }
+                else if($checkClaimClose->statusId === 3)
+                {
+                    $result = array('Action' => 'AddNew', 'Result'=> 'ErrorCloseClaim');
+                }
+                else
+                {
+                    try
+                    {
+                        $task = new ClaimTaskDetail();
+                        //Time
+                        $task->professionalServices = $idTime;
+                        $task->professionalServicesNote = $professionalServicesNote;
+                        $task->professionalServicesTime = $professionalServicesTime;
+                        $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                        $task->professionalServicesAmount = $professionalServicesAmount;
+                        //Expense
+                        $task->expense = $idExpense;
+                        $task->expenseNote = $expenseNote;
+                        $task->expenseAmount = $expenseAmount;
+                        //Information common
+                        $task->claimId = $request->get('taskObject')['ClaimId'];
+                        $task->userId = $request->get('taskObject')['UserId'];
+                        $task->createdBy = $request->get('taskObject')['UserId'];
+                        $task->updatedBy = $request->get('taskObject')['UserId'];
+                        $task->billDate = $toDate;
+                        $task->save();
+                        $result = array('Action' => 'AddNew', 'Result' => 'Success');
 
                     }
+                    catch(Exception $ex)
+                    {
+                        return $ex;
+                    }
                 }
-
-            }
+                break;
+            case 0:
+                if($toDate < $fromDate)
+                {
+                    $result = array('Action' => 'Update', 'Result'=> 'ErrorDate');
+                }
+                else if($toDate > $timeNow)
+                {
+                    $result = array('Action' => 'Update', 'Result'=> 'ErrorDateNow');
+                }
+                else if($checkClaimClose->statusId === 3)
+                {
+                    $result = array('Action' => 'Update', 'Result'=> 'ErrorCloseClaim');
+                }
+                else
+                {
+                    $task = ClaimTaskDetail::where('id', $request->get('idTask'))->where('claimId',$request->get('taskObject')['ClaimId'])->first();
+                    if($task)
+                    {
+                        //check this task already bill
+                        if ($task->active == 1 && $task->invoiceMajorNo == null) {
+                            $result = array('Action' => 'Update', 'Result' => 'HasBillPending');//can't fix task has already bill Pending
+                        } else if ($task->invoiceMajorNo != null) {
+                            $result = array('Action' => 'Update', 'Result' => 'HasBillComplete');//can't fix task has already bill pending complete or final bill
+                        } else if ($task->userId != Auth::user()->id) {
+                            $result = array('Action' => 'Update', 'Result' => 'UpdateOtherUser');//can't fix task of user other
+                        } else {
+                            //Time
+                            $task->professionalServices = $idTime;
+                            $task->professionalServicesNote = $professionalServicesNote;
+                            $task->professionalServicesTime = $professionalServicesTime;
+                            $task->professionalServicesRate = $request->get('taskObject')['ProfessionalServicesRate'];
+                            $task->professionalServicesAmount = $professionalServicesAmount;
+                            //Expense
+                            $task->expense = $idExpense;
+                            $task->expenseNote = $expenseNote;
+                            $task->expenseAmount = $expenseAmount;
+                            //Information common
+                            $task->billDate = $toDate;
+                            $task->updatedBy = $request->get('taskObject')['UserId'];
+                            $task->save();
+                            $result = array('Action' => 'Update', 'Result' => 'Success');
+                        }
+                    }
+                }
+                break;
         }
         return $result;
     }
@@ -616,6 +634,7 @@ class UserController extends Controller
         try
         {
             $time = TaskCategory::where('name','TimeCode')
+                ->where('code','!=','O2')
                 ->where('code',$request->get('Code'))->first();
             if($time)
             {

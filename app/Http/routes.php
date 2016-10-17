@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('viewDetailEmployeeWhenUseEvenEnter','AdminController@viewDetailEmployeeWhenUseEvenEnter');
     Route::post('chooseClaimWhenUseEventEnter','AdminController@chooseClaimWhenUseEventEnter');
     Route::post('showInformationOfCustomer','AdminController@showInformationOfCustomer');
-    Route::post('Bill','AdminController@BillV2');
+    Route::post('Bill','AdminController@BillV3');
     Route::post('viewBillOfClaimByStatus','AdminController@viewBillOfClaimByStatus');
     Route::post('loadInformationOfBill','AdminController@loadInformationOfBill');
     Route::post('saveClaim/{claimId}','AdminController@saveClaim');
@@ -88,6 +88,8 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('saveInformationOfInvoiceAfterInReport','AdminController@saveInformationOfInvoiceAfterInReport');
     Route::post('viewDetailInvoiceByInvoice','AdminController@viewDetailInvoiceByInvoice');
     Route::post('getClaimHaveInvoiceOfTabInvoice','AdminController@getClaimHaveInvoiceOfTabInvoice');
+    Route::post('discountBill','AdminController@discountBill');
+
 });
 
 /*
