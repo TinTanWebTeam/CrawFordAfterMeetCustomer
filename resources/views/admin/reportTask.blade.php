@@ -124,6 +124,7 @@
             <tr>
                 <th>Created Date</th>
                 <th>Claim</th>
+                <th>Adjuster</th>
                 <th>Time</th>
                 <th>Unit</th>
                 <th>Expense Code</th>
@@ -180,7 +181,7 @@
                             <div style="text-align: center;font-weight: 600;">Claim #</div>
                         </div>
                         <div style="width: 35%;display: inline-block">
-                            <div style="text-align: center;font-weight: 600;">Adjsuter</div>
+                            <div style="text-align: center;font-weight: 600;">Adjuster</div>
                         </div>
                     </div>
                     <div style="width: 58%;display: inline-block">
@@ -239,10 +240,12 @@
                                     if (mm < 10) {
                                         mm = '0' + mm;
                                     }
-                                    row += "<td>" + dd + '-' + mm + '-' + yyyy + "</td>";
+                                    // row += "<td>" + dd + '/' + mm + '/' + yyyy + "</td>";
+                                    row += "<td>" + receiveDate + "</td>";
                                 }
 //                                row += "<td>" + data["ListData"][i]["CreatedDate"] + "</td>";
                                 row += "<td>" + data["ListData"][i]["Claim"] + "</td>";
+                                row += "<td>" + String(data["ListData"][i]["adjuster"]).toUpperCase() + "</td>";
                                 if (data["ListData"][i]["Time"] !== null) {
                                     row += "<td>" + data["ListData"][i]["Time"] + "</td>";
                                 }
@@ -268,7 +271,7 @@
 
                                 if(data["ListData"][i]["ExpenseAmount"]!==null)
                                 {
-                                    row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + "</td>";
+                                    row += "<td style='text-align: center'>" + Number(data["ListData"][i]["ExpenseAmount"]).format(0) + "</td>";
 
                                 }
                                 else
@@ -288,7 +291,9 @@
 
                             $("table[id=tableReport]").DataTable().destroy();
                             $("tbody#tbodyTableReport").empty().append(row);
-                            $("table[id=tableReport]").DataTable();
+                            $("table[id=tableReport]").DataTable({
+                                order: [[0, "asc"]]
+                            });
 
                         }
                         //sum textbox
@@ -458,7 +463,7 @@
                                     } else {
                                         trSubmission += '<div style="width: 24%;display: inline-block"><div style="padding-left: 40px;text-align: center">' + data["ListData"][i]["ExpenseCode"] + '</div></div>';
                                     }
-                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + Number(data["ListData"][i]["ExpenseAmount"]).toLocaleString() + '</div></div>';
+                                    trSubmission += '<div style="width: 24%;display: inline-block"><div style="text-align: center">' + Number(data["ListData"][i]["ExpenseAmount"]).format(0) + '</div></div>';
                                     trSubmission += '</div>';
                                     trSubmission += '</div>';
                                     subUnit += Number(data["ListData"][i]["Unit"]);
