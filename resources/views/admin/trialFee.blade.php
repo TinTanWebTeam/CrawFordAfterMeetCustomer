@@ -755,14 +755,14 @@
 
                 },
                 actionBillOfClaim: function () {
-                    if($("input[id=final_bill]").is(":checked"))
-                    {
-                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").hide();
-                    }
-                    else
-                    {
-                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").show();
-                    }
+//                    if($("input[id=final_bill]").is(":checked"))
+//                    {
+//                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").hide();
+//                    }
+//                    else
+//                    {
+//                        $("div[id=modalConfirm]").find("div[class=modal-content]").find("div:eq(2)").show();
+//                    }
                     $("div[id=modalConfirm]").modal("show");
                 },
                 confirmBillClaim: function () {
@@ -944,8 +944,8 @@
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
                         if(data[0]==="Pending")//nếu bill này đang là bill pending
                         {
-                            $("input[name=officer]").val(data[6]);
-                            $("input[name=policy]").val(data[7]);
+                            $("input[name=officer]").val(data[5]);
+                            $("input[name=policy]").val(data[6]);
                             //if pending at status lock is disabled button update
                             if(data[1]==="Lock")
                             {
@@ -1027,8 +1027,8 @@
                         else
                         {
 
-                            $("input[name=officer]").val(data[6]);
-                            $("input[name=policy]").val(data[7]);
+                            $("input[name=officer]").val(data[5]);
+                            $("input[name=policy]").val(data[6]);
                             $("button[name=btnBill]").text("Update Bill");
                             var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
                             var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");

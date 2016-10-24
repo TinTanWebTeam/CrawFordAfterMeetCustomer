@@ -4809,7 +4809,7 @@ class AdminController extends Controller
 
     public function BillV3(Request $request)
     {
-
+        //dd($request->all());
         $data = null;
         $invoiceTempNo = null;
         $invoiceMajorNo = null;
@@ -5131,151 +5131,309 @@ class AdminController extends Controller
                 }
                 else //bill type FB
                 {
-                    //Process....
-                    $listPendingBefore = ClaimTaskDetail::where('statusId',1)
-                        ->where('claimId',$request->get('data')['idClaim'])
-                        ->where('invoiceMajorNo',null)
-                        ->where('invoiceTempNo','!=',null)
-                        ->get();
-                    if(count($listPendingBefore)!==0)
+                    switch($billStatus)
                     {
-                        $data = array('Action' => 'AddNew', 'Error' => 'DeleteBill');
-                    }
-                    else
-                    {
-                        //get invoiceMajorNo
-                        $invoiceMajorNo = $this->getInvoiceMajorNo();
-                        //Add new row task final bill
-                        $claimTaskDetail = new ClaimTaskDetail();
-                        $claimTaskDetail->professionalServices = 2;
-                        $claimTaskDetail->professionalServicesTime = 0;
-                        $claimTaskDetail->professionalServicesNote = 'Final Billing';
-                        $claimTaskDetail->billDate = $toDate;
-                        $claimTaskDetail->active = 1;
-                        $claimTaskDetail->statusId = 2;
-                        $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
-                        $claimTaskDetail->invoiceDate = $toDate;
-                        $claimTaskDetail->claimId = $request->get('data')['idClaim'];
-                        $claimTaskDetail->userId = Auth::user()->id;
-                        $claimTaskDetail->createdBy = Auth::user()->id;
-                        $claimTaskDetail->save();
-                        //Add new bill
-                        $bill = new Bill();
-                        $bill->billToId = $request->get('data')['billToCustomer'];
-                        $bill->claimId = $request->get('data')['idClaim'];
-                        $bill->billId = $claimTaskDetail->id;
-                        $bill->total = $request->get('data')['Total'];
-                        $bill->createdBy = Auth::user()->id;
-                        $bill->updatedBy = Auth::user()->id;
-                        $bill->claimOfficer = $request->get('data')['coorInsurer'];
-                        $bill->policyNumber = $request->get('data')['policy'];
-                        $bill->percentage = $request->get('data')['discount'];
-                        $bill->save();
-                        //Add new details
-                        foreach ($request->get('data')['ArrayData'] as $item) {
-                            $user = User::where('name', $item[0])->first();
-                            if ($user) {
-                                //table professional_services
-                                $professionalServices = new ProfessionalService();
-                                $professionalServices->billId = $bill->id;
-                                $professionalServices->userId = $user->id;
-                                $professionalServices->value = $item[4];
-                                $professionalServices->rateChange = $item[2];
-                                $professionalServices->save();
-                                //table general exp
-                                $generalExp = new GeneralExp();
-                                $generalExp->billId = $bill->id;
-                                $generalExp->userId = $user->id;
-                                $generalExp->value = $item[5];
-                                $generalExp->save();
-                                //table commAndPhotoExp
-                                $commAndPhotoExp = new CommPhotoExp();
-                                $commAndPhotoExp->billId = $bill->id;
-                                $commAndPhotoExp->userId = $user->id;
-                                $commAndPhotoExp->value = $item[6];
-                                $commAndPhotoExp->save();
-                                //table consultFeeAndExp
-                                $consultFeeAndExp = new ConsultFeesExp();
-                                $consultFeeAndExp->billId = $bill->id;
-                                $consultFeeAndExp->userId = $user->id;
-                                $consultFeeAndExp->value = $item[7];
-                                $consultFeeAndExp->save();
-                                //table travelRelatedExp
-                                $travelRelatedExp = new TravelRelatedExp();
-                                $travelRelatedExp->billId = $bill->id;
-                                $travelRelatedExp->userId = $user->id;
-                                $travelRelatedExp->value = $item[8];
-                                $travelRelatedExp->save();
-                                //table gstFreeDisb
-                                $gstFreeDisb = new GstFreeDisb();
-                                $gstFreeDisb->billId = $bill->id;
-                                $gstFreeDisb->userId = $user->id;
-                                $gstFreeDisb->value = $item[9];
-                                $gstFreeDisb->save();
-                                //table disbursement
-                                $disbursement = new Disbursement();
-                                $disbursement->billId = $bill->id;
-                                $disbursement->userId = $user->id;
-                                $disbursement->value = $item[10];
-                                $disbursement->save();
-                                //table total
-                                $total = new Total();
-                                $total->billId = $bill->id;
-                                $total->userId = $user->id;
-                                $total->value = $item[11];
-                                $total->save();
+                        case 'pending':
+                            //Process....
+                            $listPendingBefore = ClaimTaskDetail::where('statusId',1)
+                                ->where('claimId',$request->get('data')['idClaim'])
+                                ->where('invoiceMajorNo',null)
+                                ->where('invoiceTempNo','!=',null)
+                                ->get();
+                            if(count($listPendingBefore)!==0)
+                            {
+                                $data = array('Action' => 'AddNew', 'Error' => 'DeleteBill');
                             }
-                        }
-                        //Add new invoice
-                        $invoice = new Invoice();
-                        $invoice->idBill = $bill->id;
-                        $invoice->invoiceDay = $claimTaskDetail->billDate;
-                        $invoice->invoiceMajorNo = $invoiceMajorNo;
-                        $invoice->corInsurer = $request->get('data')['coorInsurer'];
-                        $invoice->save();
-                        //Update detail task of user
-                        $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
-                            ->where('billDate', '>=', $fromDate)
-                            ->where('billDate', '<=', $claimTaskDetail->billDate)
-                            ->where('claimId', $request->get('data')['idClaim'])
-                            ->get()->toArray();
-                        $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
-                            ->where('billDate', '<=', $fromDate)
-                            ->where('invoiceMajorNo', null)
-                            ->where('billDate', '<=', $claimTaskDetail->billDate)
-                            ->where('claimId', $request->get('data')['idClaim'])
-                            ->get()->toArray();
-                        if ($listClaimTaskDetailV2 != null) {
-                            foreach ($listClaimTaskDetailV2 as $item) {
-                                array_push($listClaimTaskDetail, $item);
-                            }
-                        }
-                        foreach ($listClaimTaskDetail as $taskDetail) {
-                            $task = ClaimTaskDetail::where('id', $taskDetail["id"])->first();
-                            if ($task) {
-                                $task->active = 1;
-                                $task->invoiceMajorNo = $invoice->invoiceMajorNo;
-                                $task->invoiceDate = $invoice->invoiceDay;
-                                $task->save();
-
-                                //c?p nh?t rate value change
+                            else
+                            {
+                                //get invoiceMajorNo
+                                $invoiceMajorNo = $this->getInvoiceMajorNo();
+                                //Add new row task final bill
+                                $claimTaskDetail = new ClaimTaskDetail();
+                                $claimTaskDetail->professionalServices = 2;
+                                $claimTaskDetail->professionalServicesTime = 0;
+                                $claimTaskDetail->professionalServicesNote = 'Final Billing';
+                                $claimTaskDetail->billDate = $toDate;
+                                $claimTaskDetail->active = 1;
+                                $claimTaskDetail->statusId = 2;
+                                $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
+                                $claimTaskDetail->invoiceDate = $toDate;
+                                $claimTaskDetail->claimId = $request->get('data')['idClaim'];
+                                $claimTaskDetail->userId = Auth::user()->id;
+                                $claimTaskDetail->createdBy = Auth::user()->id;
+                                $claimTaskDetail->save();
+                                //Add new bill
+                                $bill = new Bill();
+                                $bill->billToId = $request->get('data')['billToCustomer'];
+                                $bill->claimId = $request->get('data')['idClaim'];
+                                $bill->billId = $claimTaskDetail->id;
+                                $bill->total = $request->get('data')['Total'];
+                                $bill->createdBy = Auth::user()->id;
+                                $bill->updatedBy = Auth::user()->id;
+                                $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                                $bill->policyNumber = $request->get('data')['policy'];
+                                $bill->percentage = $request->get('data')['discount'];
+                                $bill->save();
+                                //Add new details
                                 foreach ($request->get('data')['ArrayData'] as $item) {
-                                    $idUser = User::where('name', $item[0])->first()->id;
-                                    if ($idUser) {
-                                        $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//l?y ra rate m?c ??nh
-                                        if ($task->userId == $idUser) {
-                                            if ($checkRateDefault != $item[2]) {
-                                                $task->professionalServicesRateBillValue = $item[2];
-                                                $task->save();
+                                    $user = User::where('name', $item[0])->first();
+                                    if ($user) {
+                                        //table professional_services
+                                        $professionalServices = new ProfessionalService();
+                                        $professionalServices->billId = $bill->id;
+                                        $professionalServices->userId = $user->id;
+                                        $professionalServices->value = $item[4];
+                                        $professionalServices->rateChange = $item[2];
+                                        $professionalServices->save();
+                                        //table general exp
+                                        $generalExp = new GeneralExp();
+                                        $generalExp->billId = $bill->id;
+                                        $generalExp->userId = $user->id;
+                                        $generalExp->value = $item[5];
+                                        $generalExp->save();
+                                        //table commAndPhotoExp
+                                        $commAndPhotoExp = new CommPhotoExp();
+                                        $commAndPhotoExp->billId = $bill->id;
+                                        $commAndPhotoExp->userId = $user->id;
+                                        $commAndPhotoExp->value = $item[6];
+                                        $commAndPhotoExp->save();
+                                        //table consultFeeAndExp
+                                        $consultFeeAndExp = new ConsultFeesExp();
+                                        $consultFeeAndExp->billId = $bill->id;
+                                        $consultFeeAndExp->userId = $user->id;
+                                        $consultFeeAndExp->value = $item[7];
+                                        $consultFeeAndExp->save();
+                                        //table travelRelatedExp
+                                        $travelRelatedExp = new TravelRelatedExp();
+                                        $travelRelatedExp->billId = $bill->id;
+                                        $travelRelatedExp->userId = $user->id;
+                                        $travelRelatedExp->value = $item[8];
+                                        $travelRelatedExp->save();
+                                        //table gstFreeDisb
+                                        $gstFreeDisb = new GstFreeDisb();
+                                        $gstFreeDisb->billId = $bill->id;
+                                        $gstFreeDisb->userId = $user->id;
+                                        $gstFreeDisb->value = $item[9];
+                                        $gstFreeDisb->save();
+                                        //table disbursement
+                                        $disbursement = new Disbursement();
+                                        $disbursement->billId = $bill->id;
+                                        $disbursement->userId = $user->id;
+                                        $disbursement->value = $item[10];
+                                        $disbursement->save();
+                                        //table total
+                                        $total = new Total();
+                                        $total->billId = $bill->id;
+                                        $total->userId = $user->id;
+                                        $total->value = $item[11];
+                                        $total->save();
+                                    }
+                                }
+                                //Add new invoice
+                                $invoice = new Invoice();
+                                $invoice->idBill = $bill->id;
+                                $invoice->invoiceDay = $claimTaskDetail->billDate;
+                                $invoice->invoiceMajorNo = $invoiceMajorNo;
+                                $invoice->corInsurer = $request->get('data')['coorInsurer'];
+                                $invoice->save();
+                                //Update detail task of user
+                                $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
+                                    ->where('billDate', '>=', $fromDate)
+                                    ->where('billDate', '<=', $claimTaskDetail->billDate)
+                                    ->where('claimId', $request->get('data')['idClaim'])
+                                    ->get()->toArray();
+                                $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
+                                    ->where('billDate', '<=', $fromDate)
+                                    ->where('invoiceMajorNo', null)
+                                    ->where('billDate', '<=', $claimTaskDetail->billDate)
+                                    ->where('claimId', $request->get('data')['idClaim'])
+                                    ->get()->toArray();
+                                if ($listClaimTaskDetailV2 != null) {
+                                    foreach ($listClaimTaskDetailV2 as $item) {
+                                        array_push($listClaimTaskDetail, $item);
+                                    }
+                                }
+                                foreach ($listClaimTaskDetail as $taskDetail) {
+                                    $task = ClaimTaskDetail::where('id', $taskDetail["id"])->first();
+                                    if ($task) {
+                                        $task->active = 1;
+                                        $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                        $task->invoiceDate = $invoice->invoiceDay;
+                                        $task->save();
+
+                                        //c?p nh?t rate value change
+                                        foreach ($request->get('data')['ArrayData'] as $item) {
+                                            $idUser = User::where('name', $item[0])->first()->id;
+                                            if ($idUser) {
+                                                $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//l?y ra rate m?c ??nh
+                                                if ($task->userId == $idUser) {
+                                                    if ($checkRateDefault != $item[2]) {
+                                                        $task->professionalServicesRateBillValue = $item[2];
+                                                        $task->save();
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                $data = array('Action' => 'AddNew', 'Error' => 'null');
                             }
-                        }
-                        $data = array('Action' => 'AddNew', 'Error' => 'null');
-                    }
+                        break;
+                        case 'complete':
+                            //Process....
+                            $listPendingBefore = ClaimTaskDetail::where('statusId',1)
+                                ->where('claimId',$request->get('data')['idClaim'])
+                                ->where('invoiceMajorNo',null)
+                                ->where('invoiceTempNo','!=',null)
+                                ->get();
+                            if(count($listPendingBefore)!==0)
+                            {
+                                $data = array('Action' => 'AddNew', 'Error' => 'DeleteBill');
+                            }
+                            else
+                            {
+                                //close claim when bill Final bill at status complete
+                                $claim = Claim::where('id',$request->get('data')['idClaim'])->first();
+                                if($claim)
+                                {
+                                    $claim->statusId = 3;
+                                    $claim->closeDate = $toDate;
+                                    $claim->save();
+                                }
+                                //get invoiceMajorNo
+                                $invoiceMajorNo = $this->getInvoiceMajorNo();
+                                //Add new row task final bill
+                                $claimTaskDetail = new ClaimTaskDetail();
+                                $claimTaskDetail->professionalServices = 2;
+                                $claimTaskDetail->professionalServicesTime = 0;
+                                $claimTaskDetail->professionalServicesNote = 'Final Billing';
+                                $claimTaskDetail->billDate = $toDate;
+                                $claimTaskDetail->active = 1;
+                                $claimTaskDetail->statusId = 2;
+                                $claimTaskDetail->invoiceMajorNo = $invoiceMajorNo;
+                                $claimTaskDetail->invoiceDate = $toDate;
+                                $claimTaskDetail->claimId = $request->get('data')['idClaim'];
+                                $claimTaskDetail->userId = Auth::user()->id;
+                                $claimTaskDetail->createdBy = Auth::user()->id;
+                                $claimTaskDetail->save();
+                                //Add new bill
+                                $bill = new Bill();
+                                $bill->billToId = $request->get('data')['billToCustomer'];
+                                $bill->claimId = $request->get('data')['idClaim'];
+                                $bill->billId = $claimTaskDetail->id;
+                                $bill->total = $request->get('data')['Total'];
+                                $bill->createdBy = Auth::user()->id;
+                                $bill->updatedBy = Auth::user()->id;
+                                $bill->claimOfficer = $request->get('data')['coorInsurer'];
+                                $bill->policyNumber = $request->get('data')['policy'];
+                                $bill->percentage = $request->get('data')['discount'];
+                                $bill->save();
+                                //Add new details
+                                foreach ($request->get('data')['ArrayData'] as $item) {
+                                    $user = User::where('name', $item[0])->first();
+                                    if ($user) {
+                                        //table professional_services
+                                        $professionalServices = new ProfessionalService();
+                                        $professionalServices->billId = $bill->id;
+                                        $professionalServices->userId = $user->id;
+                                        $professionalServices->value = $item[4];
+                                        $professionalServices->rateChange = $item[2];
+                                        $professionalServices->save();
+                                        //table general exp
+                                        $generalExp = new GeneralExp();
+                                        $generalExp->billId = $bill->id;
+                                        $generalExp->userId = $user->id;
+                                        $generalExp->value = $item[5];
+                                        $generalExp->save();
+                                        //table commAndPhotoExp
+                                        $commAndPhotoExp = new CommPhotoExp();
+                                        $commAndPhotoExp->billId = $bill->id;
+                                        $commAndPhotoExp->userId = $user->id;
+                                        $commAndPhotoExp->value = $item[6];
+                                        $commAndPhotoExp->save();
+                                        //table consultFeeAndExp
+                                        $consultFeeAndExp = new ConsultFeesExp();
+                                        $consultFeeAndExp->billId = $bill->id;
+                                        $consultFeeAndExp->userId = $user->id;
+                                        $consultFeeAndExp->value = $item[7];
+                                        $consultFeeAndExp->save();
+                                        //table travelRelatedExp
+                                        $travelRelatedExp = new TravelRelatedExp();
+                                        $travelRelatedExp->billId = $bill->id;
+                                        $travelRelatedExp->userId = $user->id;
+                                        $travelRelatedExp->value = $item[8];
+                                        $travelRelatedExp->save();
+                                        //table gstFreeDisb
+                                        $gstFreeDisb = new GstFreeDisb();
+                                        $gstFreeDisb->billId = $bill->id;
+                                        $gstFreeDisb->userId = $user->id;
+                                        $gstFreeDisb->value = $item[9];
+                                        $gstFreeDisb->save();
+                                        //table disbursement
+                                        $disbursement = new Disbursement();
+                                        $disbursement->billId = $bill->id;
+                                        $disbursement->userId = $user->id;
+                                        $disbursement->value = $item[10];
+                                        $disbursement->save();
+                                        //table total
+                                        $total = new Total();
+                                        $total->billId = $bill->id;
+                                        $total->userId = $user->id;
+                                        $total->value = $item[11];
+                                        $total->save();
+                                    }
+                                }
+                                //Add new invoice
+                                $invoice = new Invoice();
+                                $invoice->idBill = $bill->id;
+                                $invoice->invoiceDay = $claimTaskDetail->billDate;
+                                $invoice->invoiceMajorNo = $invoiceMajorNo;
+                                $invoice->corInsurer = $request->get('data')['coorInsurer'];
+                                $invoice->save();
+                                //Update detail task of user
+                                $listClaimTaskDetail = ClaimTaskDetail::where('statusId', 0)
+                                    ->where('billDate', '>=', $fromDate)
+                                    ->where('billDate', '<=', $claimTaskDetail->billDate)
+                                    ->where('claimId', $request->get('data')['idClaim'])
+                                    ->get()->toArray();
+                                $listClaimTaskDetailV2 = ClaimTaskDetail::where('statusId', 0)
+                                    ->where('billDate', '<=', $fromDate)
+                                    ->where('invoiceMajorNo', null)
+                                    ->where('billDate', '<=', $claimTaskDetail->billDate)
+                                    ->where('claimId', $request->get('data')['idClaim'])
+                                    ->get()->toArray();
+                                if ($listClaimTaskDetailV2 != null) {
+                                    foreach ($listClaimTaskDetailV2 as $item) {
+                                        array_push($listClaimTaskDetail, $item);
+                                    }
+                                }
+                                foreach ($listClaimTaskDetail as $taskDetail) {
+                                    $task = ClaimTaskDetail::where('id', $taskDetail["id"])->first();
+                                    if ($task) {
+                                        $task->active = 1;
+                                        $task->invoiceMajorNo = $invoice->invoiceMajorNo;
+                                        $task->invoiceDate = $invoice->invoiceDay;
+                                        $task->save();
 
+                                        //c?p nh?t rate value change
+                                        foreach ($request->get('data')['ArrayData'] as $item) {
+                                            $idUser = User::where('name', $item[0])->first()->id;
+                                            if ($idUser) {
+                                                $checkRateDefault = RateDetail::where('userId', $idUser)->first()->value;//l?y ra rate m?c ??nh
+                                                if ($task->userId == $idUser) {
+                                                    if ($checkRateDefault != $item[2]) {
+                                                        $task->professionalServicesRateBillValue = $item[2];
+                                                        $task->save();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                $data = array('Action' => 'AddNew', 'Error' => 'null');
+                            }
+                        break;
+                    }
                 }
             }
 
@@ -5293,7 +5451,7 @@ class AdminController extends Controller
                     $bill->total = $request->get('data')['Total'];
                     $bill->claimOfficer = $request->get('data')['coorInsurer'];
                     $bill->policyNumber = $request->get('data')['policy'];
-                    $bill->percentage = $request->get('discount');
+                    $bill->percentage = $request->get('data')['discount'];
                     $bill->save();
                     //Update status = 2
                     $task = ClaimTaskDetail::where('id', $bill->billId)
@@ -5381,7 +5539,7 @@ class AdminController extends Controller
                     $bill->total = $request->get('data')['Total'];
                     $bill->claimOfficer = $request->get('data')['coorInsurer'];
                     $bill->policyNumber = $request->get('data')['policy'];
-                    $bill->percentage = $request->get('discount');
+                    $bill->percentage = $request->get('data')['discount'];
                     $bill->save();
                     //Update status = 2
                     $task = ClaimTaskDetail::where('id', $bill->billId)
@@ -5467,21 +5625,32 @@ class AdminController extends Controller
             }
             else//update bill complete // IB Complete -> Final and close claim
             {
-
-                $bill->total = $request->get('data')['Total'];
-                $bill->percentage = $request->get('discount');
-                $bill->save();
-                $taskStatus->professionalServicesNote = 'Final Billing';
-                $taskStatus->save();
-                //Close claim
-                $claim = Claim::where('id',$bill->claimId)->first();
-                if($claim)
+                switch($billStatus)
                 {
-                    $claim->closeDate =$taskStatus->invoiceDate;
-                    $claim->statusId = 3;
-                    $claim->save();
+                    case 'complete':
+                        $claim = Claim::where('id',$bill->claimId)->first();
+                        if($claim)
+                        {
+                            if($claim->statusId==3)
+                            {
+                                $data = array('Action' => 'Update', 'Error' => 'ClaimClose');
+                            }
+                            else
+                            {
+                                $bill->total = $request->get('data')['Total'];
+                                $bill->percentage = $request->get('data')['discount'];
+                                $bill->save();
+                                $taskStatus->professionalServicesNote = 'Final Billing';
+                                $taskStatus->save();
+                                //Close claim
+                                $claim->closeDate =$taskStatus->invoiceDate;
+                                $claim->statusId = 3;
+                                $claim->save();
+                                $data = array('Action' => 'Update', 'Error' => 'null');
+                            }
+                        }
+                    break;
                 }
-                $data = array('Action' => 'Update', 'Error' => 'null');
             }
         }
         return $data;
