@@ -242,7 +242,7 @@ class AdminController extends Controller
                     $policy = $claim->policy;
                     $officer = $claim->contact;
                     //Check from date to date
-                    $checkIBAndFB = ClaimTaskDetail::where('statusId', 2)
+                    $checkIBAndFB = ClaimTaskDetail::where('statusId',2)
                         ->where('claimId', $claim->id)
                         ->orderBy('billDate', 'desc')
                         ->first();
@@ -3997,6 +3997,7 @@ class AdminController extends Controller
 
     public function saveInformationOfInvoiceAfterInReport(Request $request)
     {
+
         $data = 0;
         try {
             $invoice = Invoice::where('invoiceMajorNo', $request->get('invoice'))
