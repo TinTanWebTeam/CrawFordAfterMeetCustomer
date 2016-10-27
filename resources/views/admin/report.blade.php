@@ -882,7 +882,7 @@
                 <button class="pull-right" style="margin-right: 20px">Export WIP To Excel</button>
             </div>
         </div>
-        <div class="row" style="background-color: #fff;">
+        {{-- <div class="row" style="background-color: #fff;">
             <div class="report-wip">
                 <div class="page-wip" id="pageWip1">
                     <div class="wip-title">
@@ -1404,6 +1404,27 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="row">
+            <table>
+                <caption>table title and/or explanatory text</caption>
+                <thead>
+                    <tr>
+                        <th>Opened</th>
+                        <th>Claim #</th>
+                        <th>Insured Name</th>
+                        <th>Adjuster Name</th>
+                        <th>Hours</th>
+                        <th>Rate</th>
+                        <th>Fee</th>
+                        <th>Expense Total</th>
+                        <th>Grand Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
         </div>
         <br>
     </div>
@@ -1837,7 +1858,6 @@
             }
             load_page_2();
         });
-
     }
     function load_page_2(){
         if(continue_id + 1 == data_docket.length){
@@ -2588,5 +2608,9 @@
         }
         // console.log('load complete insert discount');
     }
-
+    $(function(){
+        // $.get('getWipDataForReportWip',function(data){
+        //     console.log(data);
+        // });
+    });
 </script>
