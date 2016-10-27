@@ -102,7 +102,7 @@ class UserController extends Controller
             if ($request->get('key')) {
                 $claim = Claim::where('code', $request->get('key'))->first();
                 if ($claim) {
-                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', 2)->where('claimId',$claim->id)->orderBy('billDate', 'desc')->first();
+                    $checkDateIBcompleteFB = ClaimTaskDetail::where('statusId', '>',1)->where('claimId',$claim->id)->orderBy('billDate', 'desc')->first();
                     if ($checkDateIBcompleteFB != null) {
                         $date = $checkDateIBcompleteFB->billDate;
                     } else {

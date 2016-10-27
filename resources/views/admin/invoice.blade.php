@@ -420,18 +420,18 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <h5 style="text-align: right">Your Taxes</h5>
+                        <h5 style="text-align: right">After discount</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" name="YourTaxes" id="YourTaxes" readonly style="background-color: #EAD8D8">
+                        <input type="text" name="discount" id="discount" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <h5 style="text-align: right">Your Position</h5>
+                        <h5 style="text-align: right">Discount percentage</h5>
                     </div>
                     <div class="col-sm-8">
-                        <input type="text" name="YourPosition" id="YourPosition" readonly style="background-color: #EAD8D8">
+                        <input type="text" name="percentage" id="percentage" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
             </div>
@@ -541,16 +541,18 @@
                     <h4>Policy No:</h4>
                 </div>
                 <div style="display: inline-block;width: 34%;box-sizing: border-box">
-                    <h4 style="margin-top: 0px">Not advised</h4>
+                    <h4 style="margin-top: 0px" id="yourClaimNo">Not advised</h4>
                     <h4 id="policyClaim"></h4>
                 </div>
                 <div style="display: inline-block;width: 15%;box-sizing: border-box">
-                    <h4 style="margin-top: 0px">VIA Ref:</h4>
                     <h4>Loss date:</h4>
+                    <h4 style="margin-top: 0px">VIA Ref:</h4>
+
                 </div>
                 <div style="display: inline-block;width: 25%;box-sizing: border-box">
-                    <h4 style="margin-top: 0px" id="viaRef"></h4>
                     <h4 id="lossDateClaim"></h4>
+                    <h4 style="margin-top: 0px" id="viaRef"></h4>
+
                 </div>
             </div>
             <br>
@@ -560,7 +562,7 @@
             <br>
             <br>
             <div style="width: 1150px;display: block">
-                <h4 class="text-center" style="font-weight: 600">Memoradum of Fees</h4>
+                <h4 class="text-center" style="font-weight: 600">Memorandum of Fees</h4>
                 <br>
                 <br>
                 <div style="width: 1150px;">
@@ -863,7 +865,12 @@
                         $("input[name=BranchID]").val(data[0][0]["branchId"]);
                         $("input[name=InsuredName]").val(data[0][0]["insuredLastName"]);
                         $("input[name=Policy]").val(data[0][0]["policy"]);
-                        $("input[name=CoClaim]").val();
+                        $("input[name=discount]").val(data[0][0]["total"]).formatCurrency({roundToDecimalPlace:0});
+                        $("input[name=percentage]").val(data[0][0]["percentage"]);
+                        if(data[0][0]["insuredClaim"]!==null)
+                        {
+                            $("h4[id=yourClaimNo]").text(data[0][0]["insuredClaim"]);
+                        }
                         //load information bank and exchangeRate
                         $("input[name=bankName]").val(data[0][0]["nameBank"]);
                         $("input[name=exchangeRate]").val(data[0][0]["exchangeRate"]).formatCurrency({roundToDecimalPlace:0});
@@ -906,7 +913,8 @@
                         $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
                         $("h4[id=expenseVND]").text((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,"")))).formatCurrency({roundToDecimalPlace:0});
                         //load total excludingVAT VND
-                        $("h4[id=total_ExcludingVAT_VND]").text(Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,""))).formatCurrency({roundToDecimalPlace:0});
+                        //$("h4[id=total_ExcludingVAT_VND]").text(Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,""))).formatCurrency({roundToDecimalPlace:0});
+                        $("h4[id=total_ExcludingVAT_VND]").text($("input[name=discount]").val()).formatCurrency({roundToDecimalPlace:0});
                         //load total VAT VND
                         $("h4[id=total_Vat_VND]").text(Math.round(Number($("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
 

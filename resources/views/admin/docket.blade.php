@@ -1224,6 +1224,7 @@
                     $.post(url+"deleteTask",{_token:_token,idTask:docketView.idTaskDelete,date:$("input[name=fromDate]").val() +" "+docketView.timeFrom},function(data){
                         if(data==="1")
                         {
+                            $("label[id=statusClaim]").text("Open").css("color","blue");
                             $("div[id=modalDelete]").modal("hide");
                             $("div[id=modal-confirm]").find("div[class=modal-body]").find("h4").text("Delete Success");
                             $("div[id=modal-confirm]").modal("show");

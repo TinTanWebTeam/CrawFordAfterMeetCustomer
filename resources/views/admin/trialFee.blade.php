@@ -511,8 +511,18 @@
                     }
 
                 },
-                chooseClaimWhenUseEventEnterKey: function (e) {
+                resetCheckbockStatusBill:function()
+                {
+                    $("button[name=btnBill]").text("Update Bill").prop("disabled",false);
+                    $("input[id=interim_bill]").prop("disabled",false);
+                    $("input[id=final_bill]").prop("disabled",false);
                     $("input[id=pending]").prop("disabled",false).prop("checked",true);
+                    $("input[id=complete]").prop("disabled",false);
+                },
+                chooseClaimWhenUseEventEnterKey: function (e) {
+                    //Reset checkbock status bill
+                    trialFeeView.resetCheckbockStatusBill();
+
                     $("input[name=action]").val("1");
                     $("button[name=btnBill]").text("Bill Claim").prop("disabled",false);
                     $("input[name=ToDate]").val("").prop("readOnly",false);
@@ -528,6 +538,7 @@
                                 $("div[id=modalNotification]").modal("show");
                             }
                             else {
+                                $("input[name=discount]").val("");
                                 var arrayTimeCheck = data["check"].split(" ");
                                 trialFeeView.timeFrom = arrayTimeCheck[1];//save time to variable temp to bill
                                 $("input[name=FromDate]").val(arrayTimeCheck[0]);
@@ -907,6 +918,13 @@
                                     $("button[name=modalAgree]").prop("disabled",false);
                                     $("input[name=discount]").val("");
                                 }
+                                else if(data["Error"]==="UpdateBillFinal")
+                                {
+                                    $("div[id=modalConfirm]").modal("hide");
+                                    $("div[id=modalNotification]").find("div[class=modal-body]").find("h4").text("You must update bill complete final");
+                                    $("div[id=modalNotification]").modal("show");
+                                    $("button[name=modalAgree]").prop("disabled",false);
+                                }
                                 else
                                 {
                                     $("div[id=modalConfirm]").modal("hide");
@@ -932,127 +950,61 @@
                     trialFeeView.loadIBClaimConfirnm();
                 },
                 viewDetailIBClaim: function (element) {
-                    var total = $(element).find("td:eq(4)").text();
+                    //Reset
+                    trialFeeView.resetCheckbockStatusBill();
                     trialFeeView.idBillWhenUpdateBill = $(element).attr("id");
                     $("input[name=action]").val("0");
                     $.post(url+"loadInformationOfBill",{_token:_token,idBill:$(element).attr("id")},function(data)
                     {
-
-                        $("input[id=pending]").prop("disabled",true).prop("checked",false);
+                        switch (data[0])
+                        {
+                            case "IBPending":
+                                $("input[id=pending]").prop("disabled",true).prop("checked",false);
+                                break;
+                            case "IBComplete":
+                                $("input[id=interim_bill]").prop("disabled",true).prop("checked",false);
+                                $("input[id=pending]").prop("disabled",true).prop("checked",false);
+                                break;
+                            case "FBPending":
+                                $("input[id=interim_bill]").prop("disabled",true).prop("checked",false);
+                                $("input[id=pending]").prop("disabled",true).prop("checked",false);
+                                break;
+                            case "FBComplete":
+                                $("input[id=interim_bill]").prop("disabled",true).prop("checked",false);
+                                $("input[id=final_bill]").prop("disabled",true).prop("checked",false);
+                                $("button[name=btnBill]").prop("disabled",true);
+                                break;
+                        }
                         trialFeeView.showInformationOfCustomer(trialFeeView.codeCustomer);
                         var theadListTaskDetail = $("thead[id=theadTableListTaskDetail]");
                         var tbodyListTaskDetail = $("tbody[id=tbodyTableListTaskDetail]");
-                        if(data[0]==="Pending")//nếu bill này đang là bill pending
-                        {
-                            $("input[name=officer]").val(data[5]);
-                            $("input[name=policy]").val(data[6]);
-                            //if pending at status lock is disabled button update
-                            if(data[1]==="Lock")
-                            {
-                                $("button[name=btnBill]").text("Update Bill").prop("disabled",true);
-                            }
-                            else
-                            {
-                                $("button[name=btnBill]").text("Update Bill").prop("disabled",false);
-                            }
-                            //insert from date to date
-                            var arrayTimeCheckFromDate = data[2]["FromDate"].split(" ");
-                            var arrayTimeCheckToDate = data[2]["ToDate"].split(" ");
-                            //Pass data time in properties
-                            trialFeeView.timeFrom = arrayTimeCheckFromDate[1];
-                            trialFeeView.timeTo = arrayTimeCheckToDate[1];
-                            //custom date text box
-                            $("input[name=FromDate]").val(arrayTimeCheckFromDate[0]).prop("readOnly",true);
-                            $("input[name=ToDate]").val(arrayTimeCheckToDate[0]).prop("readOnly",true);
-                            trialFeeView.clearTable();
-                            trialFeeView.loadTableGL();
-                            for (var a = 0; a < data[3].length; a++) {
-                                theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[3][a]["userName"] + "</th>");
-                                //check null sumtime
-                                if(data[3][a]["sumTimeCvChinh"]!==null)
-                                {
-                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[3][a]["userName"] + ">"+data[3][a]["sumTimeCvChinh"]+"</td>");
-                                }
-                                else
-                                {
-                                    tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[3][a]["userName"] + "></td>");
-                                }
-                                tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
-                                tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[3][a]["userName"] + ">" + data[3][a]["rateType"] + "</td>");
-                                tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
 
-                                tbodyListTaskDetail.find("tr:eq(4)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                tbodyListTaskDetail.find("tr:eq(5)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                tbodyListTaskDetail.find("tr:eq(6)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'</td>");
-                                tbodyListTaskDetail.find("tr:eq(7)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                tbodyListTaskDetail.find("tr:eq(8)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                tbodyListTaskDetail.find("tr:eq(9)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                tbodyListTaskDetail.find("tr:eq(10)").append("<td id=" + data[3][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
-                                for (var b = 0; b < data[4].length; b++) {
-                                    switch (b) {
-                                        case 0:
-                                            tbodyListTaskDetail.find("tr:eq(3)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            tbodyListTaskDetail.find("tr:eq(1)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["rate"]);
-                                            break;
-                                        case 1:
-                                            tbodyListTaskDetail.find("tr:eq(4)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 2:
-                                            tbodyListTaskDetail.find("tr:eq(5)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 3:
-                                            tbodyListTaskDetail.find("tr:eq(6)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 4:
-                                            tbodyListTaskDetail.find("tr:eq(7)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 5:
-                                            tbodyListTaskDetail.find("tr:eq(8)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 6:
-                                            tbodyListTaskDetail.find("tr:eq(9)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                        case 7:
-                                            tbodyListTaskDetail.find("tr:eq(10)").find("td[id="+data[4][b][a]["name"]+"]").children().val(data[4][b][a]["value"]);
-                                            break;
-                                    }
-                                }
-                            }
-                            trialFeeView.loadDataToTableTotal();
-                            //load total
-                            $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[5]);
-                            trialFeeView.formatInputCurrencyTableTotal();
-                            trialFeeView.formatInputCurrencyTableDataUser();
-                        }
-                        else
-                        {
-
-                            $("input[name=officer]").val(data[5]);
-                            $("input[name=policy]").val(data[6]);
-                            $("button[name=btnBill]").text("Update Bill");
-                            var arrayTimeCheckFromDateCL = data[1]["FromDate"].split(" ");
-                            var arrayTimeCheckToDateCL = data[1]["ToDate"].split(" ");
-                            //Pass date time in properties
-                            trialFeeView.timeFrom = arrayTimeCheckFromDateCL[1];
-                            trialFeeView.timeTo = arrayTimeCheckFromDateCL[1];
-                            //insert date in text box
-                            $("input[name=FromDate]").val(arrayTimeCheckFromDateCL[0]).prop("readOnly",true);
-                            $("input[name=ToDate]").val(arrayTimeCheckToDateCL[0]).prop("readOnly",true);
-                            //insert data default
-                            trialFeeView.clearTable();
-                            trialFeeView.loadTableGL();
-                            for (var a = 0; a < data[2].length; a++) {
+                        $("input[name=officer]").val(data[5]);
+                        $("input[name=policy]").val(data[6]);
+                        $("input[name=discount]").val(data[7]);
+                        //insert from date to date
+                        var arrayTimeCheckFromDate = data[1]["FromDate"].split(" ");
+                        var arrayTimeCheckToDate = data[1]["ToDate"].split(" ");
+                        //Pass data time in properties
+                        trialFeeView.timeFrom = arrayTimeCheckFromDate[1];
+                        trialFeeView.timeTo = arrayTimeCheckToDate[1];
+                        //custom date text box
+                        $("input[name=FromDate]").val(arrayTimeCheckFromDate[0]).prop("readOnly",true);
+                        $("input[name=ToDate]").val(arrayTimeCheckToDate[0]).prop("readOnly",true);
+                        trialFeeView.clearTable();
+                        trialFeeView.loadTableGL();
+                        for (var a = 0; a < data[2].length; a++) {
                                 theadListTaskDetail.find("tr:eq(1)").append("<th style='text-align: center'>" + data[2][a]["userName"] + "</th>");
+                                //check null sumtime
                                 if(data[2][a]["sumTimeCvChinh"]!==null)
                                 {
                                     tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + ">"+data[2][a]["sumTimeCvChinh"]+"</td>");
-
                                 }
-                                else{
+                                else
+                                {
                                     tbodyListTaskDetail.find("tr:eq(0)").append("<td id=" + data[2][a]["userName"] + "></td>");
-
                                 }
-                                tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
+                                tbodyListTaskDetail.find("tr:eq(1)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' onchange='trialFeeView.sumTotalValueofInputOfTableListTaskDetail(this)'></td>");
                                 tbodyListTaskDetail.find("tr:eq(2)").append("<td id=" + data[2][a]["userName"] + ">" + data[2][a]["rateType"] + "</td>");
                                 tbodyListTaskDetail.find("tr:eq(3)").append("<td id=" + data[2][a]["userName"] + "><input type='text' id='' name='' value='0' readonly style='background-color: #EAE2E2'></td>");
 
@@ -1093,13 +1045,11 @@
                                     }
                                 }
                             }
-                            //insert total into table total
-                            trialFeeView.loadDataToTableTotal();
-                            //load total
-                            $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[4]);
-                            trialFeeView.formatInputCurrencyTableTotal();
-                            trialFeeView.formatInputCurrencyTableDataUser();
-                        }
+                        trialFeeView.loadDataToTableTotal();
+                        //load total
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[4]);
+                        trialFeeView.formatInputCurrencyTableTotal();
+                        trialFeeView.formatInputCurrencyTableDataUser();
                     });
                 },
                 cancel:function()
