@@ -2851,59 +2851,79 @@ class AdminController extends Controller
 
     public function getInvoiceTempNo()
     {
-        $invoiceTempNo = null;
-        $majorNo = Invoice::orderBy('invoiceMajorNo', 'desc')->first();
-        $tempNo = Invoice::orderBy('invoiceTempNo', 'desc')->first();
-        if ($majorNo == null && $tempNo == null)
+        $invoice = null;
+        $temp = 0;
+        $rowInvoice = Invoice::orderBy('created_at', 'desc')->first();
+        if($rowInvoice)
         {
-            $invoiceTempNo = 10000;
+            if($rowInvoice->invoiceMajorNo != null && $rowInvoice->invoiceTempNo == null)
+                $temp = 1;
+            if($rowInvoice->invoiceMajorNo == null && $rowInvoice->invoiceTempNo != null)
+                $temp = 2;
+            if($rowInvoice->invoiceMajorNo != null && $rowInvoice->invoiceTempNo != null)
+                $temp = 3;
         }
-        else if ($majorNo != null && $tempNo != null)
+        switch($temp)
         {
-            $major = (int)substr($majorNo->invoiceMajorNo, 1, 4);
-            $temp = (int)substr($tempNo->invoiceTempNo, 1, 4);
-            if ($major > $temp)
-            {
-                $invoiceTempNo = ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
-            } else
-            {
-                $invoiceTempNo = ((int)("1" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
-            }
+            case 0:
+                $invoice = 10000;
+                break;
+            case 1:
+                $invoice = ((int)("1" . substr($rowInvoice->invoiceMajorNo, 1, 4))) + 1;
+                break;
+            case 2:
+                $invoice = $rowInvoice->invoiceTempNo + 1;
+                break;
+            case 3:
+                $major = (int)substr($rowInvoice->invoiceMajorNo, 1, 4);
+                $temp = (int)substr($rowInvoice->invoiceTempNo, 1, 4);
+                if ($major > $temp) {
+                    $invoice = ((int)("1" . substr($rowInvoice->invoiceMajorNo, 1, 4))) + 1;
+                } else {
+                    $invoice = $rowInvoice->invoiceTempNo + 1;
+                }
+                break;
         }
-        else if ($majorNo != null && $tempNo == null)
-        {
-            $invoiceTempNo = ((int)("1" . substr($majorNo->invoiceMajorNo, 1, 4))) + 1;
-        }
-        else
-        {
-            $invoiceTempNo = $tempNo->invoiceTempNo + 1;
-        }
-        return $invoiceTempNo;
-
+        return $invoice;
 
     }
 
     public function getInvoiceMajorNo()
     {
-        $invoiceMajorNo = null;
-        $majorNo = Invoice::orderBy('invoiceMajorNo', 'desc')->first();
-        $tempNo = Invoice::orderBy('invoiceTempNo', 'desc')->first();
-        if ($majorNo == null && $tempNo == null) {
-            $invoiceMajorNo = 20000;
-        } else if ($majorNo->invoiceMajorNo != null && $tempNo->invoiceTempNo != null) {
-            $major = (int)substr($majorNo->invoiceMajorNo, 1, 4);
-            $temp = (int)substr($tempNo->invoiceTempNo, 1, 4);
-            if ($major > $temp) {
-                $invoiceMajorNo = $majorNo->invoiceMajorNo + 1;
-            } else {
-                $invoiceMajorNo = ((int)("2" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
-            }
-        } else if ($majorNo->invoiceMajorNo != null && $tempNo->invoiceTempNo == null) {
-            $invoiceMajorNo = $majorNo->invoiceMajorNo + 1;
-        } else {
-            $invoiceMajorNo = ((int)("2" . substr($tempNo->invoiceTempNo, 1, 4))) + 1;
+        $invoice = null;
+        $temp = 0;
+        $rowInvoice = Invoice::orderBy('created_at', 'desc')->first();
+        if($rowInvoice)
+        {
+            if($rowInvoice->invoiceMajorNo != null && $rowInvoice->invoiceTempNo == null)
+                $temp = 1;
+            if($rowInvoice->invoiceMajorNo == null && $rowInvoice->invoiceTempNo != null)
+                $temp = 2;
+            if($rowInvoice->invoiceMajorNo != null && $rowInvoice->invoiceTempNo != null)
+                $temp = 3;
         }
-        return $invoiceMajorNo;
+        switch($temp)
+        {
+            case 0:
+                $invoice = 20000;
+                break;
+            case 1:
+                $invoice = $rowInvoice->invoiceMajorNo + 1;
+                break;
+            case 2:
+                $invoice = ((int)("2" . substr($rowInvoice->invoiceTempNo, 1, 4))) + 1;
+                break;
+            case 3:
+                $major = (int)substr($rowInvoice->invoiceMajorNo, 1, 4);
+                $temp = (int)substr($rowInvoice->invoiceTempNo, 1, 4);
+                if ($major > $temp) {
+                    $invoice = $rowInvoice->invoiceMajorNo + 1;
+                } else {
+                    $invoice = ((int)("2" . substr($rowInvoice->invoiceTempNo, 1, 4))) + 1;
+                }
+                break;
+        }
+        return $invoice;
     }
 
     public function Bill(Request $request)
