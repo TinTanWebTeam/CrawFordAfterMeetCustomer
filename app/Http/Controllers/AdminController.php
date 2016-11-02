@@ -4872,7 +4872,9 @@ class AdminController extends Controller
                     'invoices.dateExchangeRate as dateExchangeRate',
                     'invoices.addressBank as addressBank',
                     'customers.fullName as nameCustomer',
-                    'customers.address as addressCustomer'
+                    'customers.address as addressCustomer',
+                    'bills.professionalServices as professionalServicesDiscount',
+                    'bills.percentage as percentage'
                 )->get();
             array_push($resultArray, $query1);
             $professionalService = DB::table('invoices')
@@ -5923,13 +5925,9 @@ class AdminController extends Controller
                 ->first();
             if($user)
             {
-                $password = decrypt($user->password,Config::get('app.key'));
-                if($password == $request->get('passwordCurrent'))
-                {
-                    $user->password = encrypt($request->get('passwordNew'), Config::get('app.key'));
-                    $user->save();
-                    $bRe = 1;
-                }
+               $user->password = encrypt($request->get('passwordNew'), Config::get('app.key'));
+               $user->save();
+               $bRe = 1;
             }
         }
         catch(Exception $ex)

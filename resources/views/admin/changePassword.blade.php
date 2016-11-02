@@ -59,10 +59,6 @@
                 <td><input type="password" id="userCurrent" name="userCurrent"></td>
             </tr>
 
-            <tr>
-                <td>Password Current :</td>
-                <td><input type="password" class="form-control" name="passwordCurrent" id="passwordCurrent"></td>
-            </tr>
 
             <tr style="padding-top: 10px">
                 <td>Password New :</td>
@@ -110,7 +106,6 @@
                 {
                     $("form[id=formChangePassword]").validate({
                         rules: {
-                            passwordCurrent: "required",
                             User:"required",
                             passwordNew: {
                                 required:true,
@@ -123,7 +118,6 @@
                             }
                         },
                         messages: {
-                            passwordCurrent: "ID is required",
                             User: "User is required",
                             passwordNew:{
                                 required:"Password is required",
@@ -142,7 +136,6 @@
                                 {
                                     _token:_token,
                                     idUser:$("input[name=userCurrent]").val(),
-                                    passwordCurrent:$("input[name=passwordCurrent]").val(),
                                     passwordNew:$("input[name=passwordNew]").val()},
                                 function(data){
                                     if(data==="1")
