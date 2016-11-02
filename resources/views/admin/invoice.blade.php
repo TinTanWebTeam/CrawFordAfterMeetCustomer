@@ -396,7 +396,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <h5 style="text-align: right">Claim Total Tax</h5>
+                        <h5 style="text-align: right">Total Professional Fee</h5>
                     </div>
                     <div class="col-sm-8">
                         <input type="text" name="claimTotalTax" id="claimTotalTax" readonly style="background-color: #EAD8D8">
@@ -404,7 +404,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <h5 style="text-align: right">Claim Total Fee</h5>
+                        <h5 style="text-align: right">Total Expense Fee</h5>
                     </div>
                     <div class="col-sm-8">
                         <input type="text" name="claimTotalFee" id="claimTotalFee" readonly style="background-color: #EAD8D8">
@@ -424,6 +424,14 @@
                     </div>
                     <div class="col-sm-8">
                         <input type="text" name="discount" id="discount" readonly style="background-color: #EAD8D8">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h5 style="text-align: right">VAT(10%)</h5>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" name="vat" id="vat" readonly style="background-color: #EAD8D8">
                     </div>
                 </div>
                 <div class="row">
@@ -894,9 +902,11 @@
                         $("input[name=Disbursements]").val(data[7][0]["disbursement"]);
                         $("input[name=claimTotalFee]").val(ClaimTotalFee);
                         $("input[name=yourSubtotal]").val(parseFloat(data[1][0]["professionalServices"]) + ClaimTotalFee);
-                        invoiceView.formatCurrencyInput();
-                        $("input[name=claimTotalTax]").val($("input[name=Professional]").val());
+                        $("input[name=vat]").val(Math.round(Number($("input[name=discount]").val().replace(/,/g,"")) * 1.1)).formatCurrency({roundToDecimalPlace:0});
+                        //$("h4[id=total_Vat_VND]").text(Math.round(Number($("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")) * 1.1) - $("h4[id=total_ExcludingVAT_VND]").text().replace(/,/g,"")).formatCurrency({roundToDecimalPlace:0});
 
+                        $("input[name=claimTotalTax]").val(data[0][0]["professionalServicesDiscount"]);
+                        invoiceView.formatCurrencyInput();
 
                         //load information of report
                         $("h4[id=viaRef]").text($("input[id=Claim]").val());
@@ -910,7 +920,7 @@
                         $("h4[id=addressCustomer]").text(data[0][0]["addressCustomer"]);
                         $("h4[id=nameCustomer]").text(data[0][0]["nameCustomer"]);
                         //load report invoice
-                        $("h4[id=professionFeeVND]").text($("input[name=Professional]").val());
+                        $("h4[id=professionFeeVND]").text($("input[name=claimTotalTax]").val());
                         $("h4[id=expenseVND]").text((Number($("input[name=GeneralExp]").val().replace(/,/g,""))) + (Number($("input[name=CommPhotoExp]").val().replace(/,/g,""))) + (Number($("input[name=ConsultFeesExp]").val().replace(/,/g,""))) + (Number($("input[name=TravelRelatedExp]").val().replace(/,/g,""))) + (Number($("input[name=GSTFreeDisb]").val().replace(/,/g,""))) + (Number($("input[name=Disbursements]").val().replace(/,/g,"")))).formatCurrency({roundToDecimalPlace:0});
                         //load total excludingVAT VND
                         //$("h4[id=total_ExcludingVAT_VND]").text(Number($("h4[id=professionFeeVND]").text().replace(/,/g,"")) + Number($("h4[id=expenseVND]").text().replace(/,/g,""))).formatCurrency({roundToDecimalPlace:0});
@@ -1105,6 +1115,7 @@
                     $("input[name=Disbursements]").formatCurrency({roundToDecimalPlace:0});
                     $("input[name=claimTotalFee]").formatCurrency({roundToDecimalPlace:0});
                     $("input[name=yourSubtotal]").formatCurrency({roundToDecimalPlace:0});
+                    $("input[name=claimTotalTax]").formatCurrency({roundToDecimalPlace:0});
 
                 },
                 round:function(value,decimals)

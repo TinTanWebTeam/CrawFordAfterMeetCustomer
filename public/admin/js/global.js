@@ -63,4 +63,12 @@ $(function() {
             });
         }
     });
+    Catogories.find("li").eq(7).click(function() {
+        if ($(this).find("a").text() === "Change Password") {
+            setActiveMenu($(this));
+            $.get(url + "changePassword", function(viewChangePassword) {
+                $("div#page_container").empty().append(viewChangePassword);
+            });
+        }
+    });
 });

@@ -21,6 +21,7 @@
                 <li><a href="javascript:;">Employee</a></li>
                 <li><a href="javascript:;">Report Claim</a></li>
 				<li><a href="javascript:;">Report Docket</a></li>
+				<li><a href="javascript:;">Change Password</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

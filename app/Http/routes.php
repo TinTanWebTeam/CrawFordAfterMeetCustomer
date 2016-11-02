@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::get('report','AdminController@getViewReport');
     Route::get('docket','AdminController@getViewDocket');
     Route::get('reportTask','AdminController@reportTask');
+    Route::get('changePassword','AdminController@getViewChangePassword');
     Route::get('getClaimByCode/{code}','AdminController@getClaimByCode');
     Route::get('getAllClaim','AdminController@getAllClaim');
     Route::get('getAllSourceCode','AdminController@getAllSourceCode');
@@ -89,6 +90,9 @@ Route::group(['middleware' => ['auth','admin'],'prefix' => 'admin'],function (){
     Route::post('viewDetailInvoiceByInvoice','AdminController@viewDetailInvoiceByInvoice');
     Route::post('getClaimHaveInvoiceOfTabInvoice','AdminController@getClaimHaveInvoiceOfTabInvoice');
     Route::post('discountBill','AdminController@discountBill');
+
+    Route::post('saveChangePassword','AdminController@saveChangePassword');
+    Route::get('getAllEmployeesChangePassword','AdminController@getAllEmployeesChangePassword');
 
 });
 

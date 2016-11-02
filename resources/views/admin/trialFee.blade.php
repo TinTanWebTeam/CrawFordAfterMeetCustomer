@@ -625,6 +625,17 @@
                         });
                     }
                 },
+                sumAllRowInvoice:function()
+                {
+                    var tbodyList = $("tbody[id=tbodyListTotal]");
+                    var sum = 0;
+                    var trSum = tbodyList.find("tr");
+                    for(var i= 3;i<=trSum.length - 2;i++)
+                    {
+                        sum += Number($(trSum[i]).find("td").children().val().replace(/,/g,""));
+                    }
+                    return sum;
+                },
                 sumAllRow:function(row)
                 {
                     var tbodyList = $("tbody[id=tbodyTableListTaskDetail]");
@@ -676,13 +687,15 @@
                         }
                         if (z > 2 && z <= 10) {
                             //if ($("input[name=action]").val() === "0") {
-                                if (z === 10) {
+                                if (z === 3) {
                                     tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent(this)' value=" + arrSum[h] + "></td>");
+                                    h++;
                                 }
                                 else {
                                     tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
                                     h++;
                                 }
+
                             //}
 //                            else {
 //                                alert(123);
@@ -721,8 +734,9 @@
                             tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[z] + "</td>").append("<td>" + arrSum[z] + "</td>")
                         }
                         if (z > 2 && z <= 10) {
-                            if (z === 10) {
+                            if (z === 3) {
                                 tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' onchange='trialFeeView.discountPrecent(this)' value=" + arrSum[h] + "></td>");
+                                h++;
                             }
                             else {
                                 tbodyListTotal.find("tr:eq(" + z + ")").empty().append("<td>" + arrSum[h] + "</td>").append("<td><input type='text' id='' name='' readonly style='background-color:#EAE2E2' value=" + arrSum[h] + "></td>");
@@ -842,6 +856,7 @@
                         billType: $("input[name=bill-type]:checked").attr("id"),
                         billStatus:billStatus,
                         discount:discount,
+                        professionalDiscount:$("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(1)").children().val().replace(/,/g,""),
                         ArrayData: objectUserAll
                     };
                     if(objectUserAll==="null")
@@ -1047,6 +1062,7 @@
                             }
                         trialFeeView.loadDataToTableTotal();
                         //load total
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(1)").children().val(data[8]);
                         $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(data[4]);
                         trialFeeView.formatInputCurrencyTableTotal();
                         trialFeeView.formatInputCurrencyTableDataUser();
@@ -1167,17 +1183,19 @@
                 },
                 discountBill:function()
                 {
-                    var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
+                    var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(0)").text().replace(/,/g,"");
                     if(parseFloat($("input[name=discount]").val()) <=100 && parseFloat($("input[name=discount]").val()) >0) {
                         var inputDiscount = $("input[name=discount]").val().replace("%", "");
                         var discount = parseFloat(actualBill - (parseFloat((actualBill * inputDiscount) / 100)));
-                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(discount).formatCurrency({roundToDecimalPlace: 0});
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(1)").children().val(discount).formatCurrency({roundToDecimalPlace: 0});
                     }
                     else
                     {
-                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(actualBill).formatCurrency({roundToDecimalPlace: 0});
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(1)").children().val(actualBill).formatCurrency({roundToDecimalPlace: 0});
                         $("input[name=discount]").val("");
                     }
+                    //Sum new value in total
+                    $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(trialFeeView.sumAllRowInvoice()).formatCurrency({roundToDecimalPlace: 0});
                 },
                 discountPrecent:function(element)
                 {
@@ -1188,10 +1206,11 @@
                     else
                     {
                         var invoiceBill =  $(element).val();
-                        var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(0)").text().replace(/,/g,"");
+                        var actualBill = $("tbody[id=tbodyListTotal]").find("tr:eq(3)").find("td:eq(0)").text().replace(/,/g,"");
                         $("input[name=discount]").val(100 - Math.floor((invoiceBill*100)/actualBill));
                         $(element).formatCurrency({roundToDecimalPlace: 0});
-
+                        //Sum new value in total
+                        $("tbody[id=tbodyListTotal]").find("tr:eq(10)").find("td:eq(1)").children().val(trialFeeView.sumAllRowInvoice()).formatCurrency({roundToDecimalPlace: 0});
                     }
 
                 },
