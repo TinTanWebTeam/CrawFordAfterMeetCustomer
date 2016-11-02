@@ -155,7 +155,7 @@
                                     <span>&nbsp;<div id="catastrophicLoss" style="display: inline-block"></div></span>
                                     <span>&nbsp;<div id="sourceCode" style="display: inline-block"></div></span>
                                     <span>&nbsp;<div id="insurerCode" style="display: inline-block"></div></span>
-                                    <span>&nbsp;<div id="brockerCode" style="display: inline-block"></div></span>
+                                    <span>&nbsp;<div id="brokerCode" style="display: inline-block"></div></span>
                                     <span>&nbsp;<div id="branchCode" style="display: inline-block"></div></span>
                                     <span>&nbsp;<div id="branchTypeCode" style="display: inline-block"></div></span>
                                     <span>&nbsp;<div id="destroyedDate" style="display: inline-block"></div></span>
@@ -272,7 +272,7 @@
                                             <span><div id="billToCustomerPolicyNumber" style="display: inline-block"></div></span>
                                         </div>
                                         <div class="co-insurers-content-body-col-last">
-                                            <span>To be advise</span>
+                                            <span id="compClaimNumber">To be advise</span>
                                         </div>
                                     </div>
                                 </div>
@@ -882,7 +882,7 @@
                 <button class="pull-right" style="margin-right: 20px">Export WIP To Excel</button>
             </div>
         </div>
-        {{-- <div class="row" style="background-color: #fff;">
+        <div class="row" style="background-color: #fff;">
             <div class="report-wip">
                 <div class="page-wip" id="pageWip1">
                     <div class="wip-title">
@@ -1404,27 +1404,6 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
-        <div class="row">
-            <table>
-                <caption>table title and/or explanatory text</caption>
-                <thead>
-                    <tr>
-                        <th>Opened</th>
-                        <th>Claim #</th>
-                        <th>Insured Name</th>
-                        <th>Adjuster Name</th>
-                        <th>Hours</th>
-                        <th>Rate</th>
-                        <th>Fee</th>
-                        <th>Expense Total</th>
-                        <th>Grand Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
         </div>
         <br>
     </div>
@@ -1562,8 +1541,12 @@
             $("#lossDescCode").empty().append(result.claim.lossDescCode + " - " + result.claim.lossDescCodeDetail);
             $("#catastrophicLoss").empty().append(result.claim.catastrophicLoss);
             $("#sourceCode").empty().append(result.claim.sourceCode + " - " + result.claim.sourceCodeDetail);
-            $("#insurerCode").empty().append(result.claim.insurerCode);
-            $("#brockerCode").empty().append(result.claim.brockerCode);
+            if(String(result.claim.insurerCode).length > 40){
+                $("#insurerCode").css('font-size','16px').empty().append(result.claim.insurerCode);
+            }else{
+                $("#insurerCode").css('font-size','18px').empty().append(result.claim.insurerCode);
+            }
+            $("#brokerCode").empty().append(result.claim.brokerCode);
             if(result.claim.branchCode != ''){
                 $("#branchCode").empty().append(result.claim.branchCode + " - " + result.claim.branchCodeDetail);
             }else{
@@ -1720,6 +1703,12 @@
             $("#billToCustomerCode").empty().append(result.bill.billToId);
             $("#billToCustomerClaimOfficer").empty().append(result.bill.claimOfficer);
             $("#billToCustomerPolicyNumber").empty().append(result.bill.policyNumber);
+            console.log(result.claim.insuredClaimNo);
+            if(result.claim.insuredClaimNo != ""){
+                $("#compClaimNumber").empty().append(result.claim.insuredClaimNo);
+            }else{
+                $("#compClaimNumber").empty().append("To be advise");
+            }
             var row = "";
             for(var i = 0; i< result.assit.length;i++){
                 row += "<div class='element'>";
@@ -1858,6 +1847,7 @@
             }
             load_page_2();
         });
+
     }
     function load_page_2(){
         if(continue_id + 1 == data_docket.length){
@@ -2608,9 +2598,5 @@
         }
         // console.log('load complete insert discount');
     }
-    $(function(){
-        // $.get('getWipDataForReportWip',function(data){
-        //     console.log(data);
-        // });
-    });
+
 </script>

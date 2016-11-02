@@ -2116,6 +2116,7 @@ class AdminController extends Controller
     {
         $claim = Claim::where('code', $claim_code)->first();
         if($claim){
+            $broker = Broker::where('code',$claim->brokerCode)->first();
             if($invoice_id != '0'){
                 $insurer = Customer::where('code', $claim->insurerCode)->first();
                 $branch = Branch::where('code', $claim->branchCode)->first();
@@ -2201,7 +2202,7 @@ class AdminController extends Controller
                         'accountCode' => $claim->accountCode,
                         'accountPolicyId' => $claim->accountPolicyId,
                         'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
-                        'insuredClaim' => $claim->insuredClaim,
+                        'insuredClaimNo' => $claim->insuredClaim,
                         'tradingAs' => $claim->tradingAs,
                         'claimTypeCode' => $claim->claimTypeCode,
                         'claimTypeCodeDetail' => $insuranceDetail->name,
@@ -2212,6 +2213,7 @@ class AdminController extends Controller
                         'sourceCodeDetail' => $sourceCode->name,
                         'insurerCode' => $claim->insurerCode . ' - ' . $insurer->fullName,
                         'branchCode' => $claim->branchCode,
+                        'brokerCode' => $broker == null ? '' : $broker->code.' - '.$broker->firstName,
                         'branchCodeDetail' => $branch == null ? '': $branch->name,
                         'branchTypeCode' => $claim->branchTypeCode,
                         'destroyedDate' => $claim->destroyedDate,
@@ -2304,7 +2306,7 @@ class AdminController extends Controller
                         'accountCode' => $claim->accountCode,
                         'accountPolicyId' => $claim->accountPolicyId,
                         'insuredName' => $claim->insuredFirstName . ' ' . $claim->insuredLastName,
-                        'insuredClaim' => $claim->insuredClaim,
+                        'insuredClaimNo' => $claim->insuredClaim,
                         'tradingAs' => $claim->tradingAs,
                         'claimTypeCode' => $claim->claimTypeCode,
                         'claimTypeCodeDetail' => $insuranceDetail->name,
