@@ -480,11 +480,6 @@
                     BonusDate:null,
                     NetworkID_created:null,
                     NetworkID_changed:null,
-                    Locked:null,
-                    LockedDetail:null,
-                    Inactive:null,
-                    InactiveDetail:null,
-                    DefaultProfile:null,
                     Created_at:null,
                     Changed_at:null,
                     Flat:null,
@@ -555,45 +550,19 @@
                             {
                                 employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("select#Sex option:selected").val();
                             }
-                            else if(Object.keys(employeeView.EmployeeObject)[i]==="DefaultProfile")
-                            {
-                                var checked = null;
-                                if($("input[name=DefaultProfile]").is(":checked"))
-                                {
-                                    checked = "True";
-                                }
-                                else
-                                {
-                                    checked = "False";
-                                }
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked;
-                            }
-                            else if(Object.keys(employeeView.EmployeeObject)[i]==="Locked")
-                            {
-                                var checked1 = null;
-                                if($("input[name=checkboxLockAndActive]:eq(0)").is(":checked"))
-                                {
-                                    checked1 = "True";
-                                }
-                                else
-                                {
-                                    checked1 = "False";
-                                }
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked1;
-                            }
-                            else if(Object.keys(employeeView.EmployeeObject)[i]==="Inactive")
-                            {
-                                var checked2 = null;
-                                if($("input[name=checkboxLockAndActive]:eq(1)").is(":checked"))
-                                {
-                                    checked2 = "True";
-                                }
-                                else
-                                {
-                                    checked2 = "False";
-                                }
-                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked2;
-                            }
+//                            else if(Object.keys(employeeView.EmployeeObject)[i]==="Inactive")
+//                            {
+//                                var checked2 = null;
+//                                if($("input[name=checkboxLockAndActive]:eq(1)").is(":checked"))
+//                                {
+//                                    checked2 = "True";
+//                                }
+//                                else
+//                                {
+//                                    checked2 = "False";
+//                                }
+//                                employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = checked2;
+//                            }
                             else
                             {
                                 employeeView.EmployeeObject[Object.keys(employeeView.EmployeeObject)[i]] = $("#"+Object.keys(employeeView.EmployeeObject)[i]).val();

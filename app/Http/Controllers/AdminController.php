@@ -95,52 +95,64 @@ class AdminController extends Controller
         return view('admin.report');
     }
 
+    public function checkInsertEmployee(Request $request)
+    {
+        try{
+            $employee = new User();
+            $employee->name = $request->get('dataEmployee')['Name'];
+            $employee->email = $request->get('dataEmployee')['Email'];
+            $employee->password = encrypt($request->get('dataEmployee')['Password'], Config::get('app.key'));
+            $employee->firstName = $request->get('dataEmployee')['FirstName'];
+            $employee->lastName = $request->get('dataEmployee')['LastName'];
+            $employee->salutation = $request->get('dataEmployee')['Salutation'];
+            $employee->middleInitial = $request->get('dataEmployee')['MiddleInitial'];
+            $employee->designations = $request->get('dataEmployee')['Designations'];
+            $employee->sex = $request->get('dataEmployee')['Sex'];
+            $employee->birthDate = $request->get('dataEmployee')['BirthDate'];
+            $employee->company = $request->get('dataEmployee')['Company'];
+            $employee->title = $request->get('dataEmployee')['Title'];
+            $employee->phone = $request->get('dataEmployee')['Phone'];
+            $employee->address = $request->get('dataEmployee')['Address'];
+            $employee->bonusDate = $request->get('dataEmployee')['BonusDate'];
+            $employee->userID_created = Auth::user()->id;
+            $employee->userID_changed = Auth::user()->id;
+            $employee->networkID_created = $request->get('dataEmployee')['NetworkID_created'];
+            $employee->positionId = $request->get('dataEmployee')['Position'];
+            $employee->roleId = 2;
+            $employee->save();
+            return  array(true,$employee->id);
+        }
+        catch(Exception $ex)
+        {
+            return false;
+        }
+
+    }
     public function addNewAndUpdateEmployee(Request $request)
     {
         //dd($request->all());
         $result = null;
         if ($request->get('idAction') == 1) {
             try {
-
-                $employee = new User();
-                $employee->name = $request->get('dataEmployee')['Name'];
-                $employee->email = $request->get('dataEmployee')['Email'];
-                $employee->password = encrypt($request->get('dataEmployee')['Password'], Config::get('app.key'));
-                $employee->firstName = $request->get('dataEmployee')['FirstName'];
-                $employee->lastName = $request->get('dataEmployee')['LastName'];
-                $employee->salutation = $request->get('dataEmployee')['Salutation'];
-                $employee->middleInitial = $request->get('dataEmployee')['MiddleInitial'];
-                $employee->designations = $request->get('dataEmployee')['Designations'];
-                $employee->sex = $request->get('dataEmployee')['Sex'];
-                $employee->birthDate = $request->get('dataEmployee')['BirthDate'];
-                $employee->company = $request->get('dataEmployee')['Company'];
-                $employee->title = $request->get('dataEmployee')['Title'];
-                $employee->phone = $request->get('dataEmployee')['Phone'];
-                $employee->address = $request->get('dataEmployee')['Address'];
-                $employee->bonusDate = $request->get('dataEmployee')['BonusDate'];
-                $employee->userID_created = Auth::user()->id;
-                $employee->userID_changed = Auth::user()->id;
-                $employee->networkID_created = $request->get('dataEmployee')['NetworkID_created'];
-                $employee->positionId = $request->get('dataEmployee')['Position'];
-                $employee->roleId = 2;
-                if ($request->get('dataEmployee')['DefaultProfile'] == 'True') {
-                    $employee->defaultProfile = 1;
-                } else {
-                    $employee->defaultProfile = 0;
+                DB::beginTransaction();
+                $checkInsertEmployee = $this->checkInsertEmployee($request);
+                if($checkInsertEmployee[0])
+                {
+                    //Insert table rate details
+                    $rate_Detail = new RateDetail();
+                    $rate_Detail->value = $request->get('dataEmployee')['Hourly'];
+                    $rate_Detail->description = $request->get('dataEmployee')['Hourly'];
+                    $rate_Detail->active = 1;
+                    $rate_Detail->rateTypeId = 2;
+                    $rate_Detail->userId = $checkInsertEmployee[1];
+                    $rate_Detail->claimId = 0;
+                    $rate_Detail->createdBy = Auth::user()->id;
+                    $rate_Detail->save();
+                    DB::commit();
                 }
-                $employee->save();
-                //Insert table rate details
-                $rate_Detail = new RateDetail();
-                $rate_Detail->value = $request->get('dataEmployee')['Hourly'];
-                $rate_Detail->description = $request->get('dataEmployee')['Hourly'];
-                $rate_Detail->active = 1;
-                $rate_Detail->rateTypeId = 2;
-                $rate_Detail->userId = $employee->id;
-                $rate_Detail->claimId = 0;
-                $rate_Detail->createdBy = Auth::user()->id;
-                $rate_Detail->save();
+                else
+                   DB::rollBack();
                 $result = array('Action' => 'AddNew', 'Result' => 1);
-
             } catch (Exception $ex) {
                 return $ex;
             }
