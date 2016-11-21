@@ -122,6 +122,7 @@
         <table class="table table-bordered" id="tableReport">
             <thead>
             <tr>
+                <th>Id</th>
                 <th>Created Date</th>
                 <th>Claim</th>
                 <th>Adjuster</th>
@@ -228,6 +229,7 @@
                             $("tbody#tbodyTableReport").empty();
                             for (var i = 0; i < data["ListData"].length; i++) {
                                 row += "<tr>";
+                                row += "<td>" + i + "</td>";
                                 if (data["ListData"][i]["CreatedDate"]) {
                                     var receiveDate = new Date(data["ListData"][i]["CreatedDate"].substring(0, 10));
                                     var dd = receiveDate.getDate();
@@ -240,8 +242,8 @@
                                     if (mm < 10) {
                                         mm = '0' + mm;
                                     }
-                                    // row += "<td>" + dd + '/' + mm + '/' + yyyy + "</td>";
-                                    row += "<td>" + receiveDate + "</td>";
+                                    row += "<td>" + dd + '/' + mm + '/' + yyyy + "</td>";
+                                    // row += "<td>" + receiveDate + "</td>";
                                 }
 //                                row += "<td>" + data["ListData"][i]["CreatedDate"] + "</td>";
                                 row += "<td>" + data["ListData"][i]["Claim"] + "</td>";
@@ -292,6 +294,10 @@
                             $("table[id=tableReport]").DataTable().destroy();
                             $("tbody#tbodyTableReport").empty().append(row);
                             $("table[id=tableReport]").DataTable({
+                                tableTools: {
+                                    "sSwfPath": "copy_csv_xls_pdf.swf"
+                                },
+                                dom: 'T<"clear">lfrtip',
                                 order: [[0, "asc"]]
                             });
 
